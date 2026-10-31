@@ -33,7 +33,7 @@
 | replay | 安装后运行成功，输出 `REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND` |
 | 配置 CLI | 默认 `CAPABILITY_DISABLED`；带 `--config-prefix` 进入真实读取路径（无目标时为 `TARGET_CONNECTION_REFUSED`） |
 | 红队 | Node 入口 5/5 通过，0 skip |
-| 启发式审计 | `python3 ai_audit.py`：0 命中，exit 0（Protocol/overload 与 `self._*` 引用已精确排除） |
+| 启发式审计 | `python3 scripts/ai_audit.py`：0 命中，exit 0（Protocol/overload 与 `self._*` 引用已精确排除） |
 | 安全/一致性 | 仅 `actuator_http.py` 导入 socket/http.client；`git diff --check`、`uv lock --check` 通过 |
 
 ## 残余风险与说明
@@ -42,4 +42,4 @@
 - `replay_data/` 是 `tests/fixtures/` 的打包副本，后续修改 fixture 时需要同步。
 - 本轮没有重新运行真实 Boot/Java/PostgreSQL Shop 验收，也没有执行真实 TLS/SNI 或第三方桌面客户端矩阵；这些沿用仓库已有验收记录，不等同于新的真实环境证明。
 - 配置诊断仍默认关闭；只有显式登记的 prefix/property 才可读取，值输出还需要 `--config-allow-values`。
-- `ai_audit.py` 是启发式扫描工具；本轮已修正 Protocol/overload、属性方法引用和 `partial` 状态断言的识别，但启发式扫描仍不能替代本记录中的定向复现和运行时测试。
+- `scripts/ai_audit.py` 是启发式扫描工具；本轮已修正 Protocol/overload、属性方法引用和 `partial` 状态断言的识别，但启发式扫描仍不能替代本记录中的定向复现和运行时测试。它不在 CI 门禁内，且阶段 1 依赖外部 `rg`（缺失时仅告警并跳过），因此 `exit 0` 不区分「rg 已扫描且 0 命中」与「rg 未安装、阶段 1 被跳过」。

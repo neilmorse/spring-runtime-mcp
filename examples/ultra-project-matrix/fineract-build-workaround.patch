@@ -1,0 +1,32 @@
+diff --git a/fineract-provider/build.gradle b/fineract-provider/build.gradle
+index f4fb4fe..fd3226e 100644
+--- a/fineract-provider/build.gradle
++++ b/fineract-provider/build.gradle
+@@ -351,3 +351,9 @@ rat.dependsOn prepareInputYaml
+ spotbugsTest.dependsOn resolve
+ compileTestJava.dependsOn ':fineract-client:processResources', ':fineract-avro-schemas:processResources'
+ resolveMainClassName.dependsOn resolve
++
++tasks.register('dumpRuntimeClasspath') {
++    doLast {
++        file('classpath-runtime.txt').text = sourceSets.main.runtimeClasspath.asPath
++    }
++}
+diff --git a/settings.gradle b/settings.gradle
+index c33ea27..9023fa5 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -17,6 +17,13 @@
+  * under the License.
+  */
+ 
++pluginManagement {
++    repositories {
++        maven { url 'https://maven.aliyun.com/repository/public' }
++        gradlePluginPortal()
++    }
++}
++
+ plugins {
+     id 'com.gradle.enterprise' version '3.16.1'
+     id 'com.gradle.common-custom-user-data-gradle-plugin' version '1.12.1'

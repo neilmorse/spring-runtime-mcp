@@ -8,7 +8,7 @@ from typing import Any
 from ..models.common import AnalysisBudget
 
 _ABNORMAL = {"DOWN", "OUT_OF_SERVICE", "UNKNOWN"}
-_CLASS = re.compile(r"[A-Za-z_][A-Za-z0-9_.$]{0,255}\Z")
+_CLASS = re.compile(r"(?:[A-Za-z_$][A-Za-z0-9_$]*\.)+[A-Za-z_$][A-Za-z0-9_$]*\Z")
 
 
 def _children(node: dict[str, Any]) -> dict[str, Any]:
@@ -56,7 +56,7 @@ def _error_type(node: dict[str, Any]) -> str | None:
     if not tokens:
         return None
     token = tokens[-1]
-    if _CLASS.fullmatch(token):
+    if len(token) <= 256 and _CLASS.fullmatch(token):
         return token
     return None
 

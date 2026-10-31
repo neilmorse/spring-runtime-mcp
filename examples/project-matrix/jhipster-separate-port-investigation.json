@@ -1,0 +1,107 @@
+{
+  "experiment": "separate-port-without-actuator-operation-docs",
+  "sourceRevision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+  "startupErrorTypes": [],
+  "startupBeanIdentifiers": [],
+  "started": true,
+  "javaMajor": 21,
+  "checks": [
+    {
+      "tool": "springboot_inspect_beans",
+      "arguments": {
+        "beanNamePattern": "userService"
+      },
+      "status": "partial",
+      "totalMatched": null,
+      "returnedItems": 1,
+      "beanNames": [
+        "userService"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "measuredResponseBytes": 11610,
+      "mappingPaths": []
+    },
+    {
+      "tool": "springboot_search_openapi",
+      "arguments": {
+        "schemaName": "AdminUserDTO"
+      },
+      "status": "unavailable",
+      "totalMatched": null,
+      "returnedItems": 0,
+      "beanNames": [],
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "measuredResponseBytes": 3079,
+      "mappingPaths": []
+    },
+    {
+      "tool": "springboot_verify_mappings",
+      "arguments": {
+        "pathPattern": "/actuator/openapi*"
+      },
+      "status": "ok",
+      "totalMatched": 0,
+      "returnedItems": 0,
+      "beanNames": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "measuredResponseBytes": 2184,
+      "mappingPaths": []
+    },
+    {
+      "tool": "springboot_verify_mappings",
+      "arguments": {
+        "controllerClassPattern": "*OpenApi*"
+      },
+      "status": "ok",
+      "totalMatched": 0,
+      "returnedItems": 0,
+      "beanNames": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "measuredResponseBytes": 2184,
+      "mappingPaths": []
+    },
+    {
+      "tool": "springboot_inspect_beans",
+      "arguments": {
+        "beanNamePattern": "multipleOpenApiActuatorResource",
+        "maxDepth": 0
+      },
+      "status": "partial",
+      "totalMatched": null,
+      "returnedItems": 1,
+      "beanNames": [
+        "multipleOpenApiActuatorResource"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "measuredResponseBytes": 3844,
+      "mappingPaths": []
+    },
+    {
+      "tool": "springboot_inspect_beans",
+      "arguments": {
+        "beanNamePattern": "openAPIDefaultGroupedOpenAPI",
+        "maxDepth": 0
+      },
+      "status": "partial",
+      "totalMatched": null,
+      "returnedItems": 1,
+      "beanNames": [
+        "openAPIDefaultGroupedOpenAPI"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "measuredResponseBytes": 3692,
+      "mappingPaths": []
+    }
+  ],
+  "targetProcessStopped": true
+}

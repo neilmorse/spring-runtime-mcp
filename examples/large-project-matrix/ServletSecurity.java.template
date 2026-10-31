@@ -1,0 +1,68 @@
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.List;
+import SERVLET_PACKAGE.servlet.Filter;
+import SERVLET_PACKAGE.servlet.http.HttpServletRequest;
+import SERVLET_PACKAGE.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+@Configuration(proxyBeanMethods = false)
+@EnableWebSecurity
+public class DiagnosticSecurity {
+    private static boolean matches(String actual, String env) {
+        String expected = System.getenv(env);
+        return actual != null && expected != null && MessageDigest.isEqual(
+            actual.getBytes(StandardCharsets.UTF_8),
+            ("Bearer " + expected).getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Bean
+    @Order(Integer.MIN_VALUE)
+    SecurityFilterChain diagnosticActuatorSecurity(HttpSecurity http) throws Exception {
+        RequestMatcher actuator = request -> {
+            String path = request.getRequestURI().substring(request.getContextPath().length());
+            return path.equals("/actuator") || path.startsWith("/actuator/");
+        };
+        Filter bearer = (request, response, chain) -> {
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
+            if (!req.getMethod().equals("GET") && !req.getMethod().equals("HEAD")) {
+                res.setStatus(405);
+                return;
+            }
+            String value = req.getHeader("Authorization");
+            String role = matches(value, "LARGE_DIAGNOSTICS_ADMIN") ? "ROLE_DIAGNOSTICS"
+                : matches(value, "LARGE_DIAGNOSTICS_USER") ? "ROLE_VIEWER" : null;
+            if (role == null) {
+                res.setStatus(401);
+                return;
+            }
+            var context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(new UsernamePasswordAuthenticationToken(
+                "diagnostics", null, List.of(new SimpleGrantedAuthority(role))));
+            SecurityContextHolder.setContext(context);
+            try { chain.doFilter(request, response); }
+            finally { SecurityContextHolder.clearContext(); }
+        };
+        http.MATCHER_METHOD(actuator)
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(errors -> errors
+                .authenticationEntryPoint((req, res, error) -> res.setStatus(401))
+                .accessDeniedHandler((req, res, error) -> res.setStatus(403)))
+            .authorizeHttpRequests(auth -> auth.anyRequest().hasAuthority("ROLE_DIAGNOSTICS"))
+            .addFilterBefore(bearer, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "absent": {
+    "exitCode": 0,
+    "verified": true
+  },
+  "explicit": {
+    "exitCode": 0,
+    "verified": true
+  },
+  "property": {
+    "exitCode": 0,
+    "verified": true
+  },
+  "null-list": {
+    "exitCode": 0,
+    "verified": true
+  }
+}

@@ -1,0 +1,34 @@
+diff --git a/src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java b/src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java
+index 4d37884..8522d02 100644
+--- a/src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java
++++ b/src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java
+@@ -74,11 +74,11 @@ public class SecurityConfiguration {
+                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                     .requestMatchers("/api/**").authenticated()
+                     .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+-                    .requestMatchers("/management/health").permitAll()
+-                    .requestMatchers("/management/health/**").permitAll()
+-                    .requestMatchers("/management/info").permitAll()
+-                    .requestMatchers("/management/prometheus").permitAll()
+-                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
++                    .requestMatchers("/actuator/health").permitAll()
++                    .requestMatchers("/actuator/health/**").permitAll()
++                    .requestMatchers("/actuator/info").permitAll()
++                    .requestMatchers("/actuator/prometheus").permitAll()
++                    .requestMatchers("/actuator/**").hasAuthority(AuthoritiesConstants.ADMIN)
+             )
+             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+             .exceptionHandling(exceptions ->
+diff --git a/src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java b/src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java
+index 8f871c6..37ac833 100644
+--- a/src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java
++++ b/src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java
+@@ -19,7 +19,7 @@ public class SpaWebFilter extends OncePerRequestFilter {
+         String path = request.getRequestURI().substring(request.getContextPath().length());
+         if (
+             !path.startsWith("/api") &&
+-            !path.startsWith("/management") &&
++            !path.startsWith("/actuator") &&
+             !path.startsWith("/v3/api-docs") &&
+             !path.startsWith("/h2-console") &&
+             !path.contains(".") &&

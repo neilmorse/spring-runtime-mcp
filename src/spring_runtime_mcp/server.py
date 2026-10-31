@@ -7,7 +7,6 @@ import json
 import sys
 import time
 from dataclasses import replace
-from datetime import datetime
 from typing import Any, TextIO, cast
 
 import mcp.types as types
@@ -21,13 +20,14 @@ from mcp.shared.message import SessionMessage
 from . import __version__
 from .contracts.definitions import list_tools
 from .models.source_catalog import SourceCatalog
+from .models.timestamps import parse_rfc3339
 from .models.common import CALL_BUDGET, CallBudget, NormalizationError
 from .policy.sanitization import SanitizerPipeline
 from .policy.configuration import ConfigReadPolicy
 from .snapshots import SnapshotStore
 from .services import Services
 from .diagnostics import failed
-from .tools.registry import HANDLERS, call_tool
+from .tools.registry import call_tool, validate_handlers
 from .tools.support import TOOL_TIMEOUT_SECONDS
 from .transport.actuator_http import ActuatorHttpTransport
 from .transport.response_gate import ENDPOINTS, ResponseGateReader
@@ -49,13 +49,7 @@ _FORMAT_CHECKER = FormatChecker()
 
 
 def _is_rfc3339(value: object) -> bool:
-    if not isinstance(value, str):
-        return True
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError:
-        return False
-    return parsed.tzinfo is not None
+    return not isinstance(value, str) or parse_rfc3339(value) is not None
 
 
 _FORMAT_CHECKER.checkers["date-time"] = (_is_rfc3339, ())
@@ -131,8 +125,6 @@ async def _call_tool(
         ).validate(arguments)
     except ValidationError:
         return _result(failed("INVALID_ARGUMENT"), params_id(ctx))
-    if name not in HANDLERS:
-        return _result(failed("CAPABILITY_DISABLED"), params_id(ctx))
     try:
         envelope = await call_tool(name, arguments, services)
         if not _valid_envelope(catalog[name]["outputSchema"], envelope):
@@ -174,6 +166,8 @@ def _result(
 
 
 def build_server(services: Services) -> Server[Services]:
+    validate_handlers()
+
     async def list_tools_handler(
         ctx: Any, params: types.PaginatedRequestParams | None
     ) -> types.ListToolsResult:

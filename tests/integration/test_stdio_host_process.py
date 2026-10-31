@@ -81,6 +81,7 @@ def host_in_stages(
     *stages: bytes,
     base_url: str | None = None,
     timeout: float = 30,
+    args: list[str] | None = None,
 ) -> subprocess.CompletedProcess[bytes]:
     """Feed stdin in stages, reading each stage's replies before the next.
 
@@ -96,6 +97,8 @@ def host_in_stages(
     command = [sys.executable, "-m", "spring_runtime_mcp.cli"]
     if base_url is not None:
         command += ["--base-url", base_url]
+    if args is not None:
+        command += args
     process = subprocess.Popen(
         command,
         stdin=subprocess.PIPE,
@@ -425,8 +428,9 @@ def test_stdio_host_process_rejects_a_mismatched_fact_catalog(
 
     assert completed.returncode == 2, completed.stderr
     assert completed.stdout == b""
-    assert completed.stderr == b"invalid server configuration\n"
+    assert b"SOURCE_TARGET_MISMATCH" in completed.stderr
     assert str(catalog).encode() not in completed.stderr
+    assert b"Traceback" not in completed.stderr
 
 
 def test_stdio_host_process_accepts_a_matching_fact_catalog(tmp_path: Path) -> None:
@@ -434,7 +438,8 @@ def test_stdio_host_process_accepts_a_matching_fact_catalog(tmp_path: Path) -> N
     catalog = tmp_path / "catalog.json"
     catalog.write_text(json.dumps({"targetId": "local", "types": [], "producers": []}))
 
-    completed = host(_frame(PING), args=["--source-catalog", str(catalog)])
+    # EOF may cancel pending SDK writes; keep stdin open until ping is answered.
+    completed = host_in_stages(_frame(PING), args=["--source-catalog", str(catalog)])
 
     assert completed.returncode == 0 and completed.stderr == b""
     lines = completed.stdout.splitlines()
@@ -570,4 +575,11 @@ def test_bearer_registration_fails_without_echoing_secrets(
         monkeypatch.setenv("REVIEW_BAD_BEARER", value)
     result = host(_frame(PING), args=["--token-env", "REVIEW_BAD_BEARER"])
     assert result.returncode == 2 and result.stdout == b""
-    assert result.stderr == b"invalid server configuration\n"
+    stderr = result.stderr.decode()
+    assert "--token-env" in stderr
+    assert "Traceback" not in stderr
+    if value in (None, ""):
+        assert "REVIEW_BAD_BEARER" in stderr
+        assert "missing or empty" in stderr
+    else:
+        assert value not in stderr

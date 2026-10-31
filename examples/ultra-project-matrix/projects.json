@@ -1,0 +1,20 @@
+{
+  "fineract": {
+    "repository": "https://github.com/apache/fineract",
+    "revision": "5d96e8cc32ff63f97d5ac15e19c6fafee0c31357",
+    "tag": "1.9.0",
+    "module": "fineract-provider",
+    "mainClass": "org.apache.fineract.ServerApplication",
+    "bootVersion": "3.1.7",
+    "stack": "servlet-jakarta",
+    "bean": "dataSource",
+    "route": "/actuator/health",
+    "businessRoute": "/api/v1/offices",
+    "database": true,
+    "migrationEngine": null,
+    "unexposedHttpStatus": 404,
+    "separatePort": false,
+    "profiles": ["ultra-local"],
+    "openapi": false
+  }
+}

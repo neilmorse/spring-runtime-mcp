@@ -1,0 +1,803 @@
+{
+  "diagnosticBaseRevision": "49ffdb9cdcd905666fef93ce2a3cc13ab3872280",
+  "diagnosticWorkingTreeModified": true,
+  "authorization": "User authorized additional larger public-project testing and removed the network-traffic restriction on 2026-10-22.",
+  "scope": "Native Boot versions, original application configuration, disposable random loopback listeners and in-memory H2. Only bounded safe summaries are saved.",
+  "selectedToolCallCount": 43,
+  "acceptedRunCount": 2,
+  "runs": [
+    {
+      "verifiedAt": "2026-10-22T12:31:18.529720+00:00",
+      "project": "petclinic",
+      "sourceRepository": "https://github.com/spring-projects/spring-petclinic",
+      "sourceRevision": "500158f732419217507c7656904b8e6aa1bcc0d6",
+      "configuredBootVersion": "4.1.0",
+      "authentication": "none",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 30,
+      "checks": [
+        {
+          "case": "known-bean",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": 1,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "measuredResponseBytes": 5532
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": 0,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 2886
+        },
+        {
+          "case": "bean-page-1",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": 416,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "measuredResponseBytes": 14576
+        },
+        {
+          "case": "bean-page-2",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": 416,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "measuredResponseBytes": 12638
+        },
+        {
+          "case": "known-route",
+          "tool": "springboot_verify_mappings",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 3250
+        },
+        {
+          "case": "database-health",
+          "tool": "springboot_diagnose_health",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 3012
+        },
+        {
+          "case": "buffered-startup",
+          "tool": "springboot_analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_NODE_LIMIT",
+            "STARTUP_ORPHAN_STEP",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "measuredResponseBytes": 10404
+        },
+        {
+          "case": "migrations",
+          "tool": "springboot_check_migrations",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "measuredResponseBytes": 3077
+        },
+        {
+          "case": "openapi-operation",
+          "tool": "springboot_search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "measuredResponseBytes": 3079
+        },
+        {
+          "case": "config-default",
+          "tool": "springboot_inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "measuredResponseBytes": 2985
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "springboot_detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 2562
+        },
+        {
+          "case": "registered-config",
+          "tool": "springboot_inspect_config",
+          "status": "partial",
+          "totalMatched": 1,
+          "coverage": "partial",
+          "gaps": [
+            "CONFIGPROPS_NESTED_UNSUPPORTED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 3352
+        },
+        {
+          "case": "registered-profiles",
+          "tool": "springboot_detect_drift",
+          "status": "ok",
+          "totalMatched": 0,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "measuredResponseBytes": 2416
+        }
+      ],
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "javaMajor": 21,
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 416,
+        "dependencyCount": 430
+      },
+      "targetProcessStopped": true,
+      "accepted": true,
+      "changedJavaSources": [],
+      "upstreamBusinessSourcesUnchanged": true,
+      "compiledClassCount": 30,
+      "runtimeJarCount": 171,
+      "upstreamTestsExecuted": false,
+      "frontendBuilt": false,
+      "bootParentModified": false
+    },
+    {
+      "verifiedAt": "2026-10-22T12:37:51.006153+00:00",
+      "project": "petclinic-rest",
+      "sourceRepository": "https://github.com/spring-petclinic/spring-petclinic-rest",
+      "sourceRevision": "afc8fc1d3b8ec8de69414482b3bd70a1da78cb95",
+      "configuredBootVersion": "4.1.1",
+      "authentication": "upstream-disabled",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 87,
+      "checks": [
+        {
+          "case": "known-bean",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 13856
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2940
+        },
+        {
+          "case": "bean-page-1",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 9834
+        },
+        {
+          "case": "bean-page-2",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 14722
+        },
+        {
+          "case": "known-route",
+          "tool": "springboot_verify_mappings",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3552
+        },
+        {
+          "case": "database-health",
+          "tool": "springboot_diagnose_health",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3012
+        },
+        {
+          "case": "buffered-startup",
+          "tool": "springboot_analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_NODE_LIMIT",
+            "STARTUP_ORPHAN_STEP",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 10434
+        },
+        {
+          "case": "migrations",
+          "tool": "springboot_check_migrations",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAVAILABLE"
+          ],
+          "httpStatuses": [
+            500
+          ],
+          "measuredResponseBytes": 3077
+        },
+        {
+          "case": "openapi-operation",
+          "tool": "springboot_search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "NON_TREE_JSON"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "measuredResponseBytes": 2935
+        },
+        {
+          "case": "openapi-schema",
+          "tool": "springboot_search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "OUTPUT_CONTRACT_VIOLATION"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "measuredResponseBytes": 3007
+        },
+        {
+          "case": "openapi-simple-schema",
+          "tool": "springboot_search_openapi",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3278
+        },
+        {
+          "case": "config-default",
+          "tool": "springboot_inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "measuredResponseBytes": 2985
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "springboot_detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2562
+        },
+        {
+          "case": "registered-config",
+          "tool": "springboot_inspect_config",
+          "status": "partial",
+          "totalMatched": 1,
+          "coverage": "partial",
+          "gaps": [
+            "CONFIGPROPS_NESTED_UNSUPPORTED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3400
+        },
+        {
+          "case": "registered-profiles",
+          "tool": "springboot_detect_drift",
+          "status": "ok",
+          "totalMatched": 0,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2512
+        }
+      ],
+      "failureCodes": [
+        "OPENAPI_OPERATION_UNOBSERVED",
+        "OPENAPI_SCHEMA_UNOBSERVED"
+      ],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "javaMajor": 21,
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 474,
+        "dependencyCount": 568
+      },
+      "targetProcessStopped": true,
+      "accepted": false,
+      "changedJavaSources": [],
+      "upstreamBusinessSourcesUnchanged": true,
+      "compiledClassCount": 126,
+      "runtimeJarCount": 150,
+      "upstreamTestsExecuted": false,
+      "frontendBuilt": false,
+      "bootParentModified": false
+    },
+    {
+      "verifiedAt": "2026-10-22T12:33:45.448332+00:00",
+      "project": "jhipster",
+      "sourceRepository": "https://github.com/jhipster/jhipster-sample-app",
+      "sourceRevision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+      "configuredBootVersion": "4.1.1",
+      "authentication": "HS512-admin",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 81,
+      "checks": [],
+      "failureCodes": [
+        "HARNESS_FAILED_AT_STARTUP"
+      ],
+      "startupErrorTypes": [
+        "org.springframework.beans.factory.UnsatisfiedDependencyException",
+        "org.springframework.beans.factory.BeanCreationException",
+        "org.springframework.beans.BeanInstantiationException",
+        "java.lang.NoSuchMethodException"
+      ],
+      "startupBeanIdentifiers": [
+        "springdocBeanFactoryPostProcessor3",
+        "tech.jhipster.config.apidoc.JHipsterSpringDocGroupsConfiguration",
+        "tech.jhipster.config.apidoc.JHipsterSpringDocGroupsConfiguration$$SpringCGLIB$$0"
+      ],
+      "targetProcessStopped": true,
+      "accepted": false,
+      "changedJavaSources": [
+        "src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java",
+        "src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java"
+      ],
+      "upstreamBusinessSourcesUnchanged": false,
+      "compiledClassCount": 91,
+      "runtimeJarCount": 290,
+      "upstreamTestsExecuted": false,
+      "frontendBuilt": false,
+      "bootParentModified": false
+    },
+    {
+      "verifiedAt": "2026-10-22T12:36:01.933480+00:00",
+      "project": "jhipster-core",
+      "sourceRepository": "https://github.com/jhipster/jhipster-sample-app",
+      "sourceRevision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+      "configuredBootVersion": "4.1.1",
+      "authentication": "HS512-admin",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 81,
+      "checks": [
+        {
+          "case": "authorization-anonymous",
+          "tool": "springboot_inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "measuredResponseBytes": 3087
+        },
+        {
+          "case": "authorization-non-admin",
+          "tool": "springboot_inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            403
+          ],
+          "measuredResponseBytes": 3087
+        },
+        {
+          "case": "known-bean",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 11790
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2940
+        },
+        {
+          "case": "bean-page-1",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 13246
+        },
+        {
+          "case": "bean-page-2",
+          "tool": "springboot_inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 14132
+        },
+        {
+          "case": "known-route",
+          "tool": "springboot_verify_mappings",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3370
+        },
+        {
+          "case": "database-health",
+          "tool": "springboot_diagnose_health",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 3012
+        },
+        {
+          "case": "buffered-startup",
+          "tool": "springboot_analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_NODE_LIMIT",
+            "STARTUP_ORPHAN_STEP",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 10444
+        },
+        {
+          "case": "migrations",
+          "tool": "springboot_check_migrations",
+          "status": "ok",
+          "totalMatched": 8,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 15580,
+          "appliedOnPage": 8
+        },
+        {
+          "case": "openapi-operation",
+          "tool": "springboot_search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "httpStatuses": [
+            404
+          ],
+          "measuredResponseBytes": 3079
+        },
+        {
+          "case": "config-default",
+          "tool": "springboot_inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "measuredResponseBytes": 2985
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "springboot_detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2562
+        },
+        {
+          "case": "registered-config",
+          "tool": "springboot_inspect_config",
+          "status": "partial",
+          "totalMatched": 2,
+          "coverage": "partial",
+          "gaps": [
+            "CONFIGPROPS_NESTED_UNSUPPORTED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 4456
+        },
+        {
+          "case": "registered-profiles",
+          "tool": "springboot_detect_drift",
+          "status": "ok",
+          "totalMatched": 0,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "measuredResponseBytes": 2500
+        }
+      ],
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "javaMajor": 21,
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 486,
+        "dependencyCount": 514
+      },
+      "targetProcessStopped": true,
+      "accepted": true,
+      "changedJavaSources": [
+        "src/main/java/io/github/jhipster/sample/config/SecurityConfiguration.java",
+        "src/main/java/io/github/jhipster/sample/web/filter/SpaWebFilter.java"
+      ],
+      "upstreamBusinessSourcesUnchanged": false,
+      "compiledClassCount": 91,
+      "runtimeJarCount": 290,
+      "upstreamTestsExecuted": false,
+      "frontendBuilt": false,
+      "bootParentModified": false
+    }
+  ]
+}

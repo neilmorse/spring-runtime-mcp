@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import os
+from importlib.resources import files
 from pathlib import Path
 from typing import Any, NoReturn
 
@@ -21,7 +22,13 @@ from .transport.replay_files import read_replay_file
 from .transport.responses import serialize_response
 from .transport.stdio import quiet_console, seal_console
 
-REPLAY_ROOT = Path(__file__).resolve().parent / "replay_data/bean_graph"
+_RESOURCE_ROOT = files("spring_runtime_mcp").joinpath("replay_data")
+# Normal wheel installs expose filesystem resources. Keep the descriptor-based
+# no-symlink reader; unsupported archive importers fail closed rather than using
+# an unbounded resource read or falling back to repository fixtures.
+if not isinstance(_RESOURCE_ROOT, Path):
+    raise NormalizationError("FIXTURE_PATH_DENIED")
+REPLAY_ROOT = _RESOURCE_ROOT / "bean_graph"
 CONFORMANCE_ROOT = REPLAY_ROOT.parent / "conformance"
 PROFILES = ("boot-2.7-servlet", "boot-3.4-servlet", "boot-4.1-webflux")
 _PROFILE_FILES = {

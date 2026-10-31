@@ -13,6 +13,7 @@ from ..models.queries import OpenApiQuery
 _EXPANSION_LIMIT_GAP = "REF_EXPANSION_LIMIT"
 _OAS_DIALECT = "https://spec.openapis.org/oas/3.1/dialect/base"
 _DIALECTS = frozenset({_OAS_DIALECT, "https://json-schema.org/draft/2020-12/schema"})
+_DOCUMENT_DIALECT = object()
 
 _METHODS = {
     "get",
@@ -44,6 +45,10 @@ _SCHEMA_KEYS = {
     "required",
     "enum",
 }
+_SCHEMA_TYPES = frozenset(
+    {"null", "boolean", "object", "array", "number", "string", "integer"}
+)
+_METADATA_ARRAY_LIMITS = {"type": 7, "required": 50, "enum": 16}
 
 
 def _pointer(document: dict[str, Any], ref: str) -> Any:
@@ -102,11 +107,76 @@ class _Expander:
         self.is_31 = str(document.get("openapi", "")).startswith("3.1.")
         self.dialect = document.get("jsonSchemaDialect", _OAS_DIALECT)
         self._targets: dict[str, Any] = {}
+        self._target_dialects: dict[str, Any] = {}
+        self._unsupported_target_bases: set[str] = set()
 
     def target(self, ref: str) -> Any:
+        if len(ref) > 512:
+            self.gaps.add("REF_INVALID")
+            return None
         # Cache pointer lookup separately from path-local cycle detection.
         if ref not in self._targets:
             self._targets[ref] = _pointer(self.document, ref)
+            # Determine the target's lexical scope, independently of the caller.
+            # Map containers are not Schema objects: a business field named
+            # $schema must not change the dialect of its siblings.
+            node: Any = self.document
+            dialect = self.dialect
+            role = "outside"
+            parts = [
+                part.replace("~1", "/").replace("~0", "~")
+                for part in unquote(ref[2:]).split("/")
+            ]
+            for index, part in enumerate(parts):
+                if not self._consume():
+                    self._targets[ref] = None
+                    break
+                if role == "schema" and isinstance(node, dict):
+                    dialect = node.get("$schema", dialect)
+                    if any(key in node for key in ("$id", "$dynamicAnchor")):
+                        self._unsupported_target_bases.add(ref)
+                if role in {"map", "array"}:
+                    next_role = "schema"
+                elif role == "schema":
+                    next_role = (
+                        "map"
+                        if part
+                        in {"properties", "$defs", "definitions", "patternProperties"}
+                        else "array"
+                        if part in {"allOf", "oneOf", "anyOf", "prefixItems"}
+                        else "schema"
+                        if part
+                        in {
+                            "items",
+                            "additionalProperties",
+                            "contains",
+                            "not",
+                            "if",
+                            "then",
+                            "else",
+                        }
+                        else "outside"
+                    )
+                else:
+                    next_role = (
+                        "map"
+                        if parts[: index + 1] == ["components", "schemas"]
+                        else "schema"
+                        if part == "schema"
+                        else "outside"
+                    )
+                if isinstance(node, dict):
+                    node = node.get(part)
+                elif (
+                    isinstance(node, list)
+                    and part.isdecimal()
+                    and int(part) < len(node)
+                ):
+                    node = node[int(part)]
+                else:
+                    node = None
+                role = next_role
+            self._target_dialects[ref] = dialect
         return self._targets[ref]
 
     def _consume(self) -> bool:
@@ -122,7 +192,11 @@ class _Expander:
         return True
 
     def expand(
-        self, schema: Any, depth: int, seen: frozenset[str]
+        self,
+        schema: Any,
+        depth: int,
+        seen: frozenset[str],
+        inherited_dialect: Any = _DOCUMENT_DIALECT,
     ) -> tuple[dict[str, Any], bool]:
         if not self._consume():
             return {
@@ -132,7 +206,12 @@ class _Expander:
         if not isinstance(schema, dict):
             self.gaps.add("OPENAPI_SCHEMA_UNREADABLE")
             return {"referenceState": "invalid"}, False
-        dialect = schema.get("$schema", self.dialect)
+        dialect = schema.get(
+            "$schema",
+            self.dialect
+            if inherited_dialect is _DOCUMENT_DIALECT
+            else inherited_dialect,
+        )
         if not isinstance(dialect, str) or dialect not in _DIALECTS:
             self.gaps.add("OPENAPI_SCHEMA_DIALECT_UNSUPPORTED")
             return {
@@ -157,11 +236,11 @@ class _Expander:
                 "examples",
                 "default",
             }:
-                sibling, sibling_complete = self._project(schema, depth, seen)
+                sibling, sibling_complete = self._project(schema, depth, seen, dialect)
                 # Conjunction preserves conflicting constraints without flattening.
                 return {"allOf": [resolved, sibling]}, complete and sibling_complete
             return resolved, complete
-        return self._project(schema, depth, seen)
+        return self._project(schema, depth, seen, dialect)
 
     def _resolve(
         self, ref: str, depth: int, seen: frozenset[str]
@@ -189,13 +268,21 @@ class _Expander:
         if not isinstance(target, dict):
             self.gaps.add("REF_INVALID")
             return {"$ref": ref, "referenceState": "invalid"}, False
-        projected, complete = self.expand(target, depth + 1, seen | {ref})
+        if ref in self._unsupported_target_bases:
+            self.gaps.add("OPENAPI_SCHEMA_BASE_UNSUPPORTED")
+            return {
+                "referenceState": "unsupported",
+                "omissionCodes": ["OPENAPI_SCHEMA_BASE_UNSUPPORTED"],
+            }, False
+        projected, complete = self.expand(
+            target, depth + 1, seen | {ref}, self._target_dialects[ref]
+        )
         projected["$ref"] = ref
         projected["referenceState"] = "resolved"
         return projected, complete
 
     def _project(
-        self, schema: dict[str, Any], depth: int, seen: frozenset[str]
+        self, schema: dict[str, Any], depth: int, seen: frozenset[str], dialect: str
     ) -> tuple[dict[str, Any], bool]:
         projected: dict[str, Any] = {}
         complete = True
@@ -228,6 +315,47 @@ class _Expander:
             if key not in schema:
                 continue
             value = schema[key]
+            # Never borrow a mutable node from the source. A cached $ref target
+            # can be expanded along several paths in the same output tree.
+            if isinstance(value, list):
+                limit = _METADATA_ARRAY_LIMITS.get(key, 0)
+                if not limit or len(value) > limit:
+                    complete = False
+                    continue
+                copied: list[Any] = []
+                valid = True
+                for member in value:
+                    if not self._consume():
+                        return {
+                            "referenceState": "unsupported",
+                            "omissionCodes": [_EXPANSION_LIMIT_GAP],
+                        }, False
+                    if (
+                        not isinstance(member, (str, int, float, bool, type(None)))
+                        or (isinstance(member, str) and len(member) > 512)
+                        or (
+                            key == "required"
+                            and (not isinstance(member, str) or len(member) > 128)
+                        )
+                        or (
+                            key == "type"
+                            and (
+                                not isinstance(member, str)
+                                or member not in _SCHEMA_TYPES
+                            )
+                        )
+                    ):
+                        valid = False
+                        break
+                    copied.append(member)
+                if valid:
+                    projected[key] = copied
+                else:
+                    complete = False
+                continue
+            if isinstance(value, dict) or key in {"required", "enum"}:
+                complete = False
+                continue
             if isinstance(value, str) and any(char.isspace() for char in value):
                 complete = False
                 continue
@@ -243,7 +371,9 @@ class _Expander:
                 ):
                     complete = False
                     continue
-                child, child_complete = self.expand(properties[name], depth, seen)
+                child, child_complete = self.expand(
+                    properties[name], depth, seen, dialect
+                )
                 if self._exhausted:
                     return {
                         "referenceState": "unsupported",
@@ -257,7 +387,7 @@ class _Expander:
                     break
             projected["properties"] = kept
         if "items" in schema:
-            child, child_complete = self.expand(schema["items"], depth, seen)
+            child, child_complete = self.expand(schema["items"], depth, seen, dialect)
             if self._exhausted:
                 return {
                     "referenceState": "unsupported",
@@ -270,7 +400,7 @@ class _Expander:
             if isinstance(additional, bool):
                 projected["additionalProperties"] = additional
             else:
-                child, child_complete = self.expand(additional, depth, seen)
+                child, child_complete = self.expand(additional, depth, seen, dialect)
                 projected["additionalProperties"] = child
                 complete = complete and child_complete
         for key in ("allOf", "oneOf", "anyOf"):
@@ -283,7 +413,7 @@ class _Expander:
                 continue
             children = []
             for part in raw[:16]:
-                child, child_complete = self.expand(part, depth, seen)
+                child, child_complete = self.expand(part, depth, seen, dialect)
                 children.append(child)
                 complete = complete and child_complete
                 if self._exhausted:
@@ -298,6 +428,57 @@ class _Expander:
         if not complete:
             self.gaps.add("OPENAPI_SCHEMA_PARTIAL")
         return projected, complete
+
+
+def _path_item(value: Any, expander: _Expander) -> dict[str, Any]:
+    """Keep disjoint PathItem fields; conflicting fields have no defined winner."""
+    fields: dict[str, Any] = {}
+    conflicts: set[str] = set()
+    seen: set[str] = set()
+    while True:
+        if not isinstance(value, dict):
+            expander.gaps.add("OPENAPI_PATH_UNREADABLE")
+            break
+        for key, child in value.items():
+            if not expander._consume():
+                expander.gaps.add("OPENAPI_PATH_UNREADABLE")
+                return fields
+            if key == "$ref":
+                continue
+            if key in fields or key in conflicts:
+                fields.pop(key, None)
+                conflicts.add(key)
+                expander.gaps.add("OPENAPI_PATH_FIELD_CONFLICT")
+            else:
+                fields[key] = child
+        if "$ref" not in value:
+            break
+        ref = value["$ref"]
+        if not isinstance(ref, str) or not ref.startswith("#/") or len(ref) > 512:
+            expander.gaps.update(
+                {
+                    "REF_EXTERNAL_BLOCKED"
+                    if isinstance(ref, str) and not ref.startswith("#")
+                    else "REF_INVALID",
+                    "OPENAPI_PATH_UNREADABLE",
+                }
+            )
+            break
+        if ref in seen or len(seen) >= 8 or not expander._consume():
+            expander.gaps.update(
+                {
+                    "REF_CYCLE"
+                    if ref in seen
+                    else _EXPANSION_LIMIT_GAP
+                    if expander._exhausted
+                    else "REF_DEPTH_LIMIT",
+                    "OPENAPI_PATH_UNREADABLE",
+                }
+            )
+            break
+        seen.add(ref)
+        value = expander.target(ref)
+    return fields
 
 
 def _object(value: Any, expander: _Expander) -> dict[str, Any] | None:
@@ -421,13 +602,11 @@ def normalize_openapi(
     paths = body["paths"]
     for path in sorted(paths):
         if not isinstance(path, str) or not path.startswith("/"):
+            expander.gaps.add("OPENAPI_PATH_UNREADABLE")
             continue
         if query.path_pattern and not glob_matches(query.path_pattern, path):
             continue
-        operations = _object(paths[path], expander)
-        if operations is None:
-            expander.gaps.add("OPENAPI_PATH_UNREADABLE")
-            continue
+        operations = _path_item(paths[path], expander)
         for method in sorted(operations):
             if method not in _METHODS:
                 continue
@@ -436,6 +615,7 @@ def normalize_openapi(
                 continue
             operation = operations[method]
             if not isinstance(operation, dict):
+                expander.gaps.add("OPENAPI_OPERATION_UNREADABLE")
                 continue
             operation_id = operation.get("operationId")
             if query.operation_id and operation_id != query.operation_id:

@@ -1,0 +1,60 @@
+{
+  "project": "alibaba/nacos",
+  "selection": {
+    "method": "shuf -n 1 over a curated popular production Spring Boot pool",
+    "candidates": [
+      {"repository": "alibaba/nacos", "stars": 33471},
+      {"repository": "PowerJob/PowerJob", "stars": 7801},
+      {"repository": "alibaba/Sentinel", "stars": 23146}
+    ],
+    "selected": "alibaba/nacos",
+    "starsAsOf": "2026-10-23"
+  },
+  "source": {
+    "tag": "2.4.3",
+    "revision": "f4f8b189cf16186669de5b692d43630ed2c3fda2",
+    "commitDate": "2024-10-12T14:55:33+08:00",
+    "springBootVersion": "2.7.18",
+    "mavenModules": 22,
+    "totalJavaFiles": 2391,
+    "mainJavaFiles": 1526,
+    "runtimeJava": "21",
+    "build": "Maven 3.10.0, -Prelease-nacos, tests/frontend/publishing skipped"
+  },
+  "distributionPatch": {
+    "originalJar": "distribution/target/nacos-server-2.4.3/nacos/target/nacos-server.jar",
+    "originalSha256": "956d534d096455aaebb697e3e55b33b4b1b32530af7c036fc1915937677caae0",
+    "patchedJar": "operator copy under the disposable work directory",
+    "patchedSha256": "b3eca64044b7d42892a06144b750ab9abbefd33b4c999d6ae9c15837b20eb74b",
+    "removedArtifacts": ["BOOT-INF/lib/hessian-3.3.6.jar"],
+    "retainedArtifacts": ["BOOT-INF/lib/hessian-4.0.63.jar"],
+    "reason": "SOFA JRaft and Nacos consistency both expose com.caucho.hessian.io; the distribution loaded 3.3.6 before NacosHessianSerializerFactory's required 4.0.63",
+    "scope": "operator copy only; source and original distribution jar untouched",
+    "unverified": "JRaft snapshot serialization and multi-node consistency after removing the old Hessian jar"
+  },
+  "isolation": {
+    "targetBind": "127.0.0.1 only",
+    "managementPort": "separate loopback port",
+    "database": "mariadb:11.2",
+    "databaseSchema": "distribution/conf/mysql-schema.sql",
+    "databasePort": "loopback only",
+    "credentials": "random per run; delivered to the launcher through environment variables; not stored in results",
+    "businessWrites": "none; MCP calls are GET/HEAD and the soak does not exercise Nacos publish/registration/UI login"
+  },
+  "testWindow": {
+    "soakStart": "2026-10-23T11:27:08.617001+00:00",
+    "soakComplete": "2026-10-23T15:27:10.164534+00:00",
+    "soakSeconds": 14401.542,
+    "samples": 240,
+    "totalCalls": 68260,
+    "soakCalls": 68189
+  },
+  "evidence": {
+    "report": "nacos-four-hour-2026-10-23.json",
+    "reportSha256": "e4a5018e3ba368cb00185930d186d66fe19c32efbb33ed6d8fec6e70d4695f6d",
+    "progress": "nacos-four-hour-2026-10-23.jsonl",
+    "progressSha256": "3e1c5dd7fbcc4c3ca29e7445721a6a3b2be9316ec75219ba2070e23a1543fa0d",
+    "stdout": "nacos-four-hour-2026-10-23.stdout.log",
+    "stdoutSha256": "3b951b0a68e21b2bcc68324e75e88d0c5e7766b6e870e659ef60fcc1bc6b9eae"
+  }
+}

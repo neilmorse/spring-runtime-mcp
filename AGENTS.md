@@ -12,6 +12,7 @@ v0.2.0 工作树包含 Python 分析内核、八工具、官方 `mcp` Python SDK
 
 | 任务涉及 | 查阅位置 |
 | --- | --- |
+| 当前依赖、入口、数据流与历史覆盖率边界 | `docs/audits/system-map-2026-10-23.md`；现状惯例见 `LEGACY_CONVENTIONS.md` |
 | 产品范围、默认值、验收或架构选择 | `SPEC.md`；早期项目计划仅作历史背景 |
 | HTTP 连接、SSRF、白名单、凭据或脱敏 | `docs/architecture/security-and-sanitization.md` |
 | Boot 2.7/3.x/4.x、MVC/WebFlux、容器关系与响应解析 | `docs/architecture/cross-version-normalization.md` |
@@ -40,11 +41,23 @@ uv build
 
 Schema/校验脚本改动运行契约校验；Python 改动再运行相关 lint/format；打包配置或资源路径改动再运行 `uv build` 并确认 wheel 含 `schemas/tools-contract.json`。纯文档改动检查措辞、路径与链接即可。相关检查通过后停止扩大或重复测试，除非新改动、失败或未解决的安全问题需要。未配置的 npm、Maven、pytest、构建命令不能作为已执行验证。真实实例集成必须另行明确授权并与默认离线检查分开。
 
+### 验证命令分级（按改动类型选跑，全部通过才收口）
+
+| 改动类型 | 必跑 |
+| --- | --- |
+| 任何 Python 改动 | `pytest -q`；`ruff check`；`ruff format --check` |
+| `src/` 类型相关改动 | `mypy src/spring_runtime_mcp` |
+| schema 或 `scripts/validate_tool_contract.py` | 契约校验 |
+| 打包配置 / 资源路径 | `uv build` 并确认 wheel 含 `schemas/tools-contract.json` |
+| 纯文档 | 措辞、路径、链接检查 |
+
+`mypy` 仅覆盖 `src/`，`tests/` 不强制类型检查；如需检查测试类型，单独运行并在交付说明中标注。未配置或未实际执行的命令不能写成“已验证”。
+
 ## 实现约定与传递关系
 
 后续实现遵循 `src/spring_runtime_mcp/` 的 `transport/`、`policy/`、`models/`、`adapters/`、`analyzers/`、`tools/` 分层；Python 使用四空格、类型注解、snake_case 和 PascalCase，公共 JSON 使用 camelCase。协议、联网、安全策略和确定性分析分别实现。
 
-面向 `gpt-6.1-sol`，修改 Bean、条件、漂移或 OpenAPI 算法时逐项检查：
+面向 `gpt-6.1-sol`（此模型标识随主力推理模型迭代维护，版本变更时请同步更新本句），修改 Bean、条件、漂移或 OpenAPI 算法时逐项检查：
 
 - Bean aliases 双向索引、父 Context 的 parentId 链与同名遮蔽；父容器不向子容器查找依赖。
 - 分页前建立完整可见依赖图和反向索引，覆盖二阶及传递依赖，检测环与缺失父节点。
@@ -52,6 +65,30 @@ Schema/校验脚本改动运行契约校验；Python 改动再运行相关 lint/
 - OpenAPI 直接与二阶 `$ref`，共享引用、循环、JSON Pointer 转义及深度上限；禁止请求远程引用。
 
 证据缺失返回 unknown/partial；不能把不可见、截断或无法解析写成“不存在”或确切根因。
+
+## 通用编码约束（现状差异见 LEGACY_CONVENTIONS.md）
+
+- 修改适配器时必须保留该函数现有输入输出契约；`normalize_*` 的签名并不统一，`load_source_catalog` 接收已解析的 Mapping。
+- 影响结论的证据缺失必须沿该模块现有 gaps/Fact 通道传递，由构造结果信封的层调用 `partial`；禁止用默认值掩盖证据缺失。
+- 新增公共结果字段必须使用 `None`、Fact 状态或 Schema 已定义的缺失状态，禁止用空字符串表示证据缺失。
+- 错误码必须匹配 `[A-Z][A-Z0-9_]{0,63}`；新增码需在 `diagnostics.py` 预定义
+- 环境变量只在 `cli.py` 读取；其他模块禁止直接访问 `os.environ`
+- HTTP 行为固定：GET/HEAD only、禁重定向、禁代理、TLS 验证开启；修改任一项均属 Never 级禁止
+- 私有辅助函数用 `_` 前缀；禁止新建独立 `type_guards.py`（类型守卫内联）
+- 新增 catch-all 属 Ask First，需说明为什么无法捕获具体异常；现有协议/工具边界的固定错误转换与连接器清理后重抛路径不得因统一风格而删除。
+
+## 核心保护区（无明确授权不修改）
+
+以下路径承担核心契约、安全边界或协议边界，修改前必须满足两个条件之一：（1）该文件已有针对被修改分支的特征测试；（2）本次任务有明确授权说明。
+
+- `src/spring_runtime_mcp/models/` 核心契约，被 25+ 模块依赖
+- `src/spring_runtime_mcp/policy/sanitization.py` 强制脱敏，安全边界
+- `src/spring_runtime_mcp/diagnostics.py` 错误码体系，`CODE_RE` 强制格式
+- `src/spring_runtime_mcp/transport/actuator_http.py` SSRF/TLS/IP 白名单唯一实现点
+- `src/spring_runtime_mcp/transport/response_gate.py` 端点访问控制唯一实现点
+- `src/spring_runtime_mcp/server.py` MCP 协议边界
+
+覆盖率 < 80% 或未覆盖关键分支（except / raise / 边界检查）的模块，改动前必须先补特征测试再改实现。不得以“顺手清理”为由扩大改动范围。
 
 ## 三级操作边界
 
@@ -75,4 +112,5 @@ Schema/校验脚本改动运行契约校验；Python 改动再运行相关 lint/
 
 遇到授权、安全或证据阻塞，停止对应分支，返回结构化错误/自愈建议，完成可独立部分。交付说明应列出行为变化、实际验证与未解决限制；提交主题使用简短祈使句，可加 `feat:`、`fix:`、`docs:`，PR 附安全与兼容性影响。
 
-维护本文件时参考 [OpenAI 的技能与提示指导](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)和 [AGENTS.md 开放格式](https://agents.md/)，保持按需路由与具体授权，避免复制整份系统规格。
+维护本文件时参考 [OpenAI 的技能与提示指导](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra) 和 [AGENTS.md 开放格式](https://agents.md/)，保持按需路由与具体授权，避免复制整份系统规格。外部链接失效时请及时更新为可访问地址。
+f

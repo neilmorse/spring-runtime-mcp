@@ -2,7 +2,16 @@
 
 [English README](README.md)
 
-当前版本为 **v0.2.0**，工作树另含尚未发布的综合审查修复。交付范围、实际验证与限制见 [版本记录](CHANGELOG.md)及[修复验收报告](docs/audits/comprehensive-remediation-2026-10-22.md)。
+**v0.2.0 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.0.md)。
+
+安装并检查版本（显式使用官方 PyPI，避免镜像尚未同步新包）：
+
+```bash
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --base-url http://127.0.0.1:18081
+```
+
+先按[目标配置指南](docs/target-app-setup.md)配置本地应用。第二条命令为常驻 MCP 宿主，等待客户端通过 STDIO 发出请求；replay 仍是一次性离线命令。
 
 面向编码 Agent 的本地优先、只读、安全默认运行时诊断工具。项目目标是把获权 Spring Boot 实例的 Actuator 与 OpenAPI 响应转换为脱敏、可追溯、有界的运行证据。
 
@@ -17,7 +26,7 @@ uv run --locked python -m pytest -q
 uv run --locked python -m spring_runtime_mcp.replay --scenario stripe-missing --tool springboot_inspect_beans --arguments-json '{"typePattern":"example.PaymentGateway","contextId":"application","conditionDepth":4}'
 ```
 
-开发工具缓存完成后，可给 `uv run` 加 `--offline`。以上命令使用锁定的项目环境。后续示例中的 `PYTHONPATH=src` 是 Bash/Zsh 的环境设置语法，适用于 Linux/macOS。Node 仅用于可选的 TypeScript 红队测试入口，不是分析内核运行依赖。
+开发工具缓存完成后，可给 `uv run` 加 `--offline`。以上命令使用锁定的项目环境。Node 仅用于可选的 TypeScript 红队测试入口，不是分析内核运行依赖。
 
 第一条运行离线测试；第二条输出一行 JSON-RPC 结果，包含相同内容的 `structuredContent` 与兼容文本副本。`missingBeanAnalysis.blockingPaths` 应还原：
 
@@ -28,7 +37,7 @@ REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND
 这表示显式源码事实中的 `PaymentGateway` 实现需要 `StripeClient`，其工厂又因缺少 `stripe.enabled` 未满足条件。此 fixture 的类型目录并不完整，所以外层保留 `partial`、`totalMatched: null`；不能据此断言所有运行 Bean 都不实现接口。查看别名、父子容器和双向关系可运行：
 
 ```bash
-PYTHONPATH=src uv run --offline --no-project --with jsonschema==4.25.1 python -m spring_runtime_mcp.replay --scenario parent-child --tool springboot_inspect_beans --arguments-json '{"beanNamePattern":"orderRepoAlias","contextId":"infrastructure","direction":"both","maxDepth":3}'
+uv run --locked python -m spring_runtime_mcp.replay --scenario parent-child --tool springboot_inspect_beans --arguments-json '{"beanNamePattern":"orderRepoAlias","contextId":"infrastructure","direction":"both","maxDepth":3}'
 ```
 
 不要把 `replay` 填入 MCP 客户端启动配置：它只处理一次固定样本，不读取客户端的 `initialize`、`tools/list` 或 `tools/call` 请求。
@@ -48,7 +57,7 @@ PYTHONPATH=src uv run --offline --no-project --with jsonschema==4.25.1 python -m
 | OpenAPI | `springboot_search_openapi` | 按接口或 Schema 查询，默认两层同文档引用 | 离线处理器；只请求固定 `/actuator/openapi` |
 | 运行态漂移 | `springboot_detect_drift` | 调用者提交的 Bean、路由、迁移版本和 Profile | 离线处理器；未提交的维度不比较 |
 
-Boot 2.7、3.x、4.x 与 Servlet/WebFlux 是归一化目标。仓库提供多版本**合成** fixtures；本轮单独验收了 Boot 3.5.16 / Java 21 / MVC / JWT / PostgreSQL 16 的 Shop 应用，仍未完成真实版本矩阵。目标配置差异见[配置指南](docs/target-app-setup.md)。
+Boot 2.7、3.x、4.x 与 Servlet/WebFlux 是归一化目标。仓库提供多版本**合成** fixtures；已有 Shop、Fineract、HertzBeat、XXL-JOB 与 Nacos 等固定版本隔离验收记录，尚未完成真实版本矩阵。具体组合和限制见[版本记录](CHANGELOG.md)；目标配置差异见[配置指南](docs/target-app-setup.md)。
 
 ## 与 Spring AI、springdoc 的关系
 
@@ -83,17 +92,17 @@ Boot 2.7、3.x、4.x 与 Servlet/WebFlux 是归一化目标。仓库提供多版
 | `--config-property` | 无（可重复） | 无 |
 | `--config-profiles` | 无 | 关闭 |
 | `--config-allow-values` | 无 | 关闭 |
+| `--version` | 无 | 打印版本后退出 |
 
 没有 `--url`。`--base-url` 是进程启动时登记的 origin，不能从工具参数传入。依赖已缓存时，下面的命令不访问包索引；在客户端发出 `tools/call` 之前也不连接诊断目标：
 
 ```bash
-PYTHONPATH=src uv run --offline --no-project --with jsonschema==4.25.1 \
-  python -m spring_runtime_mcp.cli --base-url http://127.0.0.1:18081
+uv run --locked spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-项目环境已安装依赖后，也可以 `uv run --project <仓库绝对路径> spring-runtime-mcp --base-url http://127.0.0.1:18081`。模板不含凭据或自动批准设置。把 `<仓库绝对路径>` 换成当前机器的检出目录。桌面客户端可能不继承终端 PATH，因此命令写成 `uv` 的绝对路径更稳。
+项目环境已安装依赖后，也可以 `uv run --locked --project <仓库绝对路径> spring-runtime-mcp --base-url http://127.0.0.1:18081`。模板不含凭据或自动批准设置。把 `<仓库绝对路径>` 换成当前机器的检出目录。桌面客户端可能不继承终端 PATH，因此命令写成 `uv` 的绝对路径更稳。
 
-目标已有 Bearer/JWT 鉴权时，增加 `--token-env SHOP_ACTUATOR_TOKEN`，由启动环境提供同名变量。命令只携带变量名，令牌绑定登记 origin 并进入已知秘密脱敏集合；变量缺失、空值或格式非法时启动失败。Basic、自定义头、非回环目标、自定义管理基路径和 OpenAPI 路径回退仍未实现。
+目标已有 Bearer/JWT 鉴权时，增加 `--token-env SHOP_ACTUATOR_TOKEN`，由启动环境提供同名变量。命令只携带变量名，令牌绑定登记 origin 并进入已知秘密脱敏集合；变量缺失、空值或格式非法时启动失败。Basic、自定义头、非回环目标、自定义管理基路径和 OpenAPI 路径回退仍未实现。响应编码支持缺省、`identity` 和单成员 gzip，压缩前后分别计数限额。
 
 配置诊断默认关闭。启用 `springboot_inspect_config` 至少登记一个 `--config-prefix` 或 `--config-property`；只有同时提供 `--config-allow-values` 才允许返回经过脱敏的登记标量值。`springboot_detect_drift` 的 profile 比较需要 `--config-profiles`。只给值权限、没有选择器时启动失败。
 
@@ -104,12 +113,12 @@ PYTHONPATH=src uv run --offline --no-project --with jsonschema==4.25.1 \
 ```toml
 [mcp_servers.spring_runtime]
 command = "uv"
-args = ["run", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+args = ["run", "--locked", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
-运行 `codex mcp list` 检查登记。登记成功只说明进程能握手，不说明目标端点已授权。
+运行 `codex mcp list` 检查登记。列出登记仅说明配置被读取，不证明进程握手或目标端点授权。
 
 ### Claude Desktop / Claude Code
 
@@ -120,7 +129,7 @@ Claude Desktop 通过 Settings → Developer → Edit Config 打开 `claude_desk
   "mcpServers": {
     "spring-runtime": {
       "command": "uv",
-      "args": ["run", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+      "args": ["run", "--locked", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
     }
   }
 }
@@ -134,7 +143,7 @@ Claude Code 在工作区根目录使用 `.mcp.json`，配置如下；用 `claude
     "spring-runtime": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+      "args": ["run", "--locked", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
     }
   }
 }
@@ -149,7 +158,7 @@ Claude Code 在工作区根目录使用 `.mcp.json`，配置如下；用 `claude
   "mcpServers": {
     "spring-runtime": {
       "command": "uv",
-      "args": ["run", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+      "args": ["run", "--locked", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
     }
   }
 }
@@ -165,7 +174,7 @@ Claude Code 在工作区根目录使用 `.mcp.json`，配置如下；用 `claude
     "spring-runtime": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+      "args": ["run", "--locked", "--offline", "--project", "<仓库绝对路径>", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
     }
   }
 }
@@ -235,6 +244,8 @@ REQUIRED_BEAN_MISSING      (StripeConfiguration#paymentGateway)
 
 本轮 [Shop 验收](examples/tdd-runtime/README.md)在明确批准后完成：六个只读 Actuator 端点、现有 JWT 安全链和临时 PostgreSQL；匿名读取被拒绝。原 TDD 工作区的看板业务处于红阶段，验收使用提交 `b7c54641` 的临时副本，保留全部未提交业务改动。结果仅保存脱敏摘要，临时进程和数据库已清理。
 
+[Nacos 四小时生产模拟](docs/audits/nacos-four-hour-2026-10-23.md)从随机候选池选中 alibaba/nacos 2.4.3，在回环地址和一次性 MariaDB 11.2 上持续 **14,401.542 秒**、完成 **68,260 次** MCP 调用：519 个可见 Bean 的基线与三个周期分页一致，两次目标重启恢复约 10 秒，两次 MariaDB 暂停后 readiness 超时并在解锁后恢复，非预期错误为空。测试同时记录 Actuator 内嵌 Derby health 无法反映外部 MariaDB 的盲区；单节点、固定提交样本，不代表生产集群、写路径或 JRaft 多节点验收。
+
 ## 开发与验证
 
 ```bash
@@ -247,6 +258,22 @@ uv run --no-sync ruff format --check src tests scripts
 uv build
 ```
 
-`uv.lock` 锁定运行及开发依赖；已缓存时首条同步可加 `--offline`。全量 782 项测试通过；官方 SDK 的 legacy 和 2026-07-28 模式也完成隔离 wheel 安装验收。CI 与发布复用同一门禁，发布还检查标签与包版本一致。TypeScript 红队入口是 `tests/security/redteam-audit.test.ts`，需要本机 Node，不属于默认 Python 门禁。
+`uv.lock` 锁定运行及开发依赖；已缓存时首条同步可加 `--offline`。当前离线结果见[版本记录](CHANGELOG.md)，历史交付核验见[报告](docs/audits/final-delivery-audit-2026-10-23.md)；超大型 Fineract 验收见[审计报告](docs/audits/ultra-project-fineract-2026-10-23.md)。官方 SDK 的 legacy 和 2026-07-28 模式也完成隔离 wheel 安装验收。PR CI 运行 Python 测试矩阵与静态检查；正式发布另运行完整联网审计门禁并检查标签与包版本一致，发布提交的远端工作流已通过，见发布记录。TypeScript 红队入口是 `tests/security/redteam-audit.test.ts`，需要本机 Node，不属于默认 Python 门禁。
+
+工作树自检运行 `uv run --no-sync python scripts/pre_release_check.py --allow-dirty`；加 `--audit` 才执行独立的联网 `uv audit --locked` 漏洞审计。未执行审计、跳过构建、允许脏工作树或接受跳过的测试时，检查不完整并返回 2；失败返回 1。净室阶段比对 wheel 与 sdist 的资源和版本，分别在独立环境按锁文件约束安装运行依赖、检查 CLI 版本，再从仓库外用隔离 Python 执行 SDK 两模式、八个自建回环 HTTP 处理器调用和七个内置 replay 场景。构建后端及其构建依赖固定版本，并纳入开发锁文件与漏洞审计。历史证据见 [MCP 交付专项核验](docs/audits/mcp-release-gate-2026-10-23.md)。
 
 Python 实现位于 `src/spring_runtime_mcp/`；公开契约位于 `src/spring_runtime_mcp/schemas/tools-contract.json`，随 wheel 一起分发；`tests/` 默认阻断外部网络。架构速查见 [HANDOVER.md](HANDOVER.md)。[SPEC](SPEC.md)定义产品目标，[目标配置指南](docs/target-app-setup.md)解释版本及授权，[归一化设计](docs/architecture/cross-version-normalization.md)说明响应差异，[红队报告](docs/audits/security-redteam-2026-10-17.md)列出已修复问题与仍未覆盖的真实实例边界。
+
+
+已发布版本为 **0.2.0 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
+
+源码检出使用上方锁定项目命令。wheel 安装后直接运行入口：
+
+```bash
+uv venv /tmp/spring-runtime-user
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.0-py3-none-any.whl
+/tmp/spring-runtime-user/bin/spring-runtime-mcp --version
+/tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
+```
+
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.0.md)。replay 是一次性离线命令，不是 MCP 宿主。

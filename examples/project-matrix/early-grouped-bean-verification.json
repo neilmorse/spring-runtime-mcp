@@ -1,0 +1,22 @@
+{
+  "normal": {
+    "exitCode": 0,
+    "ready": true,
+    "errorTypes": []
+  },
+  "eager": {
+    "exitCode": 1,
+    "ready": false,
+    "errorTypes": [
+      "org.springframework.beans.factory.UnsatisfiedDependencyException",
+      "org.springframework.beans.factory.BeanCreationException",
+      "org.springframework.beans.BeanInstantiationException",
+      "java.lang.NoSuchMethodException"
+    ]
+  },
+  "definitions-only": {
+    "exitCode": 0,
+    "ready": true,
+    "errorTypes": []
+  }
+}

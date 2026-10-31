@@ -1,0 +1,54 @@
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.Principal;
+import javax.servlet.Filter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/** Protect Actuator before the native legacy WebSecurityConfigurer ignores paths. */
+@Configuration(proxyBeanMethods = false)
+public class DiagnosticSecurity {
+    private static boolean matches(String actual, String env) {
+        String expected = System.getenv(env);
+        return actual != null && expected != null && MessageDigest.isEqual(
+            actual.getBytes(StandardCharsets.UTF_8),
+            ("Bearer " + expected).getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Bean
+    FilterRegistrationBean<Filter> diagnosticActuatorSecurity() {
+        Filter bearer = (request, response, chain) -> {
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse res = (HttpServletResponse) response;
+            if (!req.getMethod().equals("GET") && !req.getMethod().equals("HEAD")) {
+                res.setStatus(405);
+                return;
+            }
+            String value = req.getHeader("Authorization");
+            boolean admin = matches(value, "LARGE_DIAGNOSTICS_ADMIN");
+            if (!admin && !matches(value, "LARGE_DIAGNOSTICS_USER")) {
+                res.setStatus(401);
+                return;
+            }
+            if (!admin) {
+                res.setStatus(403);
+                return;
+            }
+            chain.doFilter(new HttpServletRequestWrapper(req) {
+                public Principal getUserPrincipal() { return () -> "diagnostics"; }
+                public String getRemoteUser() { return "diagnostics"; }
+                public boolean isUserInRole(String role) {
+                    return role.equals("DIAGNOSTICS") || role.equals("ROLE_DIAGNOSTICS");
+                }
+            }, response);
+        };
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>(bearer);
+        registration.setOrder(Integer.MIN_VALUE);
+        registration.addUrlPatterns("/actuator", "/actuator/*");
+        return registration;
+    }
+}

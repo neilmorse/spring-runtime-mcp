@@ -1,0 +1,95 @@
+{
+  "petclinic": {
+    "repository": "https://github.com/spring-projects/spring-petclinic",
+    "revision": "500158f732419217507c7656904b8e6aa1bcc0d6",
+    "bootVersion": "4.1.0",
+    "mainClass": "org.springframework.samples.petclinic.PetClinicApplication",
+    "bean": "ownerController",
+    "route": "/owners/find",
+    "profiles": [],
+    "openapi": false,
+    "migrationEngine": null,
+    "authentication": "none"
+  },
+  "petclinic-rest": {
+    "repository": "https://github.com/spring-petclinic/spring-petclinic-rest",
+    "revision": "afc8fc1d3b8ec8de69414482b3bd70a1da78cb95",
+    "bootVersion": "4.1.1",
+    "mainClass": "org.springframework.samples.petclinic.PetClinicApplication",
+    "bean": "clinicServiceImpl",
+    "route": "/api/owners/{ownerId}",
+    "profiles": [
+      "h2",
+      "spring-data-jpa"
+    ],
+    "openapi": true,
+    "schemaName": "Owner",
+    "migrationEngine": null,
+    "authentication": "upstream-disabled",
+    "supplementalSchemaName": "Specialty",
+    "expectedUnexposedMigrationError": {
+      "code": "ENDPOINT_UNAVAILABLE",
+      "httpStatus": 500
+    }
+  },
+  "jhipster": {
+    "repository": "https://github.com/jhipster/jhipster-sample-app",
+    "revision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+    "bootVersion": "4.1.1",
+    "mainClass": "io.github.jhipster.sample.JhipsterSampleApplicationApp",
+    "bean": "userService",
+    "route": "/api/admin/users",
+    "profiles": [
+      "dev",
+      "api-docs"
+    ],
+    "openapi": true,
+    "schemaName": "AdminUserDTO",
+    "migrationEngine": "liquibase",
+    "authentication": "HS512-admin"
+  },
+  "jhipster-fixed": {
+    "repository": "https://github.com/jhipster/jhipster-sample-app",
+    "revision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+    "bootVersion": "4.1.1",
+    "mainClass": "io.github.jhipster.sample.JhipsterSampleApplicationApp",
+    "bean": "userService",
+    "route": "/api/admin/users",
+    "profiles": ["dev", "api-docs"],
+    "openapi": true,
+    "schemaName": "AdminUserDTO",
+    "migrationEngine": "liquibase",
+    "authentication": "HS512-admin",
+    "classpathOverlay": "target/springdoc-patched-classes",
+    "expectedPortMode": "separate"
+  },
+  "jhipster-same-port": {
+    "repository": "https://github.com/jhipster/jhipster-sample-app",
+    "revision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+    "bootVersion": "4.1.1",
+    "mainClass": "io.github.jhipster.sample.JhipsterSampleApplicationApp",
+    "bean": "userService",
+    "route": "/api/admin/users",
+    "profiles": ["dev", "api-docs"],
+    "openapi": true,
+    "schemaName": "AdminUserDTO",
+    "migrationEngine": "liquibase",
+    "authentication": "HS512-admin"
+  },
+  "jhipster-core": {
+    "repository": "https://github.com/jhipster/jhipster-sample-app",
+    "revision": "6b000b5d23a36c45e01472471b84a44fa2464044",
+    "bootVersion": "4.1.1",
+    "mainClass": "io.github.jhipster.sample.JhipsterSampleApplicationApp",
+    "bean": "userService",
+    "route": "/api/admin/users",
+    "profiles": [
+      "dev",
+      "diagnostics"
+    ],
+    "openapi": false,
+    "schemaName": "AdminUserDTO",
+    "migrationEngine": "liquibase",
+    "authentication": "HS512-admin"
+  }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 AI Codebase Auditor: 针对 AI 生成的 Python 项目进行反“表面合规”与隐患扫描。
-用法: python3 ai_audit.py [src_dir] [test_dir] (默认: src tests)
+用法: python3 scripts/ai_audit.py [src_dir] [test_dir] (默认: src tests)
 """
 
 import ast

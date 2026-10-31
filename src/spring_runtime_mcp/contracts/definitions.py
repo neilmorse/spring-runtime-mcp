@@ -7,12 +7,12 @@ import math
 import re
 from collections.abc import Mapping
 from copy import deepcopy
-from datetime import datetime
 from functools import lru_cache
 from importlib.resources import files
 from typing import Any, Literal, cast, overload
 
 from ..models.common import NormalizationError
+from ..models.timestamps import parse_rfc3339
 from ..models.queries import (
     ConfigQuery,
     DriftQuery,
@@ -210,13 +210,7 @@ def _bounded_argument(value: Any, depth: int = 0) -> None:
 
 
 def _rfc3339(value: str) -> bool:
-    if len(value) > 64 or any(ord(char) < 32 or char.isspace() for char in value):
-        return False
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError:
-        return False
-    return parsed.tzinfo is not None
+    return parse_rfc3339(value) is not None
 
 
 def _expected_beans(items: list[dict[str, Any]]) -> tuple[ExpectedBean, ...]:

@@ -1,0 +1,181 @@
+{
+  "verifiedAt": "2026-10-22T11:25:00.428851+00:00",
+  "sourceRevision": "a6f4ff0c651545a14ff5d1f731fde9a8d136e4d5",
+  "sourceRepository": "https://github.com/spring-guides/gs-reactive-rest-service",
+  "bootVersion": "3.2.4",
+  "webStack": "webflux",
+  "target": "disposable-random-loopback-ports",
+  "accepted": true,
+  "failureCodes": [],
+  "predicateProbe": null,
+  "checks": [
+    {
+      "case": "config-default",
+      "tool": "springboot_inspect_config",
+      "status": "unavailable",
+      "totalMatched": null,
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CAPABILITY_DISABLED"
+      ],
+      "measuredResponseBytes": 2228
+    },
+    {
+      "case": "real-bean",
+      "tool": "springboot_inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 2975
+    },
+    {
+      "case": "missing-bean-conditions",
+      "tool": "springboot_inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "BEAN_INDEX_INCOMPLETE",
+        "CONDITION_EVIDENCE_INCOMPLETE",
+        "CONDITION_REPORT_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED",
+        "SOURCE_FACTS_UNAVAILABLE",
+        "UNKNOWN_CONDITION_GRAMMAR"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 2183
+    },
+    {
+      "case": "real-route",
+      "tool": "springboot_verify_mappings",
+      "status": "ok",
+      "totalMatched": 1,
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 2461,
+      "routeFacts": {
+        "expectedRouteFound": true,
+        "getMethodObserved": true,
+        "matchingComplete": true,
+        "acceptJsonConditionObserved": true
+      }
+    },
+    {
+      "case": "hidden-health",
+      "tool": "springboot_diagnose_health",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "HEALTH_DETAILS_NOT_VISIBLE"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 1635
+    },
+    {
+      "case": "startup-get-1",
+      "tool": "springboot_analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "measuredResponseBytes": 4233
+    },
+    {
+      "case": "startup-get-2",
+      "tool": "springboot_analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "measuredResponseBytes": 4233
+    },
+    {
+      "case": "real-drift",
+      "tool": "springboot_detect_drift",
+      "status": "partial",
+      "totalMatched": null,
+      "gaps": [
+        "BEAN_INDEX_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 1805
+    },
+    {
+      "case": "unexposed-migrations",
+      "tool": "springboot_check_migrations",
+      "status": "unavailable",
+      "totalMatched": null,
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "measuredResponseBytes": 2320
+    },
+    {
+      "case": "unexposed-openapi",
+      "tool": "springboot_search_openapi",
+      "status": "unavailable",
+      "totalMatched": null,
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "measuredResponseBytes": 2322
+    },
+    {
+      "case": "registered-config",
+      "tool": "springboot_inspect_config",
+      "status": "partial",
+      "totalMatched": 3,
+      "gaps": [
+        "CONFIGPROPS_NESTED_UNSUPPORTED"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 5029
+    },
+    {
+      "case": "registered-profiles",
+      "tool": "springboot_detect_drift",
+      "status": "ok",
+      "totalMatched": 0,
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "measuredResponseBytes": 1659
+    }
+  ],
+  "javaMajor": 21,
+  "targetProcessStopped": true,
+  "diagnosticBaseRevision": "49ffdb9cdcd905666fef93ce2a3cc13ab3872280",
+  "diagnosticWorkingTreeModified": true,
+  "previousFailureRecord": "verification.json",
+  "upstreamBusinessSourcesUnchanged": true
+}

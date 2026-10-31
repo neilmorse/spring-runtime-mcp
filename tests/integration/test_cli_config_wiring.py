@@ -7,6 +7,8 @@ import os
 import select
 import subprocess
 import sys
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
@@ -91,13 +93,41 @@ def _config_call(extra_args: list[str]) -> tuple[dict[str, Any], bytes]:
             process.wait(timeout=5)
 
 
-def test_cli_config_prefix_opens_the_capability_without_a_target() -> None:
-    response, stderr = _config_call(["--config-prefix", "spring.application"])
+def test_cli_config_prefix_reaches_only_its_loopback_fixture() -> None:
+    requests: list[tuple[str, str]] = []
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            requests.append((self.command, self.path))
+            self.send_response(404)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+
+        def log_message(self, *args: Any) -> None:
+            pass
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        response, stderr = _config_call(
+            [
+                "--config-prefix",
+                "spring.application",
+                "--base-url",
+                f"http://127.0.0.1:{server.server_port}",
+            ]
+        )
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
     result = response["result"]
     envelope = result["structuredContent"]
     codes = [item["code"] for item in envelope["errors"]]
     assert result["isError"] is True
-    assert codes == ["TARGET_CONNECTION_REFUSED"], envelope
+    assert codes == ["ENDPOINT_NOT_EXPOSED"], envelope
+    assert requests == [("GET", "/actuator/env"), ("GET", "/actuator/configprops")]
     assert "CAPABILITY_DISABLED" not in codes
     assert b"Traceback" not in stderr
 
@@ -123,4 +153,5 @@ def test_config_value_permission_without_a_selector_is_rejected() -> None:
     )
     assert completed.returncode == 2
     assert completed.stdout == b""
-    assert b"invalid server configuration" in completed.stderr
+    assert b"--config-allow-values requires" in completed.stderr
+    assert b"Traceback" not in completed.stderr

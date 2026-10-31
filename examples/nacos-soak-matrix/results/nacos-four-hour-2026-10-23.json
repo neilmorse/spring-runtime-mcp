@@ -1,0 +1,5191 @@
+{
+  "verifiedAt": "2026-10-23T11:26:34.402324+00:00",
+  "project": "nacos",
+  "sourceRepository": "https://github.com/alibaba/nacos",
+  "sourceRevision": "f4f8b189cf16186669de5b692d43630ed2c3fda2",
+  "sourceTag": "2.4.3",
+  "configuredBootVersion": "2.7.18",
+  "stack": "servlet-javax",
+  "authentication": "operator-management-only-Bearer",
+  "database": "disposable-mariadb-11.2",
+  "mainJavaSourceFiles": 1526,
+  "checks": [
+    {
+      "case": "anonymous",
+      "tool": "inspect_beans",
+      "status": "denied",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_UNAUTHORIZED"
+      ],
+      "httpStatuses": [
+        401
+      ],
+      "responseBytes": 3087,
+      "elapsedMs": 57.541
+    },
+    {
+      "case": "non-admin",
+      "tool": "inspect_beans",
+      "status": "denied",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_UNAUTHORIZED"
+      ],
+      "httpStatuses": [
+        403
+      ],
+      "responseBytes": 3087,
+      "elapsedMs": 9.575
+    },
+    {
+      "case": "legacy-known-bean",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9042,
+      "elapsedMs": 290.985
+    },
+    {
+      "case": "legacy-invalid-arguments",
+      "tool": "diagnose_health",
+      "status": "invalid",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "INVALID_ARGUMENT"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2945,
+      "elapsedMs": 5.735
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11718,
+      "elapsedMs": 935.487
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12272,
+      "elapsedMs": 51.835
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11782,
+      "elapsedMs": 47.661
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11476,
+      "elapsedMs": 45.395
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11974,
+      "elapsedMs": 99.088
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11714,
+      "elapsedMs": 51.36
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12320,
+      "elapsedMs": 56.499
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11996,
+      "elapsedMs": 57.03
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12478,
+      "elapsedMs": 60.035
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12742,
+      "elapsedMs": 55.739
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11646,
+      "elapsedMs": 55.736
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12836,
+      "elapsedMs": 62.212
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12800,
+      "elapsedMs": 59.424
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12466,
+      "elapsedMs": 52.468
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11304,
+      "elapsedMs": 46.106
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12032,
+      "elapsedMs": 53.599
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13554,
+      "elapsedMs": 63.113
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12046,
+      "elapsedMs": 53.777
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12124,
+      "elapsedMs": 59.468
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11952,
+      "elapsedMs": 56.031
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12592,
+      "elapsedMs": 64.101
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12888,
+      "elapsedMs": 67.846
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12636,
+      "elapsedMs": 55.3
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12718,
+      "elapsedMs": 56.687
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11666,
+      "elapsedMs": 49.183
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12006,
+      "elapsedMs": 49.795
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11568,
+      "elapsedMs": 50.742
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11778,
+      "elapsedMs": 65.886
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12714,
+      "elapsedMs": 68.64
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12706,
+      "elapsedMs": 73.049
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13226,
+      "elapsedMs": 73.849
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13018,
+      "elapsedMs": 67.986
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12554,
+      "elapsedMs": 70.988
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12742,
+      "elapsedMs": 69.334
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12706,
+      "elapsedMs": 71.399
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12714,
+      "elapsedMs": 69.254
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13258,
+      "elapsedMs": 73.662
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12942,
+      "elapsedMs": 64.439
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12896,
+      "elapsedMs": 66.41
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12658,
+      "elapsedMs": 62.28
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12510,
+      "elapsedMs": 56.971
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11804,
+      "elapsedMs": 54.442
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12364,
+      "elapsedMs": 54.439
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11756,
+      "elapsedMs": 56.793
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11490,
+      "elapsedMs": 51.034
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12600,
+      "elapsedMs": 61.248
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11994,
+      "elapsedMs": 62.913
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12678,
+      "elapsedMs": 61.412
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11730,
+      "elapsedMs": 52.813
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12658,
+      "elapsedMs": 62.716
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11310,
+      "elapsedMs": 53.25
+    },
+    {
+      "case": "full-bean-page",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 12794,
+      "elapsedMs": 35.121
+    },
+    {
+      "case": "missing-bean-conditions",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "BEAN_INDEX_INCOMPLETE",
+        "CONDITION_EVIDENCE_INCOMPLETE",
+        "CONDITION_PARSE_CONFLICT",
+        "CONDITION_REPORT_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED",
+        "SOURCE_FACTS_UNAVAILABLE",
+        "UNKNOWN_CONDITION_GRAMMAR"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 2996,
+      "elapsedMs": 263.149
+    },
+    {
+      "case": "native-route",
+      "tool": "verify_mappings",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 3388,
+      "elapsedMs": 83.969
+    },
+    {
+      "case": "native-health",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 3106,
+      "elapsedMs": 288.632
+    },
+    {
+      "case": "native-startup",
+      "tool": "analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_NODE_LIMIT",
+        "STARTUP_ORPHAN_STEP",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9360,
+      "elapsedMs": 435.31
+    },
+    {
+      "case": "native-migrations",
+      "tool": "check_migrations",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3077,
+      "elapsedMs": 20.937
+    },
+    {
+      "case": "native-openapi-unexposed",
+      "tool": "search_openapi",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3079,
+      "elapsedMs": 13.083
+    },
+    {
+      "case": "config-default-disabled",
+      "tool": "inspect_config",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CAPABILITY_DISABLED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2985,
+      "elapsedMs": 6.66
+    },
+    {
+      "case": "cross-domain-drift",
+      "tool": "detect_drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_INDEX_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 2564,
+      "elapsedMs": 149.779
+    },
+    {
+      "case": "expiry-seed",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11718,
+      "elapsedMs": 943.359
+    },
+    {
+      "case": "cursor-query-mismatch",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CURSOR_QUERY_MISMATCH"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2983,
+      "elapsedMs": 7.79
+    },
+    {
+      "case": "inventory-boundary-1800-page-0",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13664,
+      "elapsedMs": 1023.155
+    },
+    {
+      "case": "inventory-boundary-1800-page-1",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13826,
+      "elapsedMs": 103.423
+    },
+    {
+      "case": "inventory-boundary-1800-page-2",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13484,
+      "elapsedMs": 100.568
+    },
+    {
+      "case": "inventory-boundary-1800-page-3",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13626,
+      "elapsedMs": 101.941
+    },
+    {
+      "case": "inventory-boundary-1800-page-4",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 104.396
+    },
+    {
+      "case": "inventory-boundary-1800-page-5",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14064,
+      "elapsedMs": 114.069
+    },
+    {
+      "case": "inventory-boundary-1800-page-6",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13786,
+      "elapsedMs": 109.528
+    },
+    {
+      "case": "inventory-boundary-1800-page-7",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14508,
+      "elapsedMs": 117.851
+    },
+    {
+      "case": "inventory-boundary-1800-page-8",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14030,
+      "elapsedMs": 104.07
+    },
+    {
+      "case": "inventory-boundary-1800-page-9",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14754,
+      "elapsedMs": 120.583
+    },
+    {
+      "case": "inventory-boundary-1800-page-10",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14706,
+      "elapsedMs": 113.256
+    },
+    {
+      "case": "inventory-boundary-1800-page-11",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13992,
+      "elapsedMs": 114.421
+    },
+    {
+      "case": "inventory-boundary-1800-page-12",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 104.283
+    },
+    {
+      "case": "inventory-boundary-1800-page-13",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14486,
+      "elapsedMs": 104.021
+    },
+    {
+      "case": "inventory-boundary-1800-page-14",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14682,
+      "elapsedMs": 116.318
+    },
+    {
+      "case": "inventory-boundary-1800-page-15",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13926,
+      "elapsedMs": 126.913
+    },
+    {
+      "case": "inventory-boundary-1800-page-16",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14010,
+      "elapsedMs": 144.838
+    },
+    {
+      "case": "inventory-boundary-1800-page-17",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14650,
+      "elapsedMs": 131.564
+    },
+    {
+      "case": "inventory-boundary-1800-page-18",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14702,
+      "elapsedMs": 107.376
+    },
+    {
+      "case": "inventory-boundary-1800-page-19",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14734,
+      "elapsedMs": 116.232
+    },
+    {
+      "case": "inventory-boundary-1800-page-20",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 109.255
+    },
+    {
+      "case": "inventory-boundary-1800-page-21",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 107.949
+    },
+    {
+      "case": "inventory-boundary-1800-page-22",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13360,
+      "elapsedMs": 154.901
+    },
+    {
+      "case": "inventory-boundary-1800-page-23",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14458,
+      "elapsedMs": 144.744
+    },
+    {
+      "case": "inventory-boundary-1800-page-24",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14614,
+      "elapsedMs": 151.037
+    },
+    {
+      "case": "inventory-boundary-1800-page-25",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15174,
+      "elapsedMs": 140.893
+    },
+    {
+      "case": "inventory-boundary-1800-page-26",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14998,
+      "elapsedMs": 139.73
+    },
+    {
+      "case": "inventory-boundary-1800-page-27",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14490,
+      "elapsedMs": 142.994
+    },
+    {
+      "case": "inventory-boundary-1800-page-28",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14570,
+      "elapsedMs": 137.89
+    },
+    {
+      "case": "inventory-boundary-1800-page-29",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14838,
+      "elapsedMs": 138.897
+    },
+    {
+      "case": "inventory-boundary-1800-page-30",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15242,
+      "elapsedMs": 140.677
+    },
+    {
+      "case": "inventory-boundary-1800-page-31",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15030,
+      "elapsedMs": 130.725
+    },
+    {
+      "case": "inventory-boundary-1800-page-32",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14404,
+      "elapsedMs": 110.068
+    },
+    {
+      "case": "inventory-boundary-1800-page-33",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15000,
+      "elapsedMs": 100.561
+    },
+    {
+      "case": "inventory-boundary-1800-page-34",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13512,
+      "elapsedMs": 95.665
+    },
+    {
+      "case": "inventory-boundary-1800-page-35",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14222,
+      "elapsedMs": 107.859
+    },
+    {
+      "case": "inventory-boundary-1800-page-36",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13262,
+      "elapsedMs": 107.231
+    },
+    {
+      "case": "inventory-boundary-1800-page-37",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14166,
+      "elapsedMs": 109.913
+    },
+    {
+      "case": "inventory-boundary-1800-page-38",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13816,
+      "elapsedMs": 113.974
+    },
+    {
+      "case": "inventory-boundary-1800-page-39",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14538,
+      "elapsedMs": 118.456
+    },
+    {
+      "case": "inventory-boundary-1800-page-40",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 10722,
+      "elapsedMs": 85.134
+    },
+    {
+      "case": "inventory-boundary-1800-page-41",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9868,
+      "elapsedMs": 76.917
+    },
+    {
+      "case": "inventory-boundary-1800-page-42",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13068,
+      "elapsedMs": 63.668
+    },
+    {
+      "case": "inventory-boundary-1800-page-43",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14834,
+      "elapsedMs": 41.19
+    },
+    {
+      "case": "inventory-boundary-1800-invalid-arguments",
+      "tool": "diagnose_health",
+      "status": "invalid",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "INVALID_ARGUMENT"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2945,
+      "elapsedMs": 5.478
+    },
+    {
+      "case": "inventory-boundary-1800-config-disabled",
+      "tool": "inspect_config",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CAPABILITY_DISABLED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2985,
+      "elapsedMs": 5.662
+    },
+    {
+      "case": "inventory-boundary-1800-openapi-unexposed",
+      "tool": "search_openapi",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3079,
+      "elapsedMs": 25.09
+    },
+    {
+      "case": "inventory-boundary-1800-migrations-unexposed",
+      "tool": "check_migrations",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3077,
+      "elapsedMs": 12.034
+    },
+    {
+      "case": "inventory-boundary-1800-cursor-seed",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11718,
+      "elapsedMs": 1015.159
+    },
+    {
+      "case": "inventory-boundary-1800-cursor-mismatch",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CURSOR_QUERY_MISMATCH"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2983,
+      "elapsedMs": 8.648
+    },
+    {
+      "case": "inventory-boundary-1800-drift",
+      "tool": "detect_drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_INDEX_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 2532,
+      "elapsedMs": 72.128
+    },
+    {
+      "case": "inventory-boundary-1800-mappings",
+      "tool": "verify_mappings",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 3388,
+      "elapsedMs": 34.352
+    },
+    {
+      "case": "inventory-boundary-1800-health",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 15.437
+    },
+    {
+      "case": "inventory-boundary-1800-startup",
+      "tool": "analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_NODE_LIMIT",
+        "STARTUP_ORPHAN_STEP",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9360,
+      "elapsedMs": 388.169
+    },
+    {
+      "case": "phase-target-stopped",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "TARGET_CONNECTION_REFUSED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 3015,
+      "elapsedMs": 8.242
+    },
+    {
+      "case": "phase-target-recovered",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9042,
+      "elapsedMs": 356.958
+    },
+    {
+      "case": "phase-db-before",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 15.07
+    },
+    {
+      "case": "phase-db-during",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 22.484
+    },
+    {
+      "case": "phase-db-after",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 14.232
+    },
+    {
+      "case": "inventory-boundary-7200-page-0",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13664,
+      "elapsedMs": 1088.294
+    },
+    {
+      "case": "inventory-boundary-7200-page-1",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13826,
+      "elapsedMs": 118.127
+    },
+    {
+      "case": "inventory-boundary-7200-page-2",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13484,
+      "elapsedMs": 109.708
+    },
+    {
+      "case": "inventory-boundary-7200-page-3",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13626,
+      "elapsedMs": 106.635
+    },
+    {
+      "case": "inventory-boundary-7200-page-4",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 103.19
+    },
+    {
+      "case": "inventory-boundary-7200-page-5",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14062,
+      "elapsedMs": 102.97
+    },
+    {
+      "case": "inventory-boundary-7200-page-6",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13786,
+      "elapsedMs": 115.839
+    },
+    {
+      "case": "inventory-boundary-7200-page-7",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14508,
+      "elapsedMs": 122.958
+    },
+    {
+      "case": "inventory-boundary-7200-page-8",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14030,
+      "elapsedMs": 115.643
+    },
+    {
+      "case": "inventory-boundary-7200-page-9",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14754,
+      "elapsedMs": 115.859
+    },
+    {
+      "case": "inventory-boundary-7200-page-10",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14706,
+      "elapsedMs": 118.681
+    },
+    {
+      "case": "inventory-boundary-7200-page-11",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13992,
+      "elapsedMs": 111.25
+    },
+    {
+      "case": "inventory-boundary-7200-page-12",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 116.748
+    },
+    {
+      "case": "inventory-boundary-7200-page-13",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14486,
+      "elapsedMs": 116.518
+    },
+    {
+      "case": "inventory-boundary-7200-page-14",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14682,
+      "elapsedMs": 118.519
+    },
+    {
+      "case": "inventory-boundary-7200-page-15",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13926,
+      "elapsedMs": 120.642
+    },
+    {
+      "case": "inventory-boundary-7200-page-16",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14010,
+      "elapsedMs": 128.119
+    },
+    {
+      "case": "inventory-boundary-7200-page-17",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14650,
+      "elapsedMs": 137.031
+    },
+    {
+      "case": "inventory-boundary-7200-page-18",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14702,
+      "elapsedMs": 112.77
+    },
+    {
+      "case": "inventory-boundary-7200-page-19",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14734,
+      "elapsedMs": 109.796
+    },
+    {
+      "case": "inventory-boundary-7200-page-20",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 109.388
+    },
+    {
+      "case": "inventory-boundary-7200-page-21",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 122.906
+    },
+    {
+      "case": "inventory-boundary-7200-page-22",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13360,
+      "elapsedMs": 130.362
+    },
+    {
+      "case": "inventory-boundary-7200-page-23",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14458,
+      "elapsedMs": 143.365
+    },
+    {
+      "case": "inventory-boundary-7200-page-24",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14614,
+      "elapsedMs": 149.0
+    },
+    {
+      "case": "inventory-boundary-7200-page-25",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15174,
+      "elapsedMs": 173.206
+    },
+    {
+      "case": "inventory-boundary-7200-page-26",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14998,
+      "elapsedMs": 151.551
+    },
+    {
+      "case": "inventory-boundary-7200-page-27",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14490,
+      "elapsedMs": 189.124
+    },
+    {
+      "case": "inventory-boundary-7200-page-28",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14570,
+      "elapsedMs": 150.563
+    },
+    {
+      "case": "inventory-boundary-7200-page-29",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14838,
+      "elapsedMs": 157.229
+    },
+    {
+      "case": "inventory-boundary-7200-page-30",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15242,
+      "elapsedMs": 140.423
+    },
+    {
+      "case": "inventory-boundary-7200-page-31",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15030,
+      "elapsedMs": 133.979
+    },
+    {
+      "case": "inventory-boundary-7200-page-32",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14404,
+      "elapsedMs": 131.151
+    },
+    {
+      "case": "inventory-boundary-7200-page-33",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15000,
+      "elapsedMs": 118.231
+    },
+    {
+      "case": "inventory-boundary-7200-page-34",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13512,
+      "elapsedMs": 121.719
+    },
+    {
+      "case": "inventory-boundary-7200-page-35",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14222,
+      "elapsedMs": 110.023
+    },
+    {
+      "case": "inventory-boundary-7200-page-36",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13262,
+      "elapsedMs": 107.587
+    },
+    {
+      "case": "inventory-boundary-7200-page-37",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14166,
+      "elapsedMs": 146.465
+    },
+    {
+      "case": "inventory-boundary-7200-page-38",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13816,
+      "elapsedMs": 123.622
+    },
+    {
+      "case": "inventory-boundary-7200-page-39",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14538,
+      "elapsedMs": 116.252
+    },
+    {
+      "case": "inventory-boundary-7200-page-40",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 10722,
+      "elapsedMs": 88.445
+    },
+    {
+      "case": "inventory-boundary-7200-page-41",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9868,
+      "elapsedMs": 79.228
+    },
+    {
+      "case": "inventory-boundary-7200-page-42",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13068,
+      "elapsedMs": 82.4
+    },
+    {
+      "case": "inventory-boundary-7200-page-43",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14834,
+      "elapsedMs": 56.654
+    },
+    {
+      "case": "inventory-boundary-7200-invalid-arguments",
+      "tool": "diagnose_health",
+      "status": "invalid",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "INVALID_ARGUMENT"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2945,
+      "elapsedMs": 7.193
+    },
+    {
+      "case": "inventory-boundary-7200-config-disabled",
+      "tool": "inspect_config",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CAPABILITY_DISABLED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2985,
+      "elapsedMs": 13.967
+    },
+    {
+      "case": "inventory-boundary-7200-openapi-unexposed",
+      "tool": "search_openapi",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3079,
+      "elapsedMs": 169.235
+    },
+    {
+      "case": "inventory-boundary-7200-migrations-unexposed",
+      "tool": "check_migrations",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3077,
+      "elapsedMs": 13.149
+    },
+    {
+      "case": "inventory-boundary-7200-cursor-seed",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11718,
+      "elapsedMs": 1061.348
+    },
+    {
+      "case": "inventory-boundary-7200-cursor-mismatch",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CURSOR_QUERY_MISMATCH"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2983,
+      "elapsedMs": 7.744
+    },
+    {
+      "case": "inventory-boundary-7200-drift",
+      "tool": "detect_drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_INDEX_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 2532,
+      "elapsedMs": 127.895
+    },
+    {
+      "case": "inventory-boundary-7200-mappings",
+      "tool": "verify_mappings",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 3388,
+      "elapsedMs": 61.674
+    },
+    {
+      "case": "inventory-boundary-7200-health",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 24.738
+    },
+    {
+      "case": "inventory-boundary-7200-startup",
+      "tool": "analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_NODE_LIMIT",
+        "STARTUP_ORPHAN_STEP",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9362,
+      "elapsedMs": 494.205
+    },
+    {
+      "case": "phase-target-stopped",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "TARGET_CONNECTION_REFUSED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 3015,
+      "elapsedMs": 9.851
+    },
+    {
+      "case": "phase-target-recovered",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9042,
+      "elapsedMs": 353.195
+    },
+    {
+      "case": "phase-db-before",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 14.065
+    },
+    {
+      "case": "phase-db-during",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 13.119
+    },
+    {
+      "case": "phase-db-after",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 14.38
+    },
+    {
+      "case": "inventory-boundary-12600-page-0",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13664,
+      "elapsedMs": 1090.971
+    },
+    {
+      "case": "inventory-boundary-12600-page-1",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13826,
+      "elapsedMs": 124.101
+    },
+    {
+      "case": "inventory-boundary-12600-page-2",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13484,
+      "elapsedMs": 116.005
+    },
+    {
+      "case": "inventory-boundary-12600-page-3",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13626,
+      "elapsedMs": 126.788
+    },
+    {
+      "case": "inventory-boundary-12600-page-4",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 107.332
+    },
+    {
+      "case": "inventory-boundary-12600-page-5",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14064,
+      "elapsedMs": 103.311
+    },
+    {
+      "case": "inventory-boundary-12600-page-6",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13786,
+      "elapsedMs": 111.116
+    },
+    {
+      "case": "inventory-boundary-12600-page-7",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14508,
+      "elapsedMs": 118.146
+    },
+    {
+      "case": "inventory-boundary-12600-page-8",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14030,
+      "elapsedMs": 123.076
+    },
+    {
+      "case": "inventory-boundary-12600-page-9",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14754,
+      "elapsedMs": 115.749
+    },
+    {
+      "case": "inventory-boundary-12600-page-10",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14706,
+      "elapsedMs": 109.772
+    },
+    {
+      "case": "inventory-boundary-12600-page-11",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13992,
+      "elapsedMs": 108.709
+    },
+    {
+      "case": "inventory-boundary-12600-page-12",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13462,
+      "elapsedMs": 114.501
+    },
+    {
+      "case": "inventory-boundary-12600-page-13",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14486,
+      "elapsedMs": 120.797
+    },
+    {
+      "case": "inventory-boundary-12600-page-14",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14682,
+      "elapsedMs": 122.558
+    },
+    {
+      "case": "inventory-boundary-12600-page-15",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13926,
+      "elapsedMs": 119.235
+    },
+    {
+      "case": "inventory-boundary-12600-page-16",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14010,
+      "elapsedMs": 146.146
+    },
+    {
+      "case": "inventory-boundary-12600-page-17",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14650,
+      "elapsedMs": 133.861
+    },
+    {
+      "case": "inventory-boundary-12600-page-18",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14702,
+      "elapsedMs": 110.643
+    },
+    {
+      "case": "inventory-boundary-12600-page-19",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14734,
+      "elapsedMs": 101.424
+    },
+    {
+      "case": "inventory-boundary-12600-page-20",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 103.581
+    },
+    {
+      "case": "inventory-boundary-12600-page-21",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13564,
+      "elapsedMs": 123.224
+    },
+    {
+      "case": "inventory-boundary-12600-page-22",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13360,
+      "elapsedMs": 137.492
+    },
+    {
+      "case": "inventory-boundary-12600-page-23",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14458,
+      "elapsedMs": 143.149
+    },
+    {
+      "case": "inventory-boundary-12600-page-24",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14614,
+      "elapsedMs": 156.595
+    },
+    {
+      "case": "inventory-boundary-12600-page-25",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15174,
+      "elapsedMs": 161.921
+    },
+    {
+      "case": "inventory-boundary-12600-page-26",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14998,
+      "elapsedMs": 142.117
+    },
+    {
+      "case": "inventory-boundary-12600-page-27",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14490,
+      "elapsedMs": 138.754
+    },
+    {
+      "case": "inventory-boundary-12600-page-28",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14570,
+      "elapsedMs": 147.196
+    },
+    {
+      "case": "inventory-boundary-12600-page-29",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14838,
+      "elapsedMs": 166.674
+    },
+    {
+      "case": "inventory-boundary-12600-page-30",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15242,
+      "elapsedMs": 143.322
+    },
+    {
+      "case": "inventory-boundary-12600-page-31",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15030,
+      "elapsedMs": 140.881
+    },
+    {
+      "case": "inventory-boundary-12600-page-32",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14404,
+      "elapsedMs": 127.969
+    },
+    {
+      "case": "inventory-boundary-12600-page-33",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 15000,
+      "elapsedMs": 120.42
+    },
+    {
+      "case": "inventory-boundary-12600-page-34",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13512,
+      "elapsedMs": 98.516
+    },
+    {
+      "case": "inventory-boundary-12600-page-35",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14222,
+      "elapsedMs": 111.206
+    },
+    {
+      "case": "inventory-boundary-12600-page-36",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13262,
+      "elapsedMs": 117.191
+    },
+    {
+      "case": "inventory-boundary-12600-page-37",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14166,
+      "elapsedMs": 126.065
+    },
+    {
+      "case": "inventory-boundary-12600-page-38",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13816,
+      "elapsedMs": 120.955
+    },
+    {
+      "case": "inventory-boundary-12600-page-39",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14538,
+      "elapsedMs": 116.168
+    },
+    {
+      "case": "inventory-boundary-12600-page-40",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 10722,
+      "elapsedMs": 98.672
+    },
+    {
+      "case": "inventory-boundary-12600-page-41",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9868,
+      "elapsedMs": 86.633
+    },
+    {
+      "case": "inventory-boundary-12600-page-42",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 13068,
+      "elapsedMs": 76.623
+    },
+    {
+      "case": "inventory-boundary-12600-page-43",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 14834,
+      "elapsedMs": 47.439
+    },
+    {
+      "case": "inventory-boundary-12600-invalid-arguments",
+      "tool": "diagnose_health",
+      "status": "invalid",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "INVALID_ARGUMENT"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2945,
+      "elapsedMs": 6.269
+    },
+    {
+      "case": "inventory-boundary-12600-config-disabled",
+      "tool": "inspect_config",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CAPABILITY_DISABLED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2985,
+      "elapsedMs": 7.071
+    },
+    {
+      "case": "inventory-boundary-12600-openapi-unexposed",
+      "tool": "search_openapi",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3079,
+      "elapsedMs": 136.836
+    },
+    {
+      "case": "inventory-boundary-12600-migrations-unexposed",
+      "tool": "check_migrations",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "ENDPOINT_NOT_EXPOSED"
+      ],
+      "httpStatuses": [
+        404
+      ],
+      "responseBytes": 3077,
+      "elapsedMs": 69.707
+    },
+    {
+      "case": "inventory-boundary-12600-cursor-seed",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 11718,
+      "elapsedMs": 1084.858
+    },
+    {
+      "case": "inventory-boundary-12600-cursor-mismatch",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CURSOR_QUERY_MISMATCH"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2983,
+      "elapsedMs": 9.065
+    },
+    {
+      "case": "inventory-boundary-12600-drift",
+      "tool": "detect_drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_INDEX_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 2532,
+      "elapsedMs": 86.017
+    },
+    {
+      "case": "inventory-boundary-12600-mappings",
+      "tool": "verify_mappings",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 3388,
+      "elapsedMs": 39.253
+    },
+    {
+      "case": "inventory-boundary-12600-health",
+      "tool": "diagnose_health",
+      "status": "ok",
+      "totalMatched": 3,
+      "coverage": "complete",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 4534,
+      "elapsedMs": 14.324
+    },
+    {
+      "case": "inventory-boundary-12600-startup",
+      "tool": "analyze_startup",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "MAX_RESULTS",
+        "STARTUP_DEPTH_LIMIT",
+        "STARTUP_NODE_LIMIT",
+        "STARTUP_ORPHAN_STEP",
+        "STARTUP_TIMELINE_INCOMPLETE"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9364,
+      "elapsedMs": 471.783
+    },
+    {
+      "case": "cursor-expired",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "CURSOR_EXPIRED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2941,
+      "elapsedMs": 9.793
+    },
+    {
+      "case": "target-stopped",
+      "tool": "inspect_beans",
+      "status": "unavailable",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "TARGET_CONNECTION_REFUSED"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 3015,
+      "elapsedMs": 9.371
+    },
+    {
+      "case": "target-recovered-same-host",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9042,
+      "elapsedMs": 441.317
+    },
+    {
+      "case": "2026-07-28-known-bean",
+      "tool": "inspect_beans",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "truncated": true,
+      "errorCodes": [],
+      "httpStatuses": [],
+      "responseBytes": 9042,
+      "elapsedMs": 272.694
+    },
+    {
+      "case": "2026-07-28-invalid-arguments",
+      "tool": "diagnose_health",
+      "status": "invalid",
+      "totalMatched": null,
+      "coverage": "unavailable",
+      "gaps": [],
+      "truncated": false,
+      "errorCodes": [
+        "INVALID_ARGUMENT"
+      ],
+      "httpStatuses": [
+        null
+      ],
+      "responseBytes": 2945,
+      "elapsedMs": 7.236
+    }
+  ],
+  "failureCodes": [],
+  "startupErrorTypes": [],
+  "startupBeanIdentifiers": [],
+  "databaseSummary": "external persistence, loopback only",
+  "selection": {
+    "method": "shuf -n 1 over a curated popular production Spring Boot pool",
+    "candidates": [
+      "alibaba/nacos",
+      "PowerJob/PowerJob",
+      "alibaba/Sentinel"
+    ],
+    "selected": "alibaba/nacos"
+  },
+  "operatorLauncherCompileExit": 0,
+  "classpathEntryCount": 131,
+  "nacosDistributionJarSha256": "956d534d096455aaebb697e3e55b33b4b1b32530af7c036fc1915937677caae0",
+  "patchedJarSha256": "b3eca64044b7d42892a06144b750ab9abbefd33b4c999d6ae9c15837b20eb74b",
+  "portMode": "separate",
+  "javaMajor": 21,
+  "startupSeconds": [
+    6.878,
+    8.142,
+    8.814,
+    9.859
+  ],
+  "reportedInventory": {
+    "contextCount": 1,
+    "beanCount": 524,
+    "dependencyCount": 652
+  },
+  "pagination": {
+    "attempt": 1,
+    "pages": 52,
+    "uniqueBeans": 519,
+    "exhausted": true,
+    "reportedTotalMatched": null,
+    "expectedVisibleBeans": 519,
+    "coverageGaps": [
+      "ASSOCIATION_LIMIT",
+      "BEAN_GRAPH_INCOMPLETE",
+      "GRAPH_LIMIT_REACHED",
+      "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+      "REDACTED_IDENTIFIERS",
+      "SOURCE_CATALOG_UNPROVIDED"
+    ],
+    "terminalErrorCodes": []
+  },
+  "paginationAttempts": [
+    {
+      "attempt": 1,
+      "pages": 52,
+      "uniqueBeans": 519,
+      "exhausted": true,
+      "reportedTotalMatched": null,
+      "expectedVisibleBeans": 519,
+      "coverageGaps": [
+        "ASSOCIATION_LIMIT",
+        "BEAN_GRAPH_INCOMPLETE",
+        "GRAPH_LIMIT_REACHED",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "REDACTED_IDENTIFIERS",
+        "SOURCE_CATALOG_UNPROVIDED"
+      ],
+      "terminalErrorCodes": []
+    }
+  ],
+  "hostAfterWarmup": {
+    "rssKiB": 79548,
+    "openFiles": 7
+  },
+  "soak": {
+    "workers": 4,
+    "workerDelaySeconds": 0.5,
+    "plannedSeconds": 14400,
+    "seconds": 14401.542,
+    "calls": 68189,
+    "toolCalls": {
+      "inspect_beans": 25503,
+      "diagnose_health": 17008,
+      "verify_mappings": 8503,
+      "analyze_startup": 17003
+    },
+    "coverageGaps": {
+      "ASSOCIATION_LIMIT": 25503,
+      "BEAN_GRAPH_INCOMPLETE": 25503,
+      "GRAPH_LIMIT_REACHED": 25503,
+      "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY": 25503,
+      "REDACTED_IDENTIFIERS": 25503,
+      "SOURCE_CATALOG_UNPROVIDED": 25503,
+      "MAX_RESULTS": 17003,
+      "STARTUP_DEPTH_LIMIT": 17003,
+      "STARTUP_NODE_LIMIT": 17003,
+      "STARTUP_ORPHAN_STEP": 17003,
+      "STARTUP_TIMELINE_INCOMPLETE": 17003
+    },
+    "samples": 240,
+    "progressFile": "/home/neil/Projects/codcli/spring-runtime-mcp/examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.jsonl",
+    "inventoryChecks": [
+      {
+        "label": "inventory-boundary-1800",
+        "elapsedSeconds": 6.727,
+        "pages": 44,
+        "uniqueBeans": 519,
+        "expectedVisibleBeans": 519,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "coverage": {
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "scope": "registered target Bean contexts",
+          "state": "partial"
+        }
+      },
+      {
+        "label": "inventory-boundary-7200",
+        "elapsedSeconds": 7.174,
+        "pages": 44,
+        "uniqueBeans": 519,
+        "expectedVisibleBeans": 519,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "coverage": {
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "scope": "registered target Bean contexts",
+          "state": "partial"
+        }
+      },
+      {
+        "label": "inventory-boundary-12600",
+        "elapsedSeconds": 7.121,
+        "pages": 44,
+        "uniqueBeans": 519,
+        "expectedVisibleBeans": 519,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "coverage": {
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "scope": "registered target Bean contexts",
+          "state": "partial"
+        }
+      }
+    ],
+    "boundaryChecks": [
+      {
+        "label": "inventory-boundary-1800-invalid-arguments",
+        "tool": "diagnose_health",
+        "status": "invalid",
+        "errorCodes": [
+          "INVALID_ARGUMENT"
+        ],
+        "expected": [
+          "INVALID_ARGUMENT"
+        ]
+      },
+      {
+        "label": "inventory-boundary-1800-config-disabled",
+        "tool": "inspect_config",
+        "status": "unavailable",
+        "errorCodes": [
+          "CAPABILITY_DISABLED"
+        ],
+        "expected": [
+          "CAPABILITY_DISABLED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-1800-openapi-unexposed",
+        "tool": "search_openapi",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-1800-migrations-unexposed",
+        "tool": "check_migrations",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-1800-cursor-mismatch",
+        "tool": "inspect_beans",
+        "status": "unavailable",
+        "errorCodes": [
+          "CURSOR_QUERY_MISMATCH"
+        ],
+        "expected": [
+          "cursor query binding"
+        ]
+      },
+      {
+        "label": "inventory-boundary-1800-positive-domain",
+        "tools": [
+          "detect_drift",
+          "verify_mappings",
+          "diagnose_health",
+          "analyze_startup"
+        ],
+        "status": "ok"
+      },
+      {
+        "label": "inventory-boundary-7200-invalid-arguments",
+        "tool": "diagnose_health",
+        "status": "invalid",
+        "errorCodes": [
+          "INVALID_ARGUMENT"
+        ],
+        "expected": [
+          "INVALID_ARGUMENT"
+        ]
+      },
+      {
+        "label": "inventory-boundary-7200-config-disabled",
+        "tool": "inspect_config",
+        "status": "unavailable",
+        "errorCodes": [
+          "CAPABILITY_DISABLED"
+        ],
+        "expected": [
+          "CAPABILITY_DISABLED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-7200-openapi-unexposed",
+        "tool": "search_openapi",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-7200-migrations-unexposed",
+        "tool": "check_migrations",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-7200-cursor-mismatch",
+        "tool": "inspect_beans",
+        "status": "unavailable",
+        "errorCodes": [
+          "CURSOR_QUERY_MISMATCH"
+        ],
+        "expected": [
+          "cursor query binding"
+        ]
+      },
+      {
+        "label": "inventory-boundary-7200-positive-domain",
+        "tools": [
+          "detect_drift",
+          "verify_mappings",
+          "diagnose_health",
+          "analyze_startup"
+        ],
+        "status": "ok"
+      },
+      {
+        "label": "inventory-boundary-12600-invalid-arguments",
+        "tool": "diagnose_health",
+        "status": "invalid",
+        "errorCodes": [
+          "INVALID_ARGUMENT"
+        ],
+        "expected": [
+          "INVALID_ARGUMENT"
+        ]
+      },
+      {
+        "label": "inventory-boundary-12600-config-disabled",
+        "tool": "inspect_config",
+        "status": "unavailable",
+        "errorCodes": [
+          "CAPABILITY_DISABLED"
+        ],
+        "expected": [
+          "CAPABILITY_DISABLED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-12600-openapi-unexposed",
+        "tool": "search_openapi",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-12600-migrations-unexposed",
+        "tool": "check_migrations",
+        "status": "unavailable",
+        "errorCodes": [
+          "ENDPOINT_NOT_EXPOSED"
+        ],
+        "expected": [
+          "ENDPOINT_NOT_EXPOSED"
+        ]
+      },
+      {
+        "label": "inventory-boundary-12600-cursor-mismatch",
+        "tool": "inspect_beans",
+        "status": "unavailable",
+        "errorCodes": [
+          "CURSOR_QUERY_MISMATCH"
+        ],
+        "expected": [
+          "cursor query binding"
+        ]
+      },
+      {
+        "label": "inventory-boundary-12600-positive-domain",
+        "tools": [
+          "detect_drift",
+          "verify_mappings",
+          "diagnose_health",
+          "analyze_startup"
+        ],
+        "status": "ok"
+      }
+    ],
+    "targetRestarts": [
+      {
+        "atSeconds": 3600.104,
+        "recoverySeconds": 9.964,
+        "oldPid": 122331,
+        "newPid": 1951951,
+        "startupSeconds": 8.142
+      },
+      {
+        "atSeconds": 9000.203,
+        "recoverySeconds": 10.623,
+        "oldPid": 1951951,
+        "newPid": 763813,
+        "startupSeconds": 8.814
+      }
+    ],
+    "databasePauses": [
+      {
+        "atSeconds": 5400.303,
+        "actuatorBefore": "UP",
+        "actuatorDuring": "UP",
+        "actuatorAfter": "UP",
+        "readinessBefore": {
+          "httpStatus": 200,
+          "elapsedMs": 2.915
+        },
+        "readinessDuring": {
+          "httpStatus": null,
+          "elapsedMs": 5003.685,
+          "exceptionType": "TimeoutError"
+        },
+        "readinessRecovered": {
+          "httpStatus": 200,
+          "elapsedMs": 2.864
+        },
+        "databaseDuring": "paused paused=true",
+        "recoveryAttempts": 1,
+        "actuatorObservedExternalDbOutage": false
+      },
+      {
+        "atSeconds": 10800.503,
+        "actuatorBefore": "UP",
+        "actuatorDuring": "UP",
+        "actuatorAfter": "UP",
+        "readinessBefore": {
+          "httpStatus": 200,
+          "elapsedMs": 3.24
+        },
+        "readinessDuring": {
+          "httpStatus": null,
+          "elapsedMs": 5021.351,
+          "exceptionType": "TimeoutError"
+        },
+        "readinessRecovered": {
+          "httpStatus": 200,
+          "elapsedMs": 2.808
+        },
+        "databaseDuring": "paused paused=true",
+        "recoveryAttempts": 1,
+        "actuatorObservedExternalDbOutage": false
+      }
+    ],
+    "phaseErrors": [],
+    "resourceSummary": {
+      "target": {
+        "samples": 240,
+        "rssKiB": {
+          "first": 943840,
+          "last": 577664,
+          "min": 90508,
+          "max": 1025304,
+          "median": 639404.0
+        },
+        "openFiles": {
+          "first": 225,
+          "last": 224,
+          "max": 235
+        },
+        "threads": {
+          "first": 323,
+          "last": 368,
+          "max": 372
+        }
+      },
+      "host": {
+        "samples": 240,
+        "rssKiB": {
+          "first": 93712,
+          "last": 77196,
+          "min": 76180,
+          "max": 95352,
+          "median": 77746.0
+        },
+        "openFiles": {
+          "first": 7,
+          "last": 7,
+          "max": 8
+        },
+        "threads": {
+          "first": 22,
+          "last": 22,
+          "max": 22
+        }
+      }
+    },
+    "expectedErrorCodes": [
+      "AUTHORIZATION_DENIED",
+      "CAPABILITY_DISABLED",
+      "CURSOR_EXPIRED",
+      "CURSOR_QUERY_MISMATCH",
+      "ENDPOINT_NOT_EXPOSED",
+      "ENDPOINT_UNAUTHORIZED",
+      "FORBIDDEN",
+      "INVALID_ARGUMENT",
+      "TARGET_CONNECTION_REFUSED",
+      "TARGET_TIMEOUT",
+      "UNAUTHORIZED"
+    ],
+    "unexpectedErrorCodes": {}
+  },
+  "hostAfterSoak": {
+    "rssKiB": 77196,
+    "openFiles": 7
+  },
+  "hostAliveAfterSoak": true,
+  "targetProcessStopped": true,
+  "allMcpProcessesStopped": true,
+  "calls": 68260,
+  "statuses": {
+    "denied": 2,
+    "partial": 42708,
+    "invalid": 5,
+    "ok": 25525,
+    "unavailable": 20
+  },
+  "errorCodes": {
+    "ENDPOINT_UNAUTHORIZED": 2,
+    "INVALID_ARGUMENT": 5,
+    "ENDPOINT_NOT_EXPOSED": 8,
+    "CAPABILITY_DISABLED": 4,
+    "CURSOR_QUERY_MISMATCH": 4,
+    "TARGET_CONNECTION_REFUSED": 3,
+    "CURSOR_EXPIRED": 1
+  },
+  "maxResponseBytes": 15242,
+  "latencyMs": {
+    "median": 242.754,
+    "p95": 945.435,
+    "max": 2087.568
+  },
+  "accepted": true,
+  "databaseStopped": true,
+  "databasePortLoopbackOnly": true
+}

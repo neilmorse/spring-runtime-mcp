@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import gzip
 import json
 import os
 import select
@@ -19,6 +20,7 @@ import pytest
 from mcp_types.version import LATEST_HANDSHAKE_VERSION
 
 from spring_runtime_mcp.server import build_services
+from spring_runtime_mcp.diagnostics import SAFE_CODES
 
 from harness.host import dispatch
 from spring_runtime_mcp.tools.inspect_beans import Services
@@ -384,6 +386,67 @@ def test_tc_bug_09_real_slow_stream_is_closed(cancel: bool) -> None:
         thread.join(timeout=2)
 
 
+@pytest.mark.parametrize(
+    ("status", "content_type", "content_encoding", "code"),
+    [
+        (302, "application/json", None, "REDIRECT_BLOCKED"),
+        (401, "application/json", None, "ENDPOINT_UNAUTHORIZED"),
+        (200, "text/html", None, "UNEXPECTED_CONTENT_TYPE"),
+        (503, "text/html", None, "UNEXPECTED_CONTENT_TYPE"),
+        (200, "application/json", "deflate", "UNSUPPORTED_CONTENT_ENCODING"),
+        (503, "application/json", "br", "UNSUPPORTED_CONTENT_ENCODING"),
+    ],
+)
+def test_rejected_status_returns_without_waiting_for_slow_body(
+    status: int, content_type: str, content_encoding: str | None, code: str
+) -> None:
+    release = threading.Event()
+    headers_ready = threading.Event()
+    accepted_encodings: list[str | None] = []
+
+    class DelayedBodyHandler(BaseHTTPRequestHandler):
+        def log_message(self, *args: Any) -> None:
+            return None
+
+        def do_GET(self) -> None:
+            accepted_encodings.append(self.headers.get("Accept-Encoding"))
+            self.send_response(status)
+            self.send_header("Content-Type", content_type)
+            if content_encoding is not None:
+                self.send_header("Content-Encoding", content_encoding)
+            self.send_header("Content-Length", "1024")
+            headers_ready.set()
+            self.end_headers()
+            release.wait(2)
+
+    fixture = ThreadingHTTPServer(("127.0.0.1", 0), DelayedBodyHandler)
+    thread = threading.Thread(target=fixture.serve_forever, daemon=True)
+    thread.start()
+
+    async def exercise() -> None:
+        reader = ResponseGateReader(
+            ActuatorHttpTransport(_base(fixture), targets=frozenset({"local"})),
+            frozenset({"local"}),
+            frozenset({"health"}),
+            timeout=0.5,
+        )
+        with pytest.raises(EndpointReadError) as failure:
+            await reader.read("local", "health", snapshot_id="slow-error")
+        assert headers_ready.is_set()
+        assert not release.is_set()
+        assert failure.value.code == code
+        assert failure.value.http_status == status
+        assert accepted_encodings == ["identity"]
+
+    try:
+        asyncio.run(exercise())
+    finally:
+        release.set()
+        fixture.shutdown()
+        fixture.server_close()
+        thread.join(timeout=2)
+
+
 def test_real_http_transport_blocks_redirect_and_oversize(mounted: Any) -> None:
     server, state = mounted
     base = _base(server)
@@ -440,6 +503,149 @@ def test_real_http_transport_blocks_redirect_and_oversize(mounted: Any) -> None:
     assert response.status == 200
     assert len(response.body) == 1001
     assert state.paths == ["/actuator/beans"]
+
+
+@pytest.mark.parametrize("shape", ["single", "multiple", "interim", "below"])
+def test_response_headers_are_bounded_during_parsing(shape: str) -> None:
+    class OversizedHeaders(BaseHTTPRequestHandler):
+        def log_message(self, *args: Any) -> None:
+            return None
+
+        def do_GET(self) -> None:
+            if shape == "interim":
+                self.wfile.write(
+                    b"HTTP/1.1 100 Continue\r\nX-Interim: " + b"a" * 17000 + b"\r\n\r\n"
+                )
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", "15")
+            if shape == "single":
+                self.send_header("X-Large", "a" * 33000)
+            elif shape == "multiple":
+                for index in range(40):
+                    self.send_header(f"X-{index}", "a" * 1000)
+            elif shape == "interim":
+                self.send_header("X-Final", "a" * 17000)
+            else:
+                self.send_header("X-Below", "a" * 32000)
+            self.end_headers()
+            try:
+                self.wfile.write(b'{"status":"UP"}')
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+
+    fixture = ThreadingHTTPServer(("127.0.0.1", 0), OversizedHeaders)
+    fixture.handle_error = lambda *args, **kwargs: None  # type: ignore[method-assign]
+    thread = threading.Thread(target=fixture.serve_forever, daemon=True)
+    thread.start()
+    try:
+        gate = ResponseGateReader(
+            ActuatorHttpTransport(_base(fixture), targets=frozenset({"local"})),
+            frozenset({"local"}),
+            frozenset({"health"}),
+            timeout=2,
+        )
+        if shape == "below":
+            result = asyncio.run(
+                gate.read("local", "health", snapshot_id="large-headers")
+            )
+            assert result.body == {"status": "UP"}
+        else:
+            with pytest.raises(EndpointReadError) as failure:
+                asyncio.run(gate.read("local", "health", snapshot_id="large-headers"))
+            assert failure.value.code == "RESPONSE_HEADERS_TOO_LARGE"
+            assert "RESPONSE_HEADERS_TOO_LARGE" in SAFE_CODES
+    finally:
+        fixture.shutdown()
+        fixture.server_close()
+        thread.join(timeout=2)
+
+
+@pytest.mark.parametrize(
+    ("status", "chunked"), [(200, False), (503, False), (200, True)]
+)
+def test_gzip_health_json_is_decoded_from_loopback(status: int, chunked: bool) -> None:
+    class CompressedHealth(BaseHTTPRequestHandler):
+        def log_message(self, *args: Any) -> None:
+            return None
+
+        def do_GET(self) -> None:
+            payload = gzip.compress(b'{"status":"DOWN"}')
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Encoding", "gzip")
+            if chunked:
+                self.send_header("Transfer-Encoding", "chunked")
+            else:
+                self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            if chunked:
+                for part in (payload[:5], payload[5:]):
+                    self.wfile.write(f"{len(part):x}\r\n".encode() + part + b"\r\n")
+                self.wfile.write(b"0\r\n\r\n")
+            else:
+                self.wfile.write(payload)
+
+    fixture = ThreadingHTTPServer(("127.0.0.1", 0), CompressedHealth)
+    thread = threading.Thread(target=fixture.serve_forever, daemon=True)
+    thread.start()
+    try:
+        gate = ResponseGateReader(
+            ActuatorHttpTransport(_base(fixture), targets=frozenset({"local"})),
+            frozenset({"local"}),
+            frozenset({"health"}),
+            timeout=2,
+        )
+        result = asyncio.run(gate.read("local", "health", snapshot_id="gzip"))
+        assert result.body == {"status": "DOWN"}
+        assert result.http_status == status
+    finally:
+        fixture.shutdown()
+        fixture.server_close()
+        thread.join(timeout=2)
+
+
+@pytest.mark.parametrize(
+    ("status", "compressed"), [(200, False), (503, False), (200, True), (503, True)]
+)
+def test_short_content_length_body_cannot_be_accepted(
+    status: int, compressed: bool
+) -> None:
+    class ShortBody(BaseHTTPRequestHandler):
+        def log_message(self, *args: Any) -> None:
+            return None
+
+        def do_GET(self) -> None:
+            body = b'{"status":"DOWN"}'
+            payload = gzip.compress(body) if compressed else body
+            self.send_response(status)
+            self.send_header("Content-Type", "application/json")
+            if compressed:
+                self.send_header("Content-Encoding", "gzip")
+            self.send_header("Content-Length", str(len(payload) + 10))
+            self.send_header("Connection", "close")
+            self.end_headers()
+            self.wfile.write(payload)
+            self.close_connection = True
+
+    fixture = ThreadingHTTPServer(("127.0.0.1", 0), ShortBody)
+    thread = threading.Thread(target=fixture.serve_forever, daemon=True)
+    thread.start()
+    try:
+        gate = ResponseGateReader(
+            ActuatorHttpTransport(_base(fixture), targets=frozenset({"local"})),
+            frozenset({"local"}),
+            frozenset({"health"}),
+            timeout=2,
+        )
+        with pytest.raises(EndpointReadError) as failure:
+            asyncio.run(gate.read("local", "health", snapshot_id="short-body"))
+        assert failure.value.code == "INCOMPLETE_RESPONSE"
+        assert "INCOMPLETE_RESPONSE" in SAFE_CODES
+    finally:
+        fixture.shutdown()
+        fixture.server_close()
+        thread.join(timeout=2)
 
 
 def _frame(process: subprocess.Popen[bytes], payload: dict[str, Any]) -> dict[str, Any]:

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping
-from datetime import datetime
 from typing import Any
 from uuid import uuid4
 
@@ -12,6 +11,7 @@ from ..adapters.drift import compare_drift
 from ..contracts.definitions import validate_arguments
 from ..models.common import NormalizationError
 from ..models.queries import DriftQuery
+from ..models.timestamps import parse_rfc3339
 from ..transport.response_gate import EndpointReadError
 from ..services import Services
 from ..diagnostics import error, failed, partial, safe_code
@@ -88,16 +88,14 @@ def _startup_start(body: Any) -> str | None:
     if not isinstance(body, dict) or not isinstance(body.get("timeline"), dict):
         return None
     start = body["timeline"].get("startTime")
-    return start if isinstance(start, str) else None
+    return (
+        start if isinstance(start, str) and parse_rfc3339(start) is not None else None
+    )
 
 
 def _later(modified: str, started: str) -> bool:
-    try:
-        left = datetime.fromisoformat(modified.replace("Z", "+00:00"))
-        right = datetime.fromisoformat(started.replace("Z", "+00:00"))
-    except ValueError:
-        return False
-    return left.tzinfo is not None and right.tzinfo is not None and left > right
+    left, right = parse_rfc3339(modified), parse_rfc3339(started)
+    return left is not None and right is not None and left > right
 
 
 def _inferences(

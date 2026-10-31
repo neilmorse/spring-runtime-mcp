@@ -1,0 +1,23 @@
+<!-- Build inputs only. Never add this classpath to a diagnostic target JVM. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>local.diagnostics</groupId>
+  <artifactId>springdoc-compile-only</artifactId>
+  <version>1</version>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>4.1.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <dependencies>
+    <dependency><groupId>com.querydsl</groupId><artifactId>querydsl-core</artifactId></dependency>
+    <dependency><groupId>org.springframework.data</groupId><artifactId>spring-data-rest-core</artifactId></dependency>
+    <dependency><groupId>io.projectreactor</groupId><artifactId>reactor-core</artifactId></dependency>
+  </dependencies>
+</project>

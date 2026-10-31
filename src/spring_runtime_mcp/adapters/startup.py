@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
 from ..models.common import AnalysisBudget
+from ..models.timestamps import parse_rfc3339
 
 from ..contracts.definitions import glob_matches
 
@@ -25,13 +25,9 @@ def _nanos(text: str) -> int | None:
 
 
 def _timestamp(value: Any) -> str | None:
-    if not isinstance(value, str):
-        return None
-    try:
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-    except ValueError:
-        return None
-    return value if parsed.tzinfo is not None else None
+    return (
+        value if isinstance(value, str) and parse_rfc3339(value) is not None else None
+    )
 
 
 def _bottleneck(name: str) -> str:
@@ -177,28 +173,28 @@ def normalize_startup(
     )
     total: int | float | None = None
     try:
-        starts = [
-            datetime.fromisoformat(event["startTime"].replace("Z", "+00:00"))
-            for event in events
-        ]
-        ends = [
-            datetime.fromisoformat(event["endTime"].replace("Z", "+00:00"))
-            for event in events
-        ]
+        starts = [parse_rfc3339(event["startTime"]) for event in events]
+        ends = [parse_rfc3339(event["endTime"]) for event in events]
+        if not starts or any(date is None for date in [*starts, *ends]):
+            raise ValueError("STARTUP_TIMING_UNOBSERVED")
+        valid_starts = [date for date in starts if date is not None]
+        valid_ends = [date for date in ends if date is not None]
         raw_start = body["timeline"].get("startTime")
         start = (
-            datetime.fromisoformat(raw_start.replace("Z", "+00:00"))
-            if isinstance(raw_start, str)
-            else min(starts)
+            parse_rfc3339(raw_start)
+            if "startTime" in body["timeline"]
+            else min(valid_starts)
         )
-        if not starts or any(date.tzinfo is None for date in [start, *starts, *ends]):
+        if start is None:
             raise ValueError("STARTUP_TIMING_UNOBSERVED")
         if any(
             end < begin or begin < start
-            for begin, end in zip(starts, ends, strict=True)
+            for begin, end in zip(valid_starts, valid_ends, strict=True)
         ):
             raise ValueError("STARTUP_TIMING_UNOBSERVED")
-        total = (max(ends) - start).total_seconds() * 1000
+        if any(date.leap for date in [start, *valid_starts, *valid_ends]):
+            raise ValueError("STARTUP_TIMING_UNOBSERVED")
+        total = max(valid_ends).milliseconds_since(start)
     except (ValueError, TypeError, KeyError, AttributeError):
         gaps.add("STARTUP_TIMING_UNOBSERVED")
     complete = not gaps

@@ -2,7 +2,17 @@
 
 这份手册只描述仓库里已经落地的代码。离线测试覆盖八个工具、MCP stdio 宿主和回环 HTTP 连接器；它没有对真实 Spring Boot 进程做过版本矩阵验收。
 
-2026-10-22 交接补充：[综合修复报告](docs/audits/comprehensive-remediation-2026-10-22.md)记录 CR-01 至 CR-13 的关闭证据，当前全量 782 passed。官方 SDK 两种模式的隔离安装和 TDD 已提交副本的 Boot 3.5.16 / Java 21 / MVC / JWT / 临时 PostgreSQL 验收通过；该样本不等于版本矩阵。2026-10-20 的[剩余工作交接](docs/audits/remaining-work-handoff-2026-10-20.md)是历史基线，不覆盖当前状态。
+2026-10-22 交接补充：[综合修复报告](docs/audits/comprehensive-remediation-2026-10-22.md)记录 CR-01 至 CR-13 的关闭证据，当时全量 782 passed。官方 SDK 两种模式的隔离安装和 TDD 已提交副本的 Boot 3.5.16 / Java 21 / MVC / JWT / 临时 PostgreSQL 验收通过；该样本不等于版本矩阵。2026-10-20 的[剩余工作交接](docs/audits/remaining-work-handoff-2026-10-20.md)是历史基线，不覆盖当前状态。
+
+2026-10-23 追加：[Fineract 超大型验收](docs/audits/ultra-project-fineract-2026-10-23.md)完成 Apache Fineract 1.9.0 / Boot 3.1.7 / PostgreSQL 16 的 1202 次真实调用、252 页可见 Bean 穷尽、数据库暂停恢复和 JAX-RS mappings 保守降级修复；当时全量 **913 passed**。仍然只代表固定提交的隔离样本，不是生产集群或完整版本矩阵。
+
+2026-10-23 交付前总核验：[最终报告](docs/audits/final-delivery-audit-2026-10-23.md)复核功能闭环、边界防御、安全脱敏、测试真实性、净室构建与文档/版本一致性。修复 `--source-catalog` 无界读取和 CLI 启动提示，新增 `--version`，并将 pytest 升级到 9.0.3 关闭 PYSEC-2026-1845。当时全量 **922 passed**；wheel/sdist 全新 venv 安装、两种 MCP 协议和安装包内 replay 通过。未提交、未发布，未新增真实目标验收。
+
+2026-10-23 追加：[HertzBeat 小众项目验收](docs/audits/niche-project-hertzbeat-2026-10-23.md)完成 Boot 3.4.2 / Java 17 / H2 的 1594 次真实调用、87 页可见 Bean 穷尽、5 条 Flyway 迁移和目标重启恢复；[XXL-JOB 调度器验收](docs/audits/xxl-job-2026-10-23.md)完成 Boot 4.0.5 / Java 21 / MariaDB 的 2449 次调用、35 页可见 Bean 穷尽、数据库暂停 DOWN/恢复和目标重启恢复。当时全量 **925 passed**。两者都是固定提交的隔离样本，不代表生产/HA/执行器任务。
+
+2026-10-23 四小时追加：[Nacos 四小时生产模拟](docs/audits/nacos-four-hour-2026-10-23.md)从随机候选池选中 Nacos 2.4.3 / Boot 2.7.18 / Java 21 / MariaDB 11.2，完成 14,401.542 秒、68,260 次真实调用；519 个可见 Bean 的基线和三个周期分页一致，两次目标重启恢复约 10 秒，两次 MariaDB 暂停后 readiness 超时并在解锁后恢复，非预期错误为空。记录 Actuator 内嵌 Derby health 无法反映外部 MariaDB 的盲区；不验证集群、写路径、UI 或 JRaft 多节点。当时离线全量 **999 passed**；未提交、未发布。
+
+2026-10-30：工作树离线全量 **1084 passed**。构建依赖已固定并纳入锁文件；预发布自检分别验证 wheel 与 sdist 净室安装。Health 证据不完整时保留未知总数；连接器限制响应头、连接时限与 gzip 压缩前后的大小，并拒绝 Content-Length 未收满的响应。本地 TLS 验收仅覆盖五种合成证书场景。当前状态和工作区文件清单见[版本记录](CHANGELOG.md)和[交付清单](docs/audits/worktree-inventory-2026-10-30.md)。
 
 ## 1. 五层调用链
 
@@ -10,7 +20,7 @@
 stdio 客户端
     │  JSON-RPC 一行一帧
     ▼
-cli.py                         解析 --base-url / --target-id / --timeout，不接受工具参数里的 URL
+cli.py                         解析 --base-url / --target-id / --timeout / --source-catalog / --token-env / --config-*；不接受工具参数里的 URL
     ▼
 server.py                      官方 mcp SDK lowlevel Server；注册 on_list_tools/on_call_tool，stdout 只写 JSON-RPC
     ▼
