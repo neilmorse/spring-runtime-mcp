@@ -274,7 +274,13 @@ def test_server_tools_are_readonly_on_wire_and_reject_request_overrides(
 
 
 @pytest.mark.parametrize(
-    "status,code", [(404, "STARTUP_DATA_UNAVAILABLE"), (405, "ENDPOINT_UNAVAILABLE")]
+    "status,code",
+    [
+        (404, "STARTUP_DATA_UNAVAILABLE"),
+        (405, "ENDPOINT_UNAVAILABLE"),
+        (500, "ENDPOINT_UNAVAILABLE"),
+        (503, "ENDPOINT_UNAVAILABLE"),
+    ],
 )
 def test_server_startup_get_failure_never_falls_back_to_post(
     mounted: Any, status: int, code: str
@@ -289,6 +295,35 @@ def test_server_startup_get_failure_never_falls_back_to_post(
     assert state.requests == [("GET", "/actuator/startup")]
     assert state.writes == 0
     assert state.startup_buffer == [1, 2, 3]
+
+
+@pytest.mark.parametrize("status", [500, 503])
+def test_startup_server_error_suggests_collection_without_claiming_a_cause(
+    mounted: Any, status: int
+) -> None:
+    from conformance.assertions import assert_contract
+
+    server, state = mounted
+    state.responses["/actuator/startup"] = (status, b"{}")
+    result = _call_server(
+        build_services(_base(server)), "springboot_analyze_startup", {}
+    )
+    envelope = result["structuredContent"]
+    assert_contract("springboot_analyze_startup", envelope)
+    diagnostic = envelope["errors"][0]
+    assert diagnostic["code"] == "ENDPOINT_UNAVAILABLE"
+    assert diagnostic["httpStatus"] == status
+    assert diagnostic["endpointId"] == "startup"
+    remediation = diagnostic["remediation"]
+    assert remediation["action"] == "configureStartup"
+    assert remediation["requiresApproval"] is True
+    steps = " ".join(remediation["steps"])
+    assert "BufferingApplicationStartup" in steps
+    assert "if collection is absent" in steps
+    assert "does not identify" in steps
+    assert "version" in steps and "exposure" in steps
+    assert state.requests == [("GET", "/actuator/startup")]
+    assert state.writes == 0 and state.startup_buffer == [1, 2, 3]
 
 
 def test_server_tool_does_not_follow_redirect_to_an_unregistered_path(

@@ -9,8 +9,11 @@ from typing import Any
 from .models.common import NormalizationError, ParsedObservation
 from .policy.output_guard import (
     DIAGNOSTIC_MESSAGE,
+    INVALID_ARGUMENT_MESSAGE,
+    REVIEW_ARGUMENTS,
     REVIEW_AUTHORIZATION,
     REVIEW_STARTUP,
+    REVIEW_STARTUP_FAILURE,
     REVIEW_TARGET,
 )
 from .transport.bounded_json import validate_tree
@@ -99,13 +102,21 @@ def error(
         else None
     )
     status = status if type(status) is int and 100 <= status <= 599 else None
+    startup_failure = (
+        code == "ENDPOINT_UNAVAILABLE"
+        and endpoint == "startup"
+        and status is not None
+        and status >= 500
+    )
     action = (
-        "reviewAuthorization"
+        "refineQuery"
+        if code == "INVALID_ARGUMENT"
+        else "configureStartup"
+        if startup_failure or code == "STARTUP_DATA_UNAVAILABLE"
+        else "reviewAuthorization"
         if code in ("ENDPOINT_UNAUTHORIZED", "REDIRECT_BLOCKED")
         else "reviewExposure"
         if code in ("ENDPOINT_UNAVAILABLE", "ENDPOINT_NOT_EXPOSED")
-        else "configureStartup"
-        if code == "STARTUP_DATA_UNAVAILABLE"
         else "configureCapability"
         if code == "CAPABILITY_DISABLED"
         else "reviewTarget"
@@ -115,19 +126,25 @@ def error(
         "endpointId": endpoint,
         "httpStatus": status,
         "retryable": False,
-        "message": DIAGNOSTIC_MESSAGE,
+        "message": INVALID_ARGUMENT_MESSAGE
+        if code == "INVALID_ARGUMENT"
+        else DIAGNOSTIC_MESSAGE,
         "remediation": {
             "recipeId": code,
             "action": action,
             "configKeys": ["management.endpoints.web.exposure.include"]
             if action == "reviewExposure"
             else [],
-            "steps": [REVIEW_STARTUP]
+            "steps": [REVIEW_ARGUMENTS]
+            if code == "INVALID_ARGUMENT"
+            else [REVIEW_STARTUP_FAILURE, REVIEW_STARTUP]
+            if startup_failure
+            else [REVIEW_STARTUP]
             if code == "STARTUP_DATA_UNAVAILABLE"
             else [REVIEW_AUTHORIZATION]
             if action == "reviewAuthorization"
             else [REVIEW_TARGET],
-            "requiresApproval": True,
+            "requiresApproval": code != "INVALID_ARGUMENT",
             "retryAfterMs": None,
         },
     }

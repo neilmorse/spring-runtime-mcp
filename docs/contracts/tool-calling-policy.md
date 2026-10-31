@@ -67,6 +67,10 @@ origin 仅输出相对配置文件标识、可证实的行列号或合法环境�
 
 ok/partial 的有效诊断使用 isError=false，包括健康 DOWN、发现迁移失败/漂移、以及完整范围内没有匹配项。无可用领域结果的 denied/unavailable/invalid/too_large 使用 isError=true、data=null、totalMatched=null，并至少提供一个 errors 项。未知工具或非法 JSON-RPC 封装由协议错误处理；工具参数不符合 inputSchema 属于可行动的工具执行错误，使用 INVALID_ARGUMENT、isError=true，不联网，不回显输入。
 
+`INVALID_ARGUMENT` 的本地配方使用 `refineQuery`，引导重新读取 `tools/list` 的 inputSchema，核对字段名、必填选择器和类型，并提示 `maxResults` 为 1–50 的整数；修改调用参数不需要批准，不引导修改目标配置。配方不包含校验器原文或提交的参数值。
+
+startup 端点返回 5xx 时仍保留 `ENDPOINT_UNAVAILABLE` 与实际 HTTP 状态；配方使用 `configureStartup`，提示核对暴露、Boot 版本与启动采集，仅在确认缺少采集后建议在 run 前配置 `BufferingApplicationStartup`。HTTP 状态本身不确定根因，配置与重启仍需授权。其他端点的 5xx、startup 的鉴权失败或重定向不套用此采集建议。
+
 2026-07-28 的完整工具结果使用 resultType=complete；同时返回 structuredContent 与唯一 TextContent，其 text 是同一脱敏对象的紧凑 JSON。SDK 必须实际支持所宣称协议及必需请求元数据，不能仅替换版本字符串。整个 JSON-RPC 响应连同两份内容和 request id 不超过 16,384 UTF-8 字节；超限时先裁剪，再经最终序列化出口测量。此回包限制不适用于静态 tools/list 定义，不能因此截断 Schema。
 
 服务仅缓存脱敏快照。Agent 每轮最多 4 次调用、累计结果不超过 64 KiB；触顶后先总结并收窄查询。授权、网络、安全或证据失败时停止对应分支，完成其余可独立诊断，不自动提权或执行修复。

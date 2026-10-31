@@ -123,6 +123,25 @@ tool_timeout_sec = 30
 
 运行 `codex mcp list` 检查登记。列出登记仅说明配置被读取，不证明进程握手或目标端点授权。
 
+对于已有 Bearer/JWT 鉴权的目标，可以用以下公开发行包配置替换上面的同名表；合并时保留其他服务器配置。
+通过现有凭据配置流程，将 `SHOP_ACTUATOR_TOKEN` 提供给启动 Codex 的进程环境。
+令牌值不要写入 TOML、命令参数或提示词；`env_vars` 只转发指定名称的环境变量，见上述官方配置说明。
+
+```toml
+[mcp_servers.spring_runtime]
+command = "uvx"
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.1", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+env_vars = ["SHOP_ACTUATOR_TOKEN"]
+startup_timeout_sec = 20
+tool_timeout_sec = 30
+```
+
+父进程没有该变量时，转发不会创建令牌，MCP 宿主会启动失败。
+使用源码版命令时，同样追加 `--token-env SHOP_ACTUATOR_TOKEN`，并加入 `env_vars`。
+调用前读取实际 `tools/list` 的 inputSchema；例如 `springboot_verify_mappings` 使用
+`{"pathPattern":"/orders/{id}","httpMethod":"GET","maxResults":1}`，不接受 `path`/`method` 别名。
+`maxResults` 必须是 1–50 的整数；该调用只读取映射元数据，不访问业务 URL。
+
 ### Claude Desktop / Claude Code
 
 Claude Desktop 通过 Settings → Developer → Edit Config 打开 `claude_desktop_config.json`；macOS 常见位置为 `~/Library/Application Support/Claude/claude_desktop_config.json`，Windows 为 `%APPDATA%\Claude\claude_desktop_config.json`。合并 `mcpServers`，不要覆盖已有服务器。命令依赖本机 `uv`；桌面客户端可能不继承终端 PATH。[本地接入说明](https://modelcontextprotocol.io/docs/develop/connect-local-servers)。

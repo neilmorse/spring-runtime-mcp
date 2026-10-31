@@ -152,6 +152,26 @@ startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
+For a Bearer/JWT-protected target, replace that server table with the following
+published-package example. Supply `SHOP_ACTUATOR_TOKEN` through the environment
+that launches Codex, using your existing credential provisioning process; do not
+put the token value in TOML, command arguments or a prompt. Codex's `env_vars`
+forwards the named variable to the STDIO subprocess ([official configuration](https://developers.openai.com/codex/mcp)).
+
+```toml
+[mcp_servers.spring_runtime]
+command = "uvx"
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.1", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+env_vars = ["SHOP_ACTUATOR_TOKEN"]
+startup_timeout_sec = 20
+tool_timeout_sec = 30
+```
+
+Keep other server tables when merging this configuration. If the parent Codex
+process lacks the variable, forwarding cannot supply it and the host fails
+startup. For the checkout-based command above, append the same `--token-env`
+arguments and add the same `env_vars` entry.
+
 **Claude Code** — `.mcp.json` in the workspace root (Claude Desktop uses the same `mcpServers` object in `claude_desktop_config.json`):
 
 ```json
@@ -169,6 +189,12 @@ tool_timeout_sec = 30
 **Cursor** — `.cursor/mcp.json`, same `mcpServers` object without `"type"`. **VS Code** — `.vscode/mcp.json`, top-level key `servers`, with `"type": "stdio"`.
 
 Acceptance order on first connect: `initialize` succeeds → `tools/list` returns eight alphabetically sorted tools → one read-only call returns a schema-valid, sanitized result. A `401`/`403` from the target means its own security chain rejected the request; fix authorization there, never by disabling security or following `/login`.
+
+Use the field names in the actual `tools/list` inputSchema. For example, call
+`springboot_verify_mappings` with
+`{"pathPattern":"/orders/{id}","httpMethod":"GET","maxResults":1}`;
+`path` and `method` are not accepted aliases. `maxResults` must be an integer
+from 1 to 50. This reads mapping metadata and does not request the business URL.
 
 ## Verified against a real Boot 3.4 app
 

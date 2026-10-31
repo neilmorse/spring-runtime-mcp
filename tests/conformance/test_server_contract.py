@@ -129,3 +129,74 @@ def test_server_unreachable_target_returns_structured_error(
     assert SECRET.encode() not in frame
     assert b"Traceback" not in frame
     assert connections and set(connections) == {("127.0.0.1", 18080)}
+
+
+@pytest.mark.parametrize("tool,arguments,_endpoint", TOOL_CALLS)
+def test_invalid_arguments_explain_schema_constraints_without_connecting(
+    unreachable_services: tuple[Services, list[tuple[str, int]]],
+    tool: str,
+    arguments: dict[str, Any],
+    _endpoint: str,
+) -> None:
+    services, connections = unreachable_services
+    frame = asyncio.run(
+        dispatch(
+            {
+                "jsonrpc": "2.0",
+                "id": "invalid-arguments",
+                "method": "tools/call",
+                "params": {
+                    "name": tool,
+                    "arguments": {**arguments, "maxResults": 51},
+                },
+            },
+            services,
+        )
+    )
+    assert frame is not None
+    result = json.loads(frame)["result"]
+    envelope = result["structuredContent"]
+    validator(tool).validate(envelope)
+    assert envelope["status"] == "invalid" and result["isError"] is True
+    diagnostic = envelope["errors"][0]
+    assert diagnostic["code"] == "INVALID_ARGUMENT"
+    assert diagnostic["endpointId"] is None and diagnostic["httpStatus"] is None
+    remediation = diagnostic["remediation"]
+    assert remediation["action"] == "refineQuery"
+    assert remediation["requiresApproval"] is False
+    assert remediation["configKeys"] == []
+    steps = " ".join(remediation["steps"])
+    assert "inputSchema" in steps and "maxResults" in steps and "50" in steps
+    assert "parameter" in diagnostic["message"].lower()
+    assert connections == []
+    assert len(frame) <= 16_384
+    assert json.loads(result["content"][0]["text"]) == envelope
+
+
+def test_unknown_mapping_fields_are_rejected_without_echoing_input(
+    unreachable_services: tuple[Services, list[tuple[str, int]]],
+) -> None:
+    services, connections = unreachable_services
+    frame = asyncio.run(
+        dispatch(
+            {
+                "jsonrpc": "2.0",
+                "id": "wrong-fields",
+                "method": "tools/call",
+                "params": {
+                    "name": "springboot_verify_mappings",
+                    "arguments": {"path": f"/{SECRET}", "method": "GET"},
+                },
+            },
+            services,
+        )
+    )
+    assert frame is not None
+    assert SECRET.encode() not in frame
+    envelope = json.loads(frame)["result"]["structuredContent"]
+    validator("springboot_verify_mappings").validate(envelope)
+    diagnostic = envelope["errors"][0]
+    assert diagnostic["code"] == "INVALID_ARGUMENT"
+    assert diagnostic["remediation"]["action"] == "refineQuery"
+    assert "field names" in " ".join(diagnostic["remediation"]["steps"])
+    assert connections == []

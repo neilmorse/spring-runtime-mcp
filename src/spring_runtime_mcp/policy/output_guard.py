@@ -15,17 +15,23 @@ from .sanitization import (
 )
 
 DIAGNOSTIC_MESSAGE = "Diagnostic evidence is unavailable; review the registered target and access policy."
+INVALID_ARGUMENT_MESSAGE = "Tool parameters do not match the inputSchema; review field names, types and constraints."
+REVIEW_ARGUMENTS = "Read this tool's inputSchema from tools/list; use its exact field names, required selectors and value types. If supplied, maxResults must be an integer from 1 to 50. Correct the arguments before retrying; target configuration changes are not required."
 REVIEW_TARGET = (
     "Review target registration, endpoint exposure and authorization locally."
 )
 REVIEW_AUTHORIZATION = "Review the existing Spring Security rule and diagnostic credentials; do not disable security or follow login redirects."
 REVIEW_STARTUP = "Review startup endpoint exposure; if collection is absent, configure SpringApplication.setApplicationStartup(new BufferingApplicationStartup(2048)) before run; restart requires approval."
+REVIEW_STARTUP_FAILURE = "The HTTP status alone does not identify the cause. Review the Spring Boot version and startup collection configuration; configuration changes require approval."
 LOCAL_PROSE = frozenset(
     {
         DIAGNOSTIC_MESSAGE,
+        INVALID_ARGUMENT_MESSAGE,
+        REVIEW_ARGUMENTS,
         REVIEW_TARGET,
         REVIEW_AUTHORIZATION,
         REVIEW_STARTUP,
+        REVIEW_STARTUP_FAILURE,
         "registered target Bean contexts",
         "registered target health",
         "registered target mappings",

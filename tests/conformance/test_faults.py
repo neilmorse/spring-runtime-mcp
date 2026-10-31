@@ -155,6 +155,80 @@ def test_html_success_is_structured_content_type_error():
         asyncio.run(reader.read("local", "beans", snapshot_id="snapshot"))
 
 
+@pytest.mark.parametrize(
+    "tool,arguments,endpoint,status,code,action",
+    [
+        (
+            "springboot_inspect_beans",
+            {"beanNamePattern": "*"},
+            "beans",
+            500,
+            "ENDPOINT_UNAVAILABLE",
+            "reviewExposure",
+        ),
+        (
+            "springboot_diagnose_health",
+            {},
+            "health",
+            500,
+            "ENDPOINT_UNAVAILABLE",
+            "reviewExposure",
+        ),
+        (
+            "springboot_analyze_startup",
+            {},
+            "startup",
+            401,
+            "ENDPOINT_UNAUTHORIZED",
+            "reviewAuthorization",
+        ),
+        (
+            "springboot_analyze_startup",
+            {},
+            "startup",
+            302,
+            "REDIRECT_BLOCKED",
+            "reviewAuthorization",
+        ),
+        (
+            "springboot_analyze_startup",
+            {},
+            "startup",
+            405,
+            "ENDPOINT_UNAVAILABLE",
+            "reviewExposure",
+        ),
+    ],
+)
+def test_other_endpoint_failures_do_not_suggest_startup_collection(
+    tool, arguments, endpoint, status, code, action
+):
+    from spring_runtime_mcp.tools.registry import call_tool
+
+    reader, transport = gate_for(
+        {
+            "endpointId": endpoint,
+            "status": status,
+            "contentType": "application/json",
+            "body": {},
+        }
+    )
+    services = Services(
+        reader,
+        SourceCatalog("local", None, {}, (), ()),
+        SanitizerPipeline(),
+        SnapshotStore(),
+    )
+    result = asyncio.run(call_tool(tool, arguments, services))
+    assert_contract(tool, result)
+    diagnostic = result["errors"][0]
+    assert diagnostic["code"] == code and diagnostic["httpStatus"] == status
+    assert diagnostic["remediation"]["action"] == action
+    assert diagnostic["remediation"]["requiresApproval"] is True
+    assert "BufferingApplicationStartup" not in json.dumps(diagnostic)
+    assert len(transport.calls) == 1
+
+
 def test_hidden_health_does_not_invent_components(load_sample):
     case = next(
         c for c in load_sample("faults/cases.json") if c["id"] == "health-hidden"
