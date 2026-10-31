@@ -54,6 +54,11 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync --dev --locked
+      - name: Warm default-index cache with hash-locked dependencies
+        run: |
+          uv export --frozen --all-groups --no-editable --no-emit-project -o "$RUNNER_TEMP/release-cache-requirements.txt"
+          uv venv "$RUNNER_TEMP/release-cache-venv"
+          uv pip install --python "$RUNNER_TEMP/release-cache-venv/bin/python" --require-hashes -r "$RUNNER_TEMP/release-cache-requirements.txt"
       - name: Verify package and registry versions
         run: |
           uv run --no-sync python - <<'PY'

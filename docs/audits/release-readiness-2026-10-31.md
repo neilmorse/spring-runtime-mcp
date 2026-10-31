@@ -9,6 +9,7 @@
 - 材料检查另确认 springdoc 与 Fineract 历史补丁需要保留原始上下文空白：以精确路径 `.gitattributes` 排除源码空白规则，不改补丁字节；四份非空补丁均通过 `git apply --numstat` 语法解析。ThingsBoard 旧补丁为空，已撤下 README 的 `git apply` 命令并明确该历史 profile 复现材料不完整，不影响限定范围的 Python/fixture 发布验收。
 - 提交按逐文件审核清单显式暂存，不使用 `git add .` 或 `git add -A`。发布准备分支使用 `codex/release-*`；先在本地干净提交运行用户指定门禁，再仅推送该分支进行验证，不推正式标签、不触发发布。
 - 新增 `.github/workflows/release-check.yml`：分支 push / workflow_dispatch 调用共享 checks 的 `full-release-gate: true`，运行 Python 矩阵、静态检查和完整联网审计门禁。它没有 publish job、`pypi` environment 或 `id-token: write`；发布 workflow 仍以 `verify-release: true` 额外强制版本标签匹配。两入口复用相同产物检查/隔离安装实现。官方 actionlint 临时二进制在仓库外执行（关闭外部 shellcheck/pyflakes 集成），退出 0。
+- 首次验证型远端运行 `41174676429`（提交 `faf5339`）四个 Python 版本与静态检查通过，完整门禁在离线构建失败：uv.lock 的镜像源安装缓存不能满足默认 PyPI 源的隔离构建下载。保留该失败，不使用它作为通过证据。共享 release gate 新增仓库外的缓存预热：导出全部锁定依赖及哈希，用临时 venv 按默认源 `--require-hashes` 安装；随后仍由同一完整门禁离线构建/隔离安装，只有其验证产物才上传。没有新增依赖、跳过构建或放宽门禁；新提交与批次必须重验。
 - GitHub 实际仓库是 `neilmorse/spring-runtime-mcp`，旧 Kaelenx 地址重定向；插件连接只读，本机 gh 登录 neilmorse 且 REST 返回 admin/push=true。Actions 已启用、允许所有 actions；管理员查询 `environments` 返回 `total_count=0`，`pypi` 详情返回 404：这是当前未建立环境/保护规则的实际证据，不再仅标待核实。未擅自建立环境或授权。
 - PyPI 项目和 0.2.0 JSON 端点均返回 404，只能证明本轮查询时未公开，不证明名称没有保留或一定可创建。PyPI 管理页要求登录，用户反馈无法加载该站点；账户角色及（含 pending）Trusted Publisher 无法核实。预期 publisher 参数为 owner `neilmorse`、repo `spring-runtime-mcp`、workflow `release.yml`、environment `pypi`；发布前须由有权限的操作者核实并配置。项目作者名和旧项目链接保留；`server.json` 的 `io.github.Kaelenx` 命名空间授权在后续 Registry 阶段另审，当前不执行 Registry。
 - 其他客户端继续未验证；不新增支持范围、运行依赖、目标/IP/端点或资源预算。Codex 历史单调用探针不在本轮重复运行。
