@@ -14,16 +14,16 @@ It is local-first and safe by default: fixed `GET` endpoints only, no redirects,
 
 [中文说明](README.zh-CN.md)
 
-**0.2.1 Alpha is available on [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/).**
+**0.2.2 Alpha — diagnostic remediation improvements.** [PyPI package](https://pypi.org/project/spring-runtime-mcp/0.2.2/).
 It supports registered loopback targets over STDIO, with fixed endpoints and optional
 Bearer environment binding. Commands below explicitly use public PyPI to avoid mirror lag. Windows/macOS and the full Boot/client matrix remain
-unverified. This metadata patch aligns Registry ownership; diagnostics are unchanged
-from 0.2.0. See the [release record](docs/launch/release-0.2.1.md).
+unverified. This patch improves invalid-argument and startup-failure guidance
+without changing the tool schemas or access policy. See the [release record](docs/launch/release-0.2.2.md).
 Registered as [`io.github.neilmorse/spring-runtime-mcp`](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp).
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --base-url http://127.0.0.1:18081
 ```
 
 Configure your local target first using the [target setup guide](docs/target-app-setup.md).
@@ -64,7 +64,7 @@ Tools are registered in alphabetical order, each carries `readOnlyHint`, `destru
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No JDK, Docker, model API key or network target is needed; the replay command runs a tool against a committed synthetic Actuator fixture.
 
 ```bash
-git clone --branch v0.2.1 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
+git clone --branch v0.2.2 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
 uv run --locked python -m pytest -q
 uv run --locked python -m spring_runtime_mcp.replay \
   --scenario stripe-missing --tool springboot_inspect_beans \
@@ -152,6 +152,26 @@ startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
+For a Bearer/JWT-protected target, replace that server table with the following
+published-package example. Supply `SHOP_ACTUATOR_TOKEN` through the environment
+that launches Codex, using your existing credential provisioning process; do not
+put the token value in TOML, command arguments or a prompt. Codex's `env_vars`
+forwards the named variable to the STDIO subprocess ([official configuration](https://developers.openai.com/codex/mcp)).
+
+```toml
+[mcp_servers.spring_runtime]
+command = "uvx"
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.2", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+env_vars = ["SHOP_ACTUATOR_TOKEN"]
+startup_timeout_sec = 20
+tool_timeout_sec = 30
+```
+
+Keep other server tables when merging this configuration. If the parent Codex
+process lacks the variable, forwarding cannot supply it and the host fails
+startup. For the checkout-based command above, append the same `--token-env`
+arguments and add the same `env_vars` entry.
+
 **Claude Code** — `.mcp.json` in the workspace root (Claude Desktop uses the same `mcpServers` object in `claude_desktop_config.json`):
 
 ```json
@@ -169,6 +189,12 @@ tool_timeout_sec = 30
 **Cursor** — `.cursor/mcp.json`, same `mcpServers` object without `"type"`. **VS Code** — `.vscode/mcp.json`, top-level key `servers`, with `"type": "stdio"`.
 
 Acceptance order on first connect: `initialize` succeeds → `tools/list` returns eight alphabetically sorted tools → one read-only call returns a schema-valid, sanitized result. A `401`/`403` from the target means its own security chain rejected the request; fix authorization there, never by disabling security or following `/login`.
+
+Use the field names in the actual `tools/list` inputSchema. For example, call
+`springboot_verify_mappings` with
+`{"pathPattern":"/orders/{id}","httpMethod":"GET","maxResults":1}`;
+`path` and `method` are not accepted aliases. `maxResults` must be an integer
+from 1 to 50. This reads mapping metadata and does not request the business URL.
 
 ## Verified against a real Boot 3.4 app
 
@@ -237,7 +263,7 @@ Always filter first. When `truncated` is `true`, follow `nextAction` to narrow t
 
 ## Status and limitations
 
-The 0.2.1 release includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md), the [2026-10-23 ultra-large Fineract acceptance](docs/audits/ultra-project-fineract-2026-10-23.md), the [2026-10-23 niche HertzBeat acceptance](docs/audits/niche-project-hertzbeat-2026-10-23.md), the [2026-10-23 XXL-JOB scheduler acceptance](docs/audits/xxl-job-2026-10-23.md) and the [2026-10-23 four-hour Nacos soak](docs/audits/nacos-four-hour-2026-10-23.md). Historical verification snapshots and their limits follow; current released-batch evidence is in the [release record](docs/launch/release-0.2.1.md).
+The 0.2.2 release includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md), the [2026-10-23 ultra-large Fineract acceptance](docs/audits/ultra-project-fineract-2026-10-23.md), the [2026-10-23 niche HertzBeat acceptance](docs/audits/niche-project-hertzbeat-2026-10-23.md), the [2026-10-23 XXL-JOB scheduler acceptance](docs/audits/xxl-job-2026-10-23.md) and the [2026-10-23 four-hour Nacos soak](docs/audits/nacos-four-hour-2026-10-23.md). Historical verification snapshots and their limits follow; current release-batch evidence is in the [release record](docs/launch/release-0.2.2.md).
 
 - On 2026-10-30, 1084 tests passed on the uncommitted worktree; strict `mypy`, `ruff` and independent JSON Schema validation also passed. Default fixtures are **synthetic** Boot 2.7 / 3.x / 4.x and MVC / WebFlux shapes; HTTP integration tests use only test-created loopback services. Shared services enforce two reads per target and one 15-second tool deadline, including queue time and cooperative analysis.
 - A separate, explicitly authorized Shop check passed on Boot **3.5.16 / Java 21 / MVC / JWT / disposable PostgreSQL 16**. It used a committed source snapshot because the original working tree contains unfinished business changes. Hidden health details, incomplete source/condition evidence and bounded startup output remain `partial`. This sample does not establish a full version matrix.
@@ -287,7 +313,7 @@ Security findings should go to the repository's private vulnerability reporting 
 <!-- mcp-name: io.github.neilmorse/spring-runtime-mcp -->
 
 
-The published release is **0.2.1 Alpha**: loopback targets, STDIO,
+Release scope for **0.2.2 Alpha**: loopback targets, STDIO,
 eight existing tools and Bearer environment binding. See the
 [release readiness report](docs/audits/release-readiness-2026-10-31.md) for separate
 platform, historical sample, SDK and actual client evidence.
@@ -297,12 +323,12 @@ wheel independently (Linux/macOS path examples; Windows is unverified):
 
 ```bash
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.1-py3-none-any.whl
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.2-py3-none-any.whl
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-Public PyPI installation has passed an independent clean-environment check on
+Public PyPI 0.2.1 installation passed an independent clean-environment check on
 Linux/Python 3.12, including both SDK modes, eight fixture routes and seven replay
 scenarios. Replay is a one-shot offline command, not the MCP host. See the
-[release record](docs/launch/release-0.2.1.md) for evidence and remaining limits.
+[release record](docs/launch/release-0.2.2.md) for evidence and remaining limits.

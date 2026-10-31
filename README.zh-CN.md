@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-**v0.2.1 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.1.md)。
+**v0.2.2 Alpha：诊断修复提示改进**（[PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.2/)）。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.2.md)。
 
 本版仅修正 Registry 所有权和项目链接，诊断能力与 0.2.0 一致。已登记到
 [MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp)，名称为 `io.github.neilmorse/spring-runtime-mcp`。
@@ -10,8 +10,8 @@
 安装并检查版本（显式使用官方 PyPI，避免镜像尚未同步新包）：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --base-url http://127.0.0.1:18081
 ```
 
 先按[目标配置指南](docs/target-app-setup.md)配置本地应用。第二条命令为常驻 MCP 宿主，等待客户端通过 STDIO 发出请求；replay 仍是一次性离线命令。
@@ -122,6 +122,25 @@ tool_timeout_sec = 30
 ```
 
 运行 `codex mcp list` 检查登记。列出登记仅说明配置被读取，不证明进程握手或目标端点授权。
+
+对于已有 Bearer/JWT 鉴权的目标，可以用以下公开发行包配置替换上面的同名表；合并时保留其他服务器配置。
+通过现有凭据配置流程，将 `SHOP_ACTUATOR_TOKEN` 提供给启动 Codex 的进程环境。
+令牌值不要写入 TOML、命令参数或提示词；`env_vars` 只转发指定名称的环境变量，见上述官方配置说明。
+
+```toml
+[mcp_servers.spring_runtime]
+command = "uvx"
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.2", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+env_vars = ["SHOP_ACTUATOR_TOKEN"]
+startup_timeout_sec = 20
+tool_timeout_sec = 30
+```
+
+父进程没有该变量时，转发不会创建令牌，MCP 宿主会启动失败。
+使用源码版命令时，同样追加 `--token-env SHOP_ACTUATOR_TOKEN`，并加入 `env_vars`。
+调用前读取实际 `tools/list` 的 inputSchema；例如 `springboot_verify_mappings` 使用
+`{"pathPattern":"/orders/{id}","httpMethod":"GET","maxResults":1}`，不接受 `path`/`method` 别名。
+`maxResults` 必须是 1–50 的整数；该调用只读取映射元数据，不访问业务 URL。
 
 ### Claude Desktop / Claude Code
 
@@ -268,15 +287,15 @@ uv build
 Python 实现位于 `src/spring_runtime_mcp/`；公开契约位于 `src/spring_runtime_mcp/schemas/tools-contract.json`，随 wheel 一起分发；`tests/` 默认阻断外部网络。架构速查见 [HANDOVER.md](HANDOVER.md)。[SPEC](SPEC.md)定义产品目标，[目标配置指南](docs/target-app-setup.md)解释版本及授权，[归一化设计](docs/architecture/cross-version-normalization.md)说明响应差异，[红队报告](docs/audits/security-redteam-2026-10-17.md)列出已修复问题与仍未覆盖的真实实例边界。
 
 
-已发布版本为 **0.2.1 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
+本版范围为 **0.2.2 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
 
 源码检出使用上方锁定项目命令。wheel 安装后直接运行入口：
 
 ```bash
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.1-py3-none-any.whl
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.2-py3-none-any.whl
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.1.md)。replay 是一次性离线命令，不是 MCP 宿主。
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.1 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.2.md)。replay 是一次性离线命令，不是 MCP 宿主。
