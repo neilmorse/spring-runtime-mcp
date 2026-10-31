@@ -2,6 +2,8 @@
 
 ## v0.2.2 Alpha — 2026-10-31（诊断修复提示）
 
+- 已推送 `v0.2.2`（`d4388d39b2ec57160836c602bf97f4875f7f6fe3`），发布到 PyPI、GitHub Release 与 MCP Registry；完整本地/远端门禁及公开 PyPI 全新安装通过，产物摘要一致，详见[发布记录](docs/launch/release-0.2.2.md)。
+
 - `INVALID_ARGUMENT` 改为参数修复配方：检查实际 inputSchema 的字段名、类型与约束，提示 `maxResults` 为 1–50，不回显输入；修正参数无需审批。
 - startup GET 的 5xx 保留原错误码和 HTTP 状态，提示核对暴露、Boot 版本与启动采集，明确状态码不能单独确定原因；配置及重启仍需授权，不回退 POST。
 - 中英文 README 补充公开发行包的 Codex Bearer 环境变量转发示例与路由参数示例。公开 Schema、运行依赖、目标配置和安全守卫未修改；发布批次状态见[0.2.2 发布记录](docs/launch/release-0.2.2.md)。
