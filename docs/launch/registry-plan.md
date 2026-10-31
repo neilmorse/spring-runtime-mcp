@@ -32,6 +32,8 @@
 
 ## 目录状态
 
-[awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153) 为草稿。
-维护者要求 Glama 收录、启动/内省检查和真实评分徽章；用户没有 Glama 账号并明确选择暂缓。
-未创建账号、接受条款、提交虚假徽章或宣称目录收录完成。
+[awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153) 仍为草稿。
+维护者要求 Glama 收录、启动/内省检查和真实评分徽章。
+操作者此前暂缓，现已自行注册并登录 Glama；本轮提交源码审核表单，操作者确认收到审核邮件。
+公开条目及 Dockerfile 管理入口尚未生成，待人工审核后继续。没有添加虚假徽章或宣称目录已收录。
+源码构建 Dockerfile、有限本地验收与下一步见 [Glama 投稿记录](glama/README.md)。
