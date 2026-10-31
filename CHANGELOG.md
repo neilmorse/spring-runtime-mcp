@@ -1,10 +1,12 @@
 # 版本记录
 
-## 未发布 — v0.2.1 Alpha 元数据修正候选
+## v0.2.1 Alpha — 2026-10-31（元数据修正）
 
-- Registry 名称与 README 所有权标记统一为 `io.github.neilmorse/spring-runtime-mcp`；项目 URL 指向当前仓库所有者。版本源、锁文件项目版本和 Registry 包版本同步为 0.2.1。
-- 仅准备候选，不表示已上传 PyPI 或 Registry。已发布的 0.2.0 标签和产物保留；生产诊断实现、公开工具 Schema、运行依赖、只读/脱敏/目标/预算边界不变。
-- 新标签、PyPI 环境标签授权、新版本上传及 Registry 登录/提交仍需操作者批准。安装说明继续固定已公开验收的 0.2.0，待新版本公开安装通过后再切换推荐版本。
+- 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/)，标签 `v0.2.1` 指向 `2d8567ba9ae10ac143a24d4ec443909a9e8997cb`。
+- Registry 名称与 README 所有权标记统一为 `io.github.neilmorse/spring-runtime-mcp`，项目 URL 指向当前所有者；已通过短时 GitHub OIDC 身份发布并独立回读 Registry 条目。
+- 本地/远端完整门禁、1100 项测试、wheel/sdist 隔离安装及公开 PyPI 无缓存、无锁约束安装通过。版本、两种 SDK 模式、八工具回环调用和七 replay 均通过，详见[发布记录](docs/launch/release-0.2.1.md)。
+- 生产诊断实现、公开工具 Schema、运行依赖与安全边界保持；动态项目的 uv.lock 条目不固化项目版本，重新锁校验通过且锁文件字节未变。0.2.0 标签和已上传产物保留。
+- 目录 PR 已提交为草稿，依用户选择暂缓 Glama 账号/收录步骤；未宣称目录已正式收录。
 
 ## v0.2.0 Alpha — 2026-10-31（正式发布）
 

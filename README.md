@@ -4,6 +4,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![MCP](https://img.shields.io/badge/MCP-stdio-black.svg)](https://modelcontextprotocol.io)
+[![PyPI](https://img.shields.io/pypi/v/spring-runtime-mcp)](https://pypi.org/project/spring-runtime-mcp/)
 
 **Read-only, sanitized Spring Boot runtime evidence for coding agents.**
 
@@ -13,14 +14,16 @@ It is local-first and safe by default: fixed `GET` endpoints only, no redirects,
 
 [中文说明](README.zh-CN.md)
 
-**0.2.0 Alpha is available on [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/).**
+**0.2.1 Alpha is available on [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/).**
 It supports registered loopback targets over STDIO, with fixed endpoints and optional
 Bearer environment binding. Commands below explicitly use public PyPI to avoid mirror lag. Windows/macOS and the full Boot/client matrix remain
-unverified. See the [release record](docs/launch/release-0.2.0.md).
+unverified. This metadata patch aligns Registry ownership; diagnostics are unchanged
+from 0.2.0. See the [release record](docs/launch/release-0.2.1.md).
+Registered as [`io.github.neilmorse/spring-runtime-mcp`](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp).
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --base-url http://127.0.0.1:18081
 ```
 
 Configure your local target first using the [target setup guide](docs/target-app-setup.md).
@@ -61,7 +64,7 @@ Tools are registered in alphabetical order, each carries `readOnlyHint`, `destru
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No JDK, Docker, model API key or network target is needed; the replay command runs a tool against a committed synthetic Actuator fixture.
 
 ```bash
-git clone --branch v0.2.0 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
+git clone --branch v0.2.1 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
 uv run --locked python -m pytest -q
 uv run --locked python -m spring_runtime_mcp.replay \
   --scenario stripe-missing --tool springboot_inspect_beans \
@@ -234,7 +237,7 @@ Always filter first. When `truncated` is `true`, follow `nextAction` to narrow t
 
 ## Status and limitations
 
-The v0.2.0 worktree includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md), the [2026-10-23 ultra-large Fineract acceptance](docs/audits/ultra-project-fineract-2026-10-23.md), the [2026-10-23 niche HertzBeat acceptance](docs/audits/niche-project-hertzbeat-2026-10-23.md), the [2026-10-23 XXL-JOB scheduler acceptance](docs/audits/xxl-job-2026-10-23.md) and the [2026-10-23 four-hour Nacos soak](docs/audits/nacos-four-hour-2026-10-23.md). These changes have not been published. Verification and limits:
+The v0.2.1 worktree includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md), the [2026-10-23 ultra-large Fineract acceptance](docs/audits/ultra-project-fineract-2026-10-23.md), the [2026-10-23 niche HertzBeat acceptance](docs/audits/niche-project-hertzbeat-2026-10-23.md), the [2026-10-23 XXL-JOB scheduler acceptance](docs/audits/xxl-job-2026-10-23.md) and the [2026-10-23 four-hour Nacos soak](docs/audits/nacos-four-hour-2026-10-23.md). These changes have not been published. Verification and limits:
 
 - On 2026-10-30, 1084 tests passed on the uncommitted worktree; strict `mypy`, `ruff` and independent JSON Schema validation also passed. Default fixtures are **synthetic** Boot 2.7 / 3.x / 4.x and MVC / WebFlux shapes; HTTP integration tests use only test-created loopback services. Shared services enforce two reads per target and one 15-second tool deadline, including queue time and cooperative analysis.
 - A separate, explicitly authorized Shop check passed on Boot **3.5.16 / Java 21 / MVC / JWT / disposable PostgreSQL 16**. It used a committed source snapshot because the original working tree contains unfinished business changes. Hidden health details, incomplete source/condition evidence and bounded startup output remain `partial`. This sample does not establish a full version matrix.
@@ -284,7 +287,7 @@ Security findings should go to the repository's private vulnerability reporting 
 <!-- mcp-name: io.github.neilmorse/spring-runtime-mcp -->
 
 
-The published release is **0.2.0 Alpha**: loopback targets, STDIO,
+The published release is **0.2.1 Alpha**: loopback targets, STDIO,
 eight existing tools and Bearer environment binding. See the
 [release readiness report](docs/audits/release-readiness-2026-10-31.md) for separate
 platform, historical sample, SDK and actual client evidence.
@@ -294,7 +297,7 @@ wheel independently (Linux/macOS path examples; Windows is unverified):
 
 ```bash
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.0-py3-none-any.whl
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.1-py3-none-any.whl
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
@@ -302,4 +305,4 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 Public PyPI installation has passed an independent clean-environment check on
 Linux/Python 3.12, including both SDK modes, eight fixture routes and seven replay
 scenarios. Replay is a one-shot offline command, not the MCP host. See the
-[release record](docs/launch/release-0.2.0.md) for evidence and remaining limits.
+[release record](docs/launch/release-0.2.1.md) for evidence and remaining limits.
