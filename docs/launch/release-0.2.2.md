@@ -48,4 +48,3 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --base-url
 | --- | --- |
 | spring_runtime_mcp-0.2.2-py3-none-any.whl | `277e8b7c53526d8f458696ee4e4433b026671cfa15d8a417668bbdc84e59e2b1` |
 | spring_runtime_mcp-0.2.2.tar.gz | `2d0a0a64e96d225ed7d95ababcf8591713aedeeccc7d0327f2505eb65601975b` |
-
