@@ -1,5 +1,11 @@
 # 版本记录
 
+## 未发布 — v0.2.1 Alpha 元数据修正候选
+
+- Registry 名称与 README 所有权标记统一为 `io.github.neilmorse/spring-runtime-mcp`；项目 URL 指向当前仓库所有者。版本源、锁文件项目版本和 Registry 包版本同步为 0.2.1。
+- 仅准备候选，不表示已上传 PyPI 或 Registry。已发布的 0.2.0 标签和产物保留；生产诊断实现、公开工具 Schema、运行依赖、只读/脱敏/目标/预算边界不变。
+- 新标签、PyPI 环境标签授权、新版本上传及 Registry 登录/提交仍需操作者批准。安装说明继续固定已公开验收的 0.2.0，待新版本公开安装通过后再切换推荐版本。
+
 ## v0.2.0 Alpha — 2026-10-31（正式发布）
 
 - 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/)，标签 `v0.2.0` 对应 `2394b29a84a5fcd8210d3934eee1a94e1d3fc0ac`。

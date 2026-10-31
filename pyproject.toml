@@ -43,10 +43,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Kaelenx/spring-runtime-mcp"
-Repository = "https://github.com/Kaelenx/spring-runtime-mcp"
-Issues = "https://github.com/Kaelenx/spring-runtime-mcp/issues"
-Changelog = "https://github.com/Kaelenx/spring-runtime-mcp/blob/master/CHANGELOG.md"
+Homepage = "https://github.com/neilmorse/spring-runtime-mcp"
+Repository = "https://github.com/neilmorse/spring-runtime-mcp"
+Issues = "https://github.com/neilmorse/spring-runtime-mcp/issues"
+Changelog = "https://github.com/neilmorse/spring-runtime-mcp/blob/master/CHANGELOG.md"
 
 [tool.hatch.version]
 path = "src/spring_runtime_mcp/__init__.py"

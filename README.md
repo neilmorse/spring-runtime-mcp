@@ -281,7 +281,7 @@ Security findings should go to the repository's private vulnerability reporting 
 
 [Apache-2.0](LICENSE)
 
-<!-- mcp-name: io.github.Kaelenx/spring-runtime-mcp -->
+<!-- mcp-name: io.github.neilmorse/spring-runtime-mcp -->
 
 
 The published release is **0.2.0 Alpha**: loopback targets, STDIO,
