@@ -32,8 +32,8 @@
 
 ## 目录状态
 
-[awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153) 仍为草稿。
-维护者要求 Glama 收录、启动/内省检查和真实评分徽章。
-操作者此前暂缓，现已自行注册并登录 Glama；本轮提交源码审核表单，操作者确认收到审核邮件。
-公开条目及 Dockerfile 管理入口尚未生成，待人工审核后继续。没有添加虚假徽章或宣称目录已收录。
-源码构建 Dockerfile、有限本地验收与下一步见 [Glama 投稿记录](glama/README.md)。
+[Glama 条目](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp) 已公开并完成首次发布，
+成功发现全部八个工具，工具定义评分 TDQS A（3.9/5.0）。
+[awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)
+已加入真实评分徽章并恢复审核，等待上游维护者处理，尚未宣称已合并。
+源码构建、本地有限样本与远端状态见 [Glama 投稿记录](glama/README.md)。

@@ -39,14 +39,14 @@ path fallback are outside this release. Configuration diagnostics stay disabled 
 
 ## awesome-mcp-servers 投稿
 
-已提交 [PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)，现为草稿。维护者要求先通过 Glama 检查；已恢复投稿并收到审核确认，等待人工审核和远端检查，尚未完成目录收录。以下文案供恢复投稿时使用。
+已提交 [PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)，已补真实 Glama 评分徽章并恢复审核，等待上游维护者处理。Glama 已公开并发现八工具，当前工具定义评分 A（3.9/5.0）。当前投稿文案如下。
 
 目标：[punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers)。
 遵循其[贡献指南](https://github.com/punkpeye/awesome-mcp-servers/blob/main/CONTRIBUTING.md)，
-添加到 Developer Tools 类别并按仓库所有者排序，不声明 Registry 收录或完整兼容。
+添加到 Developer Tools 类别并按仓库所有者排序，仅陈述已验证的范围，不宣称完整兼容。
 
 ```markdown
-- [neilmorse/spring-runtime-mcp](https://github.com/neilmorse/spring-runtime-mcp) 🐍 🏠 - Read-only Spring Boot runtime diagnostics: beans and conditions, routes, health, migrations, startup, config origin, OpenAPI and drift. Loopback-only, sanitized, bounded responses.
+- [neilmorse/spring-runtime-mcp](https://github.com/neilmorse/spring-runtime-mcp) [![neilmorse/spring-runtime-mcp MCP server](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp/badges/score.svg)](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp) 🐍 🏠 - Read-only Spring Boot runtime diagnostics: beans and conditions, routes, health, migrations, startup, config origin, OpenAPI and drift. Loopback-only, sanitized, bounded responses.
 ```
 
 PR title: **Add Spring Runtime MCP**
@@ -69,7 +69,7 @@ were assisted by a coding agent.
 ## 其他目录与社区公告
 
 - [Smithery](https://smithery.ai/new) 当前跳转账户登录；需可用账户，且应先确认其安装模型适用于本地 STDIO。
-- [Glama](https://glama.ai/mcp/servers) 的 Add Server 已实际核查，要求账号注册/登录；操作者已自行注册并登录，源码表单已提交并收到审核确认，待人工审核通过后配置 Dockerfile。
+- [Glama](https://glama.ai/mcp/servers) 的 Add Server 已实际核查，已完成审核与首次发布，公开页发现八工具，TDQS A（3.9/5.0）；未购买 Boost 推广。
 - PulseMCP、mcp.so 未核实可用的直接提交路径，不能声称已提交或会自动同步。
 - Reddit/dev.to 等帖子需选择平台并使用操作者已授权账户；本轮先准备下列短文，不跨平台自动群发。
 
