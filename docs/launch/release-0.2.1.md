@@ -45,6 +45,6 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --base-url
 仅新增 `v0.2.1` 标签授权。详情见[命名空间迁移记录](registry-plan.md)。
 
 [awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)
-已提交并转为草稿；维护者要求先通过 Glama 检查。原先暂缓后现已恢复投稿并收到审核确认，
-等待人工审核及远端检查，尚未正式收录。最新状态见 [Glama 投稿记录](glama/README.md)。
+已补真实 Glama 徽章并恢复审核，等待上游维护者处理。Glama 条目已公开，
+发现八个工具并显示 TDQS A（3.9/5.0）；详见 [Glama 投稿记录](glama/README.md)。
 其他目录与跨平台社区帖子未发送，已准备[公告文案](announcement.md)。

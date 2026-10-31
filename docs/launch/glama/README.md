@@ -1,8 +1,13 @@
 # Glama 源码投稿与协议内省
 
-2026-10-31 已使用 GitHub 登录 Glama，提交 `neilmorse/spring-runtime-mcp` 的 Runs from source 审核表单；
-操作者确认收到审核邮件。人工审核尚未通过，公开服务器条目和 Dockerfile 管理入口尚未生成。
-这不是“已收录”或“质量检查已通过”的声明。
+2026-10-31 已完成审核并公开[服务器条目](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp)。
+Glama 首次发布记录为 0.1.0；项目 PyPI 包版本为 0.2.1，两处发布记录分别维护。
+公开页成功发现全部八个工具，显示工具定义评分 TDQS **A（3.9/5.0）**。
+此评分不是完整生产兼容性或安全保证。
+
+真实评分徽章已加入 [awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)，
+该 PR 已恢复为待维护者审核状态；提交目录 PR 不等于已经合并收录。
+邮件中的 Boost 为可选付费推广，本次收录没有购买该服务。
 
 ## Dockerfile
 
@@ -15,7 +20,8 @@ docker build -t spring-runtime-mcp-glama:0.2.1 -f docs/launch/glama/Dockerfile .
 docker run --rm --network none spring-runtime-mcp-glama:0.2.1 --version
 ```
 
-Glama 人工审核通过后，在该条目的 Admin / Dockerfile 中使用此内容并运行其构建/质量检查。
+Glama 已完成首次发布及工具内省；后续如需重建，可在条目的 Admin / Dockerfile 中使用此配方。
+这里记录的是独立验证过的本地源码构建；Glama 实际构建配置以其 Admin 记录为准。
 目录中的远端沙箱无法访问开发者机器的回环应用；实际诊断请按主 README 在应用所在环境运行本地 CLI。
 不会为了云端演示放行远程目标或提供虚假健康结果。
 
@@ -33,12 +39,12 @@ Glama 人工审核通过后，在该条目的 Admin / Dockerfile 中使用此内
 
 这些是本地有限样本，不能替代 Glama 的远端构建、人工审核、安全检查或评分。
 
-## 后续收录
+## 后续维护
 
-1. 等待审核通过及管理链接；不要重复提交同一仓库。
-2. 在 Glama 配置 Dockerfile，检查源码构建、initialize、tools/list 和八工具描述符。
-3. 核实 Glama 自己的检查和评分，记录实际结果，不把本地验收替代远端评分。
-4. 公开条目存在且检查通过后，为 awesome-mcp-servers 的 PR #18153 添加真实 Glama 徽章，再恢复其审核状态。
+1. 保留已公开条目与实际评分的记录；评分变化时重新核查具体条目，不用本地测试冒充远端评分。
+2. Dockerfile、依赖或工具元数据变化后检查 Glama 的实际构建与内省结果。
+3. 目录 PR 已补真实徽章并恢复审核，等待上游维护者处理；不要重复提交相同服务器。
+4. 保持只读、回环、脱敏与预算守卫；工具定义评分不能成为扩大权限的依据。
 
 投稿描述：
 
