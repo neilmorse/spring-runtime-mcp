@@ -1,0 +1,726 @@
+{
+  "verifiedDate": "2026-10-23",
+  "scope": "PC-01/PC-02/LS-01-remediation",
+  "publicSchemasChanged": false,
+  "runtimeDependenciesChanged": false,
+  "absoluteTtlSeconds": 60,
+  "cacheLimitBytes": 33554432,
+  "maxWireBytes": 16384,
+  "findings": [
+    {
+      "id": "PC-01",
+      "state": "repaired-with-regression-and-native-revalidation"
+    },
+    {
+      "id": "PC-02",
+      "state": "repaired-with-regression-and-native-revalidation"
+    },
+    {
+      "id": "LS-01",
+      "state": "repaired-with-regression-and-native-revalidation"
+    }
+  ],
+  "validation": {
+    "pytestPassed": 909,
+    "pytestSeconds": 32.11,
+    "mypySourceFiles": 53,
+    "ruffFiles": 109,
+    "contractTools": 8,
+    "syntheticContractAssertions": "144+"
+  },
+  "runs": [
+    {
+      "verifiedAt": "2026-10-23T03:34:48.961009+00:00",
+      "project": "shenyu",
+      "sourceRepository": "https://github.com/apache/shenyu",
+      "sourceRevision": "218c5634ebffb1f0ce7e8ea921b85cd5a633cde7",
+      "sourceTag": "v2.7.1",
+      "configuredBootVersion": "3.3.1",
+      "stack": "servlet-jakarta",
+      "authentication": "operator-management-only-Bearer",
+      "database": "native-disposable-H2",
+      "mainJavaSourceFiles": 2099,
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "scope": "native-app-plus-explicit-operator-fault-components",
+      "actuator": "native",
+      "adoptionSource": "https://shenyu.apache.org/users/",
+      "dedicatedContainerNetwork": true,
+      "faultChecks": [
+        {
+          "case": "native-db-healthy",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "injected-health-down-and-canary",
+          "expectedState": "DOWN",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "health-component-recovered",
+          "expectedState": "UP",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-exhausted",
+          "expectedState": "DOWN",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-recovered",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "boot-missing",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.NoSuchBeanDefinitionException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosBroken"
+          ]
+        },
+        {
+          "case": "boot-collision",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.support.BeanDefinitionOverrideException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCollision"
+          ]
+        },
+        {
+          "case": "boot-cycle",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.BeanCurrentlyInCreationException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCycleOne",
+            "chaosCycleTwo",
+            "chaosCycleOne"
+          ]
+        },
+        {
+          "case": "native-db-after-boot-recovery",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "sdk-cancellation",
+          "proxyReadStarted": true,
+          "clientTaskCancelled": true
+        }
+      ],
+      "operatorLauncherCompileExit": 0,
+      "runtimeImageId": "sha256:742daacb9316be4b6fc60258f6e4ac2a11882f6c597373c92290a57bfad0d2e0",
+      "portMode": "shared",
+      "javaMajor": 21,
+      "startupSeconds": [
+        15.421,
+        11.349
+      ],
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 699,
+        "dependencyCount": 957
+      },
+      "pagination": {
+        "attempt": 1,
+        "pages": 69,
+        "uniqueBeans": 692,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 692,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ],
+        "terminalErrorCodes": []
+      },
+      "paginationAttempts": [
+        {
+          "attempt": 1,
+          "pages": 69,
+          "uniqueBeans": 692,
+          "exhausted": true,
+          "reportedTotalMatched": null,
+          "expectedVisibleBeans": 692,
+          "coverageGaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "terminalErrorCodes": []
+        }
+      ],
+      "instrumentedBeanCount": 1699,
+      "faultProxy": {
+        "trapReads": 0,
+        "requests": {
+          "unauthorized:beans": 1,
+          "pass:beans": 12,
+          "forbidden:beans": 1,
+          "redirect:beans": 1,
+          "rate-limit:beans": 1,
+          "server-error:beans": 1,
+          "html:beans": 1,
+          "duplicate-keys:beans": 1,
+          "invalid-utf8:beans": 1,
+          "incomplete-body:beans": 1,
+          "oversized:beans": 1,
+          "slow:beans": 2,
+          "parent-cycle:beans": 1,
+          "orphan-parent:beans": 1,
+          "health-down:health": 1,
+          "openapi-refs:openapi": 1,
+          "startup-invalid-time:startup": 1
+        },
+        "origin": "fixed-disposable-loopback-target"
+      },
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 118,
+      "statuses": {
+        "denied": 4,
+        "partial": 90,
+        "ok": 9,
+        "unavailable": 15
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 4,
+        "MALFORMED_EVIDENCE": 2,
+        "CAPABILITY_DISABLED": 1,
+        "TARGET_CONNECTION_REFUSED": 3,
+        "REDIRECT_BLOCKED": 1,
+        "ENDPOINT_UNAVAILABLE": 2,
+        "UNEXPECTED_CONTENT_TYPE": 1,
+        "DUPLICATE_JSON_KEY": 1,
+        "INVALID_JSON": 2,
+        "RESPONSE_TOO_LARGE": 1,
+        "TARGET_TIMEOUT": 1
+      },
+      "maxResponseBytes": 14916,
+      "latencyMs": {
+        "median": 58.458,
+        "p95": 537.052,
+        "max": 1353.648
+      },
+      "accepted": true,
+      "allOwnedContainersStopped": true,
+      "fullReport": "../../examples/production-chaos/results/shenyu-remediation.json",
+      "fullReportSha256": "9ceb8bf634aab8c7309129fa2b4a97ddee081f23f76cdd520b004bed50ed584e",
+      "paginationSdkCallSumMs": 5503.825,
+      "independentInstructionCanaryAssertionsPresent": true
+    },
+    {
+      "verifiedAt": "2026-10-23T03:34:48.947065+00:00",
+      "project": "thingsboard",
+      "sourceRepository": "https://github.com/thingsboard/thingsboard",
+      "sourceRevision": "292e6a36a120c2056a3c19b501d8245d9e6f2db0",
+      "sourceTag": "v4.2.1",
+      "configuredBootVersion": "3.4.10",
+      "stack": "servlet-jakarta",
+      "authentication": "operator-management-only-Bearer",
+      "database": "disposable-PostgreSQL",
+      "mainJavaSourceFiles": 3541,
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "scope": "native-app-plus-explicit-operator-fault-components",
+      "actuator": "operator-opt-in-profile",
+      "adoptionSource": "https://thingsboard.io/case-studies/senseing/",
+      "dedicatedContainerNetwork": true,
+      "faultChecks": [
+        {
+          "case": "native-db-healthy",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "injected-health-down-and-canary",
+          "expectedState": "DOWN",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "health-component-recovered",
+          "expectedState": "UP",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-exhausted",
+          "expectedState": "DOWN",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-recovered",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-postgres-unresponsive",
+          "expectedState": "DOWN",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-postgres-recovered",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "boot-missing",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.NoSuchBeanDefinitionException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosBroken"
+          ]
+        },
+        {
+          "case": "boot-collision",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.support.BeanDefinitionOverrideException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCollision"
+          ]
+        },
+        {
+          "case": "boot-cycle",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.BeanCurrentlyInCreationException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCycleOne",
+            "chaosCycleTwo",
+            "chaosCycleOne"
+          ]
+        },
+        {
+          "case": "native-db-after-boot-recovery",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "sdk-cancellation",
+          "proxyReadStarted": true,
+          "clientTaskCancelled": true
+        }
+      ],
+      "operatorLauncherCompileExit": 0,
+      "runtimeImageId": "sha256:742daacb9316be4b6fc60258f6e4ac2a11882f6c597373c92290a57bfad0d2e0",
+      "javaMajor": 21,
+      "startupSeconds": [
+        50.367,
+        23.632,
+        22.843
+      ],
+      "nativeDatabaseInstallCompleted": true,
+      "portMode": "shared",
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 1280,
+        "dependencyCount": 5916
+      },
+      "pagination": {
+        "attempt": 1,
+        "pages": 125,
+        "uniqueBeans": 1255,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 1255,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ],
+        "terminalErrorCodes": []
+      },
+      "paginationAttempts": [
+        {
+          "attempt": 1,
+          "pages": 125,
+          "uniqueBeans": 1255,
+          "exhausted": true,
+          "reportedTotalMatched": null,
+          "expectedVisibleBeans": 1255,
+          "coverageGaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "terminalErrorCodes": []
+        }
+      ],
+      "instrumentedBeanCount": 2280,
+      "faultProxy": {
+        "trapReads": 0,
+        "requests": {
+          "unauthorized:beans": 1,
+          "pass:beans": 12,
+          "forbidden:beans": 1,
+          "redirect:beans": 1,
+          "rate-limit:beans": 1,
+          "server-error:beans": 1,
+          "html:beans": 1,
+          "duplicate-keys:beans": 1,
+          "invalid-utf8:beans": 1,
+          "incomplete-body:beans": 1,
+          "oversized:beans": 1,
+          "slow:beans": 2,
+          "parent-cycle:beans": 1,
+          "orphan-parent:beans": 1,
+          "health-down:health": 1,
+          "openapi-refs:openapi": 1,
+          "startup-invalid-time:startup": 1
+        },
+        "origin": "fixed-disposable-loopback-target"
+      },
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 176,
+      "statuses": {
+        "denied": 4,
+        "partial": 146,
+        "ok": 11,
+        "unavailable": 15
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 4,
+        "ENDPOINT_NOT_EXPOSED": 2,
+        "CAPABILITY_DISABLED": 1,
+        "TARGET_CONNECTION_REFUSED": 3,
+        "REDIRECT_BLOCKED": 1,
+        "ENDPOINT_UNAVAILABLE": 2,
+        "UNEXPECTED_CONTENT_TYPE": 1,
+        "DUPLICATE_JSON_KEY": 1,
+        "INVALID_JSON": 2,
+        "RESPONSE_TOO_LARGE": 1,
+        "TARGET_TIMEOUT": 1
+      },
+      "maxResponseBytes": 16260,
+      "latencyMs": {
+        "median": 57.604,
+        "p95": 732.708,
+        "max": 2449.557
+      },
+      "accepted": true,
+      "allOwnedContainersStopped": true,
+      "fullReport": "../../examples/production-chaos/results/thingsboard-remediation.json",
+      "fullReportSha256": "d0092be59f454be59b4ef96497b39746d5b15bb42dc15d963aaf2b8420ac19dd",
+      "paginationSdkCallSumMs": 9745.012,
+      "independentInstructionCanaryAssertionsPresent": true
+    },
+    {
+      "verifiedAt": "2026-10-23T03:38:25.616711+00:00",
+      "project": "dolphinscheduler",
+      "sourceRepository": "https://github.com/apache/dolphinscheduler",
+      "sourceRevision": "a190201acffa03d199d4ca216288734a6513de3d",
+      "sourceTag": "3.4.3",
+      "configuredBootVersion": "2.7.11",
+      "stack": "servlet-javax",
+      "authentication": "operator-management-only-Bearer",
+      "database": "native-disposable-H2",
+      "mainJavaSourceFiles": 1950,
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "scope": "native-app-plus-explicit-operator-fault-components",
+      "actuator": "native",
+      "adoptionSource": "https://news.apache.org/foundation/entry/asf-project-spotlight-apache-dolphinscheduler",
+      "dedicatedContainerNetwork": true,
+      "faultChecks": [
+        {
+          "case": "native-db-healthy",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "injected-health-down-and-canary",
+          "expectedState": "DOWN",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "health-component-recovered",
+          "expectedState": "UP",
+          "component": "chaosDependency",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-exhausted",
+          "expectedState": "DOWN",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "native-pool-recovered",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "boot-missing",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.NoSuchBeanDefinitionException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosBroken"
+          ]
+        },
+        {
+          "case": "boot-collision",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.support.BeanDefinitionOverrideException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCollision"
+          ]
+        },
+        {
+          "case": "boot-cycle",
+          "processFailed": true,
+          "errorTypes": [
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.UnsatisfiedDependencyException",
+            "org.springframework.beans.factory.BeanCurrentlyInCreationException"
+          ],
+          "beanIdentifiers": [
+            "launcherStage_nativeStartup",
+            "chaosCycleOne",
+            "chaosCycleTwo",
+            "chaosCycleOne"
+          ]
+        },
+        {
+          "case": "native-db-after-boot-recovery",
+          "expectedState": "UP",
+          "component": "db",
+          "expectedStateObserved": true,
+          "outputGuardPassed": true
+        },
+        {
+          "case": "sdk-cancellation",
+          "proxyReadStarted": true,
+          "clientTaskCancelled": true
+        }
+      ],
+      "operatorLauncherCompileExit": 0,
+      "runtimeImageId": "sha256:742daacb9316be4b6fc60258f6e4ac2a11882f6c597373c92290a57bfad0d2e0",
+      "portMode": "shared",
+      "javaMajor": 21,
+      "startupSeconds": [
+        16.605,
+        14.957
+      ],
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 826,
+        "dependencyCount": 1557
+      },
+      "pagination": {
+        "attempt": 1,
+        "pages": 82,
+        "uniqueBeans": 820,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 820,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ],
+        "terminalErrorCodes": []
+      },
+      "paginationAttempts": [
+        {
+          "attempt": 1,
+          "pages": 82,
+          "uniqueBeans": 820,
+          "exhausted": true,
+          "reportedTotalMatched": null,
+          "expectedVisibleBeans": 820,
+          "coverageGaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "terminalErrorCodes": []
+        }
+      ],
+      "instrumentedBeanCount": 1826,
+      "faultProxy": {
+        "trapReads": 0,
+        "requests": {
+          "unauthorized:beans": 1,
+          "pass:beans": 12,
+          "forbidden:beans": 1,
+          "redirect:beans": 1,
+          "rate-limit:beans": 1,
+          "server-error:beans": 1,
+          "html:beans": 1,
+          "duplicate-keys:beans": 1,
+          "invalid-utf8:beans": 1,
+          "incomplete-body:beans": 1,
+          "oversized:beans": 1,
+          "slow:beans": 2,
+          "parent-cycle:beans": 1,
+          "orphan-parent:beans": 1,
+          "health-down:health": 1,
+          "openapi-refs:openapi": 1,
+          "startup-invalid-time:startup": 1
+        },
+        "origin": "fixed-disposable-loopback-target"
+      },
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 131,
+      "statuses": {
+        "denied": 6,
+        "partial": 103,
+        "ok": 9,
+        "unavailable": 13
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 6,
+        "CAPABILITY_DISABLED": 1,
+        "TARGET_CONNECTION_REFUSED": 3,
+        "REDIRECT_BLOCKED": 1,
+        "ENDPOINT_UNAVAILABLE": 2,
+        "UNEXPECTED_CONTENT_TYPE": 1,
+        "DUPLICATE_JSON_KEY": 1,
+        "INVALID_JSON": 2,
+        "RESPONSE_TOO_LARGE": 1,
+        "TARGET_TIMEOUT": 1
+      },
+      "maxResponseBytes": 13672,
+      "latencyMs": {
+        "median": 55.694,
+        "p95": 514.038,
+        "max": 1490.593
+      },
+      "accepted": true,
+      "allOwnedContainersStopped": true,
+      "fullReport": "../../examples/production-chaos/results/dolphinscheduler-remediation.json",
+      "fullReportSha256": "83fbb54089920589867d200056c6227e251f9f0c169741d8eeb9214f152f4908",
+      "paginationSdkCallSumMs": 6252.01,
+      "independentInstructionCanaryAssertionsPresent": true
+    }
+  ],
+  "earlierRemediationRuns": [
+    {
+      "project": "shenyu",
+      "calls": 118,
+      "accepted": true,
+      "failureCodes": [],
+      "scope": "before-final-encoded-label-and-credential-stamp-hardening",
+      "sha256": "76b738243d37d79622bb091e4a69a1af8414be458bf7177673b6b41c4e54fdc3"
+    },
+    {
+      "project": "thingsboard",
+      "calls": 176,
+      "accepted": true,
+      "failureCodes": [],
+      "scope": "before-final-encoded-label-and-credential-stamp-hardening",
+      "sha256": "b8be9fe19300fa369bbea2982976d661a03857c9f145bc0f576110979f4f4097"
+    },
+    {
+      "project": "dolphinscheduler",
+      "calls": 131,
+      "accepted": true,
+      "failureCodes": [],
+      "scope": "before-final-encoded-label-and-credential-stamp-hardening",
+      "sha256": "ac17643b5fa736883dab80a63079431e2365150deb23d78be0ea7bc4c4342aed"
+    }
+  ],
+  "sourceTreeSha256": "bc538fa2bc14e4f137685aaff66b2f82703c335dcf1d3e1b9a0fbfe9bd27fc61",
+  "harnessSha256": "5fc93df759ca209bdc6d93ed96a65e836df2dfb68978ef3d8b0affb7bcd02736",
+  "previousFailureAudit": "production-chaos-2026-10-23.json",
+  "deterministicProbes": [
+    "production-chaos-remediation-probe-2026-10-23.json",
+    "large-project-cursor-remediation-2026-10-23.json"
+  ],
+  "calls": 425,
+  "finalCleanup": {
+    "ownedContainerCount": 0,
+    "ownedNetworkCount": 0,
+    "allTrackedMcpProcessesStopped": true
+  }
+}

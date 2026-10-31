@@ -2,96 +2,60 @@
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 from ..models.common import AnalysisBudget
 
 from ..contracts.definitions import glob_matches
 
-_PREDICATE_CONDITION = re.compile(
-    r"(?P<kind>consumes|produces|headers|params)\s*\[(?P<value>.*)\]\Z"
+from .mapping_predicates import (
+    HTTP_METHODS as _METHODS,
+    parse_predicate as _parse_predicate,
 )
-_PREDICATE_KIND = {
-    "consumes": "consumes",
-    "produces": "produces",
-    "headers": "header",
-    "params": "param",
-}
-_MAX_PREDICATE_LENGTH = 4096
-_MAX_PREDICATE_PIECES = 32
-_MAX_PREDICATE_PATHS = 16
-_MAX_PREDICATE_CONDITIONS = 16
 
 
-def _parse_predicate(
-    raw: Any,
-) -> tuple[list[str], list[str], list[dict[str, Any]], bool]:
-    """Parse one bounded WebFlux predicate string without executing it."""
-    if not isinstance(raw, str) or not raw or len(raw) > _MAX_PREDICATE_LENGTH:
-        return [], [], [], False
-    text = raw.strip()
-    if len(text) >= 2 and text[0] in "{(" and text[-1] in ")}":
-        text = text[1:-1]
-    pieces = [piece.strip() for piece in re.split(r",|&&", text)]
-    pieces = [piece for piece in pieces if piece]
-    if not pieces or len(pieces) > _MAX_PREDICATE_PIECES:
-        return [], [], [], False
-    paths: list[str] = []
-    methods: list[str] = []
-    conditions: list[dict[str, Any]] = []
-    for piece in pieces:
-        token, separator, rest = piece.partition(" ")
-        if token.upper() in _METHODS:
-            if methods:
-                return [], [], [], False
-            methods.append(token.upper())
-            if not separator:
-                continue
-            rest = rest.strip()
-            if rest.startswith("[") and rest.endswith("]"):
-                rest = rest[1:-1].strip()
-            if not (rest.startswith("/") and len(rest) <= 1024):
-                return [], [], [], False
-            if len(paths) >= _MAX_PREDICATE_PATHS:
-                return [], [], [], False
-            paths.append(rest)
+def _servlet_may_cover(query: str | None, mapping: str) -> bool:
+    if query is None or mapping in {"/", "/*", "*"}:
+        return True
+    if not mapping.startswith("/"):
+        return False
+    mapping_prefix = mapping.split("*", 1)[0]
+    query_prefix = query.split("*", 1)[0]
+    if mapping_prefix.startswith(query_prefix) or query_prefix.startswith(
+        mapping_prefix
+    ):
+        return True
+    return glob_matches(mapping, query) or glob_matches(query, mapping)
+
+
+def _non_dispatcher_routes_unobserved(
+    mappings: dict[str, Any], path_pattern: str | None
+) -> bool:
+    """Actuator mappings only enumerate DispatcherServlet routes.
+
+    A Jersey/other ServletContainer registered under a matching URL space means
+    the absence of a DispatcherServlet record is not evidence of absence.
+    """
+    servlets = mappings.get("servlets")
+    if servlets is None:
+        return False
+    if not isinstance(servlets, list):
+        return True
+    for servlet in servlets:
+        if not isinstance(servlet, dict):
             continue
-        if piece.startswith("/") and 1 < len(piece) <= 1024:
-            if len(paths) >= _MAX_PREDICATE_PATHS:
-                return [], [], [], False
-            paths.append(piece)
+        if (
+            servlet.get("className")
+            == "org.springframework.web.servlet.DispatcherServlet"
+        ):
             continue
-        matched = _PREDICATE_CONDITION.fullmatch(piece)
-        if matched is None or len(conditions) >= _MAX_PREDICATE_CONDITIONS:
-            return [], [], [], False
-        value = matched.group("value").strip()
-        if len(value) > 256:
-            return [], [], [], False
-        conditions.append(
-            {
-                "kind": _PREDICATE_KIND[matched.group("kind")],
-                "name": None,
-                "value": value or None,
-                "negated": False,
-            }
-        )
-    if not (paths or methods or conditions):
-        return [], [], [], False
-    return paths, methods, conditions, True
-
-
-_METHODS = {
-    "GET",
-    "HEAD",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
-    "TRACE",
-    "CONNECT",
-}
+        raw = servlet.get("mappings")
+        if not isinstance(raw, list):
+            return True
+        for mapping in raw:
+            if isinstance(mapping, str) and _servlet_may_cover(path_pattern, mapping):
+                return True
+    return False
 
 
 def _conditions(raw: dict[str, Any]) -> tuple[list[dict[str, Any]], bool]:
@@ -160,6 +124,8 @@ def normalize_mappings(
         if not isinstance(mappings, dict):
             gaps.add("MAPPINGS_UNOBSERVED")
             continue
+        if _non_dispatcher_routes_unobserved(mappings, path_pattern):
+            gaps.add("NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED")
         trees = (
             ("mvc", "dispatcherServlets"),
             ("webflux", "dispatcherHandlers"),

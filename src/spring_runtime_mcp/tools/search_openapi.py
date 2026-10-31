@@ -42,7 +42,14 @@ async def search_openapi(
             "candidateId": candidate,
             "items": items,
         }
-        result["totalMatched"] = len(items)
+        enumeration_gaps = {
+            "OPENAPI_PATH_UNREADABLE",
+            "OPENAPI_PATH_FIELD_CONFLICT",
+            "OPENAPI_OPERATION_UNREADABLE",
+        }
+        result["totalMatched"] = (
+            None if enumeration_gaps.intersection(gaps) else len(items)
+        )
         partial(result, gaps)
         limit_codes = ("REF_DEPTH_LIMIT", "REF_CYCLE", "REF_EXPANSION_LIMIT")
         if any(code in gaps for code in limit_codes):

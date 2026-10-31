@@ -59,9 +59,12 @@ async def diagnose_health(
             result["truncationReasons"] = sorted(
                 set(result["truncationReasons"] + list(limited))
             )[:8]
-        result["totalMatched"] = (
-            None if limited or "HEALTH_DETAILS_NOT_VISIBLE" in gaps else len(items)
-        )
+        incomplete_count = {
+            "HEALTH_DETAILS_NOT_VISIBLE",
+            "HEALTH_COMPONENT_UNREADABLE",
+            "HEALTH_STATUS_UNOBSERVED",
+        } & set(gaps)
+        result["totalMatched"] = None if limited or incomplete_count else len(items)
         partial(result, gaps)
         if "HEALTH_DETAILS_NOT_VISIBLE" in result["coverage"]["gaps"]:
             result["nextAction"] = {

@@ -1,0 +1,19 @@
+{
+  "hertzbeat": {
+    "repository": "https://github.com/apache/hertzbeat",
+    "revision": "67ad4b04ef1b06b62f0e5030a26d0ca069294fa3",
+    "tag": "v1.7.3",
+    "module": "hertzbeat-manager",
+    "mainClass": "org.apache.hertzbeat.manager.Manager",
+    "bootVersion": "3.4.2",
+    "stack": "servlet-jakarta",
+    "bean": "entityManagerFactory",
+    "route": "/api/monitors",
+    "database": true,
+    "migrationEngine": "flyway",
+    "unexposedHttpStatus": 404,
+    "separatePort": false,
+    "profiles": ["prod"],
+    "openapi": false
+  }
+}

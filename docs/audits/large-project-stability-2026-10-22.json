@@ -1,0 +1,5048 @@
+{
+  "scope": "opt-in-disposable-native-projects",
+  "projectReports": {
+    "flowable": {
+      "verifiedAt": "2026-10-22T15:05:49.505665+00:00",
+      "project": "flowable",
+      "sourceRepository": "https://github.com/flowable/flowable-engine",
+      "sourceRevision": "11a1cf83a8c03e343040b4d8edc751f9534d7323",
+      "sourceTag": "flowable-7.2.0",
+      "configuredBootVersion": "3.5.4",
+      "stack": "servlet-jakarta",
+      "authentication": "operator-management-only-Bearer",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 5525,
+      "checks": [
+        {
+          "case": "anonymous",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 72.565
+        },
+        {
+          "case": "non-admin",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            403
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 22.228
+        },
+        {
+          "case": "legacy-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10882,
+          "elapsedMs": 306.66
+        },
+        {
+          "case": "legacy-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.085
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12334,
+          "elapsedMs": 1257.365
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12932,
+          "elapsedMs": 867.891
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12446,
+          "elapsedMs": 810.701
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13200,
+          "elapsedMs": 836.568
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12858,
+          "elapsedMs": 910.276
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12860,
+          "elapsedMs": 905.613
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12432,
+          "elapsedMs": 892.426
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13164,
+          "elapsedMs": 885.215
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12638,
+          "elapsedMs": 810.175
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 11860,
+          "elapsedMs": 891.278
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12022,
+          "elapsedMs": 829.655
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12858,
+          "elapsedMs": 691.592
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13602,
+          "elapsedMs": 702.821
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12344,
+          "elapsedMs": 612.978
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12626,
+          "elapsedMs": 587.964
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12998,
+          "elapsedMs": 568.856
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12994,
+          "elapsedMs": 547.009
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12970,
+          "elapsedMs": 536.143
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12962,
+          "elapsedMs": 517.601
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12848,
+          "elapsedMs": 498.278
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12910,
+          "elapsedMs": 490.913
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 11846,
+          "elapsedMs": 478.619
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 11958,
+          "elapsedMs": 455.166
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12286,
+          "elapsedMs": 444.657
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12686,
+          "elapsedMs": 425.985
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13126,
+          "elapsedMs": 421.508
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12874,
+          "elapsedMs": 394.522
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13222,
+          "elapsedMs": 382.522
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13782,
+          "elapsedMs": 409.523
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13342,
+          "elapsedMs": 345.86
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12950,
+          "elapsedMs": 328.924
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12770,
+          "elapsedMs": 329.343
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12842,
+          "elapsedMs": 295.705
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12478,
+          "elapsedMs": 284.4
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12986,
+          "elapsedMs": 264.454
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13402,
+          "elapsedMs": 247.499
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12886,
+          "elapsedMs": 229.217
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13120,
+          "elapsedMs": 224.526
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12968,
+          "elapsedMs": 197.559
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12722,
+          "elapsedMs": 181.659
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12986,
+          "elapsedMs": 166.384
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13316,
+          "elapsedMs": 151.929
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12648,
+          "elapsedMs": 132.129
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 11978,
+          "elapsedMs": 116.009
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12468,
+          "elapsedMs": 107.136
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13016,
+          "elapsedMs": 91.686
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13394,
+          "elapsedMs": 74.371
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 14112,
+          "elapsedMs": 36.938
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2940,
+          "elapsedMs": 252.818
+        },
+        {
+          "case": "native-route",
+          "tool": "verify_mappings",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 3564,
+          "elapsedMs": 915.653
+        },
+        {
+          "case": "native-health",
+          "tool": "diagnose_health",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 3012,
+          "elapsedMs": 58.211
+        },
+        {
+          "case": "native-startup",
+          "tool": "analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_DEPTH_LIMIT",
+            "STARTUP_NODE_LIMIT",
+            "STARTUP_ORPHAN_STEP",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 9150,
+          "elapsedMs": 305.107
+        },
+        {
+          "case": "native-migrations",
+          "tool": "check_migrations",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "responseBytes": 3089,
+          "elapsedMs": 30.386
+        },
+        {
+          "case": "native-openapi-unexposed",
+          "tool": "search_openapi",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "responseBytes": 3091,
+          "elapsedMs": 58.083
+        },
+        {
+          "case": "config-default-disabled",
+          "tool": "inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2985,
+          "elapsedMs": 5.822
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2562,
+          "elapsedMs": 196.811
+        },
+        {
+          "case": "expiry-seed",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12334,
+          "elapsedMs": 1201.471
+        },
+        {
+          "case": "cursor-query-mismatch",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_QUERY_MISMATCH"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2983,
+          "elapsedMs": 7.933
+        },
+        {
+          "case": "cursor-expired",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_EXPIRED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2941,
+          "elapsedMs": 6.977
+        },
+        {
+          "case": "target-stopped",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "TARGET_CONNECTION_REFUSED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 3015,
+          "elapsedMs": 6.937
+        },
+        {
+          "case": "target-recovered-same-host",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10882,
+          "elapsedMs": 325.578
+        },
+        {
+          "case": "2026-07-28-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10882,
+          "elapsedMs": 249.313
+        },
+        {
+          "case": "2026-07-28-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.472
+        }
+      ],
+      "failureCodes": [],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "runtimeArtifacts": [
+        "flowable-spring-boot-starter-rest-7.2.0.jar",
+        "flowable-spring-boot-starter-7.2.0.jar",
+        "flowable-spring-boot-autoconfigure-7.2.0.jar",
+        "flowable-spring-security-7.2.0.jar",
+        "flowable-spring-boot-starter-app-7.2.0.jar",
+        "flowable-app-engine-7.2.0.jar",
+        "flowable-app-engine-api-7.2.0.jar",
+        "flowable-app-engine-spring-7.2.0.jar",
+        "flowable-event-registry-spring-configurator-7.2.0.jar",
+        "flowable-event-registry-spring-7.2.0.jar",
+        "flowable-spring-boot-starter-process-7.2.0.jar",
+        "flowable-spring-7.2.0.jar",
+        "flowable-job-spring-service-7.2.0.jar",
+        "spring-orm-6.2.9.jar",
+        "flowable-spring-boot-starter-cmmn-7.2.0.jar",
+        "flowable-cmmn-engine-7.2.0.jar",
+        "flowable-cmmn-image-generator-7.2.0.jar",
+        "flowable-cmmn-converter-7.2.0.jar",
+        "flowable-case-validation-7.2.0.jar",
+        "flowable-cmmn-spring-7.2.0.jar",
+        "flowable-spring-boot-starter-dmn-7.2.0.jar",
+        "flowable-dmn-engine-7.2.0.jar",
+        "flowable-dmn-xml-converter-7.2.0.jar",
+        "flowable-dmn-image-generator-7.2.0.jar",
+        "flowable-dmn-spring-7.2.0.jar",
+        "spring-boot-starter-jdbc-3.5.4.jar",
+        "spring-jdbc-6.2.9.jar",
+        "flowable-spring-configurator-7.2.0.jar",
+        "flowable-engine-configurator-7.2.0.jar",
+        "flowable-cmmn-spring-configurator-7.2.0.jar",
+        "flowable-cmmn-engine-configurator-7.2.0.jar",
+        "flowable-dmn-spring-configurator-7.2.0.jar",
+        "flowable-dmn-engine-configurator-7.2.0.jar",
+        "flowable-idm-spring-configurator-7.2.0.jar",
+        "flowable-spring-common-7.2.0.jar",
+        "flowable-idm-spring-7.2.0.jar",
+        "flowable-spring-boot-starter-process-rest-7.2.0.jar",
+        "flowable-rest-7.2.0.jar",
+        "flowable-idm-rest-7.2.0.jar",
+        "flowable-external-job-rest-7.2.0.jar",
+        "flowable-spring-boot-starter-app-rest-7.2.0.jar",
+        "flowable-app-engine-rest-7.2.0.jar",
+        "flowable-spring-boot-starter-cmmn-rest-7.2.0.jar",
+        "flowable-cmmn-rest-7.2.0.jar",
+        "flowable-spring-boot-starter-dmn-rest-7.2.0.jar",
+        "flowable-dmn-rest-7.2.0.jar",
+        "flowable-event-registry-rest-7.2.0.jar",
+        "flowable-event-registry-7.2.0.jar",
+        "flowable-event-registry-api-7.2.0.jar",
+        "flowable-event-registry-model-7.2.0.jar",
+        "flowable-event-registry-json-converter-7.2.0.jar",
+        "flowable-eventsubscription-service-api-7.2.0.jar",
+        "flowable-common-rest-7.2.0.jar",
+        "commons-io-2.20.0.jar",
+        "httpcore-4.4.16.jar",
+        "swagger-annotations-1.6.2.jar",
+        "swagger-models-1.6.2.jar",
+        "spring-boot-starter-web-3.5.4.jar",
+        "spring-boot-starter-json-3.5.4.jar",
+        "jackson-datatype-jdk8-2.19.2.jar",
+        "jackson-datatype-jsr310-2.19.2.jar",
+        "jackson-module-parameter-names-2.19.2.jar",
+        "spring-web-6.2.9.jar",
+        "spring-webmvc-6.2.9.jar",
+        "spring-expression-6.2.9.jar",
+        "jakarta.annotation-api-2.1.1.jar",
+        "spring-boot-properties-migrator-3.5.4.jar",
+        "spring-boot-3.5.4.jar",
+        "spring-boot-configuration-metadata-3.5.4.jar",
+        "android-json-0.0.20131108.vaadin1.jar",
+        "flowable-groovy-script-static-engine-7.2.0.jar",
+        "flowable-engine-7.2.0.jar",
+        "flowable-bpmn-converter-7.2.0.jar",
+        "flowable-bpmn-model-7.2.0.jar",
+        "flowable-process-validation-7.2.0.jar",
+        "flowable-image-generator-7.2.0.jar",
+        "flowable-engine-common-api-7.2.0.jar",
+        "flowable-engine-common-7.2.0.jar",
+        "flowable-variable-service-api-7.2.0.jar",
+        "flowable-variable-service-7.2.0.jar",
+        "flowable-identitylink-service-7.2.0.jar",
+        "flowable-identitylink-service-api-7.2.0.jar",
+        "flowable-entitylink-service-7.2.0.jar",
+        "flowable-entitylink-service-api-7.2.0.jar",
+        "flowable-event-registry-configurator-7.2.0.jar",
+        "flowable-eventsubscription-service-7.2.0.jar",
+        "flowable-task-service-7.2.0.jar",
+        "flowable-task-service-api-7.2.0.jar",
+        "flowable-job-service-7.2.0.jar",
+        "flowable-job-service-api-7.2.0.jar",
+        "flowable-batch-service-7.2.0.jar",
+        "flowable-batch-service-api-7.2.0.jar",
+        "flowable-idm-engine-configurator-7.2.0.jar",
+        "flowable-cmmn-api-7.2.0.jar",
+        "flowable-cmmn-model-7.2.0.jar",
+        "flowable-dmn-api-7.2.0.jar",
+        "flowable-dmn-model-7.2.0.jar",
+        "flowable-form-model-7.2.0.jar",
+        "flowable-form-api-7.2.0.jar",
+        "flowable-content-api-7.2.0.jar",
+        "flowable-mail-7.2.0.jar",
+        "angus-mail-2.0.4.jar",
+        "jakarta.mail-api-2.1.3.jar",
+        "angus-activation-2.0.2.jar",
+        "mybatis-3.5.19.jar",
+        "slf4j-api-2.0.17.jar",
+        "jcl-over-slf4j-2.0.17.jar",
+        "commons-lang3-3.18.0.jar",
+        "joda-time-2.14.0.jar",
+        "flowable-http-7.2.0.jar",
+        "flowable-http-common-7.2.0.jar",
+        "httpclient5-5.4.4.jar",
+        "httpcore5-5.3.4.jar",
+        "httpcore5-h2-5.3.4.jar",
+        "jackson-core-2.19.2.jar",
+        "jackson-databind-2.19.2.jar",
+        "jackson-annotations-2.19.2.jar",
+        "flowable-ldap-7.2.0.jar",
+        "flowable-idm-api-7.2.0.jar",
+        "flowable-idm-engine-7.2.0.jar",
+        "java-uuid-generator-5.1.0.jar",
+        "commons-codec-1.19.0.jar",
+        "nashorn-core-15.4.jar",
+        "asm-7.3.1.jar",
+        "asm-commons-7.3.1.jar",
+        "asm-analysis-7.3.1.jar",
+        "asm-tree-7.3.1.jar",
+        "asm-util-7.3.1.jar",
+        "spring-boot-configuration-processor-3.5.4.jar",
+        "spring-boot-autoconfigure-3.5.4.jar",
+        "spring-boot-starter-security-3.5.4.jar",
+        "spring-aop-6.2.9.jar",
+        "spring-security-config-6.5.2.jar",
+        "spring-security-web-6.5.2.jar",
+        "spring-security-crypto-6.5.2.jar",
+        "spring-security-ldap-6.5.2.jar",
+        "spring-security-core-6.5.2.jar",
+        "spring-beans-6.2.9.jar",
+        "spring-context-6.2.9.jar",
+        "spring-core-6.2.9.jar",
+        "spring-jcl-6.2.9.jar",
+        "spring-tx-6.2.9.jar",
+        "spring-boot-starter-3.5.4.jar",
+        "spring-boot-starter-logging-3.5.4.jar",
+        "logback-classic-1.5.18.jar",
+        "logback-core-1.5.18.jar",
+        "log4j-to-slf4j-2.24.3.jar",
+        "log4j-api-2.24.3.jar",
+        "jul-to-slf4j-2.0.17.jar",
+        "snakeyaml-2.4.jar",
+        "spring-boot-starter-actuator-3.5.4.jar",
+        "spring-boot-actuator-autoconfigure-3.5.4.jar",
+        "spring-boot-actuator-3.5.4.jar",
+        "micrometer-observation-1.15.2.jar",
+        "micrometer-commons-1.15.2.jar",
+        "micrometer-jakarta9-1.15.2.jar",
+        "spring-boot-starter-artemis-3.5.4.jar",
+        "spring-jms-6.2.9.jar",
+        "artemis-jakarta-client-2.42.0.jar",
+        "artemis-core-client-2.40.0.jar",
+        "jgroups-5.3.13.Final.jar",
+        "netty-transport-native-epoll-4.1.123.Final-linux-x86_64.jar",
+        "netty-transport-native-unix-common-4.1.123.Final.jar",
+        "netty-transport-classes-epoll-4.1.123.Final.jar",
+        "netty-transport-native-kqueue-4.1.123.Final-osx-x86_64.jar",
+        "netty-transport-classes-kqueue-4.1.123.Final.jar",
+        "netty-codec-http-4.1.123.Final.jar",
+        "netty-buffer-4.1.123.Final.jar",
+        "netty-transport-4.1.123.Final.jar",
+        "netty-handler-4.1.123.Final.jar",
+        "netty-handler-proxy-4.1.123.Final.jar",
+        "netty-codec-4.1.123.Final.jar",
+        "netty-codec-socks-4.1.123.Final.jar",
+        "netty-common-4.1.123.Final.jar",
+        "netty-resolver-4.1.123.Final.jar",
+        "pem-keystore-3.0.0.jar",
+        "asn-one-0.6.0.jar",
+        "artemis-commons-2.40.0.jar",
+        "commons-beanutils-1.10.1.jar",
+        "commons-collections-3.2.2.jar",
+        "artemis-selector-2.40.0.jar",
+        "jakarta.jms-api-3.1.0.jar",
+        "spring-boot-starter-amqp-3.5.4.jar",
+        "spring-messaging-6.2.9.jar",
+        "spring-rabbit-3.2.6.jar",
+        "spring-amqp-3.2.6.jar",
+        "amqp-client-5.25.0.jar",
+        "spring-kafka-3.3.9.jar",
+        "spring-retry-2.0.12.jar",
+        "kafka-clients-3.9.1.jar",
+        "zstd-jni-1.5.6-4.jar",
+        "lz4-java-1.8.0.jar",
+        "snappy-java-1.1.10.5.jar",
+        "h2-2.3.232.jar",
+        "HikariCP-6.3.2.jar",
+        "groovy-jsr223-4.0.28.jar",
+        "groovy-4.0.28.jar",
+        "jakarta.xml.bind-api-4.0.2.jar",
+        "jakarta.activation-api-2.1.3.jar",
+        "micrometer-core-1.15.2.jar",
+        "HdrHistogram-2.2.2.jar",
+        "LatencyUtils-2.0.3.jar",
+        "tomcat-embed-core-10.1.43.jar",
+        "tomcat-embed-el-10.1.43.jar",
+        "tomcat-embed-websocket-10.1.43.jar"
+      ],
+      "runtimeArtifactsSha256": "d3c637e37a0c0f358049e2ea023f6ffe563cac7faf0e380133e4595fa463999c",
+      "nativeProvidedArtifacts": [
+        "tomcat-embed-core-10.1.43.jar",
+        "tomcat-embed-el-10.1.43.jar",
+        "tomcat-embed-websocket-10.1.43.jar"
+      ],
+      "operatorLauncherCompileExit": 0,
+      "portMode": "shared",
+      "javaMajor": 21,
+      "startupSeconds": [
+        5.258,
+        5.302
+      ],
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 484,
+        "dependencyCount": 569
+      },
+      "pagination": {
+        "attempt": 1,
+        "pages": 48,
+        "uniqueBeans": 481,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 481,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ],
+        "terminalErrorCodes": []
+      },
+      "paginationAttempts": [
+        {
+          "attempt": 1,
+          "pages": 48,
+          "uniqueBeans": 481,
+          "exhausted": true,
+          "reportedTotalMatched": null,
+          "expectedVisibleBeans": 481,
+          "coverageGaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "terminalErrorCodes": []
+        }
+      ],
+      "hostAfterWarmup": {
+        "rssKiB": 86164,
+        "openFiles": 7
+      },
+      "soak": {
+        "workers": 4,
+        "seconds": 100.024,
+        "calls": 570,
+        "toolCalls": {
+          "inspect_beans": 142,
+          "verify_mappings": 142,
+          "diagnose_health": 143,
+          "analyze_startup": 143
+        },
+        "coverageGaps": {
+          "ASSOCIATION_LIMIT": 142,
+          "BEAN_GRAPH_INCOMPLETE": 142,
+          "GRAPH_LIMIT_REACHED": 142,
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY": 142,
+          "REDACTED_IDENTIFIERS": 142,
+          "SOURCE_CATALOG_UNPROVIDED": 142,
+          "MAX_RESULTS": 143,
+          "STARTUP_DEPTH_LIMIT": 143,
+          "STARTUP_NODE_LIMIT": 143,
+          "STARTUP_ORPHAN_STEP": 143,
+          "STARTUP_TIMELINE_INCOMPLETE": 143
+        }
+      },
+      "hostAfterSoak": {
+        "rssKiB": 100596,
+        "openFiles": 7
+      },
+      "hostAliveAfterSoak": true,
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 637,
+      "statuses": {
+        "denied": 4,
+        "partial": 340,
+        "invalid": 2,
+        "ok": 287,
+        "unavailable": 4
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 4,
+        "INVALID_ARGUMENT": 2,
+        "CAPABILITY_DISABLED": 1,
+        "CURSOR_QUERY_MISMATCH": 1,
+        "CURSOR_EXPIRED": 1,
+        "TARGET_CONNECTION_REFUSED": 1
+      },
+      "maxResponseBytes": 14112,
+      "latencyMs": {
+        "median": 408.015,
+        "p95": 915.221,
+        "max": 1257.365
+      },
+      "accepted": true
+    },
+    "dataflow": {
+      "verifiedAt": "2026-10-22T15:03:22.265281+00:00",
+      "project": "dataflow",
+      "sourceRepository": "https://github.com/spring-cloud/spring-cloud-dataflow",
+      "sourceRevision": "aded769567a338ee32c1606ab78ec848e89d3b4e",
+      "sourceTag": "v2.11.5",
+      "configuredBootVersion": "2.7.18",
+      "stack": "servlet-javax",
+      "authentication": "operator-management-only-Bearer",
+      "database": "disposable-in-memory-H2",
+      "mainJavaSourceFiles": 1110,
+      "checks": [
+        {
+          "case": "anonymous",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 51.128
+        },
+        {
+          "case": "non-admin",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            403
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 12.637
+        },
+        {
+          "case": "legacy-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 7836,
+          "elapsedMs": 390.709
+        },
+        {
+          "case": "legacy-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.223
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12136,
+          "elapsedMs": 1822.481
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12378,
+          "elapsedMs": 1164.597
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12778,
+          "elapsedMs": 1146.325
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13302,
+          "elapsedMs": 1134.155
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12676,
+          "elapsedMs": 1118.382
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12956,
+          "elapsedMs": 1128.266
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13438,
+          "elapsedMs": 1075.698
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13848,
+          "elapsedMs": 1047.145
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13856,
+          "elapsedMs": 1093.705
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13558,
+          "elapsedMs": 1036.012
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13196,
+          "elapsedMs": 1035.55
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13098,
+          "elapsedMs": 1021.662
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12892,
+          "elapsedMs": 986.897
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12758,
+          "elapsedMs": 953.93
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13246,
+          "elapsedMs": 948.956
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12880,
+          "elapsedMs": 931.186
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 14236,
+          "elapsedMs": 888.14
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12864,
+          "elapsedMs": 858.635
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13178,
+          "elapsedMs": 821.414
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12696,
+          "elapsedMs": 850.149
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12506,
+          "elapsedMs": 793.719
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13144,
+          "elapsedMs": 773.658
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12934,
+          "elapsedMs": 786.158
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13398,
+          "elapsedMs": 754.068
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13436,
+          "elapsedMs": 730.417
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13232,
+          "elapsedMs": 732.706
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13214,
+          "elapsedMs": 700.282
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13234,
+          "elapsedMs": 701.816
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12910,
+          "elapsedMs": 656.943
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13542,
+          "elapsedMs": 641.078
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13430,
+          "elapsedMs": 677.038
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13606,
+          "elapsedMs": 604.761
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12694,
+          "elapsedMs": 581.716
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13010,
+          "elapsedMs": 571.565
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12826,
+          "elapsedMs": 571.882
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13254,
+          "elapsedMs": 534.967
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13002,
+          "elapsedMs": 524.971
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13706,
+          "elapsedMs": 504.125
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13050,
+          "elapsedMs": 473.163
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13438,
+          "elapsedMs": 461.552
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12558,
+          "elapsedMs": 442.626
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13160,
+          "elapsedMs": 433.307
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12590,
+          "elapsedMs": 405.339
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13750,
+          "elapsedMs": 389.655
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13274,
+          "elapsedMs": 364.215
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12282,
+          "elapsedMs": 353.291
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12154,
+          "elapsedMs": 336.648
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13448,
+          "elapsedMs": 320.629
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13224,
+          "elapsedMs": 308.239
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13556,
+          "elapsedMs": 332.069
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13268,
+          "elapsedMs": 265.295
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13750,
+          "elapsedMs": 255.928
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13346,
+          "elapsedMs": 231.513
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13386,
+          "elapsedMs": 235.872
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12522,
+          "elapsedMs": 215.454
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12348,
+          "elapsedMs": 181.487
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13092,
+          "elapsedMs": 167.384
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13344,
+          "elapsedMs": 148.363
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13092,
+          "elapsedMs": 139.083
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13362,
+          "elapsedMs": 118.731
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13422,
+          "elapsedMs": 96.282
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13320,
+          "elapsedMs": 77.7
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 15332,
+          "elapsedMs": 40.522
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2940,
+          "elapsedMs": 320.199
+        },
+        {
+          "case": "native-route",
+          "tool": "verify_mappings",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 3436,
+          "elapsedMs": 78.405
+        },
+        {
+          "case": "native-health",
+          "tool": "diagnose_health",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "HEALTH_DETAILS_NOT_VISIBLE"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 3130,
+          "elapsedMs": 60.06
+        },
+        {
+          "case": "native-startup",
+          "tool": "analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_DEPTH_LIMIT",
+            "STARTUP_NODE_LIMIT",
+            "STARTUP_ORPHAN_STEP",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 8956,
+          "elapsedMs": 483.771
+        },
+        {
+          "case": "native-migrations",
+          "tool": "check_migrations",
+          "status": "ok",
+          "totalMatched": 1,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 3548,
+          "elapsedMs": 63.167
+        },
+        {
+          "case": "native-openapi-unexposed",
+          "tool": "search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "httpStatuses": [
+            404
+          ],
+          "responseBytes": 3079,
+          "elapsedMs": 38.822
+        },
+        {
+          "case": "config-default-disabled",
+          "tool": "inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2985,
+          "elapsedMs": 7.955
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2564,
+          "elapsedMs": 163.765
+        },
+        {
+          "case": "expiry-seed",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12136,
+          "elapsedMs": 1820.78
+        },
+        {
+          "case": "cursor-query-mismatch",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_QUERY_MISMATCH"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2983,
+          "elapsedMs": 6.755
+        },
+        {
+          "case": "soak-analyze_startup",
+          "tool": "analyze_startup",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "UNSAFE_OUTPUT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2935,
+          "elapsedMs": 685.561
+        },
+        {
+          "case": "cursor-expired",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_EXPIRED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2941,
+          "elapsedMs": 8.677
+        },
+        {
+          "case": "target-stopped",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "TARGET_CONNECTION_REFUSED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 3015,
+          "elapsedMs": 7.247
+        },
+        {
+          "case": "target-recovered-same-host",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 7836,
+          "elapsedMs": 400.153
+        },
+        {
+          "case": "2026-07-28-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 7836,
+          "elapsedMs": 305.215
+        },
+        {
+          "case": "2026-07-28-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.986
+        }
+      ],
+      "failureCodes": [
+        "SOAK_POSITIVE_CALL_FAILED",
+        "SOAK_UNEXPECTED_ERROR",
+        "SOAK_EXPECTED_FACTS_MISSING"
+      ],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "runtimeArtifacts": [
+        "reactor-core-3.4.41.jar",
+        "reactive-streams-1.0.4.jar",
+        "spring-cloud-starter-dataflow-ui-2.11.5.jar",
+        "spring-cloud-dataflow-ui-3.4.6.jar",
+        "spring-cloud-starter-dataflow-server-2.11.5.jar",
+        "spring-cloud-deployer-local-2.9.5.jar",
+        "spring-cloud-deployer-spi-2.9.5.jar",
+        "spring-cloud-deployer-resource-maven-2.9.5.jar",
+        "maven-model-builder-3.6.2.jar",
+        "plexus-utils-3.2.1.jar",
+        "plexus-interpolation-1.25.jar",
+        "javax.inject-1.jar",
+        "maven-model-3.6.2.jar",
+        "maven-artifact-3.6.2.jar",
+        "maven-builder-support-3.6.2.jar",
+        "org.eclipse.sisu.inject-0.3.3.jar",
+        "maven-resolver-provider-3.6.2.jar",
+        "maven-repository-metadata-3.6.2.jar",
+        "maven-resolver-api-1.4.1.jar",
+        "maven-resolver-spi-1.4.1.jar",
+        "maven-resolver-util-1.4.1.jar",
+        "maven-resolver-connector-basic-1.4.1.jar",
+        "maven-resolver-transport-file-1.4.1.jar",
+        "maven-resolver-transport-http-1.4.1.jar",
+        "jcl-over-slf4j-1.7.36.jar",
+        "maven-resolver-transport-wagon-1.4.1.jar",
+        "wagon-provider-api-3.0.0.jar",
+        "maven-resolver-impl-1.4.1.jar",
+        "wagon-http-3.5.2.jar",
+        "wagon-http-shared-3.5.2.jar",
+        "spring-cloud-deployer-resource-docker-2.9.5.jar",
+        "spring-web-5.3.39.jar",
+        "spring-boot-starter-validation-2.7.18.jar",
+        "tomcat-embed-el-9.0.93.jar",
+        "hibernate-validator-6.2.5.Final.jar",
+        "jakarta.validation-api-2.0.2.jar",
+        "classmate-1.5.1.jar",
+        "hibernate-validator-annotation-processor-6.2.5.Final.jar",
+        "spring-cloud-dataflow-server-core-2.11.5.jar",
+        "micrometer-registry-wavefront-1.9.17.jar",
+        "micrometer-core-1.9.17.jar",
+        "HdrHistogram-2.1.12.jar",
+        "LatencyUtils-2.0.3.jar",
+        "wavefront-sdk-java-3.0.4.jar",
+        "jsr305-3.0.2.jar",
+        "t-digest-3.2.jar",
+        "guava-32.1.3-jre.jar",
+        "failureaccess-1.0.1.jar",
+        "listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar",
+        "error_prone_annotations-2.21.1.jar",
+        "j2objc-annotations-2.8.jar",
+        "micrometer-registry-influx-1.9.17.jar",
+        "micrometer-registry-prometheus-1.9.17.jar",
+        "simpleclient_common-0.15.0.jar",
+        "simpleclient-0.15.0.jar",
+        "simpleclient_tracer_otel-0.15.0.jar",
+        "simpleclient_tracer_common-0.15.0.jar",
+        "simpleclient_tracer_otel_agent-0.15.0.jar",
+        "prometheus-rsocket-spring-1.5.2.jar",
+        "spring-boot-actuator-autoconfigure-2.7.18.jar",
+        "spring-boot-actuator-2.7.18.jar",
+        "prometheus-rsocket-client-1.5.2.jar",
+        "rsocket-core-1.1.4.jar",
+        "netty-buffer-4.1.113.Final.jar",
+        "netty-common-4.1.113.Final.jar",
+        "snappy-java-1.1.10.6.jar",
+        "prometheus-rsocket-proxy-server-1.5.2.jar",
+        "spring-boot-starter-webflux-2.7.18.jar",
+        "spring-boot-starter-reactor-netty-2.7.18.jar",
+        "rsocket-micrometer-1.1.4.jar",
+        "micrometer-tracing-1.1.1.jar",
+        "micrometer-observation-1.11.0.jar",
+        "micrometer-commons-1.11.0.jar",
+        "context-propagation-1.0.2.jar",
+        "aopalliance-1.0.jar",
+        "rsocket-transport-netty-1.1.4.jar",
+        "reactor-netty-core-1.0.48.jar",
+        "netty-handler-4.1.113.Final.jar",
+        "netty-resolver-4.1.113.Final.jar",
+        "netty-transport-4.1.113.Final.jar",
+        "netty-transport-native-unix-common-4.1.113.Final.jar",
+        "netty-codec-4.1.113.Final.jar",
+        "netty-handler-proxy-4.1.113.Final.jar",
+        "netty-codec-socks-4.1.113.Final.jar",
+        "netty-resolver-dns-4.1.113.Final.jar",
+        "netty-codec-dns-4.1.113.Final.jar",
+        "netty-resolver-dns-native-macos-4.1.113.Final-osx-x86_64.jar",
+        "netty-resolver-dns-classes-macos-4.1.113.Final.jar",
+        "netty-transport-native-epoll-4.1.113.Final-linux-x86_64.jar",
+        "netty-transport-classes-epoll-4.1.113.Final.jar",
+        "reactor-netty-http-1.0.48.jar",
+        "netty-codec-http-4.1.113.Final.jar",
+        "netty-codec-http2-4.1.113.Final.jar",
+        "hibernate-micrometer-5.6.15.Final.jar",
+        "jboss-logging-3.4.3.Final.jar",
+        "hibernate-core-5.6.15.Final.jar",
+        "antlr-2.7.7.jar",
+        "jboss-transaction-api_1.2_spec-1.1.1.Final.jar",
+        "jandex-2.4.2.Final.jar",
+        "javax.activation-api-1.2.0.jar",
+        "hibernate-commons-annotations-5.1.2.Final.jar",
+        "jaxb-api-2.3.1.jar",
+        "jaxb-runtime-2.3.9.jar",
+        "txw2-2.3.9.jar",
+        "istack-commons-runtime-3.0.12.jar",
+        "jakarta.activation-1.2.2.jar",
+        "javax.persistence-api-2.2.jar",
+        "spring-cloud-dataflow-schema-2.11.5.jar",
+        "spring-cloud-dataflow-schema-core-2.11.5.jar",
+        "javax.annotation-api-1.3.2.jar",
+        "spring-cloud-dataflow-aggregate-task-2.11.5.jar",
+        "spring-cloud-dataflow-common-flyway-2.11.5.jar",
+        "flyway-core-8.5.13.jar",
+        "flyway-mysql-8.5.13.jar",
+        "flyway-sqlserver-8.5.13.jar",
+        "spring-cloud-dataflow-common-persistence-2.11.5.jar",
+        "spring-data-jpa-2.7.18.jar",
+        "spring-orm-5.3.39.jar",
+        "HikariCP-4.0.3.jar",
+        "springdoc-openapi-ui-1.6.6.jar",
+        "springdoc-openapi-webmvc-core-1.6.6.jar",
+        "springdoc-openapi-common-1.6.6.jar",
+        "swagger-core-2.1.12.jar",
+        "swagger-annotations-2.1.12.jar",
+        "swagger-models-2.1.12.jar",
+        "swagger-ui-4.5.0.jar",
+        "webjars-locator-core-0.50.jar",
+        "classgraph-4.8.138.jar",
+        "spring-boot-starter-data-jpa-2.7.18.jar",
+        "spring-boot-starter-aop-2.7.18.jar",
+        "aspectjweaver-1.9.7.jar",
+        "jakarta.transaction-api-1.3.3.jar",
+        "jakarta.persistence-api-2.2.3.jar",
+        "spring-aspects-5.3.39.jar",
+        "spring-cloud-dataflow-configuration-metadata-2.11.5.jar",
+        "spring-cloud-dataflow-container-registry-2.11.5.jar",
+        "aws-java-sdk-ecr-1.12.676.jar",
+        "aws-java-sdk-core-1.12.676.jar",
+        "commons-logging-1.1.3.jar",
+        "jackson-dataformat-cbor-2.17.2.jar",
+        "jmespath-java-1.12.676.jar",
+        "spring-boot-loader-2.7.18.jar",
+        "spring-cloud-dataflow-completion-2.11.5.jar",
+        "spring-cloud-dataflow-core-2.11.5.jar",
+        "commons-text-1.10.0.jar",
+        "validation-api-2.0.1.Final.jar",
+        "spring-cloud-dataflow-registry-2.11.5.jar",
+        "spring-boot-starter-web-2.7.18.jar",
+        "spring-boot-starter-json-2.7.18.jar",
+        "spring-boot-starter-tomcat-2.7.18.jar",
+        "tomcat-embed-core-9.0.93.jar",
+        "tomcat-embed-websocket-9.0.93.jar",
+        "spring-webmvc-5.3.39.jar",
+        "spring-cloud-common-security-config-web-2.11.5.jar",
+        "spring-security-oauth2-jose-5.7.12.jar",
+        "spring-security-oauth2-resource-server-5.7.12.jar",
+        "spring-webflux-5.3.39.jar",
+        "reactor-netty-1.0.48.jar",
+        "reactor-netty-incubator-quic-0.0.37.jar",
+        "netty-incubator-codec-native-quic-0.0.66.Final-linux-x86_64.jar",
+        "netty-incubator-codec-classes-quic-0.0.66.Final.jar",
+        "reactor-netty-http-brave-1.0.48.jar",
+        "brave-instrumentation-http-5.13.11.jar",
+        "brave-5.13.11.jar",
+        "zipkin-reporter-brave-2.16.3.jar",
+        "zipkin-reporter-2.16.3.jar",
+        "zipkin-2.23.2.jar",
+        "spring-boot-starter-security-2.7.18.jar",
+        "spring-security-config-5.7.12.jar",
+        "spring-session-core-2.7.4.jar",
+        "spring-boot-starter-actuator-2.7.18.jar",
+        "spring-boot-starter-logging-2.7.18.jar",
+        "logback-classic-1.2.13.jar",
+        "logback-core-1.2.13.jar",
+        "log4j-to-slf4j-2.17.2.jar",
+        "log4j-api-2.17.2.jar",
+        "jul-to-slf4j-1.7.36.jar",
+        "spring-hateoas-1.5.6.jar",
+        "spring-aop-5.3.39.jar",
+        "spring-plugin-core-2.0.0.RELEASE.jar",
+        "spring-data-commons-2.7.18.jar",
+        "spring-boot-starter-jdbc-2.7.18.jar",
+        "spring-cloud-task-core-2.4.6.jar",
+        "spring-cloud-deployer-autoconfigure-2.9.5.jar",
+        "spring-batch-infrastructure-4.3.10.jar",
+        "spring-retry-1.3.4.jar",
+        "spring-cloud-task-batch-2.4.6.jar",
+        "postgresql-42.7.2.jar",
+        "checker-qual-3.42.0.jar",
+        "mssql-jdbc-10.2.3.jre8.jar",
+        "spring-cloud-skipper-client-2.11.5.jar",
+        "spring-cloud-dataflow-audit-2.11.5.jar",
+        "spring-cloud-dataflow-autoconfigure-2.11.5.jar",
+        "spring-cloud-dataflow-platform-kubernetes-2.11.5.jar",
+        "spring-cloud-deployer-kubernetes-2.9.5.jar",
+        "hashids-1.0.3.jar",
+        "spring-context-support-5.3.39.jar",
+        "spring-cloud-starter-kubernetes-fabric8-config-2.1.9.jar",
+        "spring-cloud-kubernetes-commons-2.1.9.jar",
+        "spring-cloud-kubernetes-fabric8-autoconfig-2.1.9.jar",
+        "spring-cloud-kubernetes-fabric8-config-2.1.9.jar",
+        "spring-cloud-starter-bootstrap-3.1.8.jar",
+        "spring-cloud-dataflow-platform-cloudfoundry-2.11.5.jar",
+        "java-cfenv-2.3.0.jar",
+        "spring-cloud-deployer-cloudfoundry-2.9.5.jar",
+        "cloudfoundry-client-reactor-4.16.0.RELEASE.jar",
+        "jjwt-api-0.11.2.jar",
+        "jjwt-impl-0.11.2.jar",
+        "jjwt-jackson-0.11.2.jar",
+        "cloudfoundry-client-4.16.0.RELEASE.jar",
+        "wire-runtime-2.2.0.jar",
+        "cloudfoundry-util-4.16.0.RELEASE.jar",
+        "evo-inflector-1.3.jar",
+        "cloudfoundry-operations-4.16.0.RELEASE.jar",
+        "caffeine-2.9.3.jar",
+        "reactor-extra-3.4.11.jar",
+        "pivotal-cloudfoundry-client-reactor-2.2.0.RELEASE.jar",
+        "pivotal-cloudfoundry-client-2.2.0.RELEASE.jar",
+        "java-cfenv-boot-pivotal-sso-2.3.0.jar",
+        "spring-cloud-deployer-resource-support-2.9.5.jar",
+        "spring-cloud-starter-config-3.1.9.jar",
+        "spring-cloud-starter-3.1.8.jar",
+        "spring-cloud-context-3.1.8.jar",
+        "spring-security-crypto-5.7.12.jar",
+        "spring-cloud-commons-3.1.8.jar",
+        "spring-security-rsa-1.0.12.RELEASE.jar",
+        "spring-cloud-config-client-3.1.9.jar",
+        "jackson-annotations-2.17.2.jar",
+        "httpclient-4.5.14.jar",
+        "httpcore-4.4.16.jar",
+        "commons-codec-1.15.jar",
+        "jackson-databind-2.17.2.jar",
+        "spring-cloud-services-starter-config-client-3.5.4.jar",
+        "java-cfenv-boot-pivotal-scs-2.3.0.jar",
+        "java-cfenv-boot-2.3.0.jar",
+        "java-cfenv-jdbc-2.3.0.jar",
+        "spring-cloud-services-config-client-autoconfigure-3.5.4.jar",
+        "spring-boot-starter-2.7.18.jar",
+        "jakarta.annotation-api-1.3.5.jar",
+        "snakeyaml-1.33.jar",
+        "spring-security-oauth2-client-5.7.12.jar",
+        "spring-security-core-5.7.12.jar",
+        "spring-expression-5.3.39.jar",
+        "spring-security-oauth2-core-5.7.12.jar",
+        "spring-security-web-5.7.12.jar",
+        "oauth2-oidc-sdk-9.35.jar",
+        "jcip-annotations-1.0-1.jar",
+        "content-type-2.2.jar",
+        "lang-tag-1.6.jar",
+        "nimbus-jose-jwt-9.37.3.jar",
+        "bcprov-jdk18on-1.78.1.jar",
+        "bcpkix-jdk18on-1.78.1.jar",
+        "bcutil-jdk18on-1.78.1.jar",
+        "kubernetes-client-5.12.4.jar",
+        "kubernetes-model-core-5.12.4.jar",
+        "kubernetes-model-common-5.12.4.jar",
+        "kubernetes-model-rbac-5.12.4.jar",
+        "kubernetes-model-admissionregistration-5.12.4.jar",
+        "kubernetes-model-apps-5.12.4.jar",
+        "kubernetes-model-autoscaling-5.12.4.jar",
+        "kubernetes-model-apiextensions-5.12.4.jar",
+        "kubernetes-model-batch-5.12.4.jar",
+        "kubernetes-model-certificates-5.12.4.jar",
+        "kubernetes-model-coordination-5.12.4.jar",
+        "kubernetes-model-discovery-5.12.4.jar",
+        "kubernetes-model-events-5.12.4.jar",
+        "kubernetes-model-extensions-5.12.4.jar",
+        "kubernetes-model-flowcontrol-5.12.4.jar",
+        "kubernetes-model-networking-5.12.4.jar",
+        "kubernetes-model-metrics-5.12.4.jar",
+        "kubernetes-model-policy-5.12.4.jar",
+        "kubernetes-model-scheduling-5.12.4.jar",
+        "kubernetes-model-storageclass-5.12.4.jar",
+        "kubernetes-model-node-5.12.4.jar",
+        "okhttp-4.11.0.jar",
+        "okio-3.4.0.jar",
+        "okio-jvm-3.4.0.jar",
+        "kotlin-stdlib-1.6.21.jar",
+        "kotlin-stdlib-common-1.6.21.jar",
+        "annotations-13.0.jar",
+        "kotlin-stdlib-jdk8-1.6.21.jar",
+        "kotlin-stdlib-jdk7-1.6.21.jar",
+        "logging-interceptor-4.9.3.jar",
+        "slf4j-api-1.7.36.jar",
+        "jackson-dataformat-yaml-2.17.2.jar",
+        "jackson-datatype-jsr310-2.17.2.jar",
+        "jackson-core-2.17.2.jar",
+        "zjsonpatch-0.3.0.jar",
+        "generex-1.0.2.jar",
+        "automaton-1.11-8.jar",
+        "mariadb-java-client-4.0.0.jar",
+        "h2-2.2.222.jar",
+        "spring-cloud-dataflow-core-dsl-2.11.5.jar",
+        "spring-jdbc-5.3.39.jar",
+        "spring-beans-5.3.39.jar",
+        "spring-tx-5.3.39.jar",
+        "json-path-2.9.0.jar",
+        "json-smart-2.4.11.jar",
+        "accessors-smart-2.4.11.jar",
+        "asm-9.3.jar",
+        "jakarta.xml.bind-api-2.3.3.jar",
+        "jakarta.activation-api-1.2.2.jar",
+        "byte-buddy-1.12.23.jar",
+        "android-json-0.0.20131108.vaadin1.jar",
+        "spring-core-5.3.39.jar",
+        "spring-jcl-5.3.39.jar",
+        "spring-boot-devtools-2.7.18.jar",
+        "spring-boot-2.7.18.jar",
+        "spring-context-5.3.39.jar",
+        "spring-boot-autoconfigure-2.7.18.jar",
+        "jackson-datatype-jdk8-2.17.2.jar",
+        "jackson-module-parameter-names-2.17.2.jar",
+        "joda-time-2.10.6.jar",
+        "spring-cloud-skipper-2.11.5.jar",
+        "spring-boot-configuration-metadata-2.7.18.jar",
+        "hibernate-jpa-2.1-api-1.0.0.Final.jar",
+        "spring-data-keyvalue-2.7.18.jar",
+        "zt-zip-1.15.jar",
+        "commons-lang3-3.12.0.jar",
+        "spring-cloud-dataflow-rest-resource-2.11.5.jar",
+        "spring-batch-core-4.3.10.jar",
+        "javax.batch-api-1.0.jar",
+        "commons-io-2.15.1.jar",
+        "jettison-1.5.4.jar",
+        "spring-cloud-common-security-config-core-2.11.5.jar",
+        "java-semver-0.9.0.jar",
+        "commons-compress-1.26.1.jar"
+      ],
+      "runtimeArtifactsSha256": "6fec4f7b299486b9cb127e2d55bc91a13775f7d5a7d3ccf41489fd6823a70f46",
+      "nativeProvidedArtifacts": [],
+      "operatorLauncherCompileExit": 0,
+      "portMode": "shared",
+      "javaMajor": 21,
+      "startupSeconds": [
+        10.898,
+        7.048
+      ],
+      "reportedInventory": {
+        "contextCount": 2,
+        "beanCount": 638,
+        "dependencyCount": 858
+      },
+      "pagination": {
+        "pages": 63,
+        "uniqueBeans": 632,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 632,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ]
+      },
+      "hostAfterWarmup": {
+        "rssKiB": 89960,
+        "openFiles": 7
+      },
+      "soak": {
+        "workers": 4,
+        "seconds": 100.02,
+        "calls": 428,
+        "toolCalls": {
+          "inspect_beans": 107,
+          "verify_mappings": 107,
+          "diagnose_health": 107,
+          "analyze_startup": 107
+        },
+        "coverageGaps": {
+          "BEAN_GRAPH_INCOMPLETE": 107,
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY": 107,
+          "REDACTED_IDENTIFIERS": 107,
+          "SOURCE_CATALOG_UNPROVIDED": 107,
+          "HEALTH_DETAILS_NOT_VISIBLE": 107,
+          "MAX_RESULTS": 213,
+          "STARTUP_DEPTH_LIMIT": 106,
+          "STARTUP_NODE_LIMIT": 106,
+          "STARTUP_ORPHAN_STEP": 106,
+          "STARTUP_TIMELINE_INCOMPLETE": 106
+        }
+      },
+      "hostAfterSoak": {
+        "rssKiB": 100080,
+        "openFiles": 7
+      },
+      "hostAliveAfterSoak": true,
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 510,
+      "statuses": {
+        "denied": 2,
+        "partial": 391,
+        "invalid": 2,
+        "ok": 109,
+        "unavailable": 6
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 2,
+        "INVALID_ARGUMENT": 2,
+        "ENDPOINT_NOT_EXPOSED": 1,
+        "CAPABILITY_DISABLED": 1,
+        "CURSOR_QUERY_MISMATCH": 1,
+        "UNSAFE_OUTPUT": 1,
+        "CURSOR_EXPIRED": 1,
+        "TARGET_CONNECTION_REFUSED": 1
+      },
+      "maxResponseBytes": 15332,
+      "latencyMs": {
+        "median": 668.936,
+        "p95": 1169.634,
+        "max": 1822.481
+      },
+      "accepted": false
+    },
+    "spring-boot-admin": {
+      "verifiedAt": "2026-10-22T15:03:23.677681+00:00",
+      "project": "spring-boot-admin",
+      "sourceRepository": "https://github.com/codecentric/spring-boot-admin",
+      "sourceRevision": "9d667167671483d93c1265545c68c0c6d6618405",
+      "sourceTag": "4.1.3",
+      "configuredBootVersion": "4.1.1",
+      "stack": "reactive",
+      "authentication": "operator-management-only-Bearer",
+      "database": null,
+      "mainJavaSourceFiles": 242,
+      "checks": [
+        {
+          "case": "anonymous",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            401
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 171.171
+        },
+        {
+          "case": "non-admin",
+          "tool": "inspect_beans",
+          "status": "denied",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_UNAUTHORIZED"
+          ],
+          "httpStatuses": [
+            403
+          ],
+          "responseBytes": 3087,
+          "elapsedMs": 42.756
+        },
+        {
+          "case": "legacy-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10954,
+          "elapsedMs": 344.197
+        },
+        {
+          "case": "legacy-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.624
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12894,
+          "elapsedMs": 991.093
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13380,
+          "elapsedMs": 664.742
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13624,
+          "elapsedMs": 711.62
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13074,
+          "elapsedMs": 626.444
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12928,
+          "elapsedMs": 606.154
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12710,
+          "elapsedMs": 594.999
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12898,
+          "elapsedMs": 584.823
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13404,
+          "elapsedMs": 545.092
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13286,
+          "elapsedMs": 536.464
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12910,
+          "elapsedMs": 505.931
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12680,
+          "elapsedMs": 495.982
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12402,
+          "elapsedMs": 479.34
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13498,
+          "elapsedMs": 461.735
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12798,
+          "elapsedMs": 450.982
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13160,
+          "elapsedMs": 431.336
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13028,
+          "elapsedMs": 412.1
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12674,
+          "elapsedMs": 409.909
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12070,
+          "elapsedMs": 413.986
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13082,
+          "elapsedMs": 379.679
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13006,
+          "elapsedMs": 352.306
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12826,
+          "elapsedMs": 328.746
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12842,
+          "elapsedMs": 306.177
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12734,
+          "elapsedMs": 290.55
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13322,
+          "elapsedMs": 274.05
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12442,
+          "elapsedMs": 250.668
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13172,
+          "elapsedMs": 247.321
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13622,
+          "elapsedMs": 223.148
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13594,
+          "elapsedMs": 201.768
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13456,
+          "elapsedMs": 177.974
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13024,
+          "elapsedMs": 160.074
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12358,
+          "elapsedMs": 143.559
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 11906,
+          "elapsedMs": 126.865
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12496,
+          "elapsedMs": 162.036
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13186,
+          "elapsedMs": 100.891
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 13124,
+          "elapsedMs": 82.654
+        },
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 14936,
+          "elapsedMs": 44.891
+        },
+        {
+          "case": "missing-bean-conditions",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "BEAN_INDEX_INCOMPLETE",
+            "CONDITION_EVIDENCE_INCOMPLETE",
+            "CONDITION_REPORT_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED",
+            "SOURCE_FACTS_UNAVAILABLE",
+            "UNKNOWN_CONDITION_GRAMMAR"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2940,
+          "elapsedMs": 222.035
+        },
+        {
+          "case": "native-route",
+          "tool": "verify_mappings",
+          "status": "ok",
+          "totalMatched": 2,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 4696,
+          "elapsedMs": 82.945
+        },
+        {
+          "case": "native-health",
+          "tool": "diagnose_health",
+          "status": "ok",
+          "totalMatched": 5,
+          "coverage": "complete",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 5634,
+          "elapsedMs": 72.442
+        },
+        {
+          "case": "native-startup",
+          "tool": "analyze_startup",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "MAX_RESULTS",
+            "STARTUP_DEPTH_LIMIT",
+            "STARTUP_TIMELINE_INCOMPLETE"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10066,
+          "elapsedMs": 437.645
+        },
+        {
+          "case": "native-migrations",
+          "tool": "check_migrations",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "httpStatuses": [
+            404
+          ],
+          "responseBytes": 3077,
+          "elapsedMs": 27.061
+        },
+        {
+          "case": "native-openapi-unexposed",
+          "tool": "search_openapi",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "ENDPOINT_NOT_EXPOSED"
+          ],
+          "httpStatuses": [
+            404
+          ],
+          "responseBytes": 3079,
+          "elapsedMs": 15.413
+        },
+        {
+          "case": "config-default-disabled",
+          "tool": "inspect_config",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CAPABILITY_DISABLED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2985,
+          "elapsedMs": 7.09
+        },
+        {
+          "case": "cross-domain-drift",
+          "tool": "detect_drift",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_INDEX_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 2562,
+          "elapsedMs": 126.475
+        },
+        {
+          "case": "expiry-seed",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "ASSOCIATION_LIMIT",
+            "BEAN_GRAPH_INCOMPLETE",
+            "GRAPH_LIMIT_REACHED",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": true,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 12894,
+          "elapsedMs": 1018.226
+        },
+        {
+          "case": "cursor-query-mismatch",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_QUERY_MISMATCH"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2983,
+          "elapsedMs": 6.942
+        },
+        {
+          "case": "soak-analyze_startup",
+          "tool": "analyze_startup",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "UNSAFE_OUTPUT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2935,
+          "elapsedMs": 1474.362
+        },
+        {
+          "case": "cursor-expired",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "CURSOR_EXPIRED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2941,
+          "elapsedMs": 7.269
+        },
+        {
+          "case": "target-stopped",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "TARGET_CONNECTION_REFUSED"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 3015,
+          "elapsedMs": 7.757
+        },
+        {
+          "case": "target-recovered-same-host",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10954,
+          "elapsedMs": 415.917
+        },
+        {
+          "case": "2026-07-28-known-bean",
+          "tool": "inspect_beans",
+          "status": "partial",
+          "totalMatched": null,
+          "coverage": "partial",
+          "gaps": [
+            "BEAN_GRAPH_INCOMPLETE",
+            "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+            "REDACTED_IDENTIFIERS",
+            "SOURCE_CATALOG_UNPROVIDED"
+          ],
+          "truncated": false,
+          "errorCodes": [],
+          "httpStatuses": [],
+          "responseBytes": 10954,
+          "elapsedMs": 219.51
+        },
+        {
+          "case": "2026-07-28-invalid-arguments",
+          "tool": "diagnose_health",
+          "status": "invalid",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "INVALID_ARGUMENT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2945,
+          "elapsedMs": 5.714
+        }
+      ],
+      "failureCodes": [
+        "SOAK_POSITIVE_CALL_FAILED",
+        "SOAK_UNEXPECTED_ERROR",
+        "SOAK_EXPECTED_FACTS_MISSING"
+      ],
+      "startupErrorTypes": [],
+      "startupBeanIdentifiers": [],
+      "runtimeArtifacts": [
+        "spring-boot-admin-starter-server-4.1.3-SNAPSHOT.jar",
+        "spring-boot-admin-server-4.1.3-SNAPSHOT.jar",
+        "spring-boot-starter-webclient-4.1.1.jar",
+        "spring-boot-starter-jackson-4.1.1.jar",
+        "spring-boot-jackson-4.1.1.jar",
+        "jackson-databind-3.1.5.jar",
+        "jackson-annotations-2.21.jar",
+        "jackson-core-3.1.5.jar",
+        "spring-boot-reactor-4.1.1.jar",
+        "spring-boot-webclient-4.1.1.jar",
+        "spring-boot-http-client-4.1.1.jar",
+        "spring-webflux-7.0.9.jar",
+        "spring-boot-http-codec-4.1.1.jar",
+        "reactor-netty-http-1.3.7.jar",
+        "netty-codec-http-4.2.17.Final.jar",
+        "netty-common-4.2.17.Final.jar",
+        "netty-buffer-4.2.17.Final.jar",
+        "netty-transport-4.2.17.Final.jar",
+        "netty-codec-base-4.2.17.Final.jar",
+        "netty-codec-compression-4.2.17.Final.jar",
+        "netty-handler-4.2.17.Final.jar",
+        "netty-codec-http2-4.2.17.Final.jar",
+        "netty-codec-http3-4.2.17.Final.jar",
+        "netty-transport-native-unix-common-4.2.17.Final.jar",
+        "netty-resolver-4.2.17.Final.jar",
+        "netty-codec-classes-quic-4.2.17.Final.jar",
+        "netty-codec-native-quic-4.2.17.Final-linux-x86_64.jar",
+        "netty-codec-native-quic-4.2.17.Final-linux-aarch_64.jar",
+        "netty-codec-native-quic-4.2.17.Final-osx-x86_64.jar",
+        "netty-codec-native-quic-4.2.17.Final-osx-aarch_64.jar",
+        "netty-codec-native-quic-4.2.17.Final-windows-x86_64.jar",
+        "netty-resolver-dns-4.2.17.Final.jar",
+        "netty-codec-dns-4.2.17.Final.jar",
+        "netty-resolver-dns-native-macos-4.2.17.Final-osx-x86_64.jar",
+        "netty-resolver-dns-classes-macos-4.2.17.Final.jar",
+        "netty-transport-native-epoll-4.2.17.Final-linux-x86_64.jar",
+        "netty-transport-classes-epoll-4.2.17.Final.jar",
+        "reactor-netty-core-1.3.7.jar",
+        "netty-handler-proxy-4.2.17.Final.jar",
+        "netty-codec-socks-4.2.17.Final.jar",
+        "spring-boot-starter-webflux-4.1.1.jar",
+        "spring-boot-starter-reactor-netty-4.1.1.jar",
+        "spring-boot-reactor-netty-4.1.1.jar",
+        "spring-boot-netty-4.1.1.jar",
+        "spring-boot-webflux-4.1.1.jar",
+        "spring-boot-web-server-4.1.1.jar",
+        "spring-boot-starter-thymeleaf-4.1.1.jar",
+        "spring-boot-thymeleaf-4.1.1.jar",
+        "thymeleaf-spring6-3.1.5.RELEASE.jar",
+        "thymeleaf-3.1.5.RELEASE.jar",
+        "attoparser-2.0.7.RELEASE.jar",
+        "unbescape-1.1.6.RELEASE.jar",
+        "spring-boot-starter-actuator-4.1.1.jar",
+        "spring-boot-starter-micrometer-metrics-4.1.1.jar",
+        "spring-boot-micrometer-metrics-4.1.1.jar",
+        "spring-boot-micrometer-observation-4.1.1.jar",
+        "spring-boot-actuator-autoconfigure-4.1.1.jar",
+        "spring-boot-actuator-4.1.1.jar",
+        "spring-boot-health-4.1.1.jar",
+        "micrometer-observation-1.17.1.jar",
+        "micrometer-commons-1.17.1.jar",
+        "micrometer-jakarta9-1.17.1.jar",
+        "micrometer-core-1.17.1.jar",
+        "HdrHistogram-2.2.2.jar",
+        "httpclient5-5.6.4.jar",
+        "httpcore5-5.4.3.jar",
+        "httpcore5-h2-5.4.3.jar",
+        "reactor-extra-3.6.1.jar",
+        "reactor-core-3.8.7.jar",
+        "reactive-streams-1.0.4.jar",
+        "spring-boot-admin-server-ui-4.1.3-SNAPSHOT.jar",
+        "spring-boot-admin-server-cloud-4.1.3-SNAPSHOT.jar",
+        "spring-boot-starter-security-4.1.1.jar",
+        "spring-boot-starter-4.1.1.jar",
+        "spring-boot-starter-logging-4.1.1.jar",
+        "logback-classic-1.5.38.jar",
+        "logback-core-1.5.38.jar",
+        "log4j-to-slf4j-2.25.5.jar",
+        "log4j-api-2.25.5.jar",
+        "jul-to-slf4j-2.0.18.jar",
+        "jakarta.annotation-api-3.0.0.jar",
+        "snakeyaml-2.6.jar",
+        "spring-boot-security-4.1.1.jar",
+        "spring-security-config-7.1.1.jar",
+        "spring-security-core-7.1.1.jar",
+        "spring-security-crypto-7.1.1.jar",
+        "spring-security-web-7.1.1.jar",
+        "spring-expression-7.0.9.jar",
+        "spring-web-7.0.9.jar",
+        "spring-aop-7.0.9.jar",
+        "spring-beans-7.0.9.jar",
+        "spring-boot-admin-starter-client-4.1.3-SNAPSHOT.jar",
+        "spring-boot-admin-client-4.1.3-SNAPSHOT.jar",
+        "spring-boot-starter-restclient-4.1.1.jar",
+        "spring-boot-restclient-4.1.1.jar",
+        "spring-boot-http-converter-4.1.1.jar",
+        "slf4j-api-2.0.18.jar",
+        "spring-core-7.0.9.jar",
+        "commons-logging-1.3.6.jar",
+        "jspecify-1.0.1.jar",
+        "spring-boot-devtools-4.1.1.jar",
+        "spring-boot-4.1.1.jar",
+        "spring-context-7.0.9.jar",
+        "spring-boot-autoconfigure-4.1.1.jar"
+      ],
+      "runtimeArtifactsSha256": "7f7f397d466cd3a45e1760e5a7ea42d6268edad30ad81f4eb5138670aa927192",
+      "nativeProvidedArtifacts": [],
+      "operatorLauncherCompileExit": 0,
+      "portMode": "separate",
+      "javaMajor": 21,
+      "startupSeconds": [
+        6.333,
+        3.17
+      ],
+      "reportedInventory": {
+        "contextCount": 1,
+        "beanCount": 368,
+        "dependencyCount": 443
+      },
+      "pagination": {
+        "pages": 36,
+        "uniqueBeans": 362,
+        "exhausted": true,
+        "reportedTotalMatched": null,
+        "expectedVisibleBeans": 362,
+        "coverageGaps": [
+          "ASSOCIATION_LIMIT",
+          "BEAN_GRAPH_INCOMPLETE",
+          "GRAPH_LIMIT_REACHED",
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+          "REDACTED_IDENTIFIERS",
+          "SOURCE_CATALOG_UNPROVIDED"
+        ]
+      },
+      "hostAfterWarmup": {
+        "rssKiB": 81892,
+        "openFiles": 7
+      },
+      "soak": {
+        "workers": 4,
+        "seconds": 100.022,
+        "calls": 546,
+        "toolCalls": {
+          "inspect_beans": 136,
+          "verify_mappings": 136,
+          "diagnose_health": 137,
+          "analyze_startup": 137
+        },
+        "coverageGaps": {
+          "BEAN_GRAPH_INCOMPLETE": 136,
+          "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY": 136,
+          "REDACTED_IDENTIFIERS": 136,
+          "SOURCE_CATALOG_UNPROVIDED": 136,
+          "MAX_RESULTS": 136,
+          "STARTUP_DEPTH_LIMIT": 136,
+          "STARTUP_TIMELINE_INCOMPLETE": 136
+        }
+      },
+      "hostAfterSoak": {
+        "rssKiB": 94108,
+        "openFiles": 7
+      },
+      "hostAliveAfterSoak": true,
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "calls": 601,
+      "statuses": {
+        "denied": 2,
+        "partial": 315,
+        "invalid": 2,
+        "ok": 275,
+        "unavailable": 7
+      },
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 2,
+        "INVALID_ARGUMENT": 2,
+        "ENDPOINT_NOT_EXPOSED": 2,
+        "CAPABILITY_DISABLED": 1,
+        "CURSOR_QUERY_MISMATCH": 1,
+        "UNSAFE_OUTPUT": 1,
+        "CURSOR_EXPIRED": 1,
+        "TARGET_CONNECTION_REFUSED": 1
+      },
+      "maxResponseBytes": 14936,
+      "latencyMs": {
+        "median": 368.327,
+        "p95": 1137.321,
+        "max": 1474.362
+      },
+      "accepted": false
+    }
+  },
+  "retainedFailureEvidence": {
+    "dataflow-first-soak": {
+      "verifiedAt": "2026-10-22T14:57:50.139346+00:00",
+      "project": "dataflow",
+      "calls": 519,
+      "failureCodes": [
+        "INCOMPLETE_PAGINATION",
+        "UNEXPOSED_OPENAPI_MISREPORTED",
+        "SOAK_POSITIVE_CALL_FAILED",
+        "SOAK_UNEXPECTED_ERROR",
+        "HARNESS_FAILED_AT_TARGET_RECOVERED_SAME_HOST"
+      ],
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 2,
+        "INVALID_ARGUMENT": 2,
+        "CAPABILITY_DISABLED": 1,
+        "CURSOR_QUERY_MISMATCH": 1,
+        "UNSAFE_OUTPUT": 1,
+        "CURSOR_EXPIRED": 1,
+        "TARGET_CONNECTION_REFUSED": 1
+      },
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "unexpectedChecks": []
+    },
+    "flowable-interrupted-pagination": {
+      "verifiedAt": "2026-10-22T15:03:20.928498+00:00",
+      "project": "flowable",
+      "calls": 41,
+      "failureCodes": [
+        "HARNESS_FAILED_AT_FULL_BEAN_PAGE"
+      ],
+      "errorCodes": {
+        "ENDPOINT_UNAUTHORIZED": 2,
+        "INVALID_ARGUMENT": 1,
+        "UNSAFE_OUTPUT": 1
+      },
+      "targetProcessStopped": true,
+      "allMcpProcessesStopped": true,
+      "unexpectedChecks": [
+        {
+          "case": "full-bean-page",
+          "tool": "inspect_beans",
+          "status": "unavailable",
+          "totalMatched": null,
+          "coverage": "unavailable",
+          "gaps": [],
+          "truncated": false,
+          "errorCodes": [
+            "UNSAFE_OUTPUT"
+          ],
+          "httpStatuses": [
+            null
+          ],
+          "responseBytes": 2935,
+          "elapsedMs": 238.163
+        }
+      ]
+    }
+  },
+  "dataflowDatabaseProbe": {
+    "project": "dataflow",
+    "databaseComponentObserved": true,
+    "databaseComponentUp": true,
+    "targetProcessStopped": true,
+    "checks": [
+      {
+        "case": "database-component-probe",
+        "tool": "diagnose_health",
+        "status": "partial",
+        "totalMatched": null,
+        "coverage": "partial",
+        "gaps": [
+          "HEALTH_DETAILS_NOT_VISIBLE"
+        ],
+        "truncated": false,
+        "errorCodes": [],
+        "httpStatuses": [],
+        "responseBytes": 3130,
+        "elapsedMs": 166.204
+      }
+    ]
+  },
+  "offlineChecks": {
+    "pytestPassed": 881,
+    "pytestSeconds": 38.02,
+    "mypySourceFiles": 53,
+    "ruffFiles": 105,
+    "contractTools": 8,
+    "contractSyntheticAssertions": "144+",
+    "installedSdkDiscoveryModes": [
+      "legacy",
+      "2026-07-28"
+    ]
+  },
+  "knownUnrepairedDefect": "opaque-cursor-output-guard-conflict",
+  "productionCodeChangedThisRound": false
+}

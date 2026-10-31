@@ -1,0 +1,63 @@
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
+import org.springframework.web.server.WebFilter;
+
+@Configuration(proxyBeanMethods = false)
+public class DiagnosticSecurity {
+    private static boolean matches(String actual, String env) {
+        String expected = System.getenv(env);
+        return actual != null && expected != null && MessageDigest.isEqual(
+            actual.getBytes(StandardCharsets.UTF_8),
+            ("Bearer " + expected).getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Bean
+    @Order(Integer.MIN_VALUE)
+    SecurityWebFilterChain diagnosticActuatorSecurity(ServerHttpSecurity http) {
+        WebFilter bearer = (exchange, chain) -> {
+            String method = exchange.getRequest().getMethod().name();
+            if (!method.equals("GET") && !method.equals("HEAD")) {
+                exchange.getResponse().setStatusCode(HttpStatus.METHOD_NOT_ALLOWED);
+                return exchange.getResponse().setComplete();
+            }
+            String value = exchange.getRequest().getHeaders().getFirst("Authorization");
+            String role = matches(value, "LARGE_DIAGNOSTICS_ADMIN") ? "ROLE_DIAGNOSTICS"
+                : matches(value, "LARGE_DIAGNOSTICS_USER") ? "ROLE_VIEWER" : null;
+            if (role == null) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
+            var auth = new UsernamePasswordAuthenticationToken(
+                "diagnostics", null, List.of(new SimpleGrantedAuthority(role)));
+            return chain.filter(exchange)
+                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));
+        };
+        return http.securityMatcher(ServerWebExchangeMatchers.pathMatchers("/actuator", "/actuator/**"))
+            .csrf(csrf -> csrf.disable())
+            .httpBasic(basic -> basic.disable())
+            .formLogin(form -> form.disable())
+            .exceptionHandling(errors -> errors
+                .authenticationEntryPoint((exchange, error) -> {
+                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                    return exchange.getResponse().setComplete();
+                })
+                .accessDeniedHandler((exchange, error) -> {
+                    exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                    return exchange.getResponse().setComplete();
+                }))
+            .authorizeExchange(auth -> auth.anyExchange().hasRole("DIAGNOSTICS"))
+            .addFilterAt(bearer, SecurityWebFiltersOrder.AUTHENTICATION).build();
+    }
+}

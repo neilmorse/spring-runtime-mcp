@@ -1,0 +1,4 @@
+<configuration>
+  <!-- Never persist or export framework output from disposable targets. -->
+  <root level="OFF"/>
+</configuration>

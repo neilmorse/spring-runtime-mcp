@@ -6,7 +6,13 @@ from typing import Any
 
 from ..models.common import NormalizationError
 from ..transport.bounded_json import loads_bounded, validate_tree
-from .sanitization import MARKER, SanitizerPipeline, sensitive_key
+from .sanitization import (
+    MARKER,
+    OMITTED_TEXT_FIELDS,
+    SanitizerPipeline,
+    sensitive_key,
+    untrusted_text_descriptor,
+)
 
 DIAGNOSTIC_MESSAGE = "Diagnostic evidence is unavailable; review the registered target and access policy."
 REVIEW_TARGET = (
@@ -29,9 +35,6 @@ LOCAL_PROSE = frozenset(
         "registered target openapi",
     }
 )
-OMITTED_TEXT_FIELDS = frozenset(
-    {"description", "comments", "stackTrace", "instructions", "system", "role"}
-)
 
 
 def ensure_safe_output(
@@ -50,11 +53,39 @@ def ensure_safe_output(
         if depth > 64:
             raise NormalizationError("UNSAFE_OUTPUT")
         if isinstance(item, dict):
+            descriptor_tainted = untrusted_text_descriptor(item)
+            unsafe_descriptor = False
+            for key in ("name", "key", "propertyName", "propertyKey"):
+                name = item.get(key)
+                if isinstance(name, str) and pipeline.identifier(name) == MARKER:
+                    descriptor_tainted = True
+                    unsafe_descriptor |= sensitive_key(name) or pipeline.high_risk(name)
+            if descriptor_tainted and any(
+                item.get(key) not in (None, MARKER)
+                for key in ("value", "bindingValue", "effectiveValue", "inputs")
+            ):
+                raise NormalizationError(
+                    "UNSAFE_OUTPUT" if unsafe_descriptor else "UNTRUSTED_OUTPUT"
+                )
+            if (
+                descriptor_tainted
+                and isinstance(item.get("origin"), str)
+                and item["origin"] != MARKER
+            ):
+                raise NormalizationError("UNTRUSTED_OUTPUT")
             for key, child in item.items():
                 if pipeline.high_risk(key) or (
                     sensitive_key(key) and child not in (MARKER, None)
                 ):
                     raise NormalizationError("UNSAFE_OUTPUT")
+                if field == "properties":
+                    # Property names may coincide with omitted prose fields;
+                    # only Schema objects are allowed, and their contents still
+                    # pass every ordinary output check.
+                    if not isinstance(child, dict):
+                        raise NormalizationError("UNTRUSTED_OUTPUT")
+                    pending.append((child, "", depth + 1))
+                    continue
                 if key in OMITTED_TEXT_FIELDS and child not in (MARKER, None, [], {}):
                     raise NormalizationError("UNTRUSTED_OUTPUT")
                 pending.append((child, key, depth + 1))

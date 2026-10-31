@@ -1,7 +1,117 @@
 # 版本记录
 
+## 未发布 — 2026-10-31 发布流程收口
+
+- 将已审阅的生产修复、测试、资源、脚本和历史证据准备为同一发布提交；Nacos 原运行日志/逐分钟 JSONL 本地留存并精确忽略，聚合证据保留。
+- 新增仅验证的 `Release validation only` 分支流水线，复用完整门禁，不请求 OIDC 或 PyPI 发布环境；正式标签仍需版本匹配及操作者批准。
+- 修复 Git 清单的特殊文件名漏检：二进制 `git ls-files -z` 配合 `os.fsdecode`，新增 14 项真实 Git 回归。此前修复后离线 1100 passed；最终提交门禁与产物摘要另存仓库外证据，不复用旧批次。
+- 核实当前仓库所有者为 neilmorse，更新发布账户核对参数；PyPI 账户访问受阻、GitHub 尚无 pypi 环境，不声明发布就绪。
+
+## 未发布 — 2026-10-31 正式发布准备收口
+
+- 发布 CI 复用完整预发布脚本，新增强制联网漏洞审计、敏感文件/源码检查、契约校验及 sdist 隔离安装；上传已验证的同一批 wheel/sdist，不重新构建。远端执行待验。
+- 中文独立启动命令统一到锁定项目环境；保留 0.2.0 Alpha，纠正已打标签声明，公开包安装和实际客户端验收不再与 SDK 验收混同。
+- sdist 排除日志、JSONL、缓存和环境文件，保留用户源文件。范围、实际证据、交付关系与人工待办见[发布准备报告](docs/audits/release-readiness-2026-10-31.md)。
+
+## 未发布 — 2026-10-30 构建依赖锁定
+
+- 将 Hatchling 及其构建依赖固定到明确版本，并纳入开发依赖锁文件；预发布检查拒绝未固定或未纳入锁文件审计的构建依赖。没有新增运行时依赖。
+- 使用锁定依赖离线构建 wheel 和 sdist，分别通过隔离安装、CLI、两种 SDK 模式、八工具回环调用和七个 replay 场景。新增 2 项构建锁定回归；最终全量 **1084 passed / 44.43 秒**，mypy 53 个源文件、Ruff 124 个文件及八工具契约通过。`uv audit --locked` 对 43 个包未发现已知漏洞；仅代表当时的联网查询结果。
+
+## 未发布 — 2026-10-30 HTTP 读取边界修复
+
+- 增加 32 KiB 响应头累计预算，覆盖状态行、临时响应和最终响应，解析时超限返回 `RESPONSE_HEADERS_TOO_LARGE`。单成员 gzip 增量解压分别限制编码体和解码体，拒绝损坏、截断、尾部数据和多成员；其他编码仍拒绝。
+- 提前断开且未收满 Content-Length 时返回 `INCOMPLETE_RESPONSE`，不将偶然合法的 JSON 片段当作完整证据。多个解析后地址共享 2 秒 socket 连接时限，连接后恢复本次调用剩余读取时限；操作系统 DNS 解析本身仍不能由 Python 强制终止。
+- 新增合成和自建回环回归，覆盖响应头、gzip、健康 503、分块传输、双重大小限制、正文截断及连接时间预算。全量 **1082 passed / 44.67 秒**；mypy 53 个源文件、Ruff 124 个文件及八工具契约通过。Python 3.11/3.14 仅对响应头解析边界做了本地补充验证。
+- 本地自建 TLS 测试使用一次性合成证书和内存文件，验证可信证书成功、主机名不符、不受信、过期及 IP 名称不符拒绝；失败时没有发送 HTTP 请求。主机名场景的 SNI 为登记主机，IP 字面量未发送 SNI。这是有限回环样本，不代表完整 TLS/SNI 版本矩阵。
+- 历史 LS-01 与 PC-01/PC-02 的离线修复探针以 `--expect-repaired` 再次通过；临时探针输出已清理，未重跑历史真实项目矩阵。
+
+## 未发布 — 2026-10-30 sdist 净室安装验收
+
+- 预发布净室阶段要求各一个 wheel 与 sdist，分别校验版本和运行资源；sdist 额外拒绝缓存、构建产物、敏感环境文件及符号链接。两种产物分别在独立环境中按锁文件约束安装运行依赖，并完成 CLI 版本、SDK 两种模式、八工具回环链路和七个 replay 场景。
+- 新增 6 项 sdist 失败回归，覆盖产物缺失、版本或资源不一致、缓存、危险链接与安装失败。真实净室阶段通过；全量 **1055 passed / 38.85 秒**，Ruff 123 个文件通过。构建后端仍按声明范围从本地缓存解析，不由运行依赖约束锁定；本轮未发布。
+
+## 未发布 — 2026-10-30 HTTP 响应编码守卫
+
+- 对声明了非 identity Content-Encoding 的 JSON 响应，在读取正文前返回 `UNSUPPORTED_CONTENT_ENCODING`；错误保留已登记端点与 HTTP 状态，不回显编码或正文。缺省和 identity 继续读取；gzip 解压尚未实现。
+- 新增 12 个离线回归，覆盖编码链、未知编码、正常 identity、错误信封和自建回环慢速响应。首次全量测试暴露旧超时 fixture 的响应头模拟不准确及回环事件竞态，已修正测试环境并保留原断言；最终全量 **1049 passed / 40.51 秒**。mypy 53 个源文件、Ruff 123 个文件和八工具契约通过；未修改工具 Schema 或运行依赖。
+
+## 未发布 — 2026-10-30 HTTP 拒绝响应读取修复
+
+- 连接器在读取正文前检查 HTTP 状态和 Content-Type；重定向、鉴权失败、不可用端点及非 JSON 类型不再主动读取错误页，响应门仍返回原有固定错误。健康端点有效 503 JSON 继续读取；可接受 JSON 类型的判断由连接器与响应门共用。
+- 先用合成响应复现错误页读取，再用自建回环服务验证慢速正文不会把 302、401 或错误 Content-Type 转为超时。新增 17 项回归；定向网络测试 118 passed，全量 **1037 passed / 36.78 秒**；mypy 53 个源文件、Ruff 123 个文件和八工具契约通过。未改变只读网络边界、公开 Schema 或运行依赖。
+
+## 未发布 — 2026-10-30 Health 证据总数修复
+
+- Health 组件不可读或状态缺失时，`coverage` 继续记录缺口，`totalMatched` 改为 null；可读组件与未知状态仍保留。此前可能在 partial 结果中返回确定的 0 或可读条目数，误示匹配范围完整。
+- 新增 7 项合成回归，覆盖不可读组件、路径过滤、合法组件共存、缺状态、完整空结果及 MCP 快照续页。全量 **1020 passed / 36.38 秒**；mypy 53 个源文件、Ruff 122 个文件及八工具契约通过。未修改公开 Schema 或目标访问策略，未连接真实 Spring 实例。
+
+## 未发布 — 2026-10-30 预发布检查与工作区盘点
+
+- 预发布脚本读取 Hatch 动态版本，检查源码版本一致性，并在净室阶段校验 wheel 元数据与 CLI 版本。wheel 安装使用 `uv.lock` 导出的离线约束；跳过构建、允许脏工作树或接受跳过测试均标为不完整。
+- 漏洞审计独立为 `--audit`：调用 `uv audit --locked`，审计失败或不可用阻断；未启用时明确报告未执行。门禁返回 0 表示完整通过、1 表示失败、2 表示不完整。
+- 新增 14 个离线门禁回归，覆盖漏洞、超时/工具缺失、动态版本冲突、wheel/CLI 版本不一致、跳过检查、锁文件约束以及 Git 状态或跟踪文件不可读。全量 **1013 passed / 34.54 秒**；mypy 53 个源文件、Ruff 121 个文件、八工具契约及 `git diff --check` 通过。独立执行的 `uv audit --locked` 对 40 个包未发现已知漏洞；联网审计为当时的查询结果，不能替代后续复查。
+- 净室阶段实际构建并验证 wheel 资源、锁定安装、CLI 版本、官方 SDK 两种模式、八工具回环链路和七个 replay 场景。端到端自检首次发现 `pytest` 可执行文件无法导入新增测试所需的项目脚本，已改为仓库规定的 `python -m pytest` 入口。
+- 工作区文件盘点见[交付清单](docs/audits/worktree-inventory-2026-10-30.md)；清单不代替逐文件内容审查。未改公开 Schema、生产诊断逻辑或运行依赖；未提交、未发布。
+
+## 未发布 — 2026-10-23 热门生产项目 Nacos 四小时持续运行
+
+- 新增[Nacos 四小时生产模拟](examples/nacos-soak-matrix/README.md)：从 Nacos、PowerJob、Sentinel 候选中随机抽取 alibaba/nacos 2.4.3 固定提交 `f4f8b189cf16186669de5b692d43630ed2c3fda2`（2,391 个 Java 文件 / 1,526 个主 Java / 22 个 Maven 模块，Boot 2.7.18 / Java 21 / MariaDB 11.2），在回环地址、一次性 MariaDB 和独立管理端口上运行四小时。原始分布 jar 的 SOFA Hessian 3.3.6 与 Nacos 需要的 4.0.63 冲突只在复制 jar 中移除旧版；管理 Bearer、8192 步启动缓冲和业务鉴权关闭均为测试配置。
+- 正式 soak **14,401.542 秒**，**68,260 次真实调用全部满足断言**：519 个可见 Bean 基线 52 页、三个周期各 44 页穷尽且无漂移；1/2.5 小时目标重启恢复 9.964/10.623 秒；1.5/3 小时 MariaDB 暂停后 readiness 超时并在解锁后首次检查恢复；最大完整回包 15,242 字节；中位/p95 延迟 242.754/945.435 ms；240 个逐分钟样本，非预期错误为空。结果见[审计报告](docs/audits/nacos-four-hour-2026-10-23.md)、[脱敏聚合](examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.json)和[构建/补丁哈希](examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23-build.json)。
+- 记录目标级健康盲区：Actuator 的 `db` 指标来自内嵌 Derby，外部 MariaDB 暂停时 readiness 超时但 MCP `diagnose_health` 仍为 UP；报告保留 `actuatorObservedExternalDbOutage=false`，不把该结果当作外部数据库健康证明。只验证固定提交的单节点 standalone，不验证集群/HA、配置发布、服务注册、UI、客户端长连接或 JRaft 多节点；未改生产 Python 代码，未提交、未发布。当时离线全量 **999 passed**。
+
+## 未发布 — 2026-10-23 小型生产调度器 XXL-JOB 验收
+
+- 新增[调度器项目矩阵](examples/xxl-job-matrix/README.md)：拉取 XXL-JOB v3.4.0 固定提交 `555b48f2edf0e51cd77971565342d80c15c9f18d`（157 个 Java 文件 / 136 个主 Java，Boot 4.0.5 / Java 21 runtime / MariaDB 11.2），完成八工具功能、稳定性和可用性验收。未修改生产 Python 代码；SSO actuator 放行、管理 Bearer Filter 和 Logback 遮蔽均为临时测试配置。
+- 正式 300 秒运行 **2449 次真实调用全部满足断言**：356 个 Bean / 402 条依赖，356 个可见 Bean 经 35 页穷尽；路由与 db 健康 ok/complete；带原生 SSO 的业务 UI 未绕过；MariaDB 暂停后健康 DOWN、Bean 读取仍可用、恢复后 UP；最大完整回包 15,638 字节；目标停止/同宿主重启恢复。结果见[审计报告](docs/audits/xxl-job-2026-10-23.md)与[脱敏聚合](examples/xxl-job-matrix/results/xxl-job-final-300s.json)。
+- 启动树仍为 partial，迁移端点 404 负向；未验证执行器任务、告警、生产调度集群或 UI。当时全量 **925 passed**；未提交、未发布。
+
+## 未发布 — 2026-10-23 小众生产项目 HertzBeat 验收
+
+- 新增[小众生产项目矩阵](examples/niche-project-matrix/README.md)：拉取 Apache HertzBeat v1.7.3 固定提交 `67ad4b04ef1b06b62f0e5030a26d0ca069294fa3`（1387 个 Java 文件 / 975 个主 Java，Java 17 / Boot 3.4.2 / Maven / 内嵌 H2），完成八工具功能、稳定性和可用性验收。未修改生产 Python 代码；测试用的管理 Bearer Servlet Filter、Sureness `/actuator/**` 放行规则和 2048 步启动缓冲均只存在于临时副本。
+- 正式 300 秒运行 **1594 次真实调用全部满足断言**：875 个 Bean / 1167 条依赖，873 个可见 Bean 经 87 页穷尽；Flyway 5 条 APPLIED；路由和 db 健康 ok/complete；启动树仍为 partial 并保留节点/深度缺口；最大完整回包 15,072 字节；目标停止/同宿主重启恢复。结果见[审计报告](docs/audits/niche-project-hertzbeat-2026-10-23.md)与[脱敏聚合](examples/niche-project-matrix/results/hertzbeat-final-300s.json)。
+- HertzBeat 的 Spring AI MCP server 保留原生启用，未调用外部模型；首次关闭该 server 会导致 `webMvcSseServerTransportProvider` 缺少依赖 Bean。H2 为内嵌数据库，本轮没有数据库暂停场景；未验证 UI、上游测试、告警投递或生产集群。未提交、未发布。
+
+## 未发布 — 2026-10-23 MCP 交付专项门禁
+
+- MCP 宿主启动时核对八工具契约与处理器集合；缺失或多余处理器立即拒绝启动，移除路由中的 `CAPABILITY_DISABLED` 占位兜底。配置诊断未授权时仍由真实处理器返回该安全拒绝，不修改公开 Schema、依赖或目标策略。
+- 净室门禁逐字节比对 wheel 的 Schema、`py.typed` 与全部 replay JSON；安装后从仓库外执行官方 SDK 两模式、分阶段原始管道握手、八工具真实 HTTP 路由、未掩码配置脱敏、16 KiB 回包和七个 replay 场景。replay 使用 `importlib.resources` 定位包内资源，保留无符号链接、有界文件读取。
+- 修正 source catalog STDIO 测试的 EOF 竞态，读取回复后再关闭输入；配置 CLI 集成测试改为自建回环 fixture，避免探测固定端口上的未知服务。证据及限制见 [MCP 交付专项核验](docs/audits/mcp-release-gate-2026-10-23.md)。
+
+## 未发布 — 2026-10-23 交付前总核验
+
+- 源码与依赖闭环：生产代码无 TODO/FIXME/HACK/XXX、`NotImplementedError` 或调试断点；八个公开工具全部绑定真实处理器；运行时第三方导入只有 `mcp` 与 `jsonschema`，二者均已声明；配置诊断默认关闭，未登记时返回 `CAPABILITY_DISABLED`。
+- CLI 启动加固：`--source-catalog` 只接受常规文件，并按 256 KiB 上限分块读取，避免无界内存占用、FIFO 阻塞或设备文件读取；非文件、超限、目标不匹配、缺少令牌变量和非法参数均以具体且不包含值/路径的提示退出（exit 2）。新增 `--version`，与 `__version__`、wheel 元数据一致。
+- 安全依赖：开发依赖 pytest 由 8.4.2 升级至 9.0.3，关闭 `uv audit` 报告的 PYSEC-2026-1845；`uv audit` 对 40 个已解析包报告无已知漏洞。Git 全历史与工作区扫描未发现真实凭证，命中的 PEM/Bearer 均为合成测试向量。
+- 净室验证：wheel 与 sdist 包含 `tools-contract.json`、`py.typed` 与 `replay_data`，不包含测试缓存、`target/` 或示例 jar；在全新 venv 中从 wheel 和 sdist 安装后，`--version`、legacy/2026-07-28 两种 MCP 协议和安装包内 replay 均通过。`uv lock --check` 通过。
+- 文档对齐：README/README.zh-CN/SPEC 增补 `--version`；修正 SPEC 中过期的 `mypy src scripts`、默认测试范围、演示校验命令和“`--version` 未交付”表述；清理文档中的用户主目录绝对路径。
+- 最终离线 **922 passed**，mypy 53 个源文件、Ruff 113 个文件、八工具契约通过；没有 skip/xfail。详见[交付前总核验](docs/audits/final-delivery-audit-2026-10-23.md)。版本仍为 0.2.0，Git 无发布标签；本轮未提交、未发布，也不声称新增真实目标或生产矩阵验收。
+
+## 未发布 — 2026-10-23 超大型生产系统 Fineract 验收
+
+- 新增 [超大型项目矩阵](examples/ultra-project-matrix/README.md)：拉取 Apache Fineract 1.9.0 固定提交 `5d96e8cc32ff63f97d5ac15e19c6fafee0c31357`（4565 个 Java 文件 / 4087 个主 Java，Java 17 / Boot 3.1.7 / Gradle 8.5），在一次性 PostgreSQL 16 和回环 HTTP 上启动原生 provider，完成八工具功能、稳定性与可用性验收。临时构建仅在 `pluginManagement` 增加公共镜像以解析已停用 JCenter 的文档插件依赖；Boot/BOM、运行依赖和诊断网络边界未改。
+- 发现并修复 mappings 对 JAX-RS 业务路由的假阴性：Actuator `servlets` 显示 Jersey `/api/*` 覆盖时，查询路径可能由其提供但 DispatcherServlet 无记录；修复后返回 `partial`、`totalMatched=null` 和 `NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED`。新增 4 个离线回归，全量 **913 passed**。
+- 正式 300 秒运行 **1202 次真实调用全部满足断言**：2544 个 Bean / 5626 条依赖，2524 个可见 Bean 经 252 页穷尽；最大完整回包 15,170 字节；数据库暂停后健康不再 UP、Bean 读取仍可用、恢复后 UP；目标停止/同宿主重启恢复；JAX-RS 业务路由探针为 partial/gap。8192 步启动快照触发 `NORMALIZATION_LIMIT`，测试启动器改用 2048 步取得正向证据，保留容量限制。结果见[审计报告](docs/audits/ultra-project-fineract-2026-10-23.md)与[脱敏聚合](examples/ultra-project-matrix/results/fineract-final-300s.json)。
+- 首轮完整门禁在重负载后有 1 个 STDIO 进程测试失败，单独及第二次全量均通过；保留为时序波动，不修改测试或放宽断言。未提交、未发布；不声称生产集群、完整版本矩阵或长期稳定性通过。
+
+## 未发布 — 2026-10-23 故障矩阵问题修复
+
+- 关闭 PC-01、PC-02、LS-01，见[调研、修复与复验](docs/audits/production-chaos-remediation-2026-10-23.md)。说明/异常字段的 name/value 描述符传播 taint，独立出口拒绝未脱敏值；编码或无法安全输出的名称不能恢复关联值，同名 OpenAPI 业务 Schema 保留。健康错误仅提取全限定类型形态，原消息不回显。
+- 游标登记前校验安全性和唯一性，最多 16 次候选；失败不污染缓存。分页改用共享编码快照和偏移，正常续页仅处理当前页，保留原始 60 秒 TTL、32 MiB/LRU、16 KiB 完整回包及凭据策略刷新后的整快照复验/删除。
+- 新增 28 个合成回归，最终 **909 passed**，mypy/Ruff/契约通过。三项真实项目最终 **425 次调用全部满足断言**，ThingsBoard 首次连续 125 页穷尽 1255 个可见 Bean，指令 canary 均未透传，旧失败记录不覆盖。未修改公开 Schema、运行依赖或目标策略，未发布；不声称生产集群或完整版本矩阵通过。
+
+## 未发布 — 2026-10-23 真实项目故障注入
+
+- 增加[生产采用项目故障矩阵](docs/audits/production-chaos-2026-10-23.md)：ShenYu、ThingsBoard、DolphinScheduler 原生后端构建/隔离启动，选定流程 399 次真实 MCP 调用，覆盖 PostgreSQL 暂停、连接池耗尽、启动冲突/缺依赖/循环、1000 个额外实际 Bean、坏响应与取消恢复。ThingsBoard 仅在临时副本增加可选 Actuator，DolphinScheduler 使用开发 Standalone，均不代表生产集群验收。
+- 新确认 PC-01 健康详情 name/value 指令透传，补独立 canary 断言并保留真实失败；PC-02 记录 ThingsBoard 大快照连续分页在绝对 60 秒 TTL 内无法穷尽的可用性限制；旧随机游标 LS-01 仍未修复。新增离线调查探针，退出 0 表示缺陷复现；默认仍 881 passed，不能据此声称安全/稳定性全部通过。生产实现、公开 Schema、Python 运行依赖未改，未提交或发布。
+
 ## 未发布 — 2026-10-22 综合审查修复
 
+- 增加[大型原生项目稳定性矩阵](docs/audits/large-project-stability-2026-10-22.md)：Flowable、Spring Cloud Data Flow、Reactive Spring Boot Admin 固定提交构建与隔离运行，最终 1748 次真实调用，覆盖完整可见分页、四路并发、两种 SDK 协议和实例重启恢复。发现并确定复现随机游标与输出安全门冲突；保留真实 `UNSAFE_OUTPUT` 失败，生产修复尚未实施。默认离线测试仍为 881 passed，不将短时运行或 partial 结果声明为完整稳定性/兼容性通过。
+- 关闭遗留 R1–R5：保留 PathItem 非冲突相邻字段，冲突/不可读操作计数 unknown；修复 Schema resource 方言继承；统一受限 RFC3339 校验及精确时间排序，非法启动时间不再冒充完整漂移比较。新增 44 个合成回归，全量 **881 passed**。通过可复现的本地 springdoc 3.1.1 源码补丁修复过早分组实例化及固定文档入口，JHipster 独立管理端口完成 18 次验收，Petclinic REST 复验 15 次通过；缓存 jar、公开工具 Schema 和 Python 运行依赖未改。见[闭环报告与限制](docs/audits/remaining-findings-remediation-2026-10-22.md)。
+- 修复较大项目暴露的两个 OpenAPI 缺陷：共享引用的数组元数据改为有界独立投影；业务属性 `description` 的 Schema 不再被误清空，原始说明/凭据仍受递归脱敏与输出安全门限制。新增 21 个合成回归，全量 837 passed；Petclinic REST 15 次复验通过。JHipster 保留原生 API-docs/JWT/Liquibase 的同端口配置完成 18 次验收；独立管理端口组合的第三方初始化故障仍未修复。见[修复与限制](docs/audits/openapi-project-matrix-remediation-2026-10-22.md)。
+- 增加[较大公开项目真实矩阵](examples/project-matrix/README.md)：保留 Petclinic、Petclinic REST、JHipster 的原生 Boot 版本，主矩阵记录 43 次调用，覆盖 416–486 个 Bean、分页、数据库健康、原生 OpenAPI 简单 Schema、JWT 401/403 和 8 条已应用 Liquibase。复杂 OpenAPI 的两个诊断缺陷及 JHipster API-docs 启动阻塞保留为失败，不计作通过；本次只新增验收材料，未修复这些缺陷。
+- 修复真实 WebFlux 函数式路由的嵌套 AND、`Accept:` / `Content-Type:` predicate 解析；未知 OR/NOT/自定义语法继续 partial。新增 34 个离线回归，全量 816 passed；Boot 3.2.4 / WebFlux / Java 21 的 12 次真实调用验收通过，原始失败证据保留。见 [修复与复验](docs/audits/webflux-predicate-remediation-2026-10-22.md)。
 - 关闭 [综合审查](docs/audits/comprehensive-review-2026-10-22.md)的 CR-01 至 CR-13；逐项证据见[修复验收报告](docs/audits/comprehensive-remediation-2026-10-22.md)。超长请求 ID 在 SDK 前拒绝并以 null ID 结束会话；真实 SDK 工具出口再次检查 16 KiB 上限。
 - 下沉共享 `Services` 与安全诊断信封，八工具共用每目标两个读取槽和一个 15 秒 deadline；排队、读取、协作分析及输出检查使用同一预算。
 - 修复 OpenAPI 组合/字典 Schema、本地 PathItem/Response 引用及 3.0/3.1 `$ref` 语义；未知 Schema 语义明确 partial。修复迁移缺证据推导、checksum 可比性、Bean 类型查询的父子遮蔽、成功迁移状态及隐藏 UP 组件的可见性结论。

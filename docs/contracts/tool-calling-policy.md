@@ -23,11 +23,15 @@ readOnlyHint=true、destructiveHint=false、idempotentHint=true、openWorldHint=
 | 注入、Bean 或条件不匹配 | springboot_inspect_beans：至少提供名称模式、类型模式或包前缀。先读 beans；无匹配或需要解释时才读已启用 conditions，条件权限失败仍保留 Bean 事实。 |
 | 配置绑定或覆盖 | springboot_inspect_config：至少提供 prefix/propertyKeyPattern，includeValues=false。env/configprops 能力默认关闭，启用后仍与操作者登记的安全属性/前缀取交集。 |
 | 接口契约 | springboot_search_openapi：schemaName 与操作查询互斥；httpMethod 不能单独查询。按既定有限路径回退，只展开同文档引用，默认两阶、最大八阶。 |
-| 路由未注册 | springboot_verify_mappings：至少提供路径、方法或 Controller 模式。查询所有 dispatcher；不调用业务 URL，也不根据路由注册推断鉴权或业务执行成功。 |
+| 路由未注册 | springboot_verify_mappings：至少提供路径、方法或 Controller 模式。查询所有 dispatcher；不调用业务 URL，也不根据路由注册推断鉴权或业务执行成功。Actuator mappings 的 `servlets` 若显示非 DispatcherServlet 容器（如 Jersey `/api/*`）可能覆盖查询路径，空 dispatcher 结果必须返回 partial、unknown total 和 `NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED`，不能写成路由不存在。 |
 
 Pattern 参数使用大小写敏感的有界 glob，仅 `*`、`?` 为通配符，其余字符按字面量匹配；最多 128 字符，不支持用户正则、脚本或 JSONPath。实现使用有界 glob 自动机/动态规划或等价非回溯算法，不能直接拼接未经限制的正则。多个筛选条件按 AND，packagePrefix 按包段边界匹配。路径输入只是匹配文本；不执行其指向的地址。
 
 maxResults 默认及硬上限 50。先在完整可见快照过滤、计数、稳定排序，再分页；totalMatched 无法确定时为 null。嵌套关联记录整页总数也最多 50；各数组的 maxItems 不能相加成为放大预算的理由。达到字节、深度、图节点或记录预算时标记 truncated、truncationReasons 和 coverage，不截断 JSON。
+
+健康组件不可读或状态缺失时，无法确定默认健康过滤后的匹配数：保留可读组件及对应 coverage gaps，totalMatched 为 null；分页延续同一快照及未知总数。
+
+实现以共享的脱敏不可变记录快照和句柄偏移提供续页：首次整份验证与编码，正常续页只解码、投影和验证当前页；不能重复缓存整个未消费尾部。凭据/脱敏策略戳变化时先复验全部缓存事实，发现新敏感信息须删除该快照的全部句柄。共享存储及句柄元数据计入 32 MiB/LRU 预算；绝对 TTL 不因访问或新续页句柄延长。
 
 游标绑定工具、目标、规范化参数、策略版本及脱敏快照，TTL 60 秒。续页重发同一查询参数和预期快照，仅增加 cursor；不能偷偷用新预期继续旧比较。nextAction.filterSuggestions 只包含当前工具 inputSchema 允许的参数和值，客户端合并到原调用后重新验证；page 使用 nextCursor，done 时建议数组为空。不得把上游文本作为筛选建议。
 

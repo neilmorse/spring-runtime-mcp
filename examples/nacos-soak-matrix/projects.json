@@ -1,0 +1,28 @@
+{
+  "nacos": {
+    "repository": "https://github.com/alibaba/nacos",
+    "revision": "f4f8b189cf16186669de5b692d43630ed2c3fda2",
+    "tag": "2.4.3",
+    "sourceFiles": {"totalJava": 2391, "mainJava": 1526},
+    "mavenModules": 22,
+    "stars": 33471,
+    "starsAsOf": "2026-10-23",
+    "distributionDirectory": "distribution/target/nacos-server-2.4.3/nacos",
+    "mainClass": "com.alibaba.nacos.Nacos",
+    "bootVersion": "2.7.18",
+    "stack": "servlet-javax",
+    "bean": "dataSource",
+    "route": "/v1/console/health/readiness",
+    "database": true,
+    "databaseImage": "mariadb:11.2",
+    "migrationEngine": null,
+    "unexposedHttpStatus": 404,
+    "separatePort": true,
+    "openapi": false,
+    "randomPool": [
+      "alibaba/nacos",
+      "PowerJob/PowerJob",
+      "alibaba/Sentinel"
+    ]
+  }
+}

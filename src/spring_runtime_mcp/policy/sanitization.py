@@ -7,6 +7,7 @@ permission to expose arbitrary Actuator maps or free runtime prose.
 from __future__ import annotations
 
 import base64
+import hashlib
 import html
 import json
 import re
@@ -19,6 +20,40 @@ from ..models.common import NormalizationError, remaining_seconds
 from ..transport.bounded_json import loads_bounded, validate_tree
 
 MARKER = "[REDACTED_BY_MCP]"
+OMITTED_TEXT_FIELDS = frozenset(
+    {"description", "comments", "stackTrace", "instructions", "system", "role"}
+)
+_TEXT_DESCRIPTOR_NAMES = frozenset(
+    {
+        "description",
+        "comments",
+        "stacktrace",
+        "instructions",
+        "system",
+        "role",
+        "message",
+        "error",
+        "exception",
+    }
+)
+
+
+def untrusted_text_descriptor(value: Mapping[str, Any]) -> bool:
+    """Do not launder upstream prose through scalar name/value records.
+
+    Schema property names are not descriptors: their values are Schema objects,
+    not these string-valued name/key fields with associated runtime values.
+    """
+    for field in ("name", "key", "propertyName", "propertyKey"):
+        name = value.get(field)
+        if isinstance(name, str):
+            view = unicodedata.normalize("NFKC", name).casefold()
+            view = re.sub(r"[^a-z0-9]", "", view, flags=re.ASCII)
+            if view in _TEXT_DESCRIPTOR_NAMES:
+                return True
+    return False
+
+
 KEY_RE = re.compile(
     r"password|passwd|pwd|secret|token|apikey|accesskey|authorization|credential|"
     r"cookie|sessionid|privatekey|signingkey|passphrase|keystorepassword|truststorepassword",
@@ -269,6 +304,14 @@ class SanitizerPipeline:
         if len(variants) > 32:
             raise ValueError("SECRET_VARIANT_LIMIT")
         self._secrets = tuple(sorted(variants))
+        self._cache_identity = object()
+
+    @property
+    def cache_revision(self) -> tuple[object, bytes]:
+        """Opaque cache stamp; never retain credentials in a cached snapshot."""
+        return self._cache_identity, hashlib.sha256(
+            json.dumps(self._secrets).encode("utf-8")
+        ).digest()
 
     def high_risk(self, value: str, *, _encoding_depth: int = 0) -> bool:
         remaining_seconds()
@@ -436,9 +479,12 @@ class SanitizerPipeline:
                 raise NormalizationError("SANITIZATION_FAILED")
             if isinstance(item, dict):
                 descriptor_tainted = any(
-                    isinstance(item.get(key), str) and sensitive_key(item[key])
+                    isinstance(item.get(key), str)
+                    and (
+                        sensitive_key(item[key]) or self.identifier(item[key]) == MARKER
+                    )
                     for key in ("name", "key", "propertyKey", "propertyName")
-                )
+                ) or untrusted_text_descriptor(item)
                 result: dict[str, Any] = {}
                 for key, child in item.items():
                     if field == "properties":
@@ -449,8 +495,15 @@ class SanitizerPipeline:
                             or any(char.isspace() or ord(char) < 32 for char in key)
                             or sensitive_key(key)
                             or self.high_risk(key)
+                            or not isinstance(child, dict)
                         ):
                             continue
+                        # Here the key names a business field, and the value is
+                        # its Schema object. Reset the field context so names
+                        # such as description/properties cannot change how the
+                        # Schema's own keywords are sanitized.
+                        result[key] = walk(child, depth + 1, embedded)
+                        continue
                     elif key not in ALLOWED_KEYS or key == "redactions":
                         continue
                     # Migration descriptions are required by schema and are

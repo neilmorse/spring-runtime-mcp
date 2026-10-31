@@ -100,7 +100,7 @@ For startup analysis, install `BufferingApplicationStartup` before `SpringApplic
 ### 2. Run the server
 
 ```bash
-uv run --project /abs/path/to/spring-runtime-mcp spring-runtime-mcp --base-url http://127.0.0.1:18081
+uv run --locked --project /abs/path/to/spring-runtime-mcp spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
 | Flag | Env var | Default |
@@ -114,6 +114,7 @@ uv run --project /abs/path/to/spring-runtime-mcp spring-runtime-mcp --base-url h
 | `--config-property` | none (repeatable) | none |
 | `--config-profiles` | none | off |
 | `--config-allow-values` | none | off |
+| `--version` | none | print the package version and exit |
 
 `--base-url` is an origin (scheme, host, port) registered once at startup. There is no way to pass a URL, path or header through a tool call.
 
@@ -220,12 +221,15 @@ Always filter first. When `truncated` is `true`, follow `nextAction` to narrow t
 
 ## Status and limitations
 
-The v0.2.0 worktree includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md). These changes have not been published. Verification and limits:
+The v0.2.0 worktree includes the [2026-10-22 review fixes](docs/audits/comprehensive-remediation-2026-10-22.md), the [2026-10-23 ultra-large Fineract acceptance](docs/audits/ultra-project-fineract-2026-10-23.md), the [2026-10-23 niche HertzBeat acceptance](docs/audits/niche-project-hertzbeat-2026-10-23.md), the [2026-10-23 XXL-JOB scheduler acceptance](docs/audits/xxl-job-2026-10-23.md) and the [2026-10-23 four-hour Nacos soak](docs/audits/nacos-four-hour-2026-10-23.md). These changes have not been published. Verification and limits:
 
-- 782 tests, strict `mypy`, `ruff`, the AST-based red-team suite and independent JSON Schema validation pass. Default fixtures are **synthetic** Boot 2.7 / 3.x / 4.x and MVC / WebFlux shapes; HTTP integration tests use only test-created loopback services. Shared services enforce two reads per target and one 15-second tool deadline, including queue time and cooperative analysis.
+- On 2026-10-30, 1084 tests passed on the uncommitted worktree; strict `mypy`, `ruff` and independent JSON Schema validation also passed. Default fixtures are **synthetic** Boot 2.7 / 3.x / 4.x and MVC / WebFlux shapes; HTTP integration tests use only test-created loopback services. Shared services enforce two reads per target and one 15-second tool deadline, including queue time and cooperative analysis.
 - A separate, explicitly authorized Shop check passed on Boot **3.5.16 / Java 21 / MVC / JWT / disposable PostgreSQL 16**. It used a committed source snapshot because the original working tree contains unfinished business changes. Hidden health details, incomplete source/condition evidence and bounded startup output remain `partial`. This sample does not establish a full version matrix.
-- The stdio host uses the official `mcp` Python SDK 2.x. An isolated wheel installation passed SDK client discovery and tool-error checks in both `legacy` and `2026-07-28` modes. Final tool frames are checked after SDK serialization as well as before it. Third-party desktop clients and a real TLS/SNI matrix remain unverified.
-- Targets are loopback-only. Bearer binding from a named environment variable is implemented; Basic/custom headers, remote target allowlists, custom management base paths and `/v3/api-docs` fallback remain unimplemented.
+- A smaller production-used HertzBeat v1.7.3 check passed on **Boot 3.4.2 / Java 17 / embedded H2**: 1594 real calls, 873 visible beans over 87 pages, 5 applied Flyway migrations, target stop/restart recovery, and a 15,072-byte maximum response. The test-only management filter and Sureness actuator permit are not production recommendations; startup and drift stay `partial`.
+- A small production-used XXL-JOB v3.4.0 scheduler check passed on **Boot 4.0.5 / Java 21 / MariaDB 11.2**: 2449 real calls, 356 visible beans over 35 pages, DB pause **DOWN** then recovery, target stop/restart, and a 15,638-byte maximum response. The SSO actuator exclusion, management filter and Logback shadow are test-only; startup and drift stay `partial`, and no executor task was run.
+- A four-hour Nacos 2.4.3 soak (Boot **2.7.18 / Java 21 / MariaDB 11.2**, single standalone node) recorded 68,260 calls over 14,401.5 seconds: 519 visible beans stayed identical across a 52-page baseline and three 44-page sweeps, two target restarts recovered in about 10 seconds, and two MariaDB pauses made Nacos readiness time out while Actuator health stayed UP. That target health blind spot is recorded, not treated as a pass; the run is a fixed-commit isolated sample, not a cluster/HA or write-path validation.
+- The stdio host uses the official `mcp` Python SDK 2.x. An isolated wheel installation passed SDK client discovery and tool-error checks in both `legacy` and `2026-07-28` modes. Final tool frames are checked after SDK serialization as well as before it. A local TLS probe covered trusted, wrong-name, untrusted, expired and IP-name-mismatch certificates; third-party desktop clients and a full TLS/SNI matrix remain unverified.
+- Targets are loopback-only. Bearer binding from a named environment variable is implemented; Basic/custom headers, remote target allowlists, custom management base paths and `/v3/api-docs` fallback remain unimplemented. Absent, `identity` and single-member gzip content encoding are supported with separate encoded and decoded size limits.
 - Configuration diagnostics (`env`/`configprops`) are off by default on both sides. Enable them only with explicit `--config-prefix`/`--config-property` registration; values stay masked unless `--config-allow-values` is also supplied.
 
 The full list, with the exact commands and counts behind each claim, is in [CHANGELOG.md](CHANGELOG.md). Audit history, including the 15 logic/boundary defects found and fixed in October 2026, is under [docs/audits](docs/audits).
@@ -242,7 +246,9 @@ uv run --no-sync ruff format --check src tests scripts
 uv build
 ```
 
-Add `--offline` to the initial sync once dependencies are cached. `uv.lock` fixes the tested runtime and development dependency versions; the wheel includes its tool Schema and `py.typed`. Tests block outbound network by default; real Shop acceptance is a separate operator-invoked script. CI and release share the same validation workflow, and publishing depends on all its jobs and a matching version tag.
+Add `--offline` to the initial sync once dependencies are cached. `uv.lock` fixes the tested runtime and development dependency versions; the wheel includes its tool Schema and `py.typed`. Tests block outbound network by default; real Shop acceptance is a separate operator-invoked script. PR CI runs the Python test matrix and static checks; release additionally runs the full audited pre-release script and requires a matching version tag. The changed workflow awaits remote verification.
+
+For a working-tree review, run `uv run --no-sync python scripts/pre_release_check.py --allow-dirty`. Add `--audit` to run the separate online `uv audit --locked` dependency check. Skipping the audit or build, allowing a dirty tree, or accepting skipped tests makes the result incomplete (exit 2); a failure exits 1. The clean-room stage compares wheel and sdist resources and versions with the source, installs each into a separate environment using lockfile constraints for runtime dependencies, checks the CLI version, and runs `scripts/check_stdio_install.py` outside the repository with isolated Python. Both installations cover both SDK modes, eight handlers against a disposable loopback fixture and seven packaged replay scenarios. Build dependencies are pinned in the build system and included in the development lock and audit. The earlier verification is recorded in the [MCP delivery audit](docs/audits/mcp-release-gate-2026-10-23.md).
 
 Layout: `src/spring_runtime_mcp/{transport,policy,models,adapters,analyzers,tools}` — protocol, networking, security policy and deterministic analysis are separate layers, and the dependency direction never reverses (adapters do not construct HTTP clients; tools never concatenate user strings into URLs). Public JSON is camelCase, Python is snake_case.
 
@@ -263,3 +269,23 @@ Security findings should go to the repository's private vulnerability reporting 
 [Apache-2.0](LICENSE)
 
 <!-- mcp-name: io.github.Kaelenx/spring-runtime-mcp -->
+
+
+The first release candidate remains **0.2.0 Alpha**: loopback targets, STDIO,
+eight existing tools and Bearer environment binding. See the
+[release readiness report](docs/audits/release-readiness-2026-10-31.md) for separate
+platform, historical sample, SDK and actual client evidence.
+
+For a source checkout use the locked project commands above. To install a built
+wheel independently (Linux/macOS path examples; Windows is unverified):
+
+```bash
+uv venv /tmp/spring-runtime-user
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.0-py3-none-any.whl
+/tmp/spring-runtime-user/bin/spring-runtime-mcp --version
+/tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
+```
+
+Public PyPI availability was not verified this round. `uvx spring-runtime-mcp==0.2.0`
+is a post-publication path awaiting validation. Replay is a one-shot offline command,
+not the MCP host.

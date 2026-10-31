@@ -1,0 +1,19 @@
+{
+  "xxl-job": {
+    "repository": "https://github.com/xuxueli/xxl-job",
+    "revision": "555b48f2edf0e51cd77971565342d80c15c9f18d",
+    "tag": "v3.4.0",
+    "module": "xxl-job-admin",
+    "mainClass": "com.xxl.job.admin.XxlJobAdminApplication",
+    "bootVersion": "4.0.5",
+    "stack": "servlet-jakarta",
+    "bean": "dataSource",
+    "route": "/auth/login",
+    "database": true,
+    "migrationEngine": null,
+    "unexposedHttpStatus": 404,
+    "separatePort": false,
+    "profiles": ["prod"],
+    "openapi": false
+  }
+}

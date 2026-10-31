@@ -1,0 +1,45 @@
+{
+  "flowable": {
+    "repository": "https://github.com/flowable/flowable-engine",
+    "revision": "11a1cf83a8c03e343040b4d8edc751f9534d7323",
+    "tag": "flowable-7.2.0",
+    "module": "modules/flowable-app-rest",
+    "mainClass": "org.flowable.rest.app.FlowableRestApplication",
+    "bootVersion": "3.5.4",
+    "stack": "servlet-jakarta",
+    "bean": "processEngine",
+    "route": "/management/engine",
+    "database": true,
+    "migrationEngine": null,
+    "unexposedHttpStatus": 401,
+    "separatePort": false
+  },
+  "dataflow": {
+    "repository": "https://github.com/spring-cloud/spring-cloud-dataflow",
+    "revision": "aded769567a338ee32c1606ab78ec848e89d3b4e",
+    "tag": "v2.11.5",
+    "module": "spring-cloud-dataflow-server",
+    "mainClass": "org.springframework.cloud.dataflow.server.single.DataFlowServerApplication",
+    "bootVersion": "2.7.18",
+    "stack": "servlet-javax",
+    "bean": "aboutController",
+    "route": "/about",
+    "database": true,
+    "migrationEngine": "flyway",
+    "separatePort": false
+  },
+  "spring-boot-admin": {
+    "repository": "https://github.com/codecentric/spring-boot-admin",
+    "revision": "9d667167671483d93c1265545c68c0c6d6618405",
+    "tag": "4.1.3",
+    "module": "spring-boot-admin-samples/spring-boot-admin-sample-reactive",
+    "mainClass": "de.codecentric.boot.admin.sample.SpringBootAdminReactiveApplication",
+    "bootVersion": "4.1.1",
+    "stack": "reactive",
+    "bean": "instanceRegistry",
+    "route": "/applications",
+    "database": false,
+    "migrationEngine": null,
+    "separatePort": true
+  }
+}

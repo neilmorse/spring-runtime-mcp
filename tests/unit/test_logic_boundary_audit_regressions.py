@@ -499,14 +499,15 @@ def test_tc_bug_09_timeout_must_close_the_underlying_http_exchange(
 
     class Response:
         status = 200
+        length = None
 
         def read(self, size: int) -> bytes:
             reading.set()
             release.wait(timeout=2)
             return b""
 
-        def getheader(self, name: str) -> str:
-            return "application/json"
+        def getheader(self, name: str) -> str | None:
+            return "application/json" if name == "Content-Type" else None
 
     class Connection:
         def __init__(self, *args: Any, **kwargs: Any) -> None:

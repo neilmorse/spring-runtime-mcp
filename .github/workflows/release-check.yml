@@ -1,0 +1,15 @@
+name: Release validation only
+
+on:
+  push:
+    branches: ["codex/release-*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    uses: ./.github/workflows/checks.yml
+    with:
+      full-release-gate: true

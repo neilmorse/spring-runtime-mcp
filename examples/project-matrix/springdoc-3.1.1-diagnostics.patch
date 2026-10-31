@@ -1,0 +1,80 @@
+--- a/springdoc-openapi-starter-common/src/main/java/org/springdoc/core/configuration/SpringDocConfiguration.java
++++ b/springdoc-openapi-starter-common/src/main/java/org/springdoc/core/configuration/SpringDocConfiguration.java
+@@ -559,15 +559,14 @@
+ 		/**
+ 		 * Springdoc bean factory post processor 3 bean factory post processor.
+ 		 *
+-		 * @param groupedOpenApis the grouped open apis
+ 		 * @return the bean factory post processor
+ 		 */
+ 		@Bean
+ 		@Lazy(false)
+ 		@ConditionalOnManagementPort(ManagementPortType.DIFFERENT)
+ 		@Conditional(MultipleOpenApiSupportCondition.class)
+-		static BeanFactoryPostProcessor springdocBeanFactoryPostProcessor3(List<GroupedOpenApi> groupedOpenApis) {
+-			return new SpringdocActuatorBeanFactoryConfigurer(groupedOpenApis);
++		static BeanFactoryPostProcessor springdocBeanFactoryPostProcessor3() {
++			return new SpringdocActuatorBeanFactoryConfigurer();
+ 		}
+ 
+ 		/**
+--- a/springdoc-openapi-starter-common/src/main/java/org/springdoc/core/configurer/SpringdocActuatorBeanFactoryConfigurer.java
++++ b/springdoc-openapi-starter-common/src/main/java/org/springdoc/core/configurer/SpringdocActuatorBeanFactoryConfigurer.java
+@@ -37,7 +37,6 @@
+ import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
+ import org.springframework.boot.context.properties.bind.BindResult;
+ import org.springframework.boot.context.properties.bind.Binder;
+-import org.springframework.util.CollectionUtils;
+ 
+ import static org.springdoc.core.utils.Constants.ACTUATOR_DEFAULT_GROUP;
+ import static org.springdoc.core.utils.Constants.ALL_PATTERN;
+@@ -58,9 +57,13 @@
+ 	 */
+ 	private final List<GroupedOpenApi> groupedOpenApis;
+ 
++	/** Instantiates a configurer that inspects definitions without creating groups. */
++	public SpringdocActuatorBeanFactoryConfigurer() {
++		this(List.of());
++	}
++
+ 	/**
+ 	 * Instantiates a new Springdoc actuator bean factory configurer.
+-	 *
+ 	 * @param groupedOpenApis the grouped open apis
+ 	 */
+ 	public SpringdocActuatorBeanFactoryConfigurer(List<GroupedOpenApi> groupedOpenApis) {
+@@ -89,7 +92,8 @@
+ 			// Add the actuator group
+ 			newGroups.add(actuatorGroup);
+ 
+-			if (CollectionUtils.isEmpty(groupedOpenApis)) {
++			if ((groupedOpenApis == null || groupedOpenApis.isEmpty())
++					&& beanFactory.getBeanNamesForType(GroupedOpenApi.class, true, false).length == 0) {
+ 				GroupedOpenApi defaultGroup = GroupedOpenApi.builder().group(DEFAULT_GROUP_NAME)
+ 						.pathsToMatch(ALL_PATTERN)
+ 						.pathsToExclude(webEndpointProperties.getBasePath() + ALL_PATTERN)
+--- a/springdoc-openapi-starter-webmvc-api/src/main/java/org/springdoc/webmvc/api/MultipleOpenApiActuatorResource.java
++++ b/springdoc-openapi-starter-webmvc-api/src/main/java/org/springdoc/webmvc/api/MultipleOpenApiActuatorResource.java
+@@ -49,6 +49,7 @@
+ 
+ import static org.springdoc.core.utils.Constants.APPLICATION_OPENAPI_YAML;
+ import static org.springdoc.core.utils.Constants.DEFAULT_API_DOCS_ACTUATOR_URL;
++import static org.springdoc.core.utils.Constants.DEFAULT_GROUP_NAME;
+ import static org.springframework.util.AntPathMatcher.DEFAULT_PATH_SEPARATOR;
+ 
+ /**
+@@ -77,6 +78,14 @@
+ 		super(groupedOpenApis, defaultOpenAPIBuilder, requestBuilder, responseBuilder, operationParser, springDocConfigProperties, springDocProviders, springDocCustomizers);
+ 	}
+ 
++
++	/** Fixed read-only default-group entry on the management endpoint. */
++	@Operation(hidden = true)
++	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
++	public byte[] defaultOpenapiJson(HttpServletRequest request, Locale locale)
++			throws JsonProcessingException {
++		return getOpenApiResourceOrThrow(DEFAULT_GROUP_NAME).openapiJson(request, "", locale);
++	}
+ 
+ 	/**
+ 	 * Openapi json string.

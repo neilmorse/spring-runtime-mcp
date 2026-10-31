@@ -1,0 +1,58 @@
+{
+  "pathItemSiblingOperationLost": {
+    "reproduced": true,
+    "methods": [
+      "GET"
+    ],
+    "status": "ok"
+  },
+  "invalidStartupReportedComplete": {
+    "reproduced": true,
+    "status": "ok",
+    "coverage": "complete",
+    "totalMatched": 0,
+    "gaps": []
+  },
+  "nonRfc3339Accepted": {
+    "reproduced": true,
+    "formats": {
+      "basicDate": {
+        "inputAccepted": true,
+        "outputFormatAccepted": true
+      },
+      "weekDate": {
+        "inputAccepted": true,
+        "outputFormatAccepted": true
+      },
+      "offsetSeconds": {
+        "inputAccepted": true,
+        "outputFormatAccepted": true
+      },
+      "validLowercaseZ": {
+        "inputAccepted": false,
+        "outputFormatAccepted": false
+      },
+      "validLeapSecond": {
+        "inputAccepted": false,
+        "outputFormatAccepted": false
+      }
+    }
+  },
+  "nestedDialectInheritanceLost": {
+    "reproduced": true,
+    "status": "partial",
+    "gaps": [
+      "OPENAPI_SCHEMA_DIALECT_UNSUPPORTED",
+      "OPENAPI_SCHEMA_PARTIAL"
+    ]
+  },
+  "unreadablePathReportedAsZero": {
+    "reproduced": true,
+    "status": "partial",
+    "totalMatched": 0,
+    "gaps": [
+      "OPENAPI_OBJECT_UNREADABLE",
+      "OPENAPI_PATH_UNREADABLE"
+    ]
+  }
+}

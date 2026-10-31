@@ -1,5 +1,12 @@
 [build-system]
-requires = ["hatchling>=1.27"]
+requires = [
+  "hatchling==1.32.4",
+  "packaging==26.3",
+  "pathspec==1.1.1",
+  "pluggy==1.7.0",
+  "tomlkit==0.15.2",
+  "trove-classifiers==2026.9.21.13",
+]
 build-backend = "hatchling.build"
 
 [project]
@@ -29,7 +36,11 @@ classifiers = [
 dependencies = ["jsonschema==4.25.1", "mcp>=2.3,<3"]
 
 [dependency-groups]
-dev = ["pytest==8.4.2", "mypy==1.18.2", "ruff==0.14.1"]
+dev = [
+  "pytest==9.0.3", "mypy==1.18.2", "ruff==0.14.1",
+  "hatchling==1.32.4", "packaging==26.3", "pathspec==1.1.1",
+  "pluggy==1.7.0", "tomlkit==0.15.2", "trove-classifiers==2026.9.21.13",
+]
 
 [project.urls]
 Homepage = "https://github.com/Kaelenx/spring-runtime-mcp"
@@ -48,6 +59,7 @@ packages = ["src/spring_runtime_mcp"]
 
 [tool.hatch.build.targets.sdist]
 include = ["src", "tests", "scripts", "docs", "examples", "*.md", "LICENSE", "uv.lock"]
+exclude = ["**/*.log", "**/*.jsonl", "**/__pycache__", "**/.env", "**/.env.*", "**/target", "**/build", "**/dist"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "tests"]

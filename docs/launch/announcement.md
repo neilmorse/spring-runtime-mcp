@@ -1,33 +1,42 @@
 # Launch checklist and drafts
 
-Status on 2026-10-22: repository public, v0.2.0 tagged source state, CI green on
-Python 3.11–3.14, real Boot 3.4.5 demo verified. PyPI publication and external
-submissions are still pending.
+Status on 2026-10-31: v0.2.0 Alpha release preparation based on `49ffdb9`.
+The release commit and final audited batch are recorded outside the repository
+to keep the verified commit clean; see the readiness report. No release tag is
+authorized yet. Public PyPI project/version endpoints returned 404, account
+access is blocked, and GitHub currently has no `pypi` environment. Codex CLI has a single-call
+fixture smoke check; other clients and complete client coverage remain unverified.
+The authoritative scope and current evidence are in
+[the release readiness report](../audits/release-readiness-2026-10-31.md).
 
 ## 1. PyPI (blocking for everything else)
 
 1. Create the project `spring-runtime-mcp` on PyPI (or let the first trusted
    publish create it).
 2. On PyPI → project → Publishing, add a trusted publisher:
-   - owner: `Kaelenx`
+   - owner: `neilmorse` (current repository owner; the old Kaelenx URL redirects)
    - repository: `spring-runtime-mcp`
    - workflow: `release.yml`
    - environment: `pypi`
-3. Tag and push:
+3. After a clean-commit gate exits 0, validation-only CI succeeds, account checks
+   are complete, and the operator approves publication, tag and push:
 
    ```bash
    git tag -a v0.2.0 -m "v0.2.0"
    git push origin v0.2.0
    ```
 
-4. The `Release` workflow builds the wheel/sdist, installs the wheel in a clean
-   venv, checks that all eight tools load, and publishes via OIDC.
+4. The `Release` workflow runs the strict audited gate, validates wheel and sdist
+   independently, and publishes those same verified artifacts via OIDC. The updated
+   workflow needs a successful remote run. Use `Release validation only` on a
+   `codex/release-*` branch first; it has no publish job or OIDC permission.
 5. After the package is live, update the README quick start to
    `uvx spring-runtime-mcp --base-url ...` and add the PyPI badge.
 
 ## 2. Official MCP Registry
 
-`server.json` is committed and validates against the 2025-12-11 schema. The
+`server.json` declares the 2025-12-11 schema; online Registry validation and account
+authorization remain to be checked before submission. The
 README contains the ownership token `mcp-name: io.github.Kaelenx/spring-runtime-mcp`,
 which the registry checks against the PyPI project description.
 
@@ -39,7 +48,7 @@ mcp-publisher login github
 mcp-publisher publish
 ```
 
-Namespace `io.github.Kaelenx` is authorized by the GitHub login used above; the
+Verify that the GitHub login authorizes namespace `io.github.Kaelenx`; the
 PyPI package must already contain the `mcp-name` token in its README.
 
 ## 3. Directory submissions

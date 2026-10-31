@@ -3,6 +3,9 @@ name: Shared validation
 on:
   workflow_call:
     inputs:
+      full-release-gate:
+        type: boolean
+        default: false
       verify-release:
         type: boolean
         default: false
@@ -41,8 +44,9 @@ jobs:
       - run: uv run --no-sync ruff check src tests scripts
       - run: uv run --no-sync ruff format --check src tests scripts
 
-  build:
-    name: wheel + SDK interoperability
+  release-gate:
+    name: Strict release gate and verified artifacts
+    if: inputs.full-release-gate || inputs.verify-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -50,19 +54,26 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv sync --dev --locked
-      - name: Verify release tag matches package metadata
+      - name: Verify package and registry versions
+        run: |
+          uv run --no-sync python - <<'PY'
+          import json
+          from spring_runtime_mcp import __version__
+          metadata = json.load(open("server.json"))
+          assert metadata["version"] == __version__
+          assert all(p["version"] == __version__ for p in metadata["packages"])
+          PY
+      - name: Verify release tag matches package version
         if: inputs.verify-release
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: uv run --no-sync python -c 'import os; from spring_runtime_mcp import __version__; assert os.environ["RELEASE_TAG"] == "v" + __version__'
-      - run: uv build
-      - name: Install wheel with tested dependency versions and check both protocol eras
-        run: |
-          uv export --frozen --no-dev --no-editable --no-emit-project --no-hashes -o runtime-constraints.txt
-          uv venv .ci-venv
-          uv pip install --python .ci-venv/bin/python -c runtime-constraints.txt dist/*.whl
-          .ci-venv/bin/python scripts/check_stdio_install.py --command .ci-venv/bin/spring-runtime-mcp
+      - name: Full release gate (no bypass flags)
+        run: uv run --no-sync python scripts/pre_release_check.py --audit --output-dir dist
       - uses: actions/upload-artifact@v7
         with:
           name: dist
-          path: dist/
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          if-no-files-found: error

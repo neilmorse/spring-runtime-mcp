@@ -5,13 +5,12 @@ from __future__ import annotations
 import asyncio
 import time
 from collections.abc import Awaitable, Callable, Mapping
-from copy import deepcopy
 from datetime import UTC, datetime
 from functools import wraps
 from typing import Any
 
 from ..models.common import CALL_BUDGET, CallBudget, NormalizationError
-from ..snapshots import SnapshotStore
+from ..snapshots import SnapshotStore, page_envelope
 from ..transport.responses import serialize_response
 from ..services import Services
 from ..diagnostics import _check, failed, partial
@@ -109,7 +108,9 @@ async def read_checked(
     return observation
 
 
-def finalize(result: dict[str, Any], services: Services, query: Any) -> dict[str, Any]:
+def finalize(
+    result: dict[str, Any], services: Services, query: Any, *, more: bool = False
+) -> dict[str, Any]:
     """Slice items to the query limit and the serialized response budget."""
     result = services.sanitizer.sanitize(result)
     if not isinstance(result.get("data"), dict):
@@ -117,9 +118,8 @@ def finalize(result: dict[str, Any], services: Services, query: Any) -> dict[str
     items = list(result["data"].get("items") or [])
     count = min(len(items), query.max_results)
     while True:
-        page = deepcopy(result)
-        page["data"]["items"] = items[:count]
-        remaining = items[count:]
+        page = page_envelope(result, items[:count])
+        remaining = more or count < len(items)
         if remaining:
             page["truncated"] = True
             page["truncationReasons"] = sorted(
@@ -141,25 +141,25 @@ def finalize(result: dict[str, Any], services: Services, query: Any) -> dict[str
             if count <= 1:
                 return failed("RESPONSE_TOO_LARGE", query.target_id)
             count //= 2
-    if items[count:]:
-        deadline = (
-            services.snapshots.deadline(query.cursor, query) if query.cursor else None
-        )
-        continuation = deepcopy(result)
-        continuation["data"]["items"] = items[count:]
-        page["nextCursor"] = services.snapshots.put(
-            services.sanitizer.sanitize(continuation),
-            query,
-            sanitizer=services.sanitizer,
-            expires_at=deadline,
+    if remaining:
+        page["nextCursor"] = (
+            services.snapshots.advance(
+                query.cursor, query, count, sanitizer=services.sanitizer
+            )
+            if query.cursor
+            else services.snapshots.put_paged(
+                result, query, offset=count, sanitizer=services.sanitizer
+            )
         )
         serialize_response(page, "\0" * 128, sanitizer=services.sanitizer)
     return page
 
 
 def resume(services: Services, query: Any) -> dict[str, Any]:
-    stored = services.snapshots.get(query.cursor, query, sanitizer=services.sanitizer)
-    return finalize(stored, services, query)
+    stored, more = services.snapshots.get_page(
+        query.cursor, query, sanitizer=services.sanitizer
+    )
+    return finalize(stored, services, query, more=more)
 
 
 # Re-export for handlers that only need the store type in annotations.

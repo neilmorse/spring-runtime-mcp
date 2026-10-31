@@ -9,7 +9,13 @@ dist/
 target/
 build/
 .coverage
+coverage.json
+coverage_run.log
 htmlcov/
 node_modules/
 .DS_Store
 .vscode/
+
+# Retain local historical run logs; publish reviewed aggregate JSON instead.
+examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.stdout.log
+examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.jsonl

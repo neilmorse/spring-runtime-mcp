@@ -37,6 +37,17 @@ ENDPOINTS = frozenset(
 HEALTH_ENDPOINTS = frozenset({"health", "health-liveness", "health-readiness"})
 
 
+def _json_media(content_type: str) -> str | None:
+    media = content_type.partition(";")[0].strip().lower()
+    if media in {
+        "application/json",
+        "application/vnd.spring-boot.actuator.v2+json",
+        "application/vnd.spring-boot.actuator.v3+json",
+    }:
+        return media
+    return None
+
+
 class EndpointReadError(NormalizationError):
     def __init__(
         self, code: str, endpoint_id: str, http_status: int | None = None
@@ -115,6 +126,8 @@ class ResponseGateReader:
             )
         except TimeoutError:
             raise EndpointReadError("TARGET_TIMEOUT", endpoint_id) from None
+        except EndpointReadError as exc:
+            raise EndpointReadError(exc.code, endpoint_id, exc.http_status) from None
         except NormalizationError as exc:
             raise EndpointReadError(exc.code, endpoint_id) from None
         except OSError as exc:
@@ -154,11 +167,8 @@ class ResponseGateReader:
             raise EndpointReadError(code, endpoint_id, status)
         if status != 200 and not (status == 503 and endpoint_id in HEALTH_ENDPOINTS):
             raise EndpointReadError("ENDPOINT_UNAVAILABLE", endpoint_id, status)
-        media = response.content_type.partition(";")[0].strip().lower()
-        if media != "application/json" and media not in {
-            "application/vnd.spring-boot.actuator.v2+json",
-            "application/vnd.spring-boot.actuator.v3+json",
-        }:
+        media = _json_media(response.content_type)
+        if media is None:
             raise EndpointReadError("UNEXPECTED_CONTENT_TYPE", endpoint_id, status)
         try:
             body = loads_bounded(response.body, max_bytes=MAX_UPSTREAM_BYTES)

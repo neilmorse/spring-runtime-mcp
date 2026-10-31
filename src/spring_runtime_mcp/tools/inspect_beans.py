@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import time
 from collections.abc import Mapping
-from copy import deepcopy
 from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
@@ -17,6 +16,7 @@ from ..analyzers.condition_failures import analyze_missing_beans, is_assignable
 from ..contracts.definitions import glob_matches, validate_arguments
 from ..diagnostics import _check, envelope, error, failed, partial, safe_code
 from ..services import Services as Services
+from ..snapshots import page_envelope
 from .support import tool_handler
 from ..models.common import (
     AnalysisBudget,
@@ -52,14 +52,17 @@ def _analysis_catalog(catalog: SourceCatalog) -> SourceCatalog:
 
 
 def _page(
-    result: dict[str, Any], query: InspectBeansQuery, services: Services
+    result: dict[str, Any],
+    query: InspectBeansQuery,
+    services: Services,
+    *,
+    more: bool = False,
 ) -> dict[str, Any]:
     items = result["data"]["items"]
     count = min(len(items), query.max_results)
     while True:
-        page = deepcopy(result)
-        page["data"]["items"] = deepcopy(items[:count])
-        remaining = items[count:]
+        page = page_envelope(result, items[:count])
+        remaining = more or count < len(items)
         credits = 50 - count
         associations_cut = False
         for item in page["data"]["items"]:
@@ -118,16 +121,14 @@ def _page(
             result["truncated"] = True
             result["truncationReasons"] = ["RESPONSE_BUDGET"]
     if remaining:
-        deadline = (
-            services.snapshots.deadline(query.cursor, query) if query.cursor else None
-        )
-        continuation = deepcopy(result)
-        continuation["data"]["items"] = remaining
-        page["nextCursor"] = services.snapshots.put(
-            services.sanitizer.sanitize(continuation),
-            query,
-            sanitizer=services.sanitizer,
-            expires_at=deadline,
+        page["nextCursor"] = (
+            services.snapshots.advance(
+                query.cursor, query, count, sanitizer=services.sanitizer
+            )
+            if query.cursor
+            else services.snapshots.put_paged(
+                result, query, offset=count, sanitizer=services.sanitizer
+            )
         )
         serialize_response(page, "\0" * 128, sanitizer=services.sanitizer)
     return page
@@ -148,13 +149,10 @@ async def inspect_beans(
         ):
             raise NormalizationError("TARGET_NOT_REGISTERED")
         if query.cursor:
-            return _page(
-                services.snapshots.get(
-                    query.cursor, query, sanitizer=services.sanitizer
-                ),
-                query,
-                services,
+            stored, more = services.snapshots.get_page(
+                query.cursor, query, sanitizer=services.sanitizer
             )
+            return _page(stored, query, services, more=more)
         result = envelope(query.target_id)
         snapshot = uuid4().hex
         budget = AnalysisBudget(

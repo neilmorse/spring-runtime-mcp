@@ -1,0 +1,29 @@
+{
+  "finding": "PC-01",
+  "scope": "offline-synthetic-normalizer-tool-finalizer-wire-sink",
+  "status": "ok",
+  "outputSchemaValid": true,
+  "existingOutputGuardAccepted": true,
+  "instructionCanaryPresentInWireFrame": false,
+  "registeredSecretAbsentFromWireFrame": true,
+  "responseBytes": 2338,
+  "instructionPassthroughPrevented": true,
+  "paginationProbe": {
+    "finding": "PC-02",
+    "scope": "offline-synthetic-work-count-and-frozen-clock",
+    "firstPageItems": 20,
+    "secondPageItems": 20,
+    "sanitizerInputItemCounts": [
+      1255,
+      20,
+      20
+    ],
+    "sourceReads": 1,
+    "afterOriginalDeadlineErrorCodes": [
+      "CURSOR_EXPIRED"
+    ],
+    "ttlMatchesSpecifiedAbsoluteLimit": true,
+    "fullRemainderWorkObserved": false,
+    "continuationTailReprocessingPrevented": true
+  }
+}

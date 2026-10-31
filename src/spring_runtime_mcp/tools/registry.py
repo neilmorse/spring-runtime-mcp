@@ -1,4 +1,4 @@
-"""Implemented tool handlers. Missing tools stay explicit failures."""
+"""Complete diagnostic registry, checked before the host starts serving."""
 
 from __future__ import annotations
 
@@ -31,11 +31,18 @@ HANDLERS: dict[str, Handler] = {
 }
 
 
+def validate_handlers() -> None:
+    if set(HANDLERS) != {item["name"] for item in list_tools()}:
+        raise RuntimeError("INVALID_TOOL_HANDLER_REGISTRATION")
+
+
 async def call_tool(
     name: str, arguments: Mapping[str, Any], services: Services
 ) -> dict[str, Any]:
     handler = HANDLERS.get(name)
     if handler is None:
         known = {item["name"] for item in list_tools()}
-        return failed("CAPABILITY_DISABLED" if name in known else "UNKNOWN_TOOL")
+        if name in known:
+            raise RuntimeError("INVALID_TOOL_HANDLER_REGISTRATION")
+        return failed("UNKNOWN_TOOL")
     return await handler(arguments, services)

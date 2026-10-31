@@ -1,0 +1,10 @@
+{
+  "probe": "opaque-cursor-output-guard-conflict",
+  "deterministicReproduced": true,
+  "candidateAcceptedByStore": true,
+  "candidateRejectedAtWireSink": "UNSAFE_OUTPUT",
+  "randomSampleSize": 10000,
+  "randomCandidatesRejectedByGuard": 43,
+  "randomSampleIsNotAnErrorRateEstimateForAllTools": true,
+  "productionRepairApplied": false
+}

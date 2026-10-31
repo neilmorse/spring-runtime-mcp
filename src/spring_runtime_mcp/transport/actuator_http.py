@@ -15,10 +15,17 @@ import socket
 import ssl
 import threading
 import time
-from typing import Any
+import zlib
+from typing import Any, cast
 from urllib.parse import urlsplit
 
-from .response_gate import MAX_UPSTREAM_BYTES, HttpResponse
+from .response_gate import (
+    HEALTH_ENDPOINTS,
+    MAX_UPSTREAM_BYTES,
+    EndpointReadError,
+    HttpResponse,
+    _json_media,
+)
 from ..models.common import NormalizationError
 
 _PATHS = {
@@ -35,6 +42,43 @@ _PATHS = {
     "env": "/actuator/env",
     "configprops": "/actuator/configprops",
 }
+_MAX_HEADER_BYTES = 32 * 1024
+_CONNECT_TIMEOUT = 2.0
+
+
+class _HeaderReader:
+    """Limit status and header bytes before http.client accumulates them."""
+
+    def __init__(self, stream: Any) -> None:
+        self.stream = stream
+        self.remaining = _MAX_HEADER_BYTES
+
+    def readline(self, size: int = -1) -> bytes:
+        limit = self.remaining + 1
+        if size >= 0:
+            limit = min(limit, size)
+        line: bytes = self.stream.readline(limit)
+        if len(line) > self.remaining:
+            raise NormalizationError("RESPONSE_HEADERS_TOO_LARGE")
+        self.remaining -= len(line)
+        return line
+
+    def close(self) -> None:
+        self.stream.close()
+
+
+class _HeaderBoundedResponse(http.client.HTTPResponse):
+    def begin(self) -> None:
+        original = self.fp
+        if original is None:
+            raise http.client.ResponseNotReady()
+        bounded = _HeaderReader(original)
+        self.fp = bounded  # type: ignore[assignment]
+        try:
+            super().begin()
+        finally:
+            if cast(Any, self.fp) is bounded:
+                self.fp = original
 
 
 def _parse_base(url: str) -> tuple[str, str, int]:
@@ -167,9 +211,42 @@ def _read_bounded(
         state.remaining()
         chunk = response.read(min(65536, remaining))
         if not chunk:
+            if response.length is not None and response.length > 0:
+                raise NormalizationError("INCOMPLETE_RESPONSE")
             break
         chunks.append(chunk)
         remaining -= len(chunk)
+    return b"".join(chunks)
+
+
+def _read_gzip_bounded(
+    response: http.client.HTTPResponse, max_bytes: int, state: _ExchangeState
+) -> bytes:
+    decoder = zlib.decompressobj(16 + zlib.MAX_WBITS)
+    encoded = decoded = 0
+    chunks: list[bytes] = []
+    try:
+        while True:
+            state.remaining()
+            chunk = response.read(min(65536, max_bytes - encoded + 1))
+            if not chunk:
+                if response.length is not None and response.length > 0:
+                    raise NormalizationError("INCOMPLETE_RESPONSE")
+                break
+            encoded += len(chunk)
+            if encoded > max_bytes:
+                raise NormalizationError("RESPONSE_TOO_LARGE")
+            output = decoder.decompress(chunk, max_bytes - decoded + 1)
+            decoded += len(output)
+            if decoded > max_bytes or decoder.unconsumed_tail:
+                raise NormalizationError("RESPONSE_TOO_LARGE")
+            if decoder.unused_data:
+                raise NormalizationError("INVALID_COMPRESSED_DATA")
+            chunks.append(output)
+    except zlib.error:
+        raise NormalizationError("INVALID_COMPRESSED_DATA") from None
+    if not decoder.eof:
+        raise NormalizationError("INVALID_COMPRESSED_DATA")
     return b"".join(chunks)
 
 
@@ -277,11 +354,15 @@ class ActuatorHttpTransport:
                 ):
                     raise NormalizationError("ADDRESS_DENIED")
                 _loopback(resolved_host)
+            connect_deadline = min(state.deadline, time.monotonic() + _CONNECT_TIMEOUT)
             for index, (family, _, _, _, endpoint) in enumerate(records):
                 sock = socket.socket(family, socket.SOCK_STREAM)
                 state.bind_socket(sock)
                 try:
-                    sock.settimeout(state.remaining())
+                    remaining_connect = connect_deadline - time.monotonic()
+                    if remaining_connect <= 0:
+                        raise TimeoutError()
+                    sock.settimeout(min(remaining_connect, state.remaining()))
                     sock.connect(endpoint)
                     peer = sock.getpeername()
                     if (
@@ -289,7 +370,9 @@ class ActuatorHttpTransport:
                         or peer[1] != self._port
                     ):
                         raise NormalizationError("PEER_MISMATCH")
-                    state.remaining()
+                    if connect_deadline <= time.monotonic():
+                        raise TimeoutError()
+                    sock.settimeout(state.remaining())
                     return sock
                 except OSError:
                     sock.close()
@@ -303,6 +386,7 @@ class ActuatorHttpTransport:
         # http.client's socket factory is the narrow seam that preserves its
         # framing while preventing a second hostname lookup or proxy handling.
         setattr(connection, "_create_connection", connect)
+        connection.response_class = _HeaderBoundedResponse
         connection.set_debuglevel(0)
         return connection
 
@@ -346,8 +430,30 @@ class ActuatorHttpTransport:
                 headers=headers,
             )
             upstream = connection.getresponse()
-            body = _read_bounded(upstream, max_bytes, state)
+            if upstream.status != 200 and not (
+                upstream.status == 503 and endpoint_id in HEALTH_ENDPOINTS
+            ):
+                # The response gate maps rejected statuses without inspecting
+                # their bodies. Avoid spending the read budget on error pages.
+                return HttpResponse(upstream.status, "", b"")
             content_type = upstream.getheader("Content-Type") or ""
+            if _json_media(content_type) is None:
+                return HttpResponse(upstream.status, content_type, b"")
+            content_encoding = upstream.getheader("Content-Encoding")
+            encoding = (
+                content_encoding.strip().lower()
+                if content_encoding is not None
+                else "identity"
+            )
+            if encoding not in {"identity", "gzip"}:
+                raise EndpointReadError(
+                    "UNSUPPORTED_CONTENT_ENCODING", endpoint_id, upstream.status
+                )
+            body = (
+                _read_gzip_bounded(upstream, max_bytes, state)
+                if encoding == "gzip"
+                else _read_bounded(upstream, max_bytes, state)
+            )
             return HttpResponse(upstream.status, content_type, body)
         finally:
             connection.close()

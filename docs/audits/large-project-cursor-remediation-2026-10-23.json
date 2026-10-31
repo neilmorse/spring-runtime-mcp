@@ -1,0 +1,12 @@
+{
+  "probe": "opaque-cursor-output-guard-conflict",
+  "deterministicReproduced": false,
+  "candidateAcceptedByStore": false,
+  "candidateRejectedAtWireSink": null,
+  "randomSampleSize": 1000,
+  "randomCandidatesRejectedByGuard": 0,
+  "randomSampleIsNotAnErrorRateEstimateForAllTools": true,
+  "candidateRejectedAtRegistration": "UNSAFE_OUTPUT",
+  "registrationAttempts": 16,
+  "unsafeHandleRegistrationPrevented": true
+}
