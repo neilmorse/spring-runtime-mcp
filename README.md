@@ -1,6 +1,6 @@
 # Spring Boot Runtime Diagnostics MCP
 
-[![CI](https://github.com/Kaelenx/spring-runtime-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Kaelenx/spring-runtime-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/neilmorse/spring-runtime-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/neilmorse/spring-runtime-mcp/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![MCP](https://img.shields.io/badge/MCP-stdio-black.svg)](https://modelcontextprotocol.io)
@@ -12,6 +12,19 @@ Your agent can read the source, but it cannot see what actually happened when th
 It is local-first and safe by default: fixed `GET` endpoints only, no redirects, no arbitrary URLs or headers, no `heapdump`/`logfile`, no raw `env` dumps, two sanitization layers, and a hard 16 KiB per-response budget.
 
 [中文说明](README.zh-CN.md)
+
+**0.2.0 Alpha is available on [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/).**
+It supports registered loopback targets over STDIO, with fixed endpoints and optional
+Bearer environment binding. Commands below explicitly use public PyPI to avoid mirror lag. Windows/macOS and the full Boot/client matrix remain
+unverified. See the [release record](docs/launch/release-0.2.0.md).
+
+```bash
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --base-url http://127.0.0.1:18081
+```
+
+Configure your local target first using the [target setup guide](docs/target-app-setup.md).
+The second command is the persistent MCP host; it waits for a client on STDIO.
 
 ## Why not just curl `/actuator`?
 
@@ -48,7 +61,7 @@ Tools are registered in alphabetical order, each carries `readOnlyHint`, `destru
 Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No JDK, Docker, model API key or network target is needed; the replay command runs a tool against a committed synthetic Actuator fixture.
 
 ```bash
-git clone https://github.com/Kaelenx/spring-runtime-mcp.git && cd spring-runtime-mcp
+git clone --branch v0.2.0 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
 uv run --locked python -m pytest -q
 uv run --locked python -m spring_runtime_mcp.replay \
   --scenario stripe-missing --tool springboot_inspect_beans \
@@ -246,7 +259,7 @@ uv run --no-sync ruff format --check src tests scripts
 uv build
 ```
 
-Add `--offline` to the initial sync once dependencies are cached. `uv.lock` fixes the tested runtime and development dependency versions; the wheel includes its tool Schema and `py.typed`. Tests block outbound network by default; real Shop acceptance is a separate operator-invoked script. PR CI runs the Python test matrix and static checks; release additionally runs the full audited pre-release script and requires a matching version tag. The changed workflow awaits remote verification.
+Add `--offline` to the initial sync once dependencies are cached. `uv.lock` fixes the tested runtime and development dependency versions; the wheel includes its tool Schema and `py.typed`. Tests block outbound network by default; real Shop acceptance is a separate operator-invoked script. PR CI runs the Python test matrix and static checks; release additionally runs the full audited pre-release script and requires a matching version tag. The release workflow passed on the published commit; see the release record.
 
 For a working-tree review, run `uv run --no-sync python scripts/pre_release_check.py --allow-dirty`. Add `--audit` to run the separate online `uv audit --locked` dependency check. Skipping the audit or build, allowing a dirty tree, or accepting skipped tests makes the result incomplete (exit 2); a failure exits 1. The clean-room stage compares wheel and sdist resources and versions with the source, installs each into a separate environment using lockfile constraints for runtime dependencies, checks the CLI version, and runs `scripts/check_stdio_install.py` outside the repository with isolated Python. Both installations cover both SDK modes, eight handlers against a disposable loopback fixture and seven packaged replay scenarios. Build dependencies are pinned in the build system and included in the development lock and audit. The earlier verification is recorded in the [MCP delivery audit](docs/audits/mcp-release-gate-2026-10-23.md).
 
@@ -271,7 +284,7 @@ Security findings should go to the repository's private vulnerability reporting 
 <!-- mcp-name: io.github.Kaelenx/spring-runtime-mcp -->
 
 
-The first release candidate remains **0.2.0 Alpha**: loopback targets, STDIO,
+The published release is **0.2.0 Alpha**: loopback targets, STDIO,
 eight existing tools and Bearer environment binding. See the
 [release readiness report](docs/audits/release-readiness-2026-10-31.md) for separate
 platform, historical sample, SDK and actual client evidence.
@@ -286,6 +299,7 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-Public PyPI availability was not verified this round. `uvx spring-runtime-mcp==0.2.0`
-is a post-publication path awaiting validation. Replay is a one-shot offline command,
-not the MCP host.
+Public PyPI installation has passed an independent clean-environment check on
+Linux/Python 3.12, including both SDK modes, eight fixture routes and seven replay
+scenarios. Replay is a one-shot offline command, not the MCP host. See the
+[release record](docs/launch/release-0.2.0.md) for evidence and remaining limits.

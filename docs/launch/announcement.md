@@ -1,97 +1,90 @@
-# Launch checklist and drafts
+# 0.2.0 Alpha：发布与投稿材料
 
-Status on 2026-10-31: v0.2.0 Alpha release preparation based on `49ffdb9`.
-The release commit and final audited batch are recorded outside the repository
-to keep the verified commit clean; see the readiness report. No release tag is
-authorized yet. Public PyPI project/version endpoints returned 404, account
-access is blocked, and GitHub currently has no `pypi` environment. Codex CLI has a single-call
-fixture smoke check; other clients and complete client coverage remain unverified.
-The authoritative scope and current evidence are in
-[the release readiness report](../audits/release-readiness-2026-10-31.md).
+更新于 2026-10-31。PyPI 0.2.0 已发布，发布与公开安装验证见
+[发布记录](release-0.2.0.md)。Registry 尚未提交；命名空间迁移见[方案](registry-plan.md)。
 
-## 1. PyPI (blocking for everything else)
+## GitHub Release 文案
 
-1. Create the project `spring-runtime-mcp` on PyPI (or let the first trusted
-   publish create it).
-2. On PyPI → project → Publishing, add a trusted publisher:
-   - owner: `neilmorse` (current repository owner; the old Kaelenx URL redirects)
-   - repository: `spring-runtime-mcp`
-   - workflow: `release.yml`
-   - environment: `pypi`
-3. After a clean-commit gate exits 0, validation-only CI succeeds, account checks
-   are complete, and the operator approves publication, tag and push:
+Title: **Spring Runtime MCP 0.2.0 Alpha**
 
-   ```bash
-   git tag -a v0.2.0 -m "v0.2.0"
-   git push origin v0.2.0
-   ```
+Spring Runtime MCP gives coding agents bounded, sanitized evidence from a registered
+local Spring Boot instance: beans and conditions, routes, health, migrations,
+startup, configuration origin, OpenAPI and drift.
 
-4. The `Release` workflow runs the strict audited gate, validates wheel and sdist
-   independently, and publishes those same verified artifacts via OIDC. The updated
-   workflow needs a successful remote run. Use `Release validation only` on a
-   `codex/release-*` branch first; it has no publish job or OIDC permission.
-5. After the package is live, update the README quick start to
-   `uvx spring-runtime-mcp --base-url ...` and add the PyPI badge.
-
-## 2. Official MCP Registry
-
-`server.json` declares the 2025-12-11 schema; online Registry validation and account
-authorization remain to be checked before submission. The
-README contains the ownership token `mcp-name: io.github.Kaelenx/spring-runtime-mcp`,
-which the registry checks against the PyPI project description.
-
-After PyPI shows version 0.2.0:
+Install with Python 3.11+ and uv:
 
 ```bash
-# install the publisher CLI from the modelcontextprotocol/registry releases
-mcp-publisher login github
-mcp-publisher publish
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --base-url http://127.0.0.1:18081
 ```
 
-Verify that the GitHub login authorizes namespace `io.github.Kaelenx`; the
-PyPI package must already contain the `mcp-name` token in its README.
+Prepare a local, read-only Actuator endpoint using the
+[target setup guide](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.0/docs/target-app-setup.md).
+The second command is the persistent STDIO host for your MCP client.
 
-## 3. Directory submissions
+This Alpha supports loopback targets, fixed endpoints and optional Bearer environment
+binding. It permits read-only GET requests, rejects redirects and environment proxies,
+validates TLS, sanitizes results through two layers and limits complete tool responses
+to 16 KiB. Missing evidence remains partial/unknown.
 
-- **Smithery** — submit the repository at https://smithery.ai/new (or via the
-  Smithery CLI once the PyPI package exists). Use the same description as
-  `server.json`.
-- **awesome-mcp-servers** — open a PR to `punkpeye/awesome-mcp-servers` adding
-  under Developer Tools:
+The release passed Python 3.11–3.14 offline tests, the complete audited gate,
+independent wheel/sdist installations and a public PyPI clean-environment check.
+Windows/macOS, the complete Boot/Java/client matrix and production clusters remain
+unverified. Remote targets, Basic/custom headers, custom management paths and OpenAPI
+path fallback are outside this release. Configuration diagnostics stay disabled by default.
 
-  ```markdown
-  - [Kaelenx/spring-runtime-mcp](https://github.com/Kaelenx/spring-runtime-mcp) - Read-only, sanitized Spring Boot runtime diagnostics for coding agents: beans and conditions, routes, health, migrations, startup, config origin, OpenAPI and drift.
-  ```
+- [PyPI 0.2.0](https://pypi.org/project/spring-runtime-mcp/0.2.0/)
+- [Verified release workflow](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41176181251)
+- [Release source](https://github.com/neilmorse/spring-runtime-mcp/tree/v0.2.0)
 
-- **mcp.so / Glama / PulseMCP** — most index from the official registry, so
-  publish there first and only submit manually where a form requires it.
+## awesome-mcp-servers 投稿
 
-External submissions are visible actions; review the listing text before
-sending.
+目标：[punkpeye/awesome-mcp-servers](https://github.com/punkpeye/awesome-mcp-servers)。
+遵循其[贡献指南](https://github.com/punkpeye/awesome-mcp-servers/blob/main/CONTRIBUTING.md)，
+添加到 Developer Tools 类别并按仓库所有者排序，不声明 Registry 收录或完整兼容。
 
-## 4. Launch post draft (r/java, r/springboot, dev.to)
+```markdown
+- [neilmorse/spring-runtime-mcp](https://github.com/neilmorse/spring-runtime-mcp) 🐍 🏠 - Read-only Spring Boot runtime diagnostics: beans and conditions, routes, health, migrations, startup, config origin, OpenAPI and drift. Loopback-only, sanitized, bounded responses.
+```
 
-Title: **I built a read-only MCP server that tells your agent why a Spring bean
-is missing**
+PR title: **Add Spring Runtime MCP**
 
-> Coding agents can read a Spring codebase but not what happened at runtime.
-> I built `spring-runtime-mcp`, a local stdio MCP server that reads Actuator
-> and OpenAPI from an explicitly registered instance and turns it into eight
-> bounded, sanitized tools: beans and condition chains, routes, health,
-> migrations, startup, config origin, OpenAPI and drift.
->
-> It is deliberately narrow: GET only, fixed endpoints, no redirects, no
-> heapdump/logfile, no raw env dumps, 16 KiB per response, and missing evidence
-> is reported as `partial`/`unknown` instead of a confident guess.
->
-> Example from the included Boot 3.4 demo: `springboot_inspect_beans` returns
->
-> ```text
-> REQUIRED_BEAN_MISSING      (StripeConfiguration#paymentGateway)
->   → SOURCE_FACTORY_NOT_CREATED
->     → PROPERTY_NOT_FOUND   (StripeConfiguration#stripeClient, stripe.enabled)
-> ```
->
-> Repo: https://github.com/Kaelenx/spring-runtime-mcp (Apache-2.0). Feedback from
-> people running Spring Boot 2.7/3.x/4.x in unusual setups is especially
-> welcome — synthetic fixtures only go so far.
+PR body:
+
+```text
+Add spring-runtime-mcp under Developer Tools. It is an Apache-2.0 Python STDIO server
+with a public PyPI 0.2.0 Alpha package. Eight read-only tools inspect a registered
+loopback Spring Boot instance; results are sanitized and bounded to 16 KiB.
+
+Repository: https://github.com/neilmorse/spring-runtime-mcp
+Package: https://pypi.org/project/spring-runtime-mcp/0.2.0/
+
+The entry describes implemented scope only. It does not claim full Boot/client
+compatibility or MCP Registry publication. Documentation and submission preparation
+were assisted by a coding agent.
+```
+
+## 其他目录与社区公告
+
+- [Smithery](https://smithery.ai/new) 当前跳转账户登录；需可用账户，且应先确认其安装模型适用于本地 STDIO。
+- [Glama](https://glama.ai/mcp/servers) 的 Add Server 入口需实际页面核查；不使用旧的 `/submit` 搜索路由冒充提交端点。
+- PulseMCP、mcp.so 未核实可用的直接提交路径，不能声称已提交或会自动同步。
+- Reddit/dev.to 等帖子需选择平台并使用操作者已授权账户；本轮先准备下列短文，不跨平台自动群发。
+
+Title: **Spring Runtime MCP 0.2.0 Alpha: read-only runtime evidence for Spring Boot agents**
+
+```text
+Spring Runtime MCP 0.2.0 Alpha is available on PyPI. It gives coding agents eight
+read-only tools for Spring Boot beans/conditions, routes, health, migrations,
+startup, configuration origin, OpenAPI and drift.
+
+It reads a registered local loopback instance over fixed Actuator endpoints.
+Responses are sanitized and bounded to 16 KiB; missing evidence stays partial/unknown.
+Configuration diagnostics are off by default. It never invokes business operations.
+
+This is a limited Alpha, with fixture, isolated-install and fixed-project evidence.
+It does not claim every Boot/Java/client combination or production-cluster readiness.
+
+Package: https://pypi.org/project/spring-runtime-mcp/0.2.0/
+Source: https://github.com/neilmorse/spring-runtime-mcp
+```

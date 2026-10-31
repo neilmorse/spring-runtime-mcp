@@ -2,7 +2,16 @@
 
 [English README](README.md)
 
-当前版本为 **v0.2.0**，工作树另含尚未发布的综合审查修复。交付范围、实际验证与限制见 [版本记录](CHANGELOG.md)及[修复验收报告](docs/audits/comprehensive-remediation-2026-10-22.md)。
+**v0.2.0 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.0.md)。
+
+安装并检查版本（显式使用官方 PyPI，避免镜像尚未同步新包）：
+
+```bash
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.0 --base-url http://127.0.0.1:18081
+```
+
+先按[目标配置指南](docs/target-app-setup.md)配置本地应用。第二条命令为常驻 MCP 宿主，等待客户端通过 STDIO 发出请求；replay 仍是一次性离线命令。
 
 面向编码 Agent 的本地优先、只读、安全默认运行时诊断工具。项目目标是把获权 Spring Boot 实例的 Actuator 与 OpenAPI 响应转换为脱敏、可追溯、有界的运行证据。
 
@@ -249,14 +258,14 @@ uv run --no-sync ruff format --check src tests scripts
 uv build
 ```
 
-`uv.lock` 锁定运行及开发依赖；已缓存时首条同步可加 `--offline`。当前离线结果见[版本记录](CHANGELOG.md)，历史交付核验见[报告](docs/audits/final-delivery-audit-2026-10-23.md)；超大型 Fineract 验收见[审计报告](docs/audits/ultra-project-fineract-2026-10-23.md)。官方 SDK 的 legacy 和 2026-07-28 模式也完成隔离 wheel 安装验收。PR CI 运行 Python 测试矩阵与静态检查；正式发布另运行完整联网审计门禁并检查标签与包版本一致，修改后的远端工作流待验证。TypeScript 红队入口是 `tests/security/redteam-audit.test.ts`，需要本机 Node，不属于默认 Python 门禁。
+`uv.lock` 锁定运行及开发依赖；已缓存时首条同步可加 `--offline`。当前离线结果见[版本记录](CHANGELOG.md)，历史交付核验见[报告](docs/audits/final-delivery-audit-2026-10-23.md)；超大型 Fineract 验收见[审计报告](docs/audits/ultra-project-fineract-2026-10-23.md)。官方 SDK 的 legacy 和 2026-07-28 模式也完成隔离 wheel 安装验收。PR CI 运行 Python 测试矩阵与静态检查；正式发布另运行完整联网审计门禁并检查标签与包版本一致，发布提交的远端工作流已通过，见发布记录。TypeScript 红队入口是 `tests/security/redteam-audit.test.ts`，需要本机 Node，不属于默认 Python 门禁。
 
 工作树自检运行 `uv run --no-sync python scripts/pre_release_check.py --allow-dirty`；加 `--audit` 才执行独立的联网 `uv audit --locked` 漏洞审计。未执行审计、跳过构建、允许脏工作树或接受跳过的测试时，检查不完整并返回 2；失败返回 1。净室阶段比对 wheel 与 sdist 的资源和版本，分别在独立环境按锁文件约束安装运行依赖、检查 CLI 版本，再从仓库外用隔离 Python 执行 SDK 两模式、八个自建回环 HTTP 处理器调用和七个内置 replay 场景。构建后端及其构建依赖固定版本，并纳入开发锁文件与漏洞审计。历史证据见 [MCP 交付专项核验](docs/audits/mcp-release-gate-2026-10-23.md)。
 
 Python 实现位于 `src/spring_runtime_mcp/`；公开契约位于 `src/spring_runtime_mcp/schemas/tools-contract.json`，随 wheel 一起分发；`tests/` 默认阻断外部网络。架构速查见 [HANDOVER.md](HANDOVER.md)。[SPEC](SPEC.md)定义产品目标，[目标配置指南](docs/target-app-setup.md)解释版本及授权，[归一化设计](docs/architecture/cross-version-normalization.md)说明响应差异，[红队报告](docs/audits/security-redteam-2026-10-17.md)列出已修复问题与仍未覆盖的真实实例边界。
 
 
-首发候选为 **0.2.0 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
+已发布版本为 **0.2.0 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
 
 源码检出使用上方锁定项目命令。wheel 安装后直接运行入口：
 
@@ -267,4 +276,4 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 版本存在性本轮未核实；`uvx spring-runtime-mcp==0.2.0` 仅为发布后待验路径。replay 是一次性离线命令，不是 MCP 宿主。
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.0.md)。replay 是一次性离线命令，不是 MCP 宿主。
