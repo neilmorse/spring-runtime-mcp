@@ -25,10 +25,9 @@ MAVEN_OPTS='-Xmx768m -Djava.awt.headless=true' mvn -B -q --no-transfer-progress 
   -DincludeScope=runtime -Dmdep.outputFile=classpath-runtime.txt
 ```
 
-ThingsBoard 的原生服务没有标准 Actuator；仅对临时副本应用 [可选诊断 profile 补丁](thingsboard-actuator.patch)，不更换原生 Boot/BOM，不改变本项目 Python 依赖。
+ThingsBoard 的历史验收在临时副本中添加可选诊断 profile，不更换原生 Boot/BOM，不改变本项目 Python 依赖。当前留存的 `thingsboard-actuator.patch` 为空，不能用它复现该 profile；需另行恢复补丁并在授权的隔离实例中验收。本段仅保留当时构建记录，不是当前可直接执行的复现流程。
 
 ```bash
-git apply /absolute/path/to/spring-runtime-mcp/examples/production-chaos/thingsboard-actuator.patch
 MAVEN_OPTS='-Xmx896m -Djava.awt.headless=true' mvn -B -q --no-transfer-progress \
   -pl application -am -Pruntime-diagnostics -DskipTests \
   -Dskip.installyarn=true -Dskip.yarn=true \

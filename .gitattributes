@@ -1,0 +1,4 @@
+# Preserve literal upstream context whitespace in historical patch artifacts.
+# These patches are validated as patch syntax, rather than reformatted as source.
+/examples/project-matrix/springdoc-3.1.1-diagnostics.patch -whitespace
+/examples/ultra-project-matrix/fineract-build-workaround.patch -whitespace

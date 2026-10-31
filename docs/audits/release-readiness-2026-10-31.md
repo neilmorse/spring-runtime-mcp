@@ -6,6 +6,7 @@
 
 - 生产实现、全部关联离线测试、Schema/py.typed/replay 资源、发布脚本、锁文件和既有历史审计/修复记录成套纳入。已核对受改网络/协议/脱敏/分页边界、两个新增生产模块及对应回归，所有新增 Python/JSON 可解析，公开工具 Schema 无变化。保留原有暂存重命名，不删除用户文件，不将旧失败记录改写为成功。
 - Nacos 的 `.stdout.log` 和逐分钟 `.jsonl` 保留磁盘，以两个精确 `.gitignore` 路径排除；只提交脱敏聚合 JSON 和报告。已将指向未交付 JSONL 的 Markdown 链接改为本地留存说明。现有缓存/coverage/JAR/target/build/dist 继续排除；sdist 继续排除所有 log/jsonl，wheel 仅运行包。既有 demo 的已跟踪协议 transcript 不删除，sdist 仍排除 JSONL。
+- 材料检查另确认 springdoc 与 Fineract 历史补丁需要保留原始上下文空白：以精确路径 `.gitattributes` 排除源码空白规则，不改补丁字节；四份非空补丁均通过 `git apply --numstat` 语法解析。ThingsBoard 旧补丁为空，已撤下 README 的 `git apply` 命令并明确该历史 profile 复现材料不完整，不影响限定范围的 Python/fixture 发布验收。
 - 提交按逐文件审核清单显式暂存，不使用 `git add .` 或 `git add -A`。发布准备分支使用 `codex/release-*`；先在本地干净提交运行用户指定门禁，再仅推送该分支进行验证，不推正式标签、不触发发布。
 - 新增 `.github/workflows/release-check.yml`：分支 push / workflow_dispatch 调用共享 checks 的 `full-release-gate: true`，运行 Python 矩阵、静态检查和完整联网审计门禁。它没有 publish job、`pypi` environment 或 `id-token: write`；发布 workflow 仍以 `verify-release: true` 额外强制版本标签匹配。两入口复用相同产物检查/隔离安装实现。官方 actionlint 临时二进制在仓库外执行（关闭外部 shellcheck/pyflakes 集成），退出 0。
 - GitHub 实际仓库是 `neilmorse/spring-runtime-mcp`，旧 Kaelenx 地址重定向；插件连接只读，本机 gh 登录 neilmorse 且 REST 返回 admin/push=true。Actions 已启用、允许所有 actions；管理员查询 `environments` 返回 `total_count=0`，`pypi` 详情返回 404：这是当前未建立环境/保护规则的实际证据，不再仅标待核实。未擅自建立环境或授权。
