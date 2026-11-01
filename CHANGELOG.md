@@ -1,5 +1,12 @@
 # 版本记录
 
+## v0.2.6 Alpha — 2026-11-01（具名 Bean 条件）
+
+- 发布候选，完整门禁和公开分发包验收待完成；旧版本标签及产物保留。
+- 支持单一 names 选择器的 `did not find any beans named <name>`，要求名称严格一致，接通既有工厂/属性传递阻塞分析；不扩大多要求或未知语法的归因范围。
+- 新增 29 项离线回归，P4 源补丁独立验收 1172 passed；同实例基线/候选及 A–E 正反证据持久留存，实际证据缺口继续 partial/unknown。
+- CGLIB 关联、图算法、公开 Schema、运行依赖、错误码、网络/鉴权/TLS、脱敏和预算保持。范围与发布批次见[0.2.6 发布记录](docs/launch/release-0.2.6.md)。
+
 ## v0.2.5 Alpha — 2026-11-01（WebFlux 函数 handler）
 
 - 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 v0.2.5 指向 `f3f99310967b50dbee847ef82228f87ac8beba27`。完整门禁、公开包无缓存安装与函数类过滤回归通过，四批产物摘要一致。

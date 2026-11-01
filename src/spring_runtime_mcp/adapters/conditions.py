@@ -10,6 +10,7 @@ from ..models.common import AnalysisBudget, Fact, NormalizationError, ParsedObse
 from ..models.conditions import Condition, ConditionReport, Outcome, Search
 
 _IDENT = r"[A-Za-z_$][A-Za-z0-9_.$]*"
+_BEAN_NAME = re.compile(r"[A-Za-z_$][A-Za-z0-9_.$-]*\Z")
 _SOURCE = re.compile(_IDENT + r"(?:#[A-Za-z_$][A-Za-z0-9_$]*)?\Z")
 _NESTED = re.compile(
     r"(AnyNestedCondition|AllNestedConditions|NoneNestedConditions) (\d{1,4}) matched (\d{1,4}) did not\Z"
@@ -43,13 +44,16 @@ def _leaf(
 ) -> tuple[Search, tuple[str, ...], tuple[str, ...], Fact[str], str, bool, Outcome]:
     unknown: Fact[str] = Fact("notReported", None, "NOT_REPORTED")
     bean = re.fullmatch(
-        r"@ConditionalOn(Bean|MissingBean) \((types|names): ([A-Za-z0-9_.$, ]+); SearchStrategy: (all|current|parents)\) (.+)",
+        r"@ConditionalOn(Bean|MissingBean) \((types|names): ([A-Za-z0-9_.$, -]+); SearchStrategy: (all|current|parents)\) (.+)",
         message,
     )
     if bean:
         kind, selector, entries, strategy, suffix = bean.groups()
         required = tuple(s.strip() for s in entries.split(","))
-        if not required or any(not _SOURCE.fullmatch(s) for s in required):
+        pattern = re.compile(_IDENT + r"\Z") if selector == "types" else _BEAN_NAME
+        if not required or any(
+            len(s) > 256 or not pattern.fullmatch(s) for s in required
+        ):
             return (
                 "unknown",
                 (),
@@ -62,11 +66,19 @@ def _leaf(
         missing = re.fullmatch(
             r"did not find any beans(?: of type " + _IDENT + ")?", suffix
         )
+        # Boot's single-name negative report identifies exactly this selector.
+        # Lists/composite selectors or a different suffix name do not identify
+        # one missing producer and must remain unknown.
+        named_missing = (
+            selector == "names"
+            and len(required) == 1
+            and suffix == "did not find any beans named " + required[0]
+        )
         found = re.fullmatch(r"found bean '[A-Za-z0-9_.$]+'", suffix)
-        if missing or found:
+        if missing or named_missing or found:
             outcome: Outcome = (
                 "matched"
-                if (bool(missing) == (kind == "MissingBean"))
+                if (bool(missing or named_missing) == (kind == "MissingBean"))
                 else "notMatched"
             )
             return (
@@ -75,7 +87,7 @@ def _leaf(
                 required if selector == "names" else (),
                 unknown,
                 "REQUIRED_BEAN_MISSING"
-                if missing and kind == "Bean"
+                if (missing or named_missing) and kind == "Bean"
                 else "CONDITION_MATCH"
                 if outcome == "matched"
                 else "BEAN_PRESENT",

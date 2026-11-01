@@ -46,7 +46,9 @@ uv run --no-sync python -m spring_runtime_mcp.cli \
 - 没有目录、条件权限不足、source key/Context 错配时，不应把空 items 写成“Bean 不存在”。`totalMatched: null` 表示不能确认完整匹配数。
 
 2026-11-01 的隔离 TDD 开发副本（Boot 3.5.16 / Java 21 / MVC / JWT）验证了 `shop-product` 目录加载与属性负向证据关联。
-具名 `ConditionalOnBean` 的实际负向消息在该样本仍未解析，传递阻塞链未获证明；正向属性消息和其它上游语法也未全部解析。
+P4 源码候选随后在本轮隔离开发副本中验证了单一具名 `ConditionalOnBean` 的 `did not find any beans named <name>` 消息，只有后缀名称与唯一 names 选择器一致时才解析；通过精确 conditionSources 和唯一目录生产者关联到上游属性负向条件。未加载目录、Context/source 错配、多个要求无法归因或条件不可读时继续 unknown/partial。既有类型选择器与传递分析不是 P4 新增；正向属性消息和其它上游语法仍未全部解析。
+
+Bean 名称解析与 Java 类型/source 校验分别处理；有界连字符名称可用于条件解析，但目录符号字段的校验未放宽，因此不能据此宣称任意 Bean 名称均可关联源码。此验收只覆盖源码候选，不表示公开 0.2.5 包已修复。
 这不是完整版本矩阵验收，也不代表 TDD 未提交业务完成。
 
 图深度/关联上限、运行响应引用了未暴露 Bean、敏感标识脱敏、未扫描的类型关系不会因目录加载而消失。
