@@ -5,6 +5,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![MCP](https://img.shields.io/badge/MCP-stdio-black.svg)](https://modelcontextprotocol.io)
 [![PyPI](https://img.shields.io/pypi/v/spring-runtime-mcp)](https://pypi.org/project/spring-runtime-mcp/)
+[![M8ven Score](https://m8ven.ai/badge/mcp/kaelenx-spring-runtime-mcp-8hkzby?v=1262f3c1cdef4835e79f1fced294949d)](https://m8ven.ai/mcp/kaelenx-spring-runtime-mcp-8hkzby?s=readme)
 
 **Read-only, sanitized Spring Boot runtime evidence for coding agents.**
 
