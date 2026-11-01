@@ -1,5 +1,13 @@
 # 版本记录
 
+## v0.2.5 Alpha — 2026-11-01（WebFlux 函数 handler）
+
+- 发布候选；尚未发布，完整门禁、产物与公开安装验证待完成。
+- 保留 Actuator 的结构化 `details.handlerFunction.className`，投影到现有 `controllerClass`，修复 `controllerClassPattern` 对函数路由的漏匹配；不推断业务方法或 descriptor。
+- 新增 9 项离线回归；P3 重新执行的真实 MVC/JWT startup 与独立 WebFlux/Bearer 验收证据已持久留存，源码补丁验收全量 1143 passed。复杂 predicate 与 500 步分析上限继续明确 partial。
+- 合并 M8ven 发布者认证徽章分支；徽章不构成安全或兼容矩阵认证。
+- 公开 Schema、错误码、运行依赖、目标/IP/端点边界、HTTP/TLS、脱敏和预算未修改。范围与发布批次见[0.2.5 发布记录](docs/launch/release-0.2.5.md)。
+
 ## v0.2.4 Alpha — 2026-11-01（首次接入体验）
 
 - 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 v0.2.4 指向 `4e9e571aac001fc6fa9f95026688b54ae767202c`，完整门禁及公开安装/新提示检查通过，产物摘要一致。

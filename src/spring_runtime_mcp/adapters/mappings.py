@@ -163,12 +163,23 @@ def normalize_mappings(
                         if isinstance(details, dict)
                         else None
                     )
+                    function_class = (
+                        handler_function.get("className")
+                        if isinstance(handler_function, dict)
+                        else None
+                    )
+                    if isinstance(function_class, str):
+                        handler_function = function_class
                     if not isinstance(handler_function, str):
                         nested = record.get("handlerFunction")
                         handler_function = nested if isinstance(nested, str) else None
                     class_name = (
                         method.get("className") if isinstance(method, dict) else None
                     )
+                    if not isinstance(class_name, str) and isinstance(
+                        function_class, str
+                    ):
+                        class_name = function_class
                     method_name = (
                         method.get("name") if isinstance(method, dict) else None
                     )
