@@ -26,6 +26,18 @@ def _strings(value: Any) -> tuple[str, ...]:
     return tuple(_text(v) for v in value)
 
 
+def _context_id(value: Any) -> str:
+    # ApplicationContext IDs are opaque identities, not Java symbols. Keep the
+    # same bounded, control-free text accepted by the public context selector.
+    if (
+        not isinstance(value, str)
+        or not 1 <= len(value) <= 256
+        or any(ord(char) < 32 or ord(char) == 127 for char in value)
+    ):
+        raise NormalizationError("INVALID_SOURCE_CATALOG")
+    return value
+
+
 def load_source_catalog(
     payload: Mapping[str, Any], *, target_id: str, budget: AnalysisBudget
 ) -> SourceCatalog:
@@ -94,7 +106,7 @@ def load_source_catalog(
         parsed.append(
             SourceProducer(
                 f"source_producer_{i}",
-                _text(row["contextId"]),
+                _context_id(row["contextId"]),
                 _text(row["beanName"]),
                 _strings(row["aliases"]),
                 _text(row["declaredType"]),
