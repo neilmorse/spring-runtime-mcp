@@ -1,4 +1,4 @@
-name: Publish approved 0.2.2 Registry metadata
+name: Publish approved 0.2.3 Registry metadata
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: registry-0.2.2
+  group: registry-0.2.3
   cancel-in-progress: false
 
 jobs:
@@ -20,10 +20,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: v0.2.2
+          ref: v0.2.3
       - name: Verify approved source and public package ownership
         run: |
-          test "$(git rev-parse HEAD)" = d4388d39b2ec57160836c602bf97f4875f7f6fe3
+          test "$(git rev-parse HEAD)" = 3f752dc46f8f5b9344bdfbde15597b95f3dd6670
           python3 - <<'PY'
           import json
           import re
@@ -33,16 +33,16 @@ jobs:
           metadata = json.loads(Path("server.json").read_text())
           name = "io.github.neilmorse/spring-runtime-mcp"
           assert metadata["name"] == name
-          assert metadata["version"] == "0.2.2"
+          assert metadata["version"] == "0.2.3"
           assert len(metadata["packages"]) == 1
           package = metadata["packages"][0]
           assert package["registryType"] == "pypi"
           assert package["identifier"] == "spring-runtime-mcp"
-          assert package["version"] == "0.2.2"
-          url = "https://pypi.org/pypi/spring-runtime-mcp/0.2.2/json"
+          assert package["version"] == "0.2.3"
+          url = "https://pypi.org/pypi/spring-runtime-mcp/0.2.3/json"
           with urllib.request.urlopen(url, timeout=30) as response:
               public = json.load(response)
-          assert public["info"]["version"] == "0.2.2"
+          assert public["info"]["version"] == "0.2.3"
           marker = re.escape("mcp-name: " + name) + r"(?=\s|<|-->|$)"
           assert re.search(marker, public["info"]["description"])
           print("Approved source, version and public package ownership marker verified.")
@@ -75,8 +75,8 @@ jobs:
               payload = json.load(response)
           assert any(
               item.get("server", {}).get("name") == name
-              and item["server"].get("version") == "0.2.2"
+              and item["server"].get("version") == "0.2.3"
               for item in payload.get("servers", [])
           )
-          print("Registry entry confirmed: " + name + " 0.2.2")
+          print("Registry entry confirmed: " + name + " 0.2.3")
           PY
