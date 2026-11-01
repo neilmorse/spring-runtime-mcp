@@ -1,6 +1,9 @@
 # 0.2.4 Alpha — 2026-11-01
 
-本版改善首次接入体验。发布已获操作者授权，当前为准备记录；正式流水线、公开包验收及 Registry 状态完成后补齐。
+本版改善首次接入体验。
+[PyPI 0.2.4](https://pypi.org/project/spring-runtime-mcp/0.2.4/) 与
+[GitHub Release](https://github.com/neilmorse/spring-runtime-mcp/releases/tag/v0.2.4) 已公开。
+标签指向 `4e9e571aac001fc6fa9f95026688b54ae767202c`，包含 P2 修复提交 `de14a41b59ca5c0ac26fe520e33e4931216f562e`。旧版本标签和产物保留。
 
 ## 变化与兼容性
 
@@ -17,7 +20,7 @@ P2 补丁独立验收为 1134 passed / 46.64 秒，mypy、Ruff/格式通过；�
 
 ## 安装
 
-正式发布后使用公开 PyPI：
+使用公开 PyPI：
 
 ```bash
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.4 --version
@@ -27,4 +30,16 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.4 --version
 
 ## 发布批次
 
-待完成：干净提交的完整本地/远端门禁、wheel/sdist 隔离安装、正式发布、公开 PyPI 全新安装与缺失凭据提示检查、GitHub Release、MCP Registry 发布及独立回读。
+- 干净候选的完整本地门禁退出 0：1134 passed / 47.32 秒；mypy、Ruff、八工具契约与联网漏洞审计通过。
+- [远端候选验证](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41273731709) 与
+  [正式发布流水线](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41273949601) 已通过，覆盖 Python 3.11–3.14。
+- wheel/sdist 各自完成净室安装、两种 SDK 模式、八工具自建回环 HTTP 与七 replay；本地、远端候选、正式发布及公开 PyPI 的文件摘要一致。
+- PyPI 保留 neilmorse 审批和禁止管理员绕过，仅新增精确 v0.2.4 标签授权。
+- 公开 PyPI 仓库外全新 Python 3.12.15 环境无缓存、无锁约束安装通过，实际 SDK 2.3.0；两种模式、原始 JSON-RPC、八工具 HTTP、Schema/注解、脱敏/16 KiB 预算及七 replay 通过。安装后的 CLI 另行验证缺失变量退出 2、stdout 空、父环境/env_vars 提示以及不回显变量名/堆栈。
+- 首次公开命名解析未找到刚发布版本，保留日志；索引就绪、独立命名解析成功后，实际全新安装通过，没有使用本地文件或源码替代。
+- [Registry 工作流](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41274337209) 以固定版本/源提交、校验摘要的官方 publisher 及短时 GitHub OIDC 发布成功；[公开 API](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp) 已独立确认 io.github.neilmorse/spring-runtime-mcp 0.2.4 的包标识与版本。
+
+| 文件 | SHA256 |
+| --- | --- |
+| spring_runtime_mcp-0.2.4-py3-none-any.whl | `526628eeefac8c3767cf28d6c735c0c77d0b427de0d015fba6842907f5a23927` |
+| spring_runtime_mcp-0.2.4.tar.gz | `4b87a6f55346240af8739151c1bbf33bc07f9bb3bbdfaa22c7971d780f711226` |

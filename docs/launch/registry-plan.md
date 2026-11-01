@@ -1,6 +1,6 @@
 # MCP Registry：命名空间迁移记录
 
-当前已登记 `io.github.neilmorse/spring-runtime-mcp` **0.2.3**，对应[发布记录](release-0.2.3.md)。
+当前已登记 `io.github.neilmorse/spring-runtime-mcp` **0.2.4**，对应[发布记录](release-0.2.4.md)。
 下文保留 0.2.1 的命名空间迁移背景，并更新当前工作流与权限状态。
 
 2026-10-31 已完成迁移：`io.github.neilmorse/spring-runtime-mcp` 0.2.1 已发布，
@@ -24,11 +24,11 @@
 ## 身份、权限与发布
 
 - GitHub 插件对本仓库只读且身份不同；写入使用本机已获授权的仓库所有者身份。
-- PyPI 环境保留 neilmorse 人工审批和禁止管理员绕过；标签范围为 `v0.2.0`、`v0.2.1`、`v0.2.2` 与 `v0.2.3`，未开放通配规则。
+- PyPI 环境保留 neilmorse 人工审批和禁止管理员绕过；标签范围为 `v0.2.0`、`v0.2.1`、`v0.2.2`、`v0.2.3` 与 `v0.2.4`，未开放通配规则。
 - Registry 使用[手动工作流](../../.github/workflows/publish-registry.yml)，不将个人 GitHub 访问令牌交给 Registry。
-- 工作流仅允许本仓库 master 手动触发，无输入；固定检出 `v0.2.3` 并检查精确提交 SHA、版本、名称及公开 PyPI 标记。
+- 工作流仅允许本仓库 master 手动触发，无输入；固定检出 `v0.2.4` 并检查精确提交 SHA、版本、名称及公开 PyPI 标记。
 - 官方 mcp-publisher 固定 v1.8.7 且校验下载摘要；只有发布 job 具有 `id-token: write`，身份令牌为短时 OIDC。
-- [0.2.1 迁移发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41193724668)、[0.2.2 发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41217447137) 和 [0.2.3 发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41268759615) 的验证、身份认证、提交及精确条目回读均通过。
+- [0.2.1 迁移发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41193724668)、[0.2.2 发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41217447137)、[0.2.3 发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41268759615) 和 [0.2.4 发布](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41274337209) 的验证、身份认证、提交及精确条目回读均通过。
 
 后续版本需要审阅更新工作流中固定的版本/提交、完成对应包验收并取得发布授权。
 不要重复发布已有 Registry 版本或挪动旧标签。GitHub 仓库跳转不能替代命名空间所有权验证。
