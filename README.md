@@ -132,6 +132,8 @@ uv run --locked --project /abs/path/to/spring-runtime-mcp spring-runtime-mcp --b
 | `--config-allow-values` | none | off |
 | `--version` | none | print the package version and exit |
 
+For Bean producer and condition correlation, see the [source catalog guide](docs/source-catalog.md) for the existing format, exact Context/source-key matching and partial-evidence limits.
+
 `--base-url` is an origin (scheme, host, port) registered once at startup. There is no way to pass a URL, path or header through a tool call.
 
 For an existing Bearer-protected target, add `--token-env SHOP_ACTUATOR_TOKEN` and supply that environment variable to the server process. Only the variable name belongs in the command; token values stay in memory, bind to this origin, and enter the known-secret sanitization set. Invalid or missing credentials fail startup. See the [Shop acceptance example](examples/tdd-runtime/README.md) for a verified JWT setup.

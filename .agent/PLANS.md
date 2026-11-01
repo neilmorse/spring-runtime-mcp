@@ -145,3 +145,16 @@
    个源文件、Ruff check/format 120 个文件、八工具契约和 `git diff --check` 通过；目标、
    MariaDB 容器和全部 MCP 子进程停止，运行目录及手工探针凭据文件删除；源码缓存保留。
    未提交、未发布。
+
+---
+
+# Bean 未创建根因与证据完整性专项（2026-11-01）
+
+- [x] 读取双方规则，创建 codex/bean-evidence-integrity；记录当前源码摘要并复制 TDD（含未提交源码）。
+- [x] 使用独立回环 PostgreSQL 与 shop-product，保留 JWT；仅暴露 health/info/beans/conditions。
+- [x] 不带目录建立业务 Bean、依赖与已知条件样本基线；手工核实最小 source catalog，再对照。
+- [x] 分类证据缺口；选择一个实测可重复缺陷，离线 RED → 最小修复 → GREEN。
+- [x] 完整离线回归、真实样本复验、清理；仓库外交付脱敏报告。
+
+外部工作区与报告：/home/neil/bean-evidence-review-20261101
+约束：不修改 TDD 原目录、不新增依赖/公开 Schema、不扩大守卫或预算、不发布。

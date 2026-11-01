@@ -404,3 +404,76 @@ def test_source_producer_package_boundary_and_globs_only_star_question():
         catalog,
         budget=AnalysisBudget(),
     )
+
+
+@pytest.mark.parametrize(
+    "context_id", ["shop-product", "application:management", "app-1:child"]
+)
+def test_source_context_identity_is_not_a_java_type(context_id):
+    payload = fixture("factory-method/source-catalog.json")
+    for producer in payload["producers"]:
+        producer["contextId"] = context_id
+    catalog = None
+    rejection = None
+    try:
+        catalog = load_source_catalog(
+            payload, target_id="local", budget=AnalysisBudget()
+        )
+    except NormalizationError as exc:
+        rejection = exc.code
+    assert catalog is not None, rejection
+    assert {producer.context_id for producer in catalog.producers} == {context_id}
+
+
+@pytest.mark.parametrize(
+    "context_id", [None, 1, "", "x" * 257, "app\nchild", "app\x00", "app\x7f"]
+)
+def test_source_context_identity_rejects_invalid_or_control_text(context_id):
+    payload = fixture("factory-method/source-catalog.json")
+    payload["producers"][0]["contextId"] = context_id
+    with pytest.raises(NormalizationError, match="^INVALID_SOURCE_CATALOG$"):
+        load_source_catalog(payload, target_id="local", budget=AnalysisBudget())
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["declaredType", "implementationType", "configurationClass", "factoryMethod"],
+)
+def test_source_java_identifiers_remain_strict(field):
+    payload = fixture("factory-method/source-catalog.json")
+    payload["producers"][0][field] = "not-a-java-identifier"
+    with pytest.raises(NormalizationError, match="^INVALID_SOURCE_CATALOG$"):
+        load_source_catalog(payload, target_id="local", budget=AnalysisBudget())
+
+
+@pytest.mark.parametrize("catalog_context", ["shop-product", "shop_product"])
+def test_source_context_join_is_exact_for_condition_evidence(catalog_context):
+    beans = fixture("parent-child/beans.json")
+    conditions = fixture("factory-method/conditions.json")
+    for body in (beans, conditions):
+        body["contexts"]["shop-product"] = body["contexts"].pop("application")
+    payload = fixture("factory-method/source-catalog.json")
+    for producer in payload["producers"]:
+        producer["contextId"] = catalog_context
+    catalog = load_source_catalog(payload, target_id="local", budget=AnalysisBudget())
+    graph = normalize_beans(observation(beans, "beans"), budget=AnalysisBudget())
+    report = normalize_conditions(observation(conditions), budget=AnalysisBudget())
+    result = analyze_missing_beans(
+        InspectBeansQuery(bean_name_pattern="stripePaymentGateway"),
+        graph,
+        report,
+        catalog,
+        budget=AnalysisBudget(),
+    )
+    if catalog_context == "shop-product":
+        assert result.state == "explained", result.gaps
+        nodes = {node.id: node for node in result.conditions}
+        assert [nodes[node].reason_code for node in result.blocking_paths[0]] == [
+            "REQUIRED_BEAN_MISSING",
+            "SOURCE_FACTORY_NOT_CREATED",
+            "PROPERTY_NOT_FOUND",
+        ]
+    else:
+        assert result.state == "unknown"
+        assert "SOURCE_CONTEXT_UNOBSERVED" in result.gaps
+        assert not result.blocking_paths
