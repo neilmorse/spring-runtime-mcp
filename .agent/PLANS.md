@@ -158,3 +158,21 @@
 
 外部工作区与报告：/home/neil/bean-evidence-review-20261101
 约束：不修改 TDD 原目录、不新增依赖/公开 Schema、不扩大守卫或预算、不发布。
+
+# 2026-11-01 P3 真实启动与受保护 WebFlux 验收
+
+授权：当前 TDD 未提交源码隔离副本、临时回环实例/数据库、外部原生启动采集器，
+以及独立 WebFlux/Bearer 工程；只读 GET，不触及原实例，不提交或发布。
+报告与脱敏证据：[持久报告](/home/neil/Projects/codcli/spring-runtime-mcp-p3-report-2026-11-01/REPORT.md)、
+[真实补验结果](/home/neil/Projects/codcli/spring-runtime-mcp-p3-report-2026-11-01/acceptance.json)、
+[最终清理复核](/home/neil/Projects/codcli/spring-runtime-mcp-p3-report-2026-11-01/cleanup.json)。
+原临时证据目录丢失，无法恢复；本次重新执行补交，不把聊天摘要或旧报告当作通过证据。
+[SHA-256 清单](/home/neil/Projects/codcli/spring-runtime-mcp-p3-report-2026-11-01/manifest.json)
+与同目录 verify_evidence.py 可离线复核留存完整性。
+
+1. [完成] 核对规则、0.2.4 源码与两个仓库状态；保留 codex/p3-runtime-acceptance 及已有修复。
+2. [完成] 当前 TDD 快照离线构建成功；未采集 500 + configureStartup，补验采集后 575 事件连续 GET 保留；单位、跨度、父子关系与分页核验通过。
+3. [完成] 网关缺少认证链；独立 Boot 3.5.16 / Java 21 / WebFlux/Bearer 正反查询、401/403/200、分页通过；业务 handler 计数 0。
+4. [完成] 同实例基线/候选确认函数类丢失与类过滤漏匹配修复；重新执行离线 RED 2 failed/4 passed、GREEN 9 passed；全量 1143 passed，mypy/Ruff 通过。
+5. [完成] 仓库外持久报告、补验数据、清理记录、无凭据重建模板与文件哈希清单已留存；临时进程、数据库、源码/活动配置清理；TDD 原文件哈希/状态及既有容器状态保持。
+6. [范围] 源码候选，未构建 MCP wheel、未使用公开包；未扩展为完整版本矩阵或 TDD Gateway 代理路由验收。未提交、推送或发布。
