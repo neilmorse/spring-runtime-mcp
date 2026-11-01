@@ -1,9 +1,7 @@
-"""Correct-behavior regressions for the remaining architecture-audit items.
+"""Correct-behavior regressions for architecture boundaries (RW-06).
 
-These encode the completion standards of RW-06 in
-docs/audits/remaining-work-handoff-2026-10-20.md. They are expected to fail
-until the minimal fixes land; no production code is replaced and every payload
-is synthetic. Failures here are the batch entry point, not a weakened gate.
+These cover source catalog registration, config access, migrations and drift.
+Production code is exercised directly and every payload is synthetic.
 """
 
 from __future__ import annotations

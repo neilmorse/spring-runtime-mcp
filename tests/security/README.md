@@ -6,12 +6,12 @@ Run the requested TypeScript entry with Node 22+ (no npm dependencies):
 node --test tests/security/redteam-audit.test.ts
 ```
 
-It uses Node's built-in runner to execute the five actual Python test modules
-through cached, offline uv environments. TAP is test output, not MCP STDIO.
+It uses Node's built-in runner to execute five Python test modules
+through cached, offline uv environments; the table also includes the separate boundaries suite. TAP is test output, not MCP STDIO.
 Run the same cases directly with:
 
 ```bash
-uv run --offline --no-project --with pytest==8.4.2 --with jsonschema==4.25.1 python -m pytest -q tests/security
+uv run --no-sync python -m pytest -q tests/security
 ```
 
 | Module | Attack surface |
@@ -28,7 +28,8 @@ DNS service or external HTTP endpoint is accessed. The parent conftest prohibits
 network connections. Do not weaken a failing case to accept raw output or a
 request; fix the corresponding production boundary.
 
-The [audit report](../../docs/audits/security-redteam-2026-10-17.md) is a historical
-snapshot predating the HTTP connector and stdio host. See the
-[release record](../../CHANGELOG.md) for the current verification scope. These
-tests do not prove live DNS pinning, peer-IP validation or official SDK compliance.
+Current network and output boundaries are described in the
+[security architecture](../../docs/architecture/security-and-sanitization.md).
+These synthetic suites do not establish a complete live TLS/SNI, platform or
+third-party client matrix. Validation requirements are in the
+[release guide](../../docs/launch/README.md).

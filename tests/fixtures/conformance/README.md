@@ -32,7 +32,7 @@ Startup step durations overlap and must not be summed as total startup time.
 
 `contracts/` holds independent nonempty expected examples for eight published
 output schemas. They are checked as committed data, never regenerated from the
-schema during tests. Seven examples do not represent implemented handlers.
+schema during tests. Expected examples validate result shapes independently of the eight registered handlers.
 `faults/` provides status/body/error injection and the hidden-Health expected
 partial contract. `large/beans-2500.json` is a deterministic 2,500-node chain for
 filtering, page and graph-budget regression tests. Only sanitized projections

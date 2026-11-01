@@ -1,8 +1,7 @@
 # 大型公开项目原生运行矩阵（opt-in）
 
 只在用户明确授权的临时副本运行，不属于默认 pytest，不连接已有业务实例。
-固定提交见 [projects.json](projects.json)，本轮证据见
-[审计报告](../../docs/audits/large-project-stability-2026-10-22.md)。
+固定提交见 [projects.json](projects.json)。每次执行需单独授权，并将新结果写到独立文件；保存的聚合只描述其对应源码与配置。
 
 | 项目 | 固定 tag | 主 Java 文件 | 原生 Boot | 运行配置 |
 | --- | --- | ---: | --- | --- |

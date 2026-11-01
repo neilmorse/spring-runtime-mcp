@@ -1,8 +1,8 @@
 # 首次接入：公开包到第一次只读查询
 
-本路径使用公开发行包 **0.2.6 Alpha**，无需检出源码、JDK 或开发依赖。
+本路径使用公开发行包 **0.2.7 Alpha**，无需检出源码、JDK 或开发依赖。
 需要 Python 3.11+、[uv](https://docs.astral.sh/uv/getting-started/installation/)、已可用的编码客户端，以及应用维护者授予的目标读取权限。
-Linux 命令示例；Windows/macOS 本轮未验收。历史验收记录不代表本次运行。
+以下为 Linux 命令示例；Windows/macOS 尚未验证。按本指南完成实际握手与查询后再判断本次接入结果。
 
 ## 1. 安装并确认入口
 
@@ -12,12 +12,12 @@ Linux 命令示例；Windows/macOS 本轮未验收。历史验收记录不代表
 python3 --version
 uv --version
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python --default-index https://pypi.org/simple spring-runtime-mcp==0.2.6
+uv pip install --python /tmp/spring-runtime-user/bin/python --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 ```
 
-最后应输出 `spring-runtime-mcp 0.2.6`。此命令只核验入口，不连接目标。
-也可以使用 `uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.6 --version`；首次下载可能超过客户端握手等待时间，先在终端完成安装，再接入客户端。
+最后应输出 `spring-runtime-mcp 0.2.7`。此命令只核验入口，不连接目标。
+也可以使用 `uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --version`；首次下载可能超过客户端握手等待时间，先在终端完成安装，再接入客户端。
 
 `uv`/`uvx` 找不到时按官方安装说明安装并重启启动客户端的终端；用 `command -v uv` 核验 PATH。推荐配置绝对入口路径，避免桌面进程与终端 PATH 不一致。
 索引报找不到版本时，记录命令、索引与错误。PyPI 项目页有版本元数据，不等于所用镜像的 simple 索引已有文件，更不等于安装成功。可核对上述明确的公开 PyPI 索引后重试一次；不要随意换源或把本地 wheel 安装记为公开命名安装成功。
@@ -34,7 +34,7 @@ uv pip install --python /tmp/spring-runtime-user/bin/python --default-index http
 
 ## 3. 最小 Codex CLI 配置
 
-字段依据 [OpenAI 官方 MCP 文档](https://learn.chatgpt.com/docs/extend/mcp)（2026-11-01 核对）：`command`、`args`、`env_vars`、`startup_timeout_sec`、`tool_timeout_sec`。
+字段依据 [OpenAI 官方 MCP 文档](https://learn.chatgpt.com/docs/extend/mcp)：`command`、`args`、`env_vars`、`startup_timeout_sec`、`tool_timeout_sec`。
 将入口替换为第 1 步实际安装的绝对路径。已有配置只合并该表，不覆盖其他服务器。
 
 ```toml
@@ -60,7 +60,7 @@ CODEX_HOME=/tmp/spring-runtime-codex codex
 
 独立 `CODEX_HOME` 还隔离客户端登录状态；如需登录，沿用客户端官方登录流程，不把全局认证文件复制进报告。`mcp list` 只能证明登记被读取；实际会话握手与查询仍需下一步。直接在终端启动宿主后等待 STDIO 客户端是正常行为，没有交互提示也不证明卡住；退出可按 Ctrl-C。不要把 replay 命令配置为宿主。
 
-其他客户端模板见 README，属于参考模板；本轮不声明 Claude、Cursor 或 VS Code 验收通过。
+其他客户端模板见[配置指南](client-configuration.md)，属于参考配置，不能据此推导完整客户端兼容性。
 
 ## 4. 发现工具并查询
 

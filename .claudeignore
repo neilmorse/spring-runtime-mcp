@@ -1,0 +1,21 @@
+# 人类历史资料；专项任务需用户明确指定读取范围。
+# 此配置辅助检索，不是访问权限控制。
+.human/
+CHANGELOG.md
+
+# 仅在当前任务明确引用时读取临时计划。
+.agent/PLANS.md
+.agent/execplans/
+
+# 缓存与构建/测试产物。
+.venv/
+dist/
+build/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage_run.log
+coverage.json

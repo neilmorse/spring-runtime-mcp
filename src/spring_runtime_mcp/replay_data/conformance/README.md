@@ -22,7 +22,7 @@ Raw structure references:
 - [Spring Boot mappings](https://docs.spring.io/spring-boot/3.4/api/rest/actuator/mappings.html): dispatcher trees and JVM method descriptors.
 - [Startup](https://docs.spring.io/spring-boot/3.4/api/rest/actuator/startup.html): timeline events, durations, tags and parent IDs; GET snapshots only.
 - [Liquibase](https://docs.spring.io/spring-boot/3.4/api/rest/actuator/liquibase.html): case-sensitive changeSets and changeLog fields.
-- [Repository normalization design](../../../docs/architecture/cross-version-normalization.md): the remaining field mapping and visibility rules.
+- [Repository normalization design](../../../../docs/architecture/cross-version-normalization.md): the remaining field mapping and visibility rules.
 
 Migrations preserve each context and migration Bean identity. Flyway checksum is
 a signed number; Liquibase checksum is a string with its version prefix. Neither
@@ -32,10 +32,10 @@ Startup step durations overlap and must not be summed as total startup time.
 
 `contracts/` holds independent nonempty expected examples for eight published
 output schemas. They are checked as committed data, never regenerated from the
-schema during tests. Seven examples do not represent implemented handlers.
+schema during tests. Expected examples validate result shapes independently of the eight registered handlers.
 `faults/` provides status/body/error injection and the hidden-Health expected
 partial contract. `large/beans-2500.json` is a deterministic 2,500-node chain for
 filtering, page and graph-budget regression tests. Only sanitized projections
 may enter cursor storage; these raw inputs remain confined to test memory.
 
-Run commands and the evidence matrix are in [the suite guide](../../conformance/README.md).
+Run commands and the evidence matrix are in [the suite guide](../../../../tests/conformance/README.md).

@@ -1,7 +1,7 @@
 """Regression-first contracts for the 2026-10-18 logic/boundary audit.
 
-TC-BUG numbers here belong to docs/audits/logic-and-boundary-audit-2026-10-18.md,
-not the older numbered regressions. Production code is never replaced: doubles
+TC-BUG identifiers refer to this suite's logic/boundary cases. Production code
+is never replaced: doubles
 are confined to external HTTP/stdin/observation boundaries. All payloads are
 synthetic; no test opens an outbound connection. Resource attacks use bounded
 observation or cooperative cleanup rather than actually exhausting the process.
