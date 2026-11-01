@@ -1,6 +1,9 @@
 # 0.2.3 Alpha — 2026-11-01
 
-本版修复 source catalog 对 Spring Context ID 的错误校验。发布已获操作者授权，当前记录为发布准备状态；正式发布、公开安装与 Registry 的结果完成后补齐。
+本版修复 source catalog 对 Spring Context ID 的错误校验。
+[PyPI 0.2.3](https://pypi.org/project/spring-runtime-mcp/0.2.3/) 与
+[GitHub Release](https://github.com/neilmorse/spring-runtime-mcp/releases/tag/v0.2.3) 已公开。
+标签指向 `3f752dc46f8f5b9344bdfbde15597b95f3dd6670`，包含修复提交 `8997e6d9e118f1e10e2b03b8b0abf1b9b98165ad`。旧版本标签和产物保留。
 
 ## 变化与兼容性
 
@@ -17,7 +20,7 @@
 
 ## 安装
 
-正式发布后使用公开 PyPI：
+使用公开 PyPI：
 
 ```bash
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --version
@@ -28,4 +31,16 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --base-url
 
 ## 发布批次
 
-待完成：干净提交的完整本地/远端门禁、wheel/sdist 隔离安装、正式发布、公开 PyPI 全新安装、GitHub Release、精确版本 MCP Registry 提交与回读。
+- 干净候选的完整本地门禁退出 0：1134 passed / 48.95 秒；mypy、Ruff、八工具契约和联网漏洞审计通过。
+- [远端候选验证](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41267958909) 与
+  [正式发布流水线](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41268217530) 均通过，覆盖 Python 3.11–3.14。
+- wheel/sdist 均完成隔离安装、SDK 两模式、八工具自建回环 HTTP 与七 replay；本地、远端候选、正式发布和公开 PyPI 的文件摘要一致。
+- PyPI 保留 neilmorse 审批和禁止管理员绕过，仅增加精确 v0.2.3 标签授权。
+- 公开 PyPI 仓库外全新 Python 3.12.15 环境无缓存、无锁约束安装通过，实际 SDK 2.3.0；两模式、原始 JSON-RPC、八工具 HTTP、Schema/注解、脱敏/16 KiB 预算及七 replay 均通过。安装后的 CLI 目录加载器另行接受 shop-product Context ID，确认修复已进入公开包。
+- 发布初期安装索引尚未列出新版本，前三次解析失败；索引出现且独立解析成功后，相同命名安装通过。保留失败日志，没有用本地 wheel 或源码替代公开安装。
+- [Registry 工作流](https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41268759615) 使用固定版本/源提交、校验摘要的官方 publisher 与短时 GitHub OIDC，发布成功；[公开 API](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp) 已独立确认 io.github.neilmorse/spring-runtime-mcp 0.2.3 的包标识与版本。
+
+| 文件 | SHA256 |
+| --- | --- |
+| spring_runtime_mcp-0.2.3-py3-none-any.whl | `af80539a4beb436cb271a21acec2a75b79f24136bf831e10b8519a3b9e21cb58` |
+| spring_runtime_mcp-0.2.3.tar.gz | `78b7c63d9a598f747ca72d3d31a423e56fea4d67d946efad406fab62e4427c48` |

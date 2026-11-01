@@ -2,6 +2,8 @@
 
 ## v0.2.3 Alpha — 2026-11-01（源码目录 Context ID）
 
+- 已发布到 PyPI、GitHub Release 和 MCP Registry，标签 v0.2.3 指向 `3f752dc46f8f5b9344bdfbde15597b95f3dd6670`；完整门禁与公开全新安装通过，三批产物及公开 PyPI 摘要一致。
+
 - 修复 source catalog 错将 Context ID 当作 Java 符号校验的问题；允许 shop-product 等合法身份并精确关联，保留长度与 C0/DEL 限制，Java 类型/工厂字段校验保持。
 - 新增 16 项回归；独立验收全量 1134 passed，mypy/Ruff/格式通过。有限 TDD 正反样本与 legacy STDIO 已证明目录工厂关联和属性负向证据，代理类型及具名 OnBean 传递链限制仍保留。
 - 补充源码目录指南；公开 Schema、依赖、安全守卫和预算未修改。发布批次状态见[0.2.3 发布记录](docs/launch/release-0.2.3.md)。

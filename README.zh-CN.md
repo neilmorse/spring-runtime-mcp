@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-**v0.2.3 Alpha：源码目录 Context ID 校验修复**（[PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.3/)）。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.3.md)。
+**v0.2.3 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.3/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.3.md)。
 
 本版仅修正 Registry 所有权和项目链接，诊断能力与 0.2.0 一致。已登记到
 [MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp)，名称为 `io.github.neilmorse/spring-runtime-mcp`。
@@ -106,6 +106,8 @@ uv run --locked spring-runtime-mcp --base-url http://127.0.0.1:18081
 项目环境已安装依赖后，也可以 `uv run --locked --project <仓库绝对路径> spring-runtime-mcp --base-url http://127.0.0.1:18081`。模板不含凭据或自动批准设置。把 `<仓库绝对路径>` 换成当前机器的检出目录。桌面客户端可能不继承终端 PATH，因此命令写成 `uv` 的绝对路径更稳。
 
 目标已有 Bearer/JWT 鉴权时，增加 `--token-env SHOP_ACTUATOR_TOKEN`，由启动环境提供同名变量。命令只携带变量名，令牌绑定登记 origin 并进入已知秘密脱敏集合；变量缺失、空值或格式非法时启动失败。Basic、自定义头、非回环目标、自定义管理基路径和 OpenAPI 路径回退仍未实现。响应编码支持缺省、`identity` 和单成员 gzip，压缩前后分别计数限额。
+
+Bean 生产者与条件的源码关联见[源码目录指南](docs/source-catalog.md)，包含精确 Context/source key 登记和证据不足边界。
 
 配置诊断默认关闭。启用 `springboot_inspect_config` 至少登记一个 `--config-prefix` 或 `--config-property`；只有同时提供 `--config-allow-values` 才允许返回经过脱敏的登记标量值。`springboot_detect_drift` 的 profile 比较需要 `--config-profiles`。只给值权限、没有选择器时启动失败。
 
@@ -298,4 +300,4 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.2 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.3.md)。replay 是一次性离线命令，不是 MCP 宿主。
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.3 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.3.md)。replay 是一次性离线命令，不是 MCP 宿主。
