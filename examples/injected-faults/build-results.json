@@ -1,0 +1,268 @@
+{
+  "cases": {
+    "syntax": {
+      "build": {
+        "exitCode": 1,
+        "expectedDiagnosticMarker": true
+      },
+      "mcp": {
+        "called": false,
+        "reason": "No new executable runtime was produced."
+      }
+    },
+    "type": {
+      "build": {
+        "exitCode": 1,
+        "expectedDiagnosticMarker": true
+      },
+      "mcp": {
+        "called": false,
+        "reason": "No new executable runtime was produced."
+      }
+    },
+    "missing_bean": {
+      "build": {
+        "exitCode": 0
+      },
+      "launch": {
+        "exitCode": 1,
+        "expectedDiagnosticMarker": true
+      },
+      "mcp": {
+        "clientExitCode": 0,
+        "frameBytes": 2129,
+        "isError": true,
+        "status": "unavailable",
+        "totalMatched": null,
+        "coverage": {
+          "state": "unavailable",
+          "scope": "registered target Bean contexts",
+          "gaps": []
+        },
+        "errorCodes": [
+          "TARGET_CONNECTION_REFUSED"
+        ],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "cleanup": {
+        "processExited": true
+      }
+    },
+    "duplicate_bean": {
+      "build": {
+        "exitCode": 0
+      },
+      "launch": {
+        "exitCode": 1,
+        "expectedDiagnosticMarker": true
+      },
+      "mcp": {
+        "clientExitCode": 0,
+        "frameBytes": 2129,
+        "isError": true,
+        "status": "unavailable",
+        "totalMatched": null,
+        "coverage": {
+          "state": "unavailable",
+          "scope": "registered target Bean contexts",
+          "gaps": []
+        },
+        "errorCodes": [
+          "TARGET_CONNECTION_REFUSED"
+        ],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "cleanup": {
+        "processExited": true
+      }
+    },
+    "stale_runtime": {
+      "build": {
+        "exitCode": 0
+      },
+      "launch": {
+        "managementPortOpened": true
+      },
+      "source": {
+        "sourceModifiedAt": "2026-11-01T14:25:40.661660+00:00",
+        "routeChangedAfterLaunch": true
+      },
+      "mcpOldRoute": {
+        "clientExitCode": 0,
+        "frameBytes": 2304,
+        "isError": false,
+        "status": "ok",
+        "totalMatched": 1,
+        "coverage": {
+          "state": "complete",
+          "scope": "registered target mappings",
+          "gaps": []
+        },
+        "errorCodes": [],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "mcpNewRoute": {
+        "clientExitCode": 0,
+        "frameBytes": 1296,
+        "isError": false,
+        "status": "ok",
+        "totalMatched": 0,
+        "coverage": {
+          "state": "complete",
+          "scope": "registered target mappings",
+          "gaps": []
+        },
+        "errorCodes": [],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "mcpDrift": {
+        "clientExitCode": 0,
+        "frameBytes": 2244,
+        "isError": false,
+        "status": "ok",
+        "totalMatched": 1,
+        "coverage": {
+          "state": "complete",
+          "scope": "registered-target-drift",
+          "gaps": []
+        },
+        "errorCodes": [],
+        "inferences": [
+          {
+            "code": "POSSIBLE_NOT_RESTARTED",
+            "confidence": "candidate"
+          },
+          {
+            "code": "INSUFFICIENT_EVIDENCE",
+            "confidence": "unknown"
+          }
+        ],
+        "missingEvidenceLevels": [
+          "observed"
+        ],
+        "wireSchemaGuardVerified": true
+      },
+      "localEvidence": {
+        "baseline": {
+          "source": {
+            "sha256": "a8063e93d29b0d3842e9397a9f744a7c5d99f7ef9bcdc2b1e792f4cfa0ff3dcb",
+            "registeredCount": 7
+          },
+          "localArtifact": {
+            "sha256": "d46c908666816b0abccba6587423c9b1d0d0911c4a3a112498e4885b27752bf6"
+          },
+          "build": {
+            "exitCode": 0,
+            "outcome": "success",
+            "evidence": "callerReported",
+            "artifactProducedByBuild": "unknown"
+          },
+          "runtimeIdentity": {
+            "state": "notCollected",
+            "sha256": null
+          }
+        },
+        "sourceChangedWithoutBuild": {
+          "source": {
+            "sha256": "3a458342525600ca61aba11b0cee590fc94a329954e7a09c1fa5cd83da23b9e4",
+            "registeredCount": 7
+          },
+          "localArtifact": {
+            "sha256": "d46c908666816b0abccba6587423c9b1d0d0911c4a3a112498e4885b27752bf6"
+          },
+          "build": {
+            "exitCode": null,
+            "outcome": "unknown",
+            "evidence": "callerReported",
+            "artifactProducedByBuild": "unknown"
+          },
+          "runtimeIdentity": {
+            "state": "notCollected",
+            "sha256": null
+          }
+        },
+        "afterRebuild": {
+          "source": {
+            "sha256": "3a458342525600ca61aba11b0cee590fc94a329954e7a09c1fa5cd83da23b9e4",
+            "registeredCount": 7
+          },
+          "localArtifact": {
+            "sha256": "f632cf5e5d46867eb1282938f475fca09b896f80366ee4fd75e335c26a08e032"
+          },
+          "build": {
+            "exitCode": 0,
+            "outcome": "success",
+            "evidence": "callerReported",
+            "artifactProducedByBuild": "unknown"
+          },
+          "runtimeIdentity": {
+            "state": "notCollected",
+            "sha256": null
+          }
+        },
+        "beforeBuildComparison": {
+          "sourceChanged": true,
+          "localArtifactChanged": false,
+          "runtimeIdentityComparison": "unknown"
+        },
+        "afterBuildComparison": {
+          "sourceChanged": true,
+          "localArtifactChanged": true,
+          "runtimeIdentityComparison": "unknown"
+        }
+      },
+      "mcpOldRouteAfterRebuild": {
+        "clientExitCode": 0,
+        "frameBytes": 2304,
+        "isError": false,
+        "status": "ok",
+        "totalMatched": 1,
+        "coverage": {
+          "state": "complete",
+          "scope": "registered target mappings",
+          "gaps": []
+        },
+        "errorCodes": [],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "mcpNewRouteAfterRebuild": {
+        "clientExitCode": 0,
+        "frameBytes": 1296,
+        "isError": false,
+        "status": "ok",
+        "totalMatched": 0,
+        "coverage": {
+          "state": "complete",
+          "scope": "registered target mappings",
+          "gaps": []
+        },
+        "errorCodes": [],
+        "inferences": [],
+        "missingEvidenceLevels": [],
+        "wireSchemaGuardVerified": true
+      },
+      "cleanup": {
+        "processExited": true
+      }
+    }
+  },
+  "limitations": [
+    "Build and launch observations come from local Maven and launcher, not MCP.",
+    "MCP cannot inspect uncompiled source or compiler diagnostics.",
+    "The loopback listener is checked against the launched process using Linux /proc; port allocation has a race.",
+    "sourceRevision is caller-supplied, not an observed runtime build identity."
+  ],
+  "passed": true,
+  "failureCodes": [],
+  "verifiedAt": "2026-11-01T14:25:46.930270+00:00"
+}

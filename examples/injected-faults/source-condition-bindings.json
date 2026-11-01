@@ -1,0 +1,4 @@
+{
+  "example.StripeConfiguration#stripeClient": ["StripeConfiguration#stripeClient"],
+  "example.StripeConfiguration#paymentGateway": ["StripeConfiguration#paymentGateway"]
+}

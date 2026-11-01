@@ -1,6 +1,6 @@
 # 首次接入：公开包到第一次只读查询
 
-本路径使用公开发行包 **0.2.7 Alpha**，无需检出源码、JDK 或开发依赖。
+本路径使用公开发行包 **0.2.8 Alpha**，无需检出源码、JDK 或开发依赖。
 需要 Python 3.11+、[uv](https://docs.astral.sh/uv/getting-started/installation/)、已可用的编码客户端，以及应用维护者授予的目标读取权限。
 以下为 Linux 命令示例；Windows/macOS 尚未验证。按本指南完成实际握手与查询后再判断本次接入结果。
 
@@ -12,12 +12,12 @@
 python3 --version
 uv --version
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7
+uv pip install --python /tmp/spring-runtime-user/bin/python --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 ```
 
-最后应输出 `spring-runtime-mcp 0.2.7`。此命令只核验入口，不连接目标。
-也可以使用 `uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --version`；首次下载可能超过客户端握手等待时间，先在终端完成安装，再接入客户端。
+最后应输出 `spring-runtime-mcp 0.2.8`。此命令只核验入口，不连接目标。
+也可以使用 `uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8 --version`；首次下载可能超过客户端握手等待时间，先在终端完成安装，再接入客户端。
 
 `uv`/`uvx` 找不到时按官方安装说明安装并重启启动客户端的终端；用 `command -v uv` 核验 PATH。推荐配置绝对入口路径，避免桌面进程与终端 PATH 不一致。
 索引报找不到版本时，记录命令、索引与错误。PyPI 项目页有版本元数据，不等于所用镜像的 simple 索引已有文件，更不等于安装成功。可核对上述明确的公开 PyPI 索引后重试一次；不要随意换源或把本地 wheel 安装记为公开命名安装成功。

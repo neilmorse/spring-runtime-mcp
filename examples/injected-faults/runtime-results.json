@@ -1,0 +1,516 @@
+{
+  "verifiedAt": "2026-11-01T14:27:34.134813+00:00",
+  "project": "spring-boot-demo",
+  "checks": [
+    {
+      "phase": "recovery",
+      "case": "beans",
+      "status": "partial",
+      "totalMatched": 1,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 4366,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1,
+        "conditionReasons": []
+      },
+      "recoveryFor": "flyway"
+    },
+    {
+      "phase": "recovery",
+      "case": "route",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3192,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1
+      },
+      "recoveryFor": "flyway"
+    },
+    {
+      "phase": "recovery",
+      "case": "health",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "HEALTH_DETAILS_NOT_VISIBLE"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2956,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "overallStatus": "UP"
+      },
+      "recoveryFor": "flyway"
+    },
+    {
+      "phase": "recovery",
+      "case": "migration",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3484,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "version": "1",
+        "state": "APPLIED",
+        "pendingVisibility": "unknown"
+      },
+      "recoveryFor": "flyway"
+    },
+    {
+      "phase": "recovery",
+      "case": "drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2482,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "missingDimensions": []
+      },
+      "recoveryFor": "flyway"
+    },
+    {
+      "phase": "recovery",
+      "case": "beans",
+      "status": "partial",
+      "totalMatched": 1,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 4366,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1,
+        "conditionReasons": []
+      },
+      "recoveryFor": "constructorCycle"
+    },
+    {
+      "phase": "recovery",
+      "case": "route",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3192,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1
+      },
+      "recoveryFor": "constructorCycle"
+    },
+    {
+      "phase": "recovery",
+      "case": "health",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "HEALTH_DETAILS_NOT_VISIBLE"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2956,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "overallStatus": "UP"
+      },
+      "recoveryFor": "constructorCycle"
+    },
+    {
+      "phase": "recovery",
+      "case": "migration",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3484,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "version": "1",
+        "state": "APPLIED",
+        "pendingVisibility": "unknown"
+      },
+      "recoveryFor": "constructorCycle"
+    },
+    {
+      "phase": "recovery",
+      "case": "drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2482,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "missingDimensions": []
+      },
+      "recoveryFor": "constructorCycle"
+    },
+    {
+      "phase": "fault",
+      "case": "beans",
+      "status": "partial",
+      "totalMatched": 0,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "BEAN_INDEX_INCOMPLETE",
+        "CONDITION_EVIDENCE_INCOMPLETE",
+        "CONDITION_REPORT_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY",
+        "UNKNOWN_CONDITION_GRAMMAR"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 4532,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 0,
+        "conditionReasons": [
+          "PROPERTY_VALUE_MISMATCH",
+          "REQUIRED_BEAN_MISSING",
+          "SOURCE_FACTORY_NOT_CREATED"
+        ]
+      }
+    },
+    {
+      "phase": "fault",
+      "case": "route",
+      "status": "ok",
+      "totalMatched": 0,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2184,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 0
+      }
+    },
+    {
+      "phase": "fault",
+      "case": "health",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "HEALTH_DETAILS_NOT_VISIBLE"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2964,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "overallStatus": "DOWN"
+      }
+    },
+    {
+      "phase": "fault",
+      "case": "migration",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3484,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "version": "1",
+        "state": "APPLIED",
+        "pendingVisibility": "unknown"
+      }
+    },
+    {
+      "phase": "fault",
+      "case": "drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3470,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "missingDimensions": [
+          "beans",
+          "routes"
+        ]
+      }
+    },
+    {
+      "phase": "recovery",
+      "case": "beans",
+      "status": "partial",
+      "totalMatched": 1,
+      "coverage": "partial",
+      "gaps": [
+        "BEAN_GRAPH_INCOMPLETE",
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 4366,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1,
+        "conditionReasons": []
+      }
+    },
+    {
+      "phase": "recovery",
+      "case": "route",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3192,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "count": 1
+      }
+    },
+    {
+      "phase": "recovery",
+      "case": "health",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "HEALTH_DETAILS_NOT_VISIBLE"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2956,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "overallStatus": "UP"
+      }
+    },
+    {
+      "phase": "recovery",
+      "case": "migration",
+      "status": "ok",
+      "totalMatched": 1,
+      "coverage": "complete",
+      "gaps": [],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 3484,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "version": "1",
+        "state": "APPLIED",
+        "pendingVisibility": "unknown"
+      }
+    },
+    {
+      "phase": "recovery",
+      "case": "drift",
+      "status": "partial",
+      "totalMatched": null,
+      "coverage": "partial",
+      "gaps": [
+        "NOT_FOUND_IN_COMPLETE_VISIBLE_HIERARCHY"
+      ],
+      "errorCodes": [],
+      "httpStatuses": [],
+      "reconstructedFrameBytes": 2482,
+      "evidenceKind": "real_actuator_mcp",
+      "copiesEqual": true,
+      "passed": true,
+      "observation": {
+        "missingDimensions": []
+      }
+    }
+  ],
+  "failureCodes": [],
+  "provenance": {
+    "target": "real Spring Boot demo and Actuator in a disposable copy",
+    "injection": "conditional route and synthetic health indicator added to copy; stripe property toggled",
+    "migration": "invalid V2 migration is injected for startup failure; existing V1 is the recovery baseline"
+  },
+  "build": "passed",
+  "javaWarning": {
+    "evidenceKind": "javac_synthetic_source",
+    "compileSucceeded": true,
+    "rawTypeWarningObserved": true,
+    "passed": true
+  },
+  "startupFailures": [
+    {
+      "case": "flyway",
+      "evidenceKind": "local_target_startup_markers",
+      "compile": "passed",
+      "exitNonzero": true,
+      "markers": {
+        "flywayMigrationFailure": true,
+        "flywayVersion2": true
+      },
+      "passed": true,
+      "mcp": {
+        "case": "flyway",
+        "evidenceKind": "real_mcp_after_target_exit",
+        "status": "unavailable",
+        "coverage": "unavailable",
+        "errorCodes": [
+          "TARGET_CONNECTION_REFUSED"
+        ],
+        "attribution": "unknown",
+        "copiesEqual": true,
+        "reconstructedFrameBytes": 3017,
+        "passed": true
+      },
+      "recovery": {
+        "httpStatus": 200,
+        "passed": true
+      }
+    },
+    {
+      "case": "constructorCycle",
+      "evidenceKind": "local_target_startup_markers",
+      "compile": "passed",
+      "exitNonzero": true,
+      "markers": {
+        "circularDependency": true,
+        "cycleA": true,
+        "cycleB": true
+      },
+      "passed": true,
+      "mcp": {
+        "case": "constructorCycle",
+        "evidenceKind": "real_mcp_after_target_exit",
+        "status": "unavailable",
+        "coverage": "unavailable",
+        "errorCodes": [
+          "TARGET_CONNECTION_REFUSED"
+        ],
+        "attribution": "unknown",
+        "copiesEqual": true,
+        "reconstructedFrameBytes": 3017,
+        "passed": true
+      },
+      "recovery": {
+        "httpStatus": 200,
+        "passed": true
+      }
+    }
+  ],
+  "actuatorHealthHttpStatus": {
+    "fault": 503,
+    "recovery": 200
+  },
+  "admin": {
+    "checks": [
+      {
+        "phase": "fault",
+        "evidenceKind": "real_actuator_mcp_with_injected_health_indicator",
+        "overallStatus": "DOWN",
+        "status": "partial",
+        "reconstructedFrameBytes": 2998,
+        "copiesEqual": true,
+        "passed": true
+      },
+      {
+        "phase": "recovery",
+        "evidenceKind": "real_actuator_mcp_with_injected_health_indicator",
+        "overallStatus": "UP",
+        "status": "ok",
+        "reconstructedFrameBytes": 2274,
+        "copiesEqual": true,
+        "passed": true
+      }
+    ],
+    "source": "cached spring-boot-admin 4.1.3 sample; isolated operator overlay",
+    "cleanup": "owned target processes terminated",
+    "revision": "9d667167671483d93c1265545c68c0c6d6618405",
+    "actualSpringBootJar": "spring-boot-4.1.1.jar",
+    "overlayCompile": "passed",
+    "httpStatuses": {
+      "fault": 503,
+      "recovery": 200
+    }
+  },
+  "passed": true,
+  "cleanup": "owned target processes terminated and temporary copy removed"
+}

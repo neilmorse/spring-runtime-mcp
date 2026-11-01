@@ -1,0 +1,66 @@
+{
+  "verifiedAt": "2026-11-01T14:31:50.235276+00:00",
+  "passed": true,
+  "subagents": {
+    "count": 3,
+    "model": "gpt-6.1-terra",
+    "reasoningEffort": "high"
+  },
+  "primaryAgentIndependentlyReplayed": [
+    "build",
+    "runtime-with-generated-catalog",
+    "protocol"
+  ],
+  "evidenceFiles": {
+    "build": "build-results.json",
+    "runtime": "runtime-results.json",
+    "protocol": "protocol-results.json"
+  },
+  "buildCases": 5,
+  "buildBranchMcpCalls": 7,
+  "realRuntimeCalls": 24,
+  "syntheticProtocolCalls": 17,
+  "totalMcpCalls": 48,
+  "sourceFacts": {
+    "types": 5,
+    "producers": 2,
+    "expectedRoutes": 1,
+    "expectedScopeComplete": false,
+    "catalogSha256": "33298d3aecf6c9d78104ed58540fe7b9182496fe481f76b85f0dadeb05fab899",
+    "conditionBindings": "operatorRegistered",
+    "runtimeCatalogAcceptance": "passed"
+  },
+  "checks": {
+    "pytest": {
+      "passed": 1195,
+      "durationSeconds": 57.35
+    },
+    "ruffLint": "passed",
+    "ruffFormat": "passed (137 files)",
+    "mypy": "passed (53 src files)",
+    "toolContract": "passed (8 schemas, 144+ assertions)",
+    "build": "uv build --offline passed",
+    "packageResources": "wheel resources and exact sdist helper contents passed",
+    "gitDiffCheck": "passed",
+    "localDocumentationLinks": "passed"
+  },
+  "realProjects": [
+    "spring-boot-demo",
+    "spring-boot-admin"
+  ],
+  "javaRawTypeWarning": "observed",
+  "flywayFailureAndRecovery": "passed",
+  "constructorCycleAndRecovery": "passed",
+  "targetCleanup": "all experiment-owned target processes exited",
+  "productCodeChanged": false,
+  "mcpPublicSchemaChanged": false,
+  "runtimeDependenciesChanged": false,
+  "limitations": [
+    "Runtime build identity remains notCollected; local artifact hash does not identify a running JVM.",
+    "AST extraction covers registered Java subsets, not a complete Spring scan or compilation.",
+    "Only two real Spring projects were run, not all examples.",
+    "Migration failure uses disposable H2, not an external or production database.",
+    "Runtime SDK frame sizes are reconstructed bounds; build/protocol frames are measured.",
+    "Build and launch markers remain local harness evidence, not MCP root-cause diagnosis."
+  ]
+}

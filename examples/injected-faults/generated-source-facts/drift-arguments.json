@@ -1,0 +1,21 @@
+{
+  "targetId": "local",
+  "expectedScopeComplete": false,
+  "expectedBeans": [
+    {
+      "name": "stripeClient",
+      "contextId": "demo"
+    },
+    {
+      "name": "paymentGateway",
+      "contextId": "demo"
+    }
+  ],
+  "expectedRoutes": [
+    {
+      "path": "/orders/{id}",
+      "httpMethod": "GET",
+      "contextId": "demo"
+    }
+  ]
+}
