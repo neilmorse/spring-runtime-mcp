@@ -15,7 +15,7 @@ It is local-first and safe by default: fixed `GET` endpoints only, no redirects,
 
 [中文说明](README.zh-CN.md)
 
-**0.2.6 Alpha** — publication status and batch evidence are in the [release record](docs/launch/release-0.2.6.md).
+**0.2.6 Alpha is available on [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.6/).**
 It supports registered loopback targets over STDIO, with fixed endpoints and optional
 Bearer environment binding. Commands below explicitly use public PyPI to avoid mirror lag. Windows/macOS and the full Boot/client matrix remain
 unverified. This patch recognizes strictly matched single named-bean missing conditions
@@ -313,12 +313,11 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-Public PyPI 0.2.5 installation passed an independent clean-environment check on
+Public PyPI 0.2.6 installation passed an independent clean-environment check on
 Linux/Python 3.12, including both SDK modes, eight fixture routes, seven replay
-scenarios and the function handler class/filter regression with synthetic evidence.
-Replay is a one-shot offline command, not the MCP host. See the
-[0.2.5 release record](docs/launch/release-0.2.5.md) for that historical evidence;
-the [0.2.6 release record](docs/launch/release-0.2.6.md) tracks this batch separately.
+scenarios, exact named-bean grammar and the alias-to-factory/property chain with
+synthetic evidence and negative controls. Replay is a one-shot offline command,
+not the MCP host. See the [release record](docs/launch/release-0.2.6.md) for evidence and limits.
 
 ## Source development: offline replay
 

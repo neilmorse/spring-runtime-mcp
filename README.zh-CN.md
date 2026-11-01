@@ -2,7 +2,7 @@
 
 [English README](README.md)
 
-**v0.2.6 Alpha**，发布状态与批次证据见[发布记录](docs/launch/release-0.2.6.md)。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.6.md)。
+**v0.2.6 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.6/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.6.md)。
 
 0.2.6 严格解析单一具名 Bean 缺失条件，接通既有的证据关联阻塞链，未改变工具 Schema 或访问策略。已登记到
 [MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp)，名称为 `io.github.neilmorse/spring-runtime-mcp`。
@@ -279,7 +279,7 @@ uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/sprin
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-以上是 Linux/macOS 路径示例，Windows 尚未验收。历史公开 PyPI 0.2.5 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用、七个 replay，以及合成证据下的函数 handler 类与过滤回归；详见[0.2.5 发布记录](docs/launch/release-0.2.5.md)。0.2.6 批次状态单独记录。replay 是一次性离线命令，不是 MCP 宿主。
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.6 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用、七个 replay，以及合成证据下的具名条件、名称不一致拒绝、别名到工厂/属性阻塞链与缺目录对照；详见[发布记录](docs/launch/release-0.2.6.md)。replay 是一次性离线命令，不是 MCP 宿主。
 
 ## 源码开发：离线重放
 
