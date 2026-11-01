@@ -1,6 +1,6 @@
 # Bean 源码目录接入与证据边界
 
-`shop-product` 等包含连字符的 Context ID 需要 0.2.3 或更新版本；此前加载器会错误地按 Java 符号拒绝此类身份。
+Context ID 使用运行报告中的精确文本身份；`shop-product` 等连字符名称可以登记。
 
 先按[首次接入指南](first-query.md)完成基础查询；source catalog 是按需增强，不是首次接入前提。
 
@@ -45,11 +45,9 @@ uv run --no-sync python -m spring_runtime_mcp.cli \
 - 属性条件的已知负向消息可给出 `PROPERTY_NOT_FOUND` / `PROPERTY_VALUE_MISMATCH`。未识别的语法保持 unknown；其它条件或图证据不完整时，局部原因可见而整体仍为 partial。
 - 没有目录、条件权限不足、source key/Context 错配时，不应把空 items 写成“Bean 不存在”。`totalMatched: null` 表示不能确认完整匹配数。
 
-2026-11-01 的隔离 TDD 开发副本（Boot 3.5.16 / Java 21 / MVC / JWT）验证了 `shop-product` 目录加载与属性负向证据关联。
-P4 源码候选随后在本轮隔离开发副本中验证了单一具名 `ConditionalOnBean` 的 `did not find any beans named <name>` 消息，只有后缀名称与唯一 names 选择器一致时才解析；通过精确 conditionSources 和唯一目录生产者关联到上游属性负向条件。未加载目录、Context/source 错配、多个要求无法归因或条件不可读时继续 unknown/partial。既有类型选择器与传递分析不是 P4 新增；正向属性消息和其它上游语法仍未全部解析。
+单一具名 `ConditionalOnBean` 的负向消息只有在后缀名称与唯一 names 选择器一致时才解析；精确 conditionSources 与唯一目录生产者可将其关联到上游属性条件。未加载目录、Context/source 错配、多个要求无法归因或条件不可读时，继续返回 unknown/partial。已知类型选择器及传递条件使用同一证据链；未知语法保持证据缺口。
 
-Bean 名称解析与 Java 类型/source 校验分别处理；有界连字符名称可用于条件解析，但目录符号字段的校验未放宽，因此不能据此宣称任意 Bean 名称均可关联源码。上述真实验收针对源码候选；修复现已随 0.2.6 Alpha 发布，发行包检查见[发布记录](launch/release-0.2.6.md)。公开 0.2.5 包保持原样。
-这不是完整版本矩阵验收，也不代表 TDD 未提交业务完成。
+Bean 名称解析与目录中的 Java 类型/source 校验分别处理；条件消息支持的有界连字符名称，不代表所有名称都满足目录符号字段校验。运行代理与源码类型的全部组合、任意上游消息及完整 Boot 版本矩阵尚未验证。
 
 图深度/关联上限、运行响应引用了未暴露 Bean、敏感标识脱敏、未扫描的类型关系不会因目录加载而消失。
 详见[调用策略](contracts/tool-calling-policy.md)与[跨版本归一化](architecture/cross-version-normalization.md)。

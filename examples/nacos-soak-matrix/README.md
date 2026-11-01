@@ -118,9 +118,7 @@ uv run --no-sync python scripts/check_nacos_soak.py ... \
 | 资源 | 目标 RSS 中位 639,404 KiB（90,508–1,025,304）；MCP 宿主 RSS 中位 77,746 KiB、FD 7–8 |
 | 清理 | 目标、MariaDB 容器、全部 MCP 子进程停止 |
 
-详细结果、时间窗口和限制见
-[四小时审计报告](../../docs/audits/nacos-four-hour-2026-10-23.md)。原始脱敏聚合与
-逐分钟记录：
+以下脱敏聚合只描述其对应固定提交、配置和运行窗口，不代表当前工作树或完整兼容矩阵；逐分钟记录另按本地留存策略处理：
 
 - [results/nacos-four-hour-2026-10-23.json](results/nacos-four-hour-2026-10-23.json)
 - `results/nacos-four-hour-2026-10-23.jsonl`：本地逐分钟记录，保留在磁盘并由 Git 忽略，不随仓库或分发包交付；公开证据使用上方聚合 JSON。

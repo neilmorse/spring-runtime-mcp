@@ -29,40 +29,13 @@ summaries and fixed boolean probe facts are saved; raw endpoint bodies,
 framework logs, synthetic secret values and remote exception stacks are not
 saved. Every launched Java process is stopped in `finally`.
 
-## Results and scope
+## Checks and scope
 
-See [verification.json](verification.json) for the original safe results and
-[webflux-remediation-verification.json](webflux-remediation-verification.json)
-for the subsequent corrected WebFlux acceptance.
-Each variant executes 12 tool calls through the official SDK and actual STDIO
-host. Discovery must list eight tools in sorted order. Results are checked
-against the public output schema, sanitization guard and a complete response
-budget measurement including server metadata and duplicate text.
+Each variant calls tools through the official SDK and actual STDIO host. Discovery must list eight tools in sorted order; results are checked against output Schema, the safety guard and the complete response budget including SDK metadata and duplicate text.
 
-- MVC 3.5.16 and 4.1.1 pass all acceptance checks, including `/greeting`.
-- The initial WebFlux 3.2.4 run completes all calls but **fails acceptance**: the actual `/hello`
-  function route is not returned, with `MAPPING_PREDICATE_UNPARSED` and an unknown
-  total. The additional registered mappings read projects only fixed booleans
-  to help locate the predicate parser gap. This is not a passing WebFlux claim.
-  The [follow-up investigation](../../docs/audits/webflux-predicate-investigation-2026-10-22.md)
-  confirms independent nested-AND and `Accept:` grammar gaps. The subsequent
-  [parser fix and acceptance](../../docs/audits/webflux-predicate-remediation-2026-10-22.md)
-  pass all 12 calls, including a complete GET route with its Accept condition.
-- Bean lookup and conditions, hidden health, two non-draining startup GETs,
-  source/runtime comparison, default-disabled config, registered config values
-  and synthetic token redaction, and profile comparison are exercised.
-- Flyway/Liquibase and OpenAPI are absent and unexposed. Their calls must return
-  `ENDPOINT_NOT_EXPOSED`, not invented migration/schema facts. There is no
-  positive migration or OpenAPI coverage in this run.
-- Missing source facts, infrastructure dependencies, startup depth/pagination
-  and unmodeled config shapes remain visible as `partial` results.
+Checks cover Bean lookup/conditions, mappings, hidden health details, non-draining startup GETs, source/runtime comparison, configuration registration and negative authorization cases. WebFlux positive nested-AND and Accept predicates use the current parser; unknown predicate syntax remains partial with gaps. Current semantics are described in the [normalization guide](../../docs/architecture/cross-version-normalization.md).
 
-The two partial Git checkouts occupy about 872 KiB including repository
-metadata; their pack/index storage totals about 182 KiB. MVC builds used only
-the existing Maven cache. The WebFlux build added 2,364,059 bytes to that cache.
-These are storage measurements, not exact wire-traffic measurements; HTTP/Git
-overhead was not metered. No containers, images or repository history were
-downloaded. Future machines may need substantially more dependencies.
+Saved [initial results](verification.json) and [WebFlux rerun](webflux-remediation-verification.json) belong to their recorded source/configuration snapshots. New runs require separate authorization and a fresh result file; neither those records nor this harness establish complete framework/client compatibility.
 
 ## Reproduce
 

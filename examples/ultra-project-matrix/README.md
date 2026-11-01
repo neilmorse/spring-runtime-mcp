@@ -69,33 +69,14 @@ uv run --no-sync python scripts/check_ultra_project_runtime.py \
 
 脚本会自行创建/删除命名数据库容器和目标进程，结束后不留下本轮容器、网络或 MCP 子进程。
 
-## 本轮发现与处理
+## 当前断言与容量边界
 
-- **JAX-RS 路由不可见**：Fineract 的业务 REST 由 Jersey `ServletContainer` 注册在
-  `/api/*`，Actuator `/actuator/mappings` 的 `dispatcherServlets` 不含这些路由。
-  修复前 `springboot_verify_mappings` 对 `/api/v1/offices` 返回 `ok/complete` 和空结果，
-  等价于把“证据源不覆盖”写成“不存在”。本轮在适配器中识别非 DispatcherServlet 容器，
-  当查询路径可能由其覆盖时返回 `partial`、`totalMatched=null` 和
-  `NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED`；新增 4 个离线回归。正向路由断言改用
-  可见的 `/actuator/health`，业务 JAX-RS 路由保留为独立的 partial 探针，不冒充正向通过。
-- **启动快照容量**：8192 步 `BufferingApplicationStartup` 产生约 1.74 MB 启动 JSON，
-  当前归一化预算返回 `NORMALIZATION_LIMIT`（安全失败，不是崩溃）。本轮将测试启动器
-  缓冲降到 2048 步以取得正向启动证据；8192 步的限制保留为已知容量边界，不通过放宽
-  产品预算来“修复”。
-- **数据库暂停**：暂停 PostgreSQL 后健康端点超出 5 秒读取预算，MCP 返回
-  `unavailable / TARGET_TIMEOUT`；Bean 读取仍可用；恢复数据库后健康回到 UP。
-  这验证的是有界降级与恢复，不是告警语义或生产 HA。
-- **分页规模**：2544 个 Bean / 5626 条依赖，安全投影后 2524 个可见 Bean；单次查询
-  252 页穷尽，`totalMatched=null` 且 partial 缺口保留，未把可见分页当成完整原生总数。
+- Fineract 的 Jersey `/api/*` 路由不在 dispatcher 映射中；相关查询应保留 partial、totalMatched=null 和 NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED。可见 `/actuator/health` 注册事实与业务路由缺口分别断言。
+- 启动快照受归一化节点/深度预算约束；本启动器使用 2048 步缓冲。更大缓冲可能触发 NORMALIZATION_LIMIT，不能靠放宽产品预算掩盖容量边界。
+- 数据库暂停时检查有界不可用结果、Bean 读取及恢复；这不是生产告警、耐久性或 HA 验证。
+- 分页检查完整可见快照及无重复项，totalMatched 和 coverage 依证据完整性表达，不能将可见条目数当作原生完整总数。
 
-## 正式 300 秒结果
-
-最终运行 `accepted=true`、退出 0、`failureCodes=[]`：**1202 次调用**；2544 个 Bean /
-5626 条依赖，2524 个可见 Bean 用 **252 页穷尽**；最大完整回包 **15,170 字节**；
-中位/p95/最大延迟 743.034 / 2583.734 / 5011.524 ms；启动 78.779 秒、同宿主重启
-47.604 秒。数据库暂停后健康返回 `unavailable / TARGET_TIMEOUT`（未保持 UP），
-Bean 读取仍可用，恢复后 UP；JAX-RS 业务路由探针返回 partial + gap。脱敏聚合报告见
-[results/fineract-final-300s.json](results/fineract-final-300s.json)。
+[保存的聚合](results/fineract-final-300s.json)只对应其固定提交、配置和运行窗口，不代表本次执行或当前版本的容量基准。
 
 ## 验收内容
 

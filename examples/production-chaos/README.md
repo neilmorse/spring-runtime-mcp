@@ -76,25 +76,22 @@ Bearer admin/user 和数据库密码随机生成，仅内存及环境传递；�
 
 `production_fault_proxy.py` 是测试脚本内的固定 origin、固定 GET 端点代理，不是产品 URL 透传能力。它只在内存中处理本轮响应，模拟 401/403/302/429/500、HTML、重复键、非法 UTF-8、断流、超大包、延迟、父容器破损、健康 503、复杂引用和非法时间；每种异常后复测恢复。同一 SDK 宿主取消后复用；redirect / remote-ref 陷阱计数须为零。代理合成结构与原生业务证据分别标记。
 
-每次工具结果检查公开输出 Schema、独立安全门和包含文本副本的完整 16 KiB JSON-RPC 预算。已知 LS-01 随机游标故障保留为失败；重跑成功不会擦除旧失败或证明该缺陷修复。退出时只删除本轮命名容器/匿名数据库卷/网络并停止 SDK 子进程，源码和安全聚合摘要保留。
+每次工具结果检查公开输出 Schema、独立安全门和包含文本副本的完整 16 KiB JSON-RPC 预算。游标生成、分页及安全出口按当前断言检查；不同源码版本的保存结果分别解释，失败记录不覆盖。退出时只删除本轮命名容器/匿名数据库卷/网络并停止 SDK 子进程，源码和安全聚合摘要保留。
 
 
-## 已知失败与独立断言
+## 独立断言与探针模式
 
-[2026-10-23 审计](../../docs/audits/production-chaos-2026-10-23.md)记录 PC-01：健康详情的 `instructions` 被转换为 `name/value` 描述符后，现有安全门仍可能接受其中无空格的指令文本。脚本补充独立 canary 存在性断言，出现时保留 `REMOTE_INSTRUCTION_PASSTHROUGH`，不能把 `outputGuardPassed=true` 解释为指令已移除。`probe_production_chaos_findings.py` 完全离线复现工具到完整响应出口，退出 0 表示缺陷成功复现，不表示安全验收通过。此为首轮历史未修复状态；后续修复与最终复验见[修复报告](../../docs/audits/production-chaos-remediation-2026-10-23.md)。
+健康详情描述符和异常消息的 canary 必须经过独立检查，不能仅由 outputGuardPassed=true 推断已清除；出现 REMOTE_INSTRUCTION_PASSTHROUGH 时保留失败。游标安全与分页工作量同样由独立探针验证。
 
-DolphinScheduler 未暴露的迁移/OpenAPI 请求经原生错误安全链返回 401，本轮初始 404 预期属于装配错误；源清单已改为 401，历史失败记录保留，不能由 401 推断端点一定不存在。ThingsBoard 安装阶段使用 60 秒数据库 socket timeout 与 300 秒启动等待；运行期使用 2 秒 socket timeout。PostgreSQL 数据目录为 tmpfs，暂停/恢复保留该进程的数据；不验证持久性、重启后的数据保留或生产耐久性。
+DolphinScheduler 的未暴露迁移/OpenAPI 路径可能经安全链返回 401，不能据此推断端点不存在。ThingsBoard 安装和运行阶段的等待参数分别配置；私有 PostgreSQL 使用 tmpfs，不验证生产持久性或 HA。
 
-
-## 修复后复验
-
-PC-01、PC-02、LS-01 的修复保持原目标、TTL、容量和回包预算，旧失败文件不覆盖。真实项目启动命令不变，建议输出至新的 `*-remediation.json`。离线探针用显式模式验证修复，输出至新文件：
+以下为当前修复条件验证模式，完全离线，输出写到新文件：
 
 ```bash
 uv run --no-sync python scripts/probe_production_chaos_findings.py --expect-repaired \
-  --output /absolute/cache/production-chaos-remediation-probe.json
+  --output /absolute/cache/production-chaos-verification-probe.json
 uv run --no-sync python scripts/probe_large_project_stability.py --expect-repaired \
-  --output /absolute/cache/cursor-remediation-probe.json
+  --output /absolute/cache/cursor-verification-probe.json
 ```
 
-`--expect-repaired` 退出 0 表示本次探针的修复条件满足；不带该参数仍使用历史“缺陷复现”退出语义。完整回归、原始失败与修复后安全聚合摘要见[修复报告](../../docs/audits/production-chaos-remediation-2026-10-23.md)。
+`--expect-repaired` 退出 0 表示探针断言满足；不带该参数使用缺陷复现模式，退出 0 表示缺陷复现，不能用作修复通过。真实项目执行方式与这些离线探针分开，均不得覆盖已有结果。当前脱敏与快照边界见[安全架构](../../docs/architecture/security-and-sanitization.md)。

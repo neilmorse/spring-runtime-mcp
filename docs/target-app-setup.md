@@ -1,6 +1,6 @@
 # 被诊断 Spring Boot 应用配置指南
 
-本指南只配置被诊断应用的标准观测能力，不安装自定义 Agent，不把业务方法改成 MCP 工具。当前宿主可只读连接登记的回环 origin，支持 `--token-env` 绑定现有 Bearer 凭据；Basic、自定义管理基路径和远程目标尚未交付。首次安装、凭据转发和查询见[首次接入指南](first-query.md)，客户端模板见 [README](../README.md)，Boot 3.5.16 / JWT 的真实隔离样本见 [Shop 验收](../examples/tdd-runtime/README.md)。目标依赖、暴露与重启仍须应用维护者明确授权。
+本指南只配置被诊断应用的标准观测能力，不安装自定义 Agent，不把业务方法改成 MCP 工具。当前宿主可只读连接登记的回环 origin，支持 `--token-env` 绑定现有 Bearer 凭据；Basic、自定义管理基路径和远程目标尚未交付。首次安装、凭据转发和查询见[首次接入指南](first-query.md)，客户端模板见[配置指南](client-configuration.md)。目标依赖、暴露与重启仍须应用维护者明确授权。
 
 ## 1. 先确认版本和现有授权
 
@@ -53,7 +53,7 @@ management:
 
 include 是诊断能力的明确列表，exclude 额外拒绝危险读取。`env/configprops` 虽在候选列表中，仍因 `access: none` 不可用；这与本项目默认关闭配置诊断一致。日常只检查 Bean/路由时可继续把 include 精简成 `health,beans,conditions,mappings`。启用某个端点前先确认需要和授权；Flyway/Liquibase 未安装时不会凭配置生成迁移数据。
 
-仅在需要配置来源诊断且获得授权后，把 env/configprops 各自的 `access: none` 改为 `access: read-only`，保持两处 `show-values: never`。不要粘贴整份原始 env/configprops 响应；`origin`、自定义详情和资源字段仍可能携带敏感内容，未来 MCP 读取也必须执行独立脱敏和登记范围投影。
+仅在需要配置来源诊断且获得授权后，把 env/configprops 各自的 `access: none` 改为 `access: read-only`，保持两处 `show-values: never`。不要粘贴整份原始 env/configprops 响应；`origin`、自定义详情和资源字段仍可能携带敏感内容，MCP 读取执行独立脱敏和登记范围投影。
 
 ## 3. 旧版本：不要依赖被忽略的属性
 
