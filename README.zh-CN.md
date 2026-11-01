@@ -21,11 +21,11 @@
 
 ## 开始使用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.6 Alpha**：
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.7 Alpha**：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.6 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.6 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --base-url http://127.0.0.1:18081
 ```
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令；直接在终端运行会等待客户端请求。完整步骤见[首次查询](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
