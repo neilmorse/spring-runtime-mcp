@@ -25,7 +25,7 @@ def test_distribution_metadata_matches_runtime_version() -> None:
     assert distribution_version("spring-runtime-mcp") == __version__
 
 
-def test_missing_token_variable_is_named_carefully(
+def test_missing_token_variable_has_safe_forwarding_hint(
     capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.delenv("SPRING_RUNTIME_TEST_TOKEN", raising=False)
@@ -34,8 +34,10 @@ def test_missing_token_variable_is_named_carefully(
     assert exc.value.code == 2
     captured = capsys.readouterr()
     assert captured.out == ""
-    assert "SPRING_RUNTIME_TEST_TOKEN" in captured.err
+    assert "SPRING_RUNTIME_TEST_TOKEN" not in captured.err
     assert "missing or empty" in captured.err
+    assert "env_vars" in captured.err
+    assert "parent" in captured.err
     assert "Traceback" not in captured.err
 
 
