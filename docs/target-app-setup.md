@@ -1,6 +1,6 @@
 # 被诊断 Spring Boot 应用配置指南
 
-本指南只配置被诊断应用的标准观测能力，不安装自定义 Agent，不把业务方法改成 MCP 工具。当前宿主可只读连接登记的回环 origin，支持 `--token-env` 绑定现有 Bearer 凭据；Basic、自定义管理基路径和远程目标尚未交付。客户端模板见 [README](../README.md)，Boot 3.5.16 / JWT 的真实隔离样本见 [Shop 验收](../examples/tdd-runtime/README.md)。目标依赖、暴露与重启仍须应用维护者明确授权。
+本指南只配置被诊断应用的标准观测能力，不安装自定义 Agent，不把业务方法改成 MCP 工具。当前宿主可只读连接登记的回环 origin，支持 `--token-env` 绑定现有 Bearer 凭据；Basic、自定义管理基路径和远程目标尚未交付。首次安装、凭据转发和查询见[首次接入指南](first-query.md)，客户端模板见 [README](../README.md)，Boot 3.5.16 / JWT 的真实隔离样本见 [Shop 验收](../examples/tdd-runtime/README.md)。目标依赖、暴露与重启仍须应用维护者明确授权。
 
 ## 1. 先确认版本和现有授权
 
@@ -176,7 +176,7 @@ curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request 
 curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request GET --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:18081/actuator/startup
 ```
 
-这些命令假设示例管理端口使用本地 HTTP；已有 HTTPS 的实例继续使用其真实 HTTPS 地址和受信证书，不能使用 `-k`。Bearer-only 应用应沿用现有受保护凭据流程，不为测试降级成 Basic 或把 token 粘到 shell 历史。未来服务器凭据绑定必须独立配置，不接受客户端 MCP Token 透传。
+这些命令假设示例管理端口使用本地 HTTP；已有 HTTPS 的实例继续使用其真实 HTTPS 地址和受信证书，不能使用 `-k`。Bearer-only 应用应沿用现有受保护凭据流程，不为测试降级成 Basic 或把 token 粘到 shell 历史。宿主通过 `--token-env` 独立绑定既有 Bearer 凭据，不接受客户端 MCP Token 透传。
 
 | 观察 | 下一步 |
 | --- | --- |
@@ -192,8 +192,8 @@ curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request 
 
 ## 6. OpenAPI 与诊断结束后的收敛
 
-已有 springdoc 的应用默认可在业务端口提供 `/v3/api-docs`。自定义 `springdoc.api-docs.path` 或管理端口的 `/actuator/openapi` 必须由维护者按安装版本确认并在未来连接器中登记；本指南不自动启用新文档路径、不切换端口、不启用 springdoc 的 MCP 业务工具。
+已有 springdoc 的应用默认可在业务端口提供 `/v3/api-docs`。当前连接器只读取登记 origin 的固定 `/actuator/openapi`；自定义 `springdoc.api-docs.path` 不会自动回退，管理端口的 `/actuator/openapi` 是否可用必须由维护者按安装版本确认；本指南不自动启用新文档路径、不切换端口、不启用 springdoc 的 MCP 业务工具。
 
-上述 Actuator access 规则不自动保护业务端口上的 springdoc 路径，文档仍受应用现有安全规则约束。OpenAPI `servers`、远程 `$ref` 或 description 不能扩展诊断目标。当前 OpenAPI 工具尚未实现，不把人工访问成功当成 MCP 检索已通过。
+上述 Actuator access 规则不自动保护业务端口上的 springdoc 路径，文档仍受应用现有安全规则约束。OpenAPI `servers`、远程 `$ref` 或 description 不能扩展诊断目标。当前已有 `springboot_search_openapi`；仅有业务端口的 `/v3/api-docs` 不代表固定管理端点可用，人工访问成功也不等于 MCP 检索已通过。
 
 诊断结束后停用 local-mcp Profile 或收窄 exposure，撤销临时授权；变更与重启由应用维护者决定。保留脱敏结构化结论，不归档原始 env、configprops、健康异常栈、日志或内存转储。

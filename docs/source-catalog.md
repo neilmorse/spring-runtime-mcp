@@ -2,6 +2,8 @@
 
 `shop-product` 等包含连字符的 Context ID 需要 0.2.3 或更新版本；此前加载器会错误地按 Java 符号拒绝此类身份。
 
+先按[首次接入指南](first-query.md)完成基础查询；source catalog 是按需增强，不是首次接入前提。
+
 `--source-catalog` 接受操作者整理的 JSON 事实，不扫描、执行或下载源码。
 当前仓库没有通用 Java 源码目录生成器；可从[演示目录](../examples/spring-boot-demo/source-catalog.json)按已核实源码整理最小子集。
 目录由 [CLI](../src/spring_runtime_mcp/cli.py) 在启动时加载，使用[现有加载器](../src/spring_runtime_mcp/adapters/source_catalog.py)校验；不属于工具调用参数。

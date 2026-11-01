@@ -29,6 +29,8 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --base-url
 Configure your local target first using the [target setup guide](docs/target-app-setup.md).
 The second command is the persistent MCP host; it waits for a client on STDIO.
 
+**First connection:** follow the [public-package first-query guide](docs/first-query.md) (Chinese), including isolated Codex configuration, Bearer forwarding, discovery and layered troubleshooting. No checkout or development dependencies are needed.
+
 ## Why not just curl `/actuator`?
 
 Because an agent that can `curl` an Actuator can also `POST /actuator/shutdown`, read `/actuator/heapdump`, leak `spring.datasource.password` into a transcript, or paste 2 MB of `beans` JSON into its context window. This project replaces that with a narrow, auditable surface:
@@ -58,28 +60,6 @@ Related projects solve a different problem: [Spring AI MCP Server](https://docs.
 | Drift | `springboot_detect_drift` | Compare expected beans, routes, migration version and profiles from the working tree against the live process; distinguishes facts from "possibly not restarted" |
 
 Tools are registered in alphabetical order, each carries `readOnlyHint`, `destructiveHint`, `idempotentHint` and `openWorldHint` annotations, and every input/output schema is published in [`tools-contract.json`](src/spring_runtime_mcp/schemas/tools-contract.json).
-
-## Try it in 60 seconds, offline
-
-Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No JDK, Docker, model API key or network target is needed; the replay command runs a tool against a committed synthetic Actuator fixture.
-
-```bash
-git clone --branch v0.2.3 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
-uv run --locked python -m pytest -q
-uv run --locked python -m spring_runtime_mcp.replay \
-  --scenario stripe-missing --tool springboot_inspect_beans \
-  --arguments-json '{"typePattern":"example.PaymentGateway","contextId":"application","conditionDepth":4}'
-```
-
-The second command prints one JSON-RPC result. Look at `missingBeanAnalysis.blockingPaths`:
-
-```text
-REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND
-```
-
-That is the server explaining that `PaymentGateway` is missing because its implementation needs a `StripeClient`, whose factory was skipped because `stripe.enabled` is not set — three hops, with sources. The result is marked `partial` with `totalMatched: null` because the fixture's type catalog is incomplete; the server will not claim that no other bean implements the interface.
-
-`replay` is a one-shot fixture runner. Do **not** put it in an MCP client config; the MCP entry point is `spring-runtime-mcp` (below).
 
 ## Connect to a real Spring Boot application
 
@@ -116,7 +96,7 @@ For startup analysis, install `BufferingApplicationStartup` before `SpringApplic
 ### 2. Run the server
 
 ```bash
-uv run --locked --project /abs/path/to/spring-runtime-mcp spring-runtime-mcp --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --base-url http://127.0.0.1:18081
 ```
 
 | Flag | Env var | Default |
@@ -142,14 +122,14 @@ Configuration diagnostics remain off by default. To enable `springboot_inspect_c
 
 ### 3. Register it with your agent
 
-Replace `/abs/path/to/spring-runtime-mcp` with your checkout. Desktop clients may not inherit your shell `PATH`, so an absolute path to `uv` is safer.
+Use the published package below. Desktop clients may not inherit your shell `PATH`, so use the absolute path to `uvx` on your machine. Pre-install with `--version` before starting the client.
 
 **OpenAI Codex CLI** — `~/.codex/config.toml`:
 
 ```toml
 [mcp_servers.spring_runtime]
-command = "uv"
-args = ["run", "--project", "/abs/path/to/spring-runtime-mcp", "spring-runtime-mcp", "--base-url", "http://127.0.0.1:18081"]
+command = "uvx"
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.3", "--base-url", "http://127.0.0.1:18081"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
@@ -171,8 +151,10 @@ tool_timeout_sec = 30
 
 Keep other server tables when merging this configuration. If the parent Codex
 process lacks the variable, forwarding cannot supply it and the host fails
-startup. For the checkout-based command above, append the same `--token-env`
+startup. For a checkout-based development command, append the same `--token-env`
 arguments and add the same `env_vars` entry.
+
+Reference templates only; not exercised in this acceptance. Field sources: [Claude Code](https://code.claude.com/docs/en/mcp), [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers), [Cursor](https://cursor.com/docs/mcp), [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
 
 **Claude Code** — `.mcp.json` in the workspace root (Claude Desktop uses the same `mcpServers` object in `claude_desktop_config.json`):
 
@@ -190,7 +172,7 @@ arguments and add the same `env_vars` entry.
 
 **Cursor** — `.cursor/mcp.json`, same `mcpServers` object without `"type"`. **VS Code** — `.vscode/mcp.json`, top-level key `servers`, with `"type": "stdio"`.
 
-Acceptance order on first connect: `initialize` succeeds → `tools/list` returns eight alphabetically sorted tools → one read-only call returns a schema-valid, sanitized result. A `401`/`403` from the target means its own security chain rejected the request; fix authorization there, never by disabling security or following `/login`.
+Acceptance order on first connect: `initialize` succeeds → `tools/list` returns eight alphabetically sorted tools → one read-only call returns a schema-valid, sanitized result. A `401`/`403` means this read was rejected; ask the maintainer to check credential validity, roles and the diagnostic security chain. A status alone does not establish the cause; never disable security or follow `/login`.
 
 Use the field names in the actual `tools/list` inputSchema. For example, call
 `springboot_verify_mappings` with
@@ -334,3 +316,25 @@ Public PyPI 0.2.3 installation passed an independent clean-environment check on
 Linux/Python 3.12, including both SDK modes, eight fixture routes and seven replay
 scenarios. Replay is a one-shot offline command, not the MCP host. See the
 [release record](docs/launch/release-0.2.3.md) for evidence and remaining limits.
+
+## Source development: offline replay
+
+Requires Python 3.11+ and [uv](https://docs.astral.sh/uv/). No JDK, Docker, model API key or network target is needed; the replay command runs a tool against a committed synthetic Actuator fixture.
+
+```bash
+git clone --branch v0.2.3 --depth 1 https://github.com/neilmorse/spring-runtime-mcp.git && cd spring-runtime-mcp
+uv run --locked python -m pytest -q
+uv run --locked python -m spring_runtime_mcp.replay \
+  --scenario stripe-missing --tool springboot_inspect_beans \
+  --arguments-json '{"typePattern":"example.PaymentGateway","contextId":"application","conditionDepth":4}'
+```
+
+The second command prints one JSON-RPC result. Look at `missingBeanAnalysis.blockingPaths`:
+
+```text
+REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND
+```
+
+That is the server explaining that `PaymentGateway` is missing because its implementation needs a `StripeClient`, whose factory was skipped because `stripe.enabled` is not set — three hops, with sources. The result is marked `partial` with `totalMatched: null` because the fixture's type catalog is incomplete; the server will not claim that no other bean implements the interface.
+
+`replay` is a one-shot fixture runner. Do **not** put it in an MCP client config; the MCP entry point is `spring-runtime-mcp` (below).

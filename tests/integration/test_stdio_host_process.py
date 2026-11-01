@@ -579,7 +579,9 @@ def test_bearer_registration_fails_without_echoing_secrets(
     assert "--token-env" in stderr
     assert "Traceback" not in stderr
     if value in (None, ""):
-        assert "REVIEW_BAD_BEARER" in stderr
+        assert "REVIEW_BAD_BEARER" not in stderr
+        assert "env_vars" in stderr
+        assert "parent" in stderr
         assert "missing or empty" in stderr
     else:
         assert value not in stderr

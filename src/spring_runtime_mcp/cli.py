@@ -62,7 +62,10 @@ def _bearer(name: str | None) -> str | None:
     token = os.environ.get(name)
     if not token:
         raise ConfigurationError(
-            f"environment variable {name} named by --token-env is missing or empty"
+            "environment variable named by --token-env is missing or empty; "
+            "supply it in the parent client environment and forward its name "
+            "to the MCP subprocess (Codex: env_vars). Do not put the token "
+            "value in arguments or client configuration"
         )
     return token
 
