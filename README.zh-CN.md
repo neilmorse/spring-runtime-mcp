@@ -2,16 +2,16 @@
 
 [English README](README.md)
 
-**v0.2.3 Alpha 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.3/)**。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.3.md)。
+**v0.2.4 Alpha：首次接入与凭据转发提示**（[PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.4/)）。限定支持登记的回环目标、STDIO、固定端点及可选 Bearer 环境变量绑定；Windows/macOS 与完整 Boot/客户端矩阵仍未验证。发布提交、产物摘要与实际验收见[发布记录](docs/launch/release-0.2.4.md)。
 
-0.2.3 允许源码目录使用真实的 Spring Context ID（包括连字符），未改变工具 Schema 或访问策略。已登记到
+0.2.4 整理公开包到首次查询的主路径，增强缺失凭据的父环境与转发提示，未改变工具 Schema 或访问策略。已登记到
 [MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.neilmorse%2Fspring-runtime-mcp)，名称为 `io.github.neilmorse/spring-runtime-mcp`。
 
 安装并检查版本（显式使用官方 PyPI，避免镜像尚未同步新包）：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.4 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.4 --base-url http://127.0.0.1:18081
 ```
 
 先按[目标配置指南](docs/target-app-setup.md)配置本地应用。第二条命令为常驻 MCP 宿主，等待客户端通过 STDIO 发出请求；replay 仍是一次性离线命令。
@@ -77,7 +77,7 @@ Boot 2.7、3.x、4.x 与 Servlet/WebFlux 是归一化目标。仓库提供多版
 没有 `--url`。`--base-url` 是进程启动时登记的 origin，不能从工具参数传入。公开包命令如下；首次安装需要包索引，在客户端发出 `tools/call` 之前不连接诊断目标：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.3 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.4 --base-url http://127.0.0.1:18081
 ```
 
 项目环境已安装依赖后，也可以 `uv run --locked --project <仓库绝对路径> spring-runtime-mcp --base-url http://127.0.0.1:18081`。模板不含凭据或自动批准设置。把 `<仓库绝对路径>` 换成当前机器的检出目录。桌面客户端可能不继承终端 PATH，因此公开包命令写成 `uvx` 的绝对路径更稳。
@@ -95,7 +95,7 @@ Bean 生产者与条件的源码关联见[源码目录指南](docs/source-catalo
 ```toml
 [mcp_servers.spring_runtime]
 command = "uvx"
-args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.3", "--base-url", "http://127.0.0.1:18081"]
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.4", "--base-url", "http://127.0.0.1:18081"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
@@ -109,7 +109,7 @@ tool_timeout_sec = 30
 ```toml
 [mcp_servers.spring_runtime]
 command = "uvx"
-args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.3", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.4", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
 env_vars = ["SHOP_ACTUATOR_TOKEN"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
@@ -268,18 +268,18 @@ uv build
 Python 实现位于 `src/spring_runtime_mcp/`；公开契约位于 `src/spring_runtime_mcp/schemas/tools-contract.json`，随 wheel 一起分发；`tests/` 默认阻断外部网络。架构速查见 [HANDOVER.md](HANDOVER.md)。[SPEC](SPEC.md)定义产品目标，[目标配置指南](docs/target-app-setup.md)解释版本及授权，[归一化设计](docs/architecture/cross-version-normalization.md)说明响应差异，[红队报告](docs/audits/security-redteam-2026-10-17.md)列出已修复问题与仍未覆盖的真实实例边界。
 
 
-本版范围为 **0.2.3 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
+本版范围为 **0.2.4 Alpha**，仅支持本地回环、STDIO、现有八工具和 Bearer 环境变量绑定。平台、历史样本、SDK 与实际客户端证据分列于[发布准备报告](docs/audits/release-readiness-2026-10-31.md)，不代表完整兼容矩阵。
 
 源码检出使用上方锁定项目命令。wheel 安装后直接运行入口：
 
 ```bash
 uv venv /tmp/spring-runtime-user
-uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.3-py3-none-any.whl
+uv pip install --python /tmp/spring-runtime-user/bin/python /absolute/path/spring_runtime_mcp-0.2.4-py3-none-any.whl
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --version
 /tmp/spring-runtime-user/bin/spring-runtime-mcp --base-url http://127.0.0.1:18081
 ```
 
-以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.3 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.3.md)。replay 是一次性离线命令，不是 MCP 宿主。
+以上是 Linux/macOS 路径示例，Windows 尚未验收。公开 PyPI 0.2.3 的仓库外全新环境安装已在 Linux/Python 3.12 验收，通过 SDK 两模式、八工具回环调用与七个 replay；详见[发布记录](docs/launch/release-0.2.4.md)。replay 是一次性离线命令，不是 MCP 宿主。
 
 ## 源码开发：离线重放
 
