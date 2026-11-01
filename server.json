@@ -3,7 +3,7 @@
   "name": "io.github.neilmorse/spring-runtime-mcp",
   "title": "Spring Boot Runtime Diagnostics",
   "description": "Read-only Spring Boot runtime evidence for agents: beans, routes, health, startup.",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "repository": {
     "url": "https://github.com/neilmorse/spring-runtime-mcp",
     "source": "github"
@@ -12,7 +12,7 @@
     {
       "registryType": "pypi",
       "identifier": "spring-runtime-mcp",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "transport": {
         "type": "stdio"
       }

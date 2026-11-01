@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "failureCodes": [],
+  "verifiedAt": "2026-11-01T14:30:26.537256+00:00",
+  "evidenceKind": "synthetic-loopback-http-real-mcp-stdio",
+  "fixture": "synthetic loopback HTTP and real MCP STDIO; no Spring instance",
+  "cases": {
+    "01-unauthorized": {
+      "status": "denied",
+      "errorCode": "ENDPOINT_UNAUTHORIZED",
+      "wireBytes": 2202,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "02-forbidden": {
+      "status": "denied",
+      "errorCode": "ENDPOINT_UNAUTHORIZED",
+      "wireBytes": 2202,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "03-redirect": {
+      "status": "unavailable",
+      "errorCode": "REDIRECT_BLOCKED",
+      "wireBytes": 2182,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "04-html": {
+      "status": "unavailable",
+      "errorCode": "UNEXPECTED_CONTENT_TYPE",
+      "wireBytes": 2116,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "05-duplicate-keys": {
+      "status": "unavailable",
+      "errorCode": "DUPLICATE_JSON_KEY",
+      "wireBytes": 2086,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "06-invalid-utf8": {
+      "status": "unavailable",
+      "errorCode": "INVALID_JSON",
+      "wireBytes": 2050,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "07-incomplete-body": {
+      "status": "unavailable",
+      "errorCode": "INCOMPLETE_RESPONSE",
+      "wireBytes": 2094,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": true
+    },
+    "08-health-down": {
+      "status": "ok",
+      "errorCode": null,
+      "wireBytes": 2597,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": null
+    },
+    "09-openapi-refs": {
+      "status": "partial",
+      "errorCode": null,
+      "wireBytes": 4937,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": null
+    },
+    "10-health-down": {
+      "status": "ok",
+      "errorCode": null,
+      "wireBytes": 2598,
+      "schemaAndGuardPassed": true,
+      "sequenceRecovery": null
+    }
+  },
+  "trapReads": 0,
+  "mcpExitCode": 0
+}

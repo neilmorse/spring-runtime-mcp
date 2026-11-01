@@ -14,9 +14,11 @@
 | MCP 客户端配置 | [参考模板](client-configuration.md) |
 | 目标应用配置与授权 | [目标配置](target-app-setup.md) |
 | Bean 源码事实登记 | [Source catalog](source-catalog.md) |
+| 静态预期生成与本地构建证据 | [Java 静态事实](source-facts-generation.md)；[构建证据](build-evidence.md) |
 | 离线检查、构建与发布 | [发布流程](launch/README.md) |
 | Glama 源码容器构建 | [构建指南](launch/glama/README.md) |
 | 可复现 Spring Boot 演示 | [演示说明](../examples/spring-boot-demo/README.md) |
+| 隔离编译、运行态与协议故障验收 | [故障注入说明](../examples/injected-faults/README.md) |
 
 仓库协作、安全边界和验证要求由 [AGENTS.md](../AGENTS.md) 维护。公开字段与默认值以工具 Schema 为准；模块实现细节由对应源码和测试核对。
 

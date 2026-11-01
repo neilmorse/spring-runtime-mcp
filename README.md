@@ -21,11 +21,11 @@ For example, ask: “Check whether GET /orders/{id} is registered and tell me wh
 
 ## Get started
 
-You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and an authorized local Spring Boot application. Confirm its management endpoints and permissions using the [target setup guide](docs/target-app-setup.md), then check and start **0.2.7 Alpha**:
+You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and an authorized local Spring Boot application. Confirm its management endpoints and permissions using the [target setup guide](docs/target-app-setup.md), then check and start **0.2.8 Alpha**:
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.7 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8 --base-url http://127.0.0.1:18081
 ```
 
 Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [first-query guide](docs/first-query.md) or use the [client configuration templates](docs/client-configuration.md) (both in Chinese).

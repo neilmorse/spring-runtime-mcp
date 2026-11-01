@@ -5,7 +5,7 @@ Context ID 使用运行报告中的精确文本身份；`shop-product` 等连字
 先按[首次接入指南](first-query.md)完成基础查询；source catalog 是按需增强，不是首次接入前提。
 
 `--source-catalog` 接受操作者整理的 JSON 事实，不扫描、执行或下载源码。
-当前仓库没有通用 Java 源码目录生成器；可从[演示目录](../examples/spring-boot-demo/source-catalog.json)按已核实源码整理最小子集。
+可使用仓库内的[受限静态事实生成器](source-facts-generation.md)处理显式登记的 Java 文件，或从[演示目录](../examples/spring-boot-demo/source-catalog.json)按已核实源码整理最小子集。生成器只处理有限 AST 子集，不是完整 Spring 扫描器；生成结果仍须操作者审核。
 目录由 [CLI](../src/spring_runtime_mcp/cli.py) 在启动时加载，使用[现有加载器](../src/spring_runtime_mcp/adapters/source_catalog.py)校验；不属于工具调用参数。
 
 ```bash

@@ -1,0 +1,57 @@
+{
+  "targetId": "local",
+  "types": [
+    {
+      "name": "example.OrderController",
+      "directSupertypes": []
+    },
+    {
+      "name": "example.PaymentGateway",
+      "directSupertypes": []
+    },
+    {
+      "name": "example.StripeClient",
+      "directSupertypes": []
+    },
+    {
+      "name": "example.StripeConfiguration",
+      "directSupertypes": []
+    },
+    {
+      "name": "example.StripePaymentGateway",
+      "directSupertypes": [
+        "example.PaymentGateway"
+      ]
+    }
+  ],
+  "producers": [
+    {
+      "beanName": "stripeClient",
+      "aliases": [],
+      "declaredType": "example.StripeClient",
+      "implementationType": null,
+      "configurationClass": "example.StripeConfiguration",
+      "factoryMethod": "stripeClient",
+      "sourceLine": 11,
+      "contextId": "demo",
+      "sourceFile": "examples/spring-boot-demo/src/main/java/example/StripeConfiguration.java",
+      "conditionSources": [
+        "StripeConfiguration#stripeClient"
+      ]
+    },
+    {
+      "beanName": "paymentGateway",
+      "aliases": [],
+      "declaredType": "example.PaymentGateway",
+      "implementationType": null,
+      "configurationClass": "example.StripeConfiguration",
+      "factoryMethod": "paymentGateway",
+      "sourceLine": 17,
+      "contextId": "demo",
+      "sourceFile": "examples/spring-boot-demo/src/main/java/example/StripeConfiguration.java",
+      "conditionSources": [
+        "StripeConfiguration#paymentGateway"
+      ]
+    }
+  ]
+}

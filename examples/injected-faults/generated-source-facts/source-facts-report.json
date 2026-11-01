@@ -1,0 +1,34 @@
+{
+  "coverage": "partial",
+  "gaps": [
+    "NESTED_TYPE_UNSUPPORTED",
+    "RUNTIME_REGISTRATION_UNVERIFIED",
+    "SOURCE_SCOPE_PARTIAL",
+    "UNRESOLVED_ANNOTATION"
+  ],
+  "evidenceKind": "registered-source-ast",
+  "runtimeIdentity": "notCollected",
+  "driftArgumentsState": "generated",
+  "registeredSources": [
+    {
+      "path": "examples/spring-boot-demo/src/main/java/example/OrderController.java",
+      "sha256": "e2253261d48f0e090fe8663c90ae64f627899aff1a88d82915aac31c7c3679a6"
+    },
+    {
+      "path": "examples/spring-boot-demo/src/main/java/example/PaymentGateway.java",
+      "sha256": "babdcb68968bd32659ee2c30e1c8637ed90610684c2501f09dac0be6cfb85793"
+    },
+    {
+      "path": "examples/spring-boot-demo/src/main/java/example/StripeClient.java",
+      "sha256": "1d442dc4a73dde112fbb6bf25f914f25c5b864868c9b8f8e04d941a7aed24a20"
+    },
+    {
+      "path": "examples/spring-boot-demo/src/main/java/example/StripeConfiguration.java",
+      "sha256": "08d4bf8fb17a99dec2845b2e37894624e1bc0f925fb32f0099b299b370d5031c"
+    },
+    {
+      "path": "examples/spring-boot-demo/src/main/java/example/StripePaymentGateway.java",
+      "sha256": "5e102bb7b2613718d446b3131001a1ec4a73a71dc8dbe23c6d413f9dac262acc"
+    }
+  ]
+}
