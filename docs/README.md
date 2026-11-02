@@ -12,6 +12,9 @@
 | 工具选择、参数、结果与错误配方 | [调用策略](contracts/tool-calling-policy.md)；[逐工具字段说明](contracts/tools-schema/README.md)；字段以 [工具 Schema](../src/spring_runtime_mcp/schemas/tools-contract.json) 为准 |
 | 安装与首次只读查询 | [首次接入](first-query.md) |
 | MCP 客户端配置 | [参考模板](client-configuration.md) |
+| 按错误码排障 | [故障排查](troubleshooting.md) |
+| 合成性能基准 | [运行与解释](../tests/performance/README.md) |
+| 架构决策说明 | [决策索引](architecture/decisions/README.md) |
 | 目标应用配置与授权 | [目标配置](target-app-setup.md) |
 | Bean 源码事实登记 | [Source catalog](source-catalog.md) |
 | 静态预期生成与本地构建证据 | [Java 静态事实](source-facts-generation.md)；[构建证据](build-evidence.md) |

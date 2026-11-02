@@ -6,6 +6,7 @@ import copy
 import json
 import re
 from pathlib import Path
+from typing import Any
 
 from jsonschema import Draft202012Validator, FormatChecker
 
@@ -94,6 +95,48 @@ def rejects(validator: Draft202012Validator, value: object) -> None:
     assert not validator.is_valid(value), "Unexpectedly accepted invalid fixture"
 
 
+def _validate_description_length(description: str, max_length: int = 256) -> None:
+    """Validate description length for Chinese/English compatibility."""
+    # Chinese characters typically take 2-3 bytes in UTF-8
+    byte_length = len(description.encode("utf-8"))
+    assert byte_length <= max_length, (
+        f"Description too long: {byte_length} bytes (max {max_length})"
+    )
+    # Check for reasonable character length (heuristic)
+    assert len(description) <= max_length // 2, (
+        f"Description too many characters: {len(description)}"
+    )
+
+
+def _validate_default_in_range(schema: dict[str, Any], root: dict[str, Any]) -> None:
+    """Validate defaults while retaining the containing schema's local refs."""
+    if "default" not in schema:
+        return
+    # descend keeps the root resolver when checking this particular subschema.
+    validator = Draft202012Validator(root)
+    errors = list(validator.descend(schema["default"], schema))
+    if errors:
+        error_msgs = [f"{e.message} at {'.'.join(map(str, e.path))}" for e in errors]
+        raise AssertionError(
+            f"Default value {schema['default']!r} violates schema constraints: "
+            + "; ".join(error_msgs)
+        )
+
+
+def _validate_ref_in_defs(schema: dict[str, Any], root: dict[str, Any]) -> None:
+    """Validate that all $ref references are defined in $defs."""
+    for node in walk(schema):
+        if isinstance(node.get("$ref"), str):
+            ref = node["$ref"]
+            # Complete the offline reference preflight before validating defaults.
+            try:
+                resolve(root, ref)
+            except (KeyError, AssertionError):
+                raise AssertionError(
+                    f"$ref {ref} must resolve within local $defs"
+                ) from None
+
+
 def main() -> None:
     bundle = json.loads(
         (ROOT / "src/spring_runtime_mcp/schemas/tools-contract.json").read_text()
@@ -103,6 +146,11 @@ def main() -> None:
     tools = bundle["tools"]
     assert [tool["name"] for tool in tools] == sorted(EXPECTED_NAMES)
     checks = 0
+
+    # New checks
+    description_checks = 0
+    default_checks = 0
+    ref_checks = 0
     for tool, arguments in zip(tools, VALID_INPUTS, strict=True):
         hints = tool["annotations"]
         assert hints["title"]
@@ -110,17 +158,31 @@ def main() -> None:
         assert hints["idempotentHint"] is True
         assert hints["destructiveHint"] is False
         assert hints["openWorldHint"] is False
+
+        # Validate description length
+        _validate_description_length(tool["description"])
+        description_checks += 1
         for key in ("inputSchema", "outputSchema"):
             schema = tool[key]
             Draft202012Validator.check_schema(schema)
             assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
             assert schema["type"] == "object"
             assert schema["additionalProperties"] is False
+
+            # Validate all $ref references
+            _validate_ref_in_defs(schema, schema)
+            ref_checks += 1
+
             for node in walk(schema):
                 if isinstance(node.get("$ref"), str):
                     resolve(schema, node["$ref"])
                 if isinstance(node.get("pattern"), str):
                     re.compile(node["pattern"])
+
+                # Validate default values in range
+                if isinstance(node, dict) and "default" in node:
+                    _validate_default_in_range(node, schema)
+                    default_checks += 1
         iv = Draft202012Validator(tool["inputSchema"], format_checker=FormatChecker())
         ov = Draft202012Validator(tool["outputSchema"], format_checker=FormatChecker())
         iv.validate(arguments)
@@ -220,6 +282,9 @@ def main() -> None:
     rejects(config, {"prefix": "../../env"})
     print(
         f"Validated 8 isolated input/output schemas; {checks}+ synthetic contract assertions passed."
+    )
+    print(
+        f"Enhanced validations: {description_checks} descriptions, {default_checks} defaults, {ref_checks} $ref references."
     )
 
 
