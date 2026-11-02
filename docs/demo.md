@@ -2,7 +2,7 @@
 
 [First live query](first-query.md) · [Chinese overview](../README.zh-CN.md) · [Trial feedback](trial-feedback.md)
 
-This demo uses the **0.2.11 Alpha public package** and its bundled synthetic data. It needs Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/) on Linux, with package-index access for installation. After installation, the replay commands read package resources offline. No source checkout, `examples/` directory, JDK, Docker, Spring process, or model API is required.
+This demo uses the **0.2.12 Alpha public package** and its bundled synthetic data. It needs Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/) on Linux, with package-index access for installation. After installation, the replay commands read package resources offline. No source checkout, `examples/` directory, JDK, Docker, Spring process, or model API is required.
 
 The replay entry point invokes the actual tool handlers and emits a serialized JSON-RPC-shaped result. It does not start a STDIO MCP session or make HTTP requests. This demonstrates normalization and result semantics, not application authentication, MCP-client interoperability, or real-version Spring compatibility. `boot-3.4-servlet` is a synthetic scenario label, not evidence that Boot 3.4 was run.
 
@@ -13,11 +13,11 @@ Run the blocks in this page in the same terminal; `demo_dir` identifies the new 
 ```bash
 demo_dir="$(mktemp -d /tmp/spring-runtime-demo.XXXXXX)"
 uv venv "$demo_dir/venv"
-uv pip install --python "$demo_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11
+uv pip install --python "$demo_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12
 "$demo_dir/venv/bin/spring-runtime-mcp" --version
 ```
 
-Expect `spring-runtime-mcp 0.2.11` before continuing.
+Expect `spring-runtime-mcp 0.2.12` before continuing.
 
 ## 2. Ask whether GET /orders is registered
 
@@ -93,6 +93,6 @@ PY
 
 Expect `get-route: passed (synthetic replay)` and `post-route: passed (synthetic replay)`.
 
-The documented install and replay commands were checked in a new environment outside the source checkout with package 0.2.11, Python 3.12.15, and MCP SDK 2.3.0 on Linux. Both selectors and the equality of the text/structured envelopes passed. This is a synthetic replay check; it does not extend the live compatibility matrix.
+The GET/POST expectations and equality of the text/structured envelopes were checked with package 0.2.11, Python 3.12.15, and MCP SDK 2.3.0 on Linux. For the current release installation and protocol evidence, see the [publication record](launch/publication-verification.json). These synthetic checks do not extend the live compatibility matrix.
 
 To try the same question through an MCP client against your own authorized application, follow the [first-query guide](first-query.md). The application must already grant read access to the fixed mappings endpoint. The [feedback template](trial-feedback.md) distinguishes synthetic replay from a live query; a replay success alone is not a live integration or external-adoption claim.
