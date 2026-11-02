@@ -59,8 +59,8 @@ packages = ["src/spring_runtime_mcp"]
 exclude = [".human/**"]
 
 [tool.hatch.build.targets.sdist]
-include = ["src", "tests", "scripts", "docs", "examples", "*.md", "LICENSE", "uv.lock"]
-exclude = [".human/**", "**/*.log", "**/*.jsonl", "**/__pycache__", "**/.env", "**/.env.*", "**/target", "**/build", "**/dist"]
+include = ["src", "tests", "scripts", "docs", "*.md", "LICENSE", "uv.lock"]
+exclude = [".human/**", "examples/**", "**/*.log", "**/*.jsonl", "**/__pycache__", "**/.env", "**/.env.*", "**/target", "**/build", "**/dist"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "tests"]

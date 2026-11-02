@@ -21,11 +21,11 @@
 
 ## 开始使用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.10 Alpha**：
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.11 Alpha**：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.10 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.10 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --base-url http://127.0.0.1:18081
 ```
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令；直接在终端运行会等待客户端请求。完整步骤见[首次查询](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
@@ -36,6 +36,6 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.10 --base-ur
 
 工具不写目标、不重启应用，也不读取 heapdump 或原始日志。完整 Boot/Java/客户端矩阵、Windows/macOS 和生产集群兼容性尚未验证。
 
-[全部文档](docs/README.md) · [工具契约](src/spring_runtime_mcp/schemas/tools-contract.json) · [源码事实接入](docs/source-catalog.md) · [开发与验证](docs/launch/README.md) · [可运行演示](examples/spring-boot-demo/README.md)
+[全部文档](docs/README.md) · [工具契约](src/spring_runtime_mcp/schemas/tools-contract.json) · [源码事实接入](docs/source-catalog.md) · [开发与验证](docs/launch/README.md)
 
 [Apache-2.0](LICENSE) · [安全问题反馈](SECURITY.md)
