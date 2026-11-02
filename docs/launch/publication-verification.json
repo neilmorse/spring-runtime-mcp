@@ -57,7 +57,7 @@
   },
   "publicInstall": {
     "index": "https://pypi.org/simple",
-    "noCache": false,
+    "noCache": true,
     "freshEnvironmentOutsideRepository": true,
     "python": "3.12.15",
     "os": "Linux",
@@ -73,10 +73,24 @@
     "eightToolHttpFixture": "passed",
     "schemaHintsSanitizationAndFrameBudget": "passed",
     "packagedReplayScenariosPassed": 7,
-    "initialNamedInstall": "version-not-yet-resolvable",
-    "environment": "documented-demo-fresh-environment",
-    "retryAfterSimpleIndexVerification": "download-timeout",
-    "documentedDemoNamedInstall": "passed-same-official-index"
+    "environment": "separate-fresh-public-environment",
+    "namedInstallAttempts": [
+      {
+        "noCache": true,
+        "result": "version-not-yet-resolvable"
+      },
+      {
+        "noCache": true,
+        "result": "download-timeout"
+      },
+      {
+        "noCache": true,
+        "systemCertificates": true,
+        "concurrentDownloads": 2,
+        "httpTimeoutSeconds": 30,
+        "result": "passed-same-official-index"
+      }
+    ]
   },
   "scope": {
     "runtimeRequiresJdk": false,
@@ -107,6 +121,7 @@
     "postRouteMatches": 0,
     "textAndStructuredEnvelopesEqual": true,
     "inputData": "bundled-synthetic-fixtures",
-    "realSpringApplicationsContacted": false
+    "realSpringApplicationsContacted": false,
+    "noCache": false
   }
 }
