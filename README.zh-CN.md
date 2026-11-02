@@ -21,18 +21,18 @@
 
 ## 开始使用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.8 Alpha**：
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.9 Alpha**：
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.8 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.9 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.9 --base-url http://127.0.0.1:18081
 ```
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令；直接在终端运行会等待客户端请求。完整步骤见[首次查询](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
 
 ## 使用边界
 
-当前只连接本地回环地址，使用固定端点和可选 Bearer 环境变量鉴权；OpenAPI 固定读取 `/actuator/openapi`。配置值默认隐藏，输出始终脱敏，每次工具结果最多 16 KiB。证据不足会明确返回 `partial/unknown`。
+当前只连接本地回环地址，使用固定端点和可选 Bearer 环境变量鉴权；OpenAPI 固定读取 `/actuator/openapi`。配置诊断默认关闭，需通过 CLI 参数显式启用（`--config-prefix`、`--config-property`、`--config-profiles`）；启用后配置值仍默认隐藏，输出值还需要 `--config-allow-values` 和工具参数 `includeValues=true`。输出始终脱敏，每次工具结果最多 16 KiB。证据不足会明确返回 `partial/unknown`。
 
 工具不写目标、不重启应用，也不读取 heapdump 或原始日志。完整 Boot/Java/客户端矩阵、Windows/macOS 和生产集群兼容性尚未验证。
 
