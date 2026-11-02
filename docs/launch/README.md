@@ -28,7 +28,7 @@ Python 改动运行 pytest、Ruff lint/format；src 类型相关改动加 mypy�
 uv build
 ```
 
-wheel 必须包含 `spring_runtime_mcp/schemas/tools-contract.json`、`py.typed` 和 replay 资源。sdist 包含现行源码、测试、脚本和文档；`.human/` 明确排除于 wheel/sdist，人类资料仍由 Git 保留。
+wheel 必须包含 `spring_runtime_mcp/schemas/tools-contract.json`、`py.typed` 和 replay 资源。sdist 包含现行源码、测试、脚本和文档；`.human/` 明确排除于 wheel/sdist，人类资料仍由 Git 保留。`examples/` 是被 Git 忽略的本地应用 fixture 与诊断结果目录，不随仓库或发行包分发。依赖该目录的演示、真实项目验收和故障注入维护脚本须由操作者另行准备对应 fixture；默认合成回归与发行门禁不依赖该目录。
 
 开发自检入口：
 

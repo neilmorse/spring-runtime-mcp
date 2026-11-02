@@ -21,8 +21,6 @@
 | 离线重放与调试 | [replay 机制](../src/spring_runtime_mcp/replay.py) |
 | 离线检查、构建与发布 | [发布流程](launch/README.md) |
 | Glama 源码容器构建 | [构建指南](launch/glama/README.md) |
-| 可复现 Spring Boot 演示 | [演示说明](../examples/spring-boot-demo/README.md) |
-| 隔离编译、运行态与协议故障验收 | [故障注入说明](../examples/injected-faults/README.md) |
 
 仓库协作、安全边界和验证要求由 [AGENTS.md](../AGENTS.md) 维护。公开字段与默认值以工具 Schema 为准；模块实现细节由对应源码和测试核对。
 

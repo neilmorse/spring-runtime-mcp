@@ -43,7 +43,7 @@ uv run --no-sync python scripts/generate_source_facts.py \
 }
 ```
 
-左侧是生成器识别出的配置类与工厂方法，右侧必须来自已核实的目标 conditions 报告。未匹配的左侧键会失败，避免拼写错误被忽略；它仍是操作者声明，生成器不联网核实。示例的登记文件见 [source-condition-bindings.json](../examples/injected-faults/source-condition-bindings.json)。关联边界见 [Source catalog](source-catalog.md)。
+左侧是生成器识别出的配置类与工厂方法，右侧必须来自已核实的目标 conditions 报告。未匹配的左侧键会失败，避免拼写错误被忽略；它仍是操作者声明，生成器不联网核实。上述 JSON 可保存为项目内的 `relative/bindings.json`，再通过该参数登记。关联边界见 [Source catalog](source-catalog.md)。
 
 ## 限额与失败
 
