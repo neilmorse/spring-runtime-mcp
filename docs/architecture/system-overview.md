@@ -1,46 +1,46 @@
-# 系统概览
+# System overview
 
-Spring Runtime MCP 是 Python 3.11+ 的独立 STDIO 服务，为编码 Agent 提供登记 Spring Boot 回环实例的只读运行证据。安装入口为 `spring-runtime-mcp`；版本源为 [__init__.py](../../src/spring_runtime_mcp/__init__.py)，依赖及构建配置见 [pyproject.toml](../../pyproject.toml)，精确开发环境由 [uv.lock](../../uv.lock) 固定。
+Spring Runtime MCP is a standalone Python 3.11+ STDIO service providing coding agents with read-only runtime evidence from registered loopback Spring Boot instances. The executable is `spring-runtime-mcp`; [__init__.py](../../src/spring_runtime_mcp/__init__.py) defines the version. Dependencies and builds are configured in [pyproject.toml](../../pyproject.toml), with the exact development environment pinned by [uv.lock](../../uv.lock).
 
-## 模块与入口
+## Modules and entry points
 
-| 模块 | 当前职责 |
+| Module | Responsibility |
 | --- | --- |
-| `cli.py` | 参数、环境变量、Bearer 和可选源码目录加载，装配服务并启动 STDIO |
-| `server.py` | 官方 MCP SDK lowlevel Server，工具发现、参数/结果验证、共享调用时限与有界协议出口 |
-| `services.py` | 登记目标、读取器、脱敏、源码事实、快照及每目标读取槽协调 |
-| `transport/` | 固定端点 HTTP、响应门禁、有界 JSON、帧序列化和离线资源读取 |
-| `policy/` | 配置读取范围、字段投影、脱敏及独立输出安全门 |
-| `models/` | Fact、查询、观测、图模型及分析/调用预算 |
-| `adapters/` | 将 Actuator/OpenAPI 结构归一化为领域事实和证据缺口 |
-| `analyzers/` | Bean 图遍历、条件链和漂移影响等确定性分析 |
-| `tools/` | 八个处理器、固定注册、信封合成及分页 |
-| `contracts/`、`schemas/` | 参数规范化和随包分发的八工具 Schema |
-| `snapshots.py` | 有界脱敏快照、查询绑定游标与续页 |
-| `replay.py`、`replay_data/` | 使用相同处理器执行一次性离线场景 |
+| `cli.py` | Parse arguments/environment variables, bind Bearer credentials, load the optional source catalog, assemble services, and start STDIO. |
+| `server.py` | Official MCP SDK lowlevel Server; tool discovery, argument/result validation, shared deadlines, and bounded protocol output. |
+| `services.py` | Coordinate registered targets, readers, sanitization, source facts, snapshots, and per-target read slots. |
+| `transport/` | Fixed-endpoint HTTP, response gates, bounded JSON, frame serialization, and offline resource reads. |
+| `policy/` | Configuration read scope, field projection, sanitization, and the independent output gate. |
+| `models/` | Facts, queries, observations, graphs, and analysis/call budgets. |
+| `adapters/` | Normalize Actuator/OpenAPI structures into domain facts and evidence gaps. |
+| `analyzers/` | Deterministic Bean graph traversal, condition-chain analysis, and drift impact. |
+| `tools/` | Eight handlers, fixed registration, envelope composition, and pagination. |
+| `contracts/`, `schemas/` | Argument normalization and the packaged eight-tool Schema. |
+| `snapshots.py` | Bounded sanitized snapshots, query-bound cursors, and continuation pages. |
+| `replay.py`, `replay_data/` | One-shot offline scenarios using the same handlers. |
 
-模块按上述职责协作；这不是强制的单向导入图。模型为共享基础，工具层将读取、归一化、分析和安全出口连接起来。
+These are module responsibilities, not a mandatory one-way import graph. Shared models underpin the system; tools connect reads, normalization, analysis, and safe output.
 
-[CLI](../../src/spring_runtime_mcp/cli.py) 的 `main` 调用 [server](../../src/spring_runtime_mcp/server.py) 的 `build_services` 和 `run_stdio`。`build_services` 装配单个 origin/target，工具读取时才建立连接。`build_server(services)` 注册 `tools/list`、`tools/call` 回调，支持测试或本地集成注入 Services。
+The [CLI](../../src/spring_runtime_mcp/cli.py) `main` calls `build_services` and `run_stdio` in the [server](../../src/spring_runtime_mcp/server.py). `build_services` assembles one origin/target; connections are opened only when tools read. `build_server(services)` registers `tools/list` and `tools/call` callbacks and permits Services injection for tests or local integration.
 
-## 在线数据流
+## Online data flow
 
-1. CLI 校验 origin、目标、超时、可选配置策略及 Bearer 变量名称；源码目录经有界读取和 JSON 校验加载。
-2. SDK 接收请求；宿主验证参数并建立共享 15 秒调用时限，固定注册表分发到工具。
-3. 首次查询经 Services 取得目标读取槽，ResponseGateReader 校验能力，标准库连接器向固定路径发 GET。
-4. 有界响应通过状态、媒体类型与 JSON 检查，成为带目标、快照、观测时间和端点身份的 ParsedObservation。
-5. 适配器和分析器建立完整可见事实及关联，工具层将 gaps 汇入 coverage/status，过滤、计数、稳定排序。
-6. SanitizerPipeline 处理输出，分页层按记录数及完整响应字节预算选择本页；需要续页时保存脱敏快照。
-7. 宿主验证输出 Schema，独立安全门及 SDK 实际序列化出口复核完整 JSON-RPC 帧，返回结构与兼容文本副本。
+1. The CLI validates the origin, target, timeout, optional configuration policy, and Bearer variable name; bounded reads and JSON validation load the source catalog.
+2. The SDK receives a request; the host validates arguments, establishes a shared 15-second deadline, and dispatches through the fixed registry.
+3. An initial query acquires a target read slot through Services. ResponseGateReader checks capability, then the standard-library connector sends GET to the fixed path.
+4. Bounded status, media-type, and JSON checks produce a ParsedObservation with target, snapshot, observation time, and endpoint identity.
+5. Adapters and analyzers establish all visible facts and associations. Tools fold gaps into coverage/status, filter, count, and stably sort.
+6. SanitizerPipeline processes output. Pagination selects a page using record and complete-response byte budgets, saving a sanitized snapshot when continuation is needed.
+7. The host validates the output Schema. The independent safety gate and actual SDK serialization recheck the complete JSON-RPC frame, returning structured and equivalent text copies.
 
-## 状态与资源
+## State and resources
 
-首次查询采集运行证据；带 cursor 的查询沿用原参数及快照，期间不重新读取目标。SnapshotStore 默认 60 秒绝对 TTL、32 MiB 总预算，使用 LRU 淘汰；进程重启后快照丢失。策略戳变化时复核整份缓存事实，失败则删除该快照的相关句柄。
+Initial queries collect runtime evidence; cursor queries retain the original arguments and snapshot without rereading the target. SnapshotStore defaults to a 60-second absolute TTL and 32 MiB total budget with LRU eviction. Process restarts lose snapshots. A changed policy stamp triggers revalidation of all cached facts; failure removes the snapshot's associated handles.
 
-Services 每目标最多两个并发读取，等待槽位也计入调用时限。单次服务读取等待最多 5 秒并受剩余时限约束；CLI 的 reader timeout 默认 5 秒、允许大于 0 且不超过 60 秒。DNS 系统调用和工作线程的清理限制见[安全架构](security-and-sanitization.md)。
+Services permits at most two concurrent reads per target, with slot waits counted toward the deadline. A Services read waits at most 5 seconds, bounded by the remaining deadline. The CLI reader timeout defaults to 5 seconds and accepts values greater than 0 and no more than 60 seconds. See [security architecture](security-and-sanitization.md) for DNS and worker-thread cleanup limits.
 
-## 工具与证据
+## Tools and evidence
 
-固定注册八工具，按名称排序，具体选择器和结果以 [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) 及[调用策略](../contracts/tool-calling-policy.md)为准。Fact 区分 known、unknown、notReported、redacted；证据缺失沿 gaps 传至工具层，必要时返回 partial 和未知总数。
+Eight tools are registered in name order. Their selectors and results follow the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) and [calling policy](../contracts/tool-calling-policy.md). Fact distinguishes known, unknown, notReported, and redacted; missing evidence propagates through gaps to tools, yielding partial results and unknown totals when necessary.
 
-可用性和支持范围见[产品规格](../../SPEC.md)。默认验证使用合成 fixtures 和测试自建回环服务；真实目标验收需独立授权。开发检查及发行包验证见[发布流程](../launch/README.md)。
+See the [product specification](../../SPEC.md) for availability and supported scope. Default validation uses synthetic fixtures and self-hosted loopback services; real targets require separate authorization. See the [release workflow](../launch/README.md) for development checks and distribution verification.

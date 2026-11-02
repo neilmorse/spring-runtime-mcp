@@ -1,13 +1,14 @@
-# 当前任务：忽略 examples 并提交、推送、发布 0.2.11 Alpha（2026-11-02）
+# Task: English documentation and contributor onboarding
 
-用户明确要求将 examples 加入 .gitignore 后重新提交、推送和发布。停止跟踪 examples 并保留本地文件，显式排除源码发行包，修正现行说明及发行元数据。历史资料访问限于本次发行条目和完整门禁凭据扫描。
+Scope: make root Markdown documents English, retaining README.zh-CN.md in place as the Chinese overview; translate applicable current subdirectory documentation. Preserve technical contracts, safety rules, evidence limits, and existing local example files. Keep historical human archives outside this task. Root CHANGELOG.md is included in the requested root-document translation scope.
 
-- [x] 核对 Git 跟踪、打包与文档依赖，准备 0.2.11。
-- [x] 干净源码完整门禁，核对本地 examples 未改变且产物不包含 examples。
-- [x] 候选 PR 和 Python 3.11–3.14 检查，合并并推送精确标签。
-- [x] PyPI、GitHub Alpha Release 和 MCP Registry 发布与公开包验证。
-- [x] 发布验证记录、合并及工作区收尾。
+- [x] Prepare and exercise the public-package route demo and English installation instructions in new external environments.
+- [x] Prepare feedback, invitation, contribution, and PR templates.
+- [x] Translate root agent rules and product scope; preserve the Chinese README exception.
+- [x] Translate current architecture, tool references, setup, troubleshooting, validation, and release notes.
+- [x] Validate wording, links/anchors, fenced configurations, examples, and translation fidelity.
+- [x] Review the final documentation diff and prepare factual commit and PR descriptions.
 
-不连接真实 Spring Boot；保留已发布版本与现有环境保护，不改运行依赖或公开 Schema。
+No runtime, dependency, public Schema, endpoint configuration, or release change is part of this task. No invitations or user reports have been sent. The route demo is synthetic and does not establish live application or client compatibility.
 
-发布结果：源码 PR #31；候选 41434957512、正式发布 41435400621、Registry 41435879554 均通过。1224 项默认测试、完整六阶段门禁和 Python 3.11–3.14 通过；两类产物无 examples，公开摘要与本地/候选/正式产物一致。112 个先前跟踪的本地 examples 文件保留、当前跟踪数为零。PyPI 首次命名安装因索引尚未可解析失败，确认官方 simple 索引列出产物后以原命令重试成功；Python 3.12.15/Linux x86_64、MCP SDK 2.3.0 的仓库外净室验证通过 SDK 两模式、八工具回环 HTTP 和七个打包 replay。发布记录通过独立文档 PR 收口，未连接真实 Spring Boot。
+Validation: 51 current Markdown files checked; 261 local links; 30 Bash, 32 JSON, 3 TOML, and 3 YAML blocks; 1 Python block and 1 embedded Python block; Issue metadata; 23 valid tool-query examples and 1 intentional invalid example. Protected historical references were preserved without opening the archive. Existing tool-reference code blocks, release dates, source hashes, and numerical release evidence were preserved; 11 historical example links now use immutable v0.2.10 paths. The public-package install/replay checks from this task passed outside the source checkout. Runtime files, public Schema, dependencies, workflows, and examples ignore rules are unchanged.

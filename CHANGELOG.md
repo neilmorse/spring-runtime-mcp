@@ -1,276 +1,276 @@
-# 版本记录
+# Changelog
 
 ## [0.2.11] - 2026-11-02
 
-- 已发布至 PyPI、GitHub Alpha Release 与 MCP Registry，源码标签锁定 `e7ad1e79fed8ce81812928c7461f8c6d4d71d1dc`；公开产物摘要一致且均不含 `examples/`，官方 PyPI 无缓存净室安装及 SDK 两模式、八工具回环 HTTP、七个 replay 通过。详见[发布验证记录](docs/launch/publication-verification.json)。
+- Published to PyPI, GitHub Alpha Release, and MCP Registry at source tag `e7ad1e79fed8ce81812928c7461f8c6d4d71d1dc`. Public artifact digests match and exclude `examples/`; uncached official-PyPI clean installation, both SDK modes, eight-tool loopback HTTP, and seven replays passed. See the [publication verification record](docs/launch/publication-verification.json).
 
-### 发行内容整理
+### Distribution contents
 
-- 将 `examples/` 加入根目录忽略规则并停止 Git 跟踪，保留维护者本地副本；源码发行包显式排除该目录。
-- 清理现行文档中的演示链接，说明真实项目维护脚本需要另行准备本地 fixture；默认合成测试与发行门禁使用仓库内测试数据。
-- 公开八工具契约、运行依赖和运行时行为保持现有范围。
+- Ignore root `examples/` and stop tracking it while retaining maintainers' local copies; explicitly exclude it from the sdist.
+- Remove current-document demo links and document separately prepared local fixtures for real-project maintenance scripts. Default synthetic tests and release gates use repository test data.
+- Preserve the eight-tool public contract, runtime dependencies, and runtime behavior.
 
-## v0.2.10 Alpha — 2026-11-02（校验与性能基准修复）
+## v0.2.10 Alpha — 2026-11-02 (contract validation and benchmark fixes)
 
-- 已发布至 PyPI、GitHub Alpha Release 与 MCP Registry，源码标签锁定 `f293193a29123dda52178418efb0b3b80543fa96`；正式产物与本地、候选及公开下载摘要一致，官方 PyPI 无缓存净室安装、SDK 两模式、八工具回环 HTTP 与七个 replay 通过。详见[发布验证记录](docs/launch/publication-verification.json)。
+- Published to PyPI, GitHub Alpha Release, and MCP Registry at source tag `f293193a29123dda52178418efb0b3b80543fa96`. Formal artifact digests match local, candidate, and public downloads. Uncached official-PyPI clean installation, both SDK modes, eight-tool loopback HTTP, and seven replays passed. See the [publication verification record](docs/launch/publication-verification.json).
 
-- 契约维护脚本校验描述、默认值与本地引用；默认值验证保留根 Schema 引用上下文，先拒绝非本地引用，再执行校验。新增 10 项默认值及完整入口回归。
-- 新增合成性能基准，覆盖工具调用、快照、Bean 依赖深度及 16 KiB 内输出序列化；Bean 测量逐轮检查非空结果及实际 1–4 跳已解析依赖，计时参考值仅作告警阈值。
-- 补充并修正故障排查、配置登记、鉴权、超时层级及架构说明。工具 Schema、运行依赖、固定端点和产品安全边界保持现有范围。
+- Contract maintenance validates descriptions, defaults, and local references. Default validation retains the root Schema reference context and rejects nonlocal references first. Added 10 default and full-entry-point regressions.
+- Added synthetic benchmarks for calls, snapshots, Bean dependency depth, and serialization within 16 KiB. Each Bean measurement checks nonempty results and actual resolved 1–4-hop dependencies; timing reference values are warning thresholds only.
+- Added/corrected troubleshooting, configuration registration, authentication, timeout layers, and architecture notes. Preserved tool Schema, runtime dependencies, fixed endpoints, and security boundaries.
 
-## v0.2.9 Alpha — 2026-11-02（工具文档与复跑保护）
+## v0.2.9 Alpha — 2026-11-02 (tool documentation and rerun protection)
 
-- 已发布到 PyPI、GitHub Alpha Release 和 MCP Registry；标签 `v0.2.9` 指向 `96d1c53c512480f2d01b15513d3b51ec89ca1b0c`。本地、候选、正式及公开产物摘要一致；公开无缓存安装、SDK 两模式、八工具回环及七 replay 通过，见[发布验证记录](docs/launch/publication-verification.json)。
-- 新增八工具的人类可读字段说明、公共信封说明及经实际参数校验的查询示例；字段、默认值、组合约束与现有工具 Schema 对齐。
-- 明确配置诊断默认关闭及值输出的双重授权条件，整理已有 Bearer 接入、JDK 验证前提、Maven 参数和历史引用。
-- Nacos 复跑入口在初始化资源前独占创建结果文件，拒绝已有文件、目录、符号链接和相同路径，避免覆盖历史验收证据；新增 9 项合成回归。
-- demo 与 Node 安全测试使用已同步的锁定项目环境。八工具公开 Schema、运行依赖、固定端点及产品安全边界保持现有范围。
+- Published to PyPI, GitHub Alpha Release, and MCP Registry; `v0.2.9` points to `96d1c53c512480f2d01b15513d3b51ec89ca1b0c`. Local, candidate, formal, and public digests match. Uncached public installation, both SDK modes, eight-tool loopback checks, and seven replays passed; see the [publication record](docs/launch/publication-verification.json).
+- Added human-readable eight-tool fields, common envelopes, and argument-validated examples aligned with existing Schema fields, defaults, and selector constraints.
+- Clarified default-disabled configuration diagnostics and both value-output permissions; consolidated existing Bearer access, JDK prerequisites, Maven arguments, and historical references.
+- Nacos reruns exclusively reserve result files before resource initialization, rejecting existing files, directories, symlinks, and identical paths to preserve historical evidence. Added 9 synthetic regressions.
+- Demo and Node security checks use the synchronized locked project environment. Preserved public Schemas, runtime dependencies, fixed endpoints, and security boundaries.
 
-## v0.2.8 Alpha — 2026-11-01（静态事实与隔离故障验收）
+## v0.2.8 Alpha — 2026-11-01 (static facts and isolated fault acceptance)
 
-- 新增仅解析显式登记 Java 文件的 JDK AST 维护脚本，生成现有 Source catalog 和漂移参数；未知类型、复杂条件与映射继续保留 partial/gaps。
-- 新增本地源码/产物摘要证据，区分源码未构建与构建后未重启；不以本地 jar 摘要冒充运行进程身份。
-- 新增构建、真实运行态及合成协议故障验收脚本，覆盖迁移错误、构造器循环、条件 Bean、路由、健康、响应安全和恢复。
-- 验收覆盖 demo 与 Spring Boot Admin；1195 项测试通过，48 次 MCP 工具调用通过。Java 静态检查限于受支持 AST 子集和已测告警，不宣称完整版本或项目矩阵。
-- 八工具公开契约、固定端点和 Python 运行依赖保持现有范围；静态生成器为源码仓库维护工具，需要完整 JDK，不进入 wheel 运行时。
+- Added a JDK AST maintenance script that parses explicitly registered Java files into existing Source catalogs and drift arguments. Unknown types and complex conditions/mappings retain partial/gaps.
+- Added local source/artifact digest evidence distinguishing unbuilt source from rebuilt artifacts without a process restart; local jar digests are not represented as runtime identity.
+- Added build, live-runtime, and synthetic protocol fault-acceptance scripts for migration errors, constructor cycles, conditional Beans, routes, health, response safety, and recovery.
+- Acceptance covered the demo and Spring Boot Admin: 1195 tests and 48 MCP calls passed. Static Java checks cover the supported AST subset and tested warnings only, not a full version/project matrix.
+- Preserved eight-tool public contracts, fixed endpoints, and Python runtime dependencies. The source-maintenance generator requires a full JDK and is excluded from wheel runtime.
 
 
-## v0.2.7 Alpha — 2026-11-01（文档与发行包整理）
+## v0.2.7 Alpha — 2026-11-01 (documentation and distribution cleanup)
 
-- 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 `v0.2.7` 指向 `4a7a7c74b869d3aa13f64bd5b4786c7d08085fa2`。本地/候选/正式/公开产物摘要一致，公开无缓存安装及两模式、八工具和七 replay 通过，详见[发行记录](.human/releases/release-0.2.7.md)。
-- 现行文档通过 docs/README.md 按需导航；重写产品、架构和调用说明，移出未落地设计与阶段流水账。
-- AGENTS.md 精简至 29 行；中英文 README 用实际问题介绍八工具，完整客户端模板移入独立指南。
-- 人类资料库精简为决策、想法、最终报告、独有机器摘要及发布记录；删除可从 Git 回查的重复材料，历史引用固定到原提交。
-- wheel/sdist 明确排除 .human/；版本更新为 0.2.7，诊断逻辑、公开 Schema、依赖和安全策略保持。
+- Published to PyPI, GitHub Release, and MCP Registry; `v0.2.7` points to `4a7a7c74b869d3aa13f64bd5b4786c7d08085fa2`. Local/candidate/formal/public digests match. Uncached public installation, both modes, eight tools, and seven replays passed; see the [release record](.human/releases/release-0.2.7.md).
+- Added task-based docs/README.md navigation; rewrote product, architecture, and calling descriptions, moving out unimplemented designs and stage-by-stage logs.
+- Reduced AGENTS.md to 29 lines. English/Chinese READMEs introduce the tools through practical questions; full client templates moved to a separate guide.
+- Consolidated the human archive into decisions, ideas, final reports, unique machine summaries, and release records; removed Git-recoverable duplicates and pinned historical references to original commits.
+- Explicitly excluded .human/ from wheel/sdist; set version 0.2.7 without changing diagnostics, public Schema, dependencies, or security policy.
 
-## v0.2.6 Alpha — 2026-11-01（具名 Bean 条件）
+## v0.2.6 Alpha — 2026-11-01 (named Bean conditions)
 
-- 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 v0.2.6 指向 `60a4bea4434413fd140ef9bddf7d5bf4133d7b68`。完整门禁、公开无缓存安装和具名条件/阻塞链回归通过，四批产物摘要一致；旧版本标签及产物保留。
-- 支持单一 names 选择器的 `did not find any beans named <name>`，要求名称严格一致，接通既有工厂/属性传递阻塞分析；不扩大多要求或未知语法的归因范围。
-- 新增 29 项离线回归，P4 源补丁独立验收 1172 passed；同实例基线/候选及 A–E 正反证据持久留存，实际证据缺口继续 partial/unknown。
-- CGLIB 关联、图算法、公开 Schema、运行依赖、错误码、网络/鉴权/TLS、脱敏和预算保持。范围与发布批次见[0.2.6 发布记录](.human/releases/release-0.2.6.md)。
+- Published to PyPI, GitHub Release, and MCP Registry; v0.2.6 points to `60a4bea4434413fd140ef9bddf7d5bf4133d7b68`. Full gate, uncached public installation, and named-condition/blocking-chain regressions passed with all four artifact batches matching. Preserved older tags/artifacts.
+- Recognize single names-selector `did not find any beans named <name>` messages only with exact name agreement, connecting existing factory/property transitive analysis without expanding compound/unknown attribution.
+- Added 29 offline regressions; independent P4 source-patch acceptance had 1172 passed. Persisted same-instance baseline/candidate and A–E positive/negative evidence; actual gaps remain partial/unknown.
+- Preserved CGLIB correlation, graphs, public Schema, runtime dependencies, error codes, network/authentication/TLS, sanitization, and budgets. See [0.2.6 release scope](.human/releases/release-0.2.6.md).
 
-## v0.2.5 Alpha — 2026-11-01（WebFlux 函数 handler）
+## v0.2.5 Alpha — 2026-11-01 (WebFlux functional handlers)
 
-- 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 v0.2.5 指向 `f3f99310967b50dbee847ef82228f87ac8beba27`。完整门禁、公开包无缓存安装与函数类过滤回归通过，四批产物摘要一致。
-- 保留 Actuator 的结构化 `details.handlerFunction.className`，投影到现有 `controllerClass`，修复 `controllerClassPattern` 对函数路由的漏匹配；不推断业务方法或 descriptor。
-- 新增 9 项离线回归；P3 重新执行的真实 MVC/JWT startup 与独立 WebFlux/Bearer 验收证据已持久留存，源码补丁验收全量 1143 passed。复杂 predicate 与 500 步分析上限继续明确 partial。
-- 合并 M8ven 发布者认证徽章分支；徽章不构成安全或兼容矩阵认证。
-- 公开 Schema、错误码、运行依赖、目标/IP/端点边界、HTTP/TLS、脱敏和预算未修改。范围与发布批次见[0.2.5 发布记录](.human/releases/release-0.2.5.md)。
+- Published to PyPI, GitHub Release, and MCP Registry; v0.2.5 points to `f3f99310967b50dbee847ef82228f87ac8beba27`. Full gate, uncached public installation, and function-class filtering regressions passed with four matching artifact batches.
+- Preserve Actuator's structured `details.handlerFunction.className` in existing `controllerClass`, fixing functional-route misses under `controllerClassPattern` without inventing business methods or descriptors.
+- Added 9 offline regressions. Persisted P3 rerun evidence for live MVC/JWT startup and independent WebFlux/Bearer; source-patch acceptance had 1143 passed. Complex predicates and the 500-step analysis cap remain explicitly partial.
+- Merged the M8ven publisher-verification badge branch; the badge is not security or compatibility-matrix certification.
+- Public Schema, error codes, runtime dependencies, target/IP/endpoint boundaries, HTTP/TLS, sanitization, and budgets were unchanged. See [0.2.5 release scope](.human/releases/release-0.2.5.md).
 
-## v0.2.4 Alpha — 2026-11-01（首次接入体验）
+## v0.2.4 Alpha — 2026-11-01 (first-query experience)
 
-- 已发布到 PyPI、GitHub Release 和 MCP Registry；标签 v0.2.4 指向 `4e9e571aac001fc6fa9f95026688b54ae767202c`，完整门禁及公开安装/新提示检查通过，产物摘要一致。
+- Published to PyPI, GitHub Release, and MCP Registry; v0.2.4 points to `4e9e571aac001fc6fa9f95026688b54ae767202c`. Full gate, public installation, and new-message checks passed; artifact digests match.
 
-- 整理公开包到第一次有效查询的主路径，补充分层排错和可编辑安装元数据强制刷新指引，保留参考客户端的未验收范围。
-- CLI 缺失/空 Bearer 变量提示检查父环境和 env_vars，采用不回显变量名或值的固定文案；既有单元/进程回归加强并保持 1134 项通过。
-- 工具 Schema、错误码含义、依赖、算法、安全策略和预算保持；版本批次见[0.2.4 发布记录](.human/releases/release-0.2.4.md)。
+- Clarified the public-package-to-first-query path, layered troubleshooting, and forced editable-install metadata refresh, retaining unverified client-template scope.
+- Missing/empty Bearer-variable messages direct users to the parent environment and env_vars using fixed wording that reveals no variable names or values. Strengthened unit/process regressions; 1134 tests passed.
+- Preserved tool Schema, error-code meanings, dependencies, algorithms, security policy, and budgets; see the [0.2.4 release record](.human/releases/release-0.2.4.md).
 
-## v0.2.3 Alpha — 2026-11-01（源码目录 Context ID）
+## v0.2.3 Alpha — 2026-11-01 (source catalog Context IDs)
 
-- 已发布到 PyPI、GitHub Release 和 MCP Registry，标签 v0.2.3 指向 `3f752dc46f8f5b9344bdfbde15597b95f3dd6670`；完整门禁与公开全新安装通过，三批产物及公开 PyPI 摘要一致。
+- Published to PyPI, GitHub Release, and MCP Registry; v0.2.3 points to `3f752dc46f8f5b9344bdfbde15597b95f3dd6670`. Full gate and new public installation passed; three artifact batches and public PyPI digests match.
 
-- 修复 source catalog 错将 Context ID 当作 Java 符号校验的问题；允许 shop-product 等合法身份并精确关联，保留长度与 C0/DEL 限制，Java 类型/工厂字段校验保持。
-- 新增 16 项回归；独立验收全量 1134 passed，mypy/Ruff/格式通过。有限 TDD 正反样本与 legacy STDIO 已证明目录工厂关联和属性负向证据，代理类型及具名 OnBean 传递链限制仍保留。
-- 补充源码目录指南；公开 Schema、依赖、安全守卫和预算未修改。发布批次状态见[0.2.3 发布记录](.human/releases/release-0.2.3.md)。
+- Fixed source catalogs treating Context IDs as Java symbols. Valid identities such as shop-product now correlate exactly, retaining length/C0/DEL restrictions and Java type/factory validation.
+- Added 16 regressions; independent acceptance had 1134 passed with mypy/Ruff/format checks. Limited TDD positive/negative and legacy STDIO evidence established catalog factory/property-negative correlation; proxy/named-OnBean transitive limits remain.
+- Added the source catalog guide without changing public Schema, dependencies, safety guards, or budgets. See the [0.2.3 release record](.human/releases/release-0.2.3.md).
 
-## v0.2.2 Alpha — 2026-10-31（诊断修复提示）
+## v0.2.2 Alpha — 2026-10-31 (diagnostic remediation guidance)
 
-- 已推送 `v0.2.2`（`d4388d39b2ec57160836c602bf97f4875f7f6fe3`），发布到 PyPI、GitHub Release 与 MCP Registry；完整本地/远端门禁及公开 PyPI 全新安装通过，产物摘要一致，详见[发布记录](.human/releases/release-0.2.2.md)。
+- Pushed `v0.2.2` (`d4388d39b2ec57160836c602bf97f4875f7f6fe3`) and published to PyPI, GitHub Release, and MCP Registry. Full local/remote gates and new public-PyPI installation passed; digests match. See the [release record](.human/releases/release-0.2.2.md).
 
-- `INVALID_ARGUMENT` 改为参数修复配方：检查实际 inputSchema 的字段名、类型与约束，提示 `maxResults` 为 1–50，不回显输入；修正参数无需审批。
-- startup GET 的 5xx 保留原错误码和 HTTP 状态，提示核对暴露、Boot 版本与启动采集，明确状态码不能单独确定原因；配置及重启仍需授权，不回退 POST。
-- 中英文 README 补充公开发行包的 Codex Bearer 环境变量转发示例与路由参数示例。公开 Schema、运行依赖、目标配置和安全守卫未修改；发布批次状态见[0.2.2 发布记录](.human/releases/release-0.2.2.md)。
-- 新增 18 项回归，全量离线测试 **1118 passed / 44.90 秒**；mypy、Ruff 与八工具契约校验通过。HTTP 回归只使用测试自建回环服务，未重启或连接 TDD 实例；未重跑真实项目验收。
-- 随后经授权对 TDD 当前开发副本进行源码版针对性真实回归：JWT 匿名拒绝、参数错误与修正、MVC 路由及 startup 500 提示均符合预期；Codex 临时会话实际完成错误调用、修正及后续查询。三次完整 STDIO 回包最大 2677 字节，临时实例和数据库已清理，原工作区文件保持；未重跑完整真实项目矩阵。
+- INVALID_ARGUMENT now provides an argument-correction recipe: inspect actual inputSchema names/types/constraints and maxResults 1–50, without echoing input. Correcting arguments needs no approval.
+- startup GET 5xx preserves the code/status while suggesting exposure, Boot-version, and startup-collection checks. Status alone does not establish a cause; configuration/restarts still need authorization, with no POST fallback.
+- English/Chinese READMEs gained public-package Codex Bearer forwarding and route-argument examples. Public Schema, runtime dependencies, target configuration, and safety guards were unchanged; see the [0.2.2 record](.human/releases/release-0.2.2.md).
+- Added 18 regressions; full offline suite: **1118 passed / 44.90 seconds**. mypy, Ruff, and eight-tool contracts passed. HTTP regressions used self-hosted loopback services only, without restarting/contacting TDD or rerunning real-project acceptance.
+- Subsequently authorized targeted source-based live regressions on the TDD development copy verified anonymous JWT rejection, invalid/corrected arguments, MVC mappings, and startup 500 guidance. A temporary Codex session performed erroneous, corrected, and subsequent calls. Three complete STDIO responses peaked at 2677 bytes. Temporary instances/database were cleaned up, original worktree preserved; the full real-project matrix was not rerun.
 
-## v0.2.1 Alpha — 2026-10-31（元数据修正）
+## v0.2.1 Alpha — 2026-10-31 (metadata correction)
 
-- 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/)，标签 `v0.2.1` 指向 `2d8567ba9ae10ac143a24d4ec443909a9e8997cb`。
-- Registry 名称与 README 所有权标记统一为 `io.github.neilmorse/spring-runtime-mcp`，项目 URL 指向当前所有者；已通过短时 GitHub OIDC 身份发布并独立回读 Registry 条目。
-- 本地/远端完整门禁、1100 项测试、wheel/sdist 隔离安装及公开 PyPI 无缓存、无锁约束安装通过。版本、两种 SDK 模式、八工具回环调用和七 replay 均通过，详见[发布记录](.human/releases/release-0.2.1.md)。
-- 生产诊断实现、公开工具 Schema、运行依赖与安全边界保持；动态项目的 uv.lock 条目不固化项目版本，重新锁校验通过且锁文件字节未变。0.2.0 标签和已上传产物保留。
-- 目录 PR 已提交为草稿，依用户选择暂缓 Glama 账号/收录步骤；未宣称目录已正式收录。
+- Published to [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.1/); `v0.2.1` points to `2d8567ba9ae10ac143a24d4ec443909a9e8997cb`.
+- Unified Registry name and README ownership marker as `io.github.neilmorse/spring-runtime-mcp`, with project URLs pointing to the current owner. Published using short-lived GitHub OIDC and independently read back the Registry entry.
+- Full local/remote gates, 1100 tests, isolated wheel/sdist installs, and uncached public-PyPI installation without lock constraints passed. Version, both SDK modes, eight-tool loopback calls, and seven replays passed; see the [release record](.human/releases/release-0.2.1.md).
+- Preserved production diagnostics, public Schema, runtime dependencies, and security boundaries. The dynamic project's uv.lock entry does not fix its version; lock verification passed with unchanged bytes. Preserved 0.2.0 tags/artifacts.
+- Submitted the directory PR as a draft; Glama account/listing steps were deferred by user choice, without claiming formal listing.
 
-## v0.2.0 Alpha — 2026-10-31（正式发布）
+## v0.2.0 Alpha — 2026-10-31 (formal publication)
 
-- 已发布到 [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/)，标签 `v0.2.0` 对应 `2394b29a84a5fcd8210d3934eee1a94e1d3fc0ac`。
-- 干净提交本地完整门禁退出 0；正式 Release 的 Python 3.11–3.14、静态检查、契约、漏洞审计、构建/两产物隔离安装与发布全部通过。
-- 公开 PyPI 仓库外全新环境安装通过两种 SDK 模式、八工具回环调用和七 replay；公开产物摘要与验收批次一致。首发保持 Alpha、本地回环与有限兼容范围，详见[发布记录](.human/releases/release-0.2.0.md)。
-- 下列“未发布”记录保留各轮实施时状态；其中交付内容已随本版纳入，不应据历史措辞判断当前未发布。2026-10-22 的 v0.2.0 条目记录开发里程碑，不是 PyPI 首次发布日期。
+- Published to [PyPI](https://pypi.org/project/spring-runtime-mcp/0.2.0/); `v0.2.0` points to `2394b29a84a5fcd8210d3934eee1a94e1d3fc0ac`.
+- The full local gate on a clean commit exited 0. Formal Release passed Python 3.11–3.14, static/contract checks, vulnerability audit, builds, both isolated artifact installs, and publication.
+- A fresh environment outside the checkout installed from public PyPI and passed both SDK modes, eight-tool loopback calls, and seven replays. Public digests match the verified batch. The initial release remains Alpha, loopback-only, and limited in compatibility; see the [release record](.human/releases/release-0.2.0.md).
+- The following Unreleased entries retain each implementation round's historical status. Their delivered changes were included in this release; historical wording does not mean they remain unpublished. The 2026-10-22 v0.2.0 entry is a development milestone, not the initial PyPI publication date.
 
-## 未发布 — 2026-10-31 发布流程收口
+## Unreleased — 2026-10-31 release workflow completion
 
-- 将已审阅的生产修复、测试、资源、脚本和历史证据准备为同一发布提交；Nacos 原运行日志/逐分钟 JSONL 本地留存并精确忽略，聚合证据保留。
-- 新增仅验证的 `Release validation only` 分支流水线，复用完整门禁，不请求 OIDC 或 PyPI 发布环境；正式标签仍需版本匹配及操作者批准。
-- 修复 Git 清单的特殊文件名漏检：二进制 `git ls-files -z` 配合 `os.fsdecode`，新增 14 项真实 Git 回归。此前修复后离线 1100 passed；最终提交门禁与产物摘要另存仓库外证据，不复用旧批次。
-- 核实当前仓库所有者为 neilmorse，更新发布账户核对参数；PyPI 账户访问受阻、GitHub 尚无 pypi 环境，不声明发布就绪。
+- Prepared reviewed production fixes, tests, resources, scripts, and historical evidence as one release commit. Raw Nacos logs/minute JSONL remained local with exact ignore rules; aggregate evidence was retained.
+- Added the validation-only `Release validation only` branch workflow, reusing the full gate without OIDC or a PyPI publish environment. Formal tags still require matching versions and operator approval.
+- Fixed special-filename omissions in Git inventories using binary `git ls-files -z` and `os.fsdecode`; added 14 real-Git regressions. The preceding offline suite had 1100 passed; final-commit gates/digests were recorded outside the repository rather than reusing earlier batches.
+- Confirmed neilmorse as repository owner and updated publication-account checks. PyPI account access was blocked and no GitHub pypi environment existed at that stage; release readiness was not claimed.
 
-## 未发布 — 2026-10-31 正式发布准备收口
+## Unreleased — 2026-10-31 formal release preparation
 
-- 发布 CI 复用完整预发布脚本，新增强制联网漏洞审计、敏感文件/源码检查、契约校验及 sdist 隔离安装；上传已验证的同一批 wheel/sdist，不重新构建。远端执行待验。
-- 中文独立启动命令统一到锁定项目环境；保留 0.2.0 Alpha，纠正已打标签声明，公开包安装和实际客户端验收不再与 SDK 验收混同。
-- sdist 排除日志、JSONL、缓存和环境文件，保留用户源文件。范围、实际证据、交付关系与人工待办见[发布准备报告](.human/reports/release-readiness-2026-10-31.md)。
+- Release CI reuses the full pre-release script with mandatory network vulnerability audit, sensitive-file/source checks, contract validation, and isolated sdist installation. Upload the same verified wheel/sdist batch without rebuilding; remote execution was pending.
+- Unified Chinese standalone commands on the locked project environment. Retained 0.2.0 Alpha, corrected tag claims, and distinguished public-package/client acceptance from SDK checks.
+- Excluded logs, JSONL, caches, and environment files from sdist while retaining user source. Scope, evidence, deliverable relationships, and manual work are in the [readiness report](.human/reports/release-readiness-2026-10-31.md).
 
-## 未发布 — 2026-10-30 构建依赖锁定
+## Unreleased — 2026-10-30 locked build dependencies
 
-- 将 Hatchling 及其构建依赖固定到明确版本，并纳入开发依赖锁文件；预发布检查拒绝未固定或未纳入锁文件审计的构建依赖。没有新增运行时依赖。
-- 使用锁定依赖离线构建 wheel 和 sdist，分别通过隔离安装、CLI、两种 SDK 模式、八工具回环调用和七个 replay 场景。新增 2 项构建锁定回归；最终全量 **1084 passed / 44.43 秒**，mypy 53 个源文件、Ruff 124 个文件及八工具契约通过。`uv audit --locked` 对 43 个包未发现已知漏洞；仅代表当时的联网查询结果。
+- Pinned Hatchling/build dependencies to exact versions and included them in the development lock. Pre-release checks reject unpinned or unaudited build dependencies. Added no runtime dependencies.
+- Offline locked wheel/sdist builds independently passed isolated installation, CLI, both SDK modes, eight-tool loopback calls, and seven replays. Added 2 build-lock regressions; final suite **1084 passed / 44.43 seconds**, mypy 53 source files, Ruff 124 files, and eight-tool contracts passed. `uv audit --locked` found no known vulnerabilities in 43 packages, representing that query only.
 
-## 未发布 — 2026-10-30 HTTP 读取边界修复
+## Unreleased — 2026-10-30 HTTP read boundaries
 
-- 增加 32 KiB 响应头累计预算，覆盖状态行、临时响应和最终响应，解析时超限返回 `RESPONSE_HEADERS_TOO_LARGE`。单成员 gzip 增量解压分别限制编码体和解码体，拒绝损坏、截断、尾部数据和多成员；其他编码仍拒绝。
-- 提前断开且未收满 Content-Length 时返回 `INCOMPLETE_RESPONSE`，不将偶然合法的 JSON 片段当作完整证据。多个解析后地址共享 2 秒 socket 连接时限，连接后恢复本次调用剩余读取时限；操作系统 DNS 解析本身仍不能由 Python 强制终止。
-- 新增合成和自建回环回归，覆盖响应头、gzip、健康 503、分块传输、双重大小限制、正文截断及连接时间预算。全量 **1082 passed / 44.67 秒**；mypy 53 个源文件、Ruff 124 个文件及八工具契约通过。Python 3.11/3.14 仅对响应头解析边界做了本地补充验证。
-- 本地自建 TLS 测试使用一次性合成证书和内存文件，验证可信证书成功、主机名不符、不受信、过期及 IP 名称不符拒绝；失败时没有发送 HTTP 请求。主机名场景的 SNI 为登记主机，IP 字面量未发送 SNI。这是有限回环样本，不代表完整 TLS/SNI 版本矩阵。
-- 历史 LS-01 与 PC-01/PC-02 的离线修复探针以 `--expect-repaired` 再次通过；临时探针输出已清理，未重跑历史真实项目矩阵。
+- Added a cumulative 32 KiB header budget covering status, interim, and final responses, returning `RESPONSE_HEADERS_TOO_LARGE` on overflow. Incremental single-member gzip decoding separately bounds encoded/decoded bodies and rejects corruption, truncation, trailing data, and multiple members; other encodings remain rejected.
+- Early disconnect before Content-Length completion returns `INCOMPLETE_RESPONSE`, never treating accidentally valid JSON fragments as complete evidence. Resolved addresses share a 2-second socket connection deadline, then restore the remaining read deadline. Python still cannot forcibly terminate system DNS resolution.
+- Added synthetic/self-hosted loopback regressions for headers, gzip, health 503, chunking, dual size limits, truncated bodies, and connection budgets. Full suite **1082 passed / 44.67 seconds**; mypy 53 files, Ruff 124 files, and eight-tool contracts passed. Extra local Python 3.11/3.14 checks covered header parsing only.
+- Self-hosted TLS checks used disposable synthetic certificates and in-memory files: trusted certificates succeeded; hostname mismatch, untrusted/expired certificates, and IP-name mismatches were rejected before HTTP requests. Hostname cases used registered-host SNI; IP literals sent no SNI. These limited loopback samples do not establish a full TLS/SNI matrix.
+- Historical LS-01 and PC-01/PC-02 offline repair probes passed again with `--expect-repaired`. Temporary outputs were cleaned up; the historical live-project matrix was not rerun.
 
-## 未发布 — 2026-10-30 sdist 净室安装验收
+## Unreleased — 2026-10-30 clean sdist installation acceptance
 
-- 预发布净室阶段要求各一个 wheel 与 sdist，分别校验版本和运行资源；sdist 额外拒绝缓存、构建产物、敏感环境文件及符号链接。两种产物分别在独立环境中按锁文件约束安装运行依赖，并完成 CLI 版本、SDK 两种模式、八工具回环链路和七个 replay 场景。
-- 新增 6 项 sdist 失败回归，覆盖产物缺失、版本或资源不一致、缓存、危险链接与安装失败。真实净室阶段通过；全量 **1055 passed / 38.85 秒**，Ruff 123 个文件通过。构建后端仍按声明范围从本地缓存解析，不由运行依赖约束锁定；本轮未发布。
+- The clean-install gate requires one wheel and one sdist, checking version/resources independently. sdist additionally rejects caches, build outputs, sensitive environment files, and symlinks. Both artifacts install runtime dependencies under lock constraints in separate environments and exercise CLI version, both SDK modes, eight-tool loopback paths, and seven replays.
+- Added 6 sdist failure regressions for missing artifacts, version/resource mismatch, caches, dangerous links, and install failures. The real clean-install stage passed; full suite **1055 passed / 38.85 seconds**, Ruff 123 files passed. Build backend resolution still used its declared range/local cache rather than runtime constraints; this round was not published.
 
-## 未发布 — 2026-10-30 HTTP 响应编码守卫
+## Unreleased — 2026-10-30 HTTP content-encoding guard
 
-- 对声明了非 identity Content-Encoding 的 JSON 响应，在读取正文前返回 `UNSUPPORTED_CONTENT_ENCODING`；错误保留已登记端点与 HTTP 状态，不回显编码或正文。缺省和 identity 继续读取；gzip 解压尚未实现。
-- 新增 12 个离线回归，覆盖编码链、未知编码、正常 identity、错误信封和自建回环慢速响应。首次全量测试暴露旧超时 fixture 的响应头模拟不准确及回环事件竞态，已修正测试环境并保留原断言；最终全量 **1049 passed / 40.51 秒**。mypy 53 个源文件、Ruff 123 个文件和八工具契约通过；未修改工具 Schema 或运行依赖。
+- JSON with declared nonidentity Content-Encoding returns `UNSUPPORTED_CONTENT_ENCODING` before body reads. Errors retain registered endpoint/status without echoing encoding/body. Absent/identity encodings continue; gzip decoding was not yet implemented at that stage.
+- Added 12 offline regressions for encoding chains, unknown encodings, identity, error envelopes, and slow loopback responses. Initial full tests exposed inaccurate header mocks and a fixture event race; corrected the environment without weakening assertions. Final suite **1049 passed / 40.51 seconds**; mypy 53 files, Ruff 123 files, and contracts passed. No Schema/runtime dependency changes.
 
-## 未发布 — 2026-10-30 HTTP 拒绝响应读取修复
+## Unreleased — 2026-10-30 rejected HTTP response reads
 
-- 连接器在读取正文前检查 HTTP 状态和 Content-Type；重定向、鉴权失败、不可用端点及非 JSON 类型不再主动读取错误页，响应门仍返回原有固定错误。健康端点有效 503 JSON 继续读取；可接受 JSON 类型的判断由连接器与响应门共用。
-- 先用合成响应复现错误页读取，再用自建回环服务验证慢速正文不会把 302、401 或错误 Content-Type 转为超时。新增 17 项回归；定向网络测试 118 passed，全量 **1037 passed / 36.78 秒**；mypy 53 个源文件、Ruff 123 个文件和八工具契约通过。未改变只读网络边界、公开 Schema 或运行依赖。
+- The connector checks status/Content-Type before body reads, avoiding error pages for redirects, authentication failures, unavailable endpoints, and non-JSON types while retaining fixed response-gate errors. Valid health 503 JSON remains readable; connector and gate share acceptable-JSON checks.
+- Reproduced error-page reads with synthetic responses, then verified slow loopback bodies no longer convert 302, 401, or invalid Content-Type into timeouts. Added 17 regressions: targeted network suite 118 passed; full suite **1037 passed / 36.78 seconds**. mypy 53 files, Ruff 123 files, and contracts passed. Read-only boundaries, Schema, and runtime dependencies were unchanged.
 
-## 未发布 — 2026-10-30 Health 证据总数修复
+## Unreleased — 2026-10-30 health evidence counts
 
-- Health 组件不可读或状态缺失时，`coverage` 继续记录缺口，`totalMatched` 改为 null；可读组件与未知状态仍保留。此前可能在 partial 结果中返回确定的 0 或可读条目数，误示匹配范围完整。
-- 新增 7 项合成回归，覆盖不可读组件、路径过滤、合法组件共存、缺状态、完整空结果及 MCP 快照续页。全量 **1020 passed / 36.38 秒**；mypy 53 个源文件、Ruff 122 个文件及八工具契约通过。未修改公开 Schema 或目标访问策略，未连接真实 Spring 实例。
+- Unreadable health components or missing status retain coverage gaps and now set `totalMatched` to null while preserving readable components/unknown states. Previous partial responses could expose a definite count of 0 or of readable items, implying complete matching scope.
+- Added 7 synthetic regressions for unreadable components, path filters, valid peers, missing status, complete empty results, and MCP snapshot continuation. Full suite **1020 passed / 36.38 seconds**; mypy 53 files, Ruff 122 files, and contracts passed. Public Schema/target policy unchanged; no real Spring instances contacted.
 
-## 未发布 — 2026-10-30 预发布检查与工作区盘点
+## Unreleased — 2026-10-30 pre-release checks and worktree inventory
 
-- 预发布脚本读取 Hatch 动态版本，检查源码版本一致性，并在净室阶段校验 wheel 元数据与 CLI 版本。wheel 安装使用 `uv.lock` 导出的离线约束；跳过构建、允许脏工作树或接受跳过测试均标为不完整。
-- 漏洞审计独立为 `--audit`：调用 `uv audit --locked`，审计失败或不可用阻断；未启用时明确报告未执行。门禁返回 0 表示完整通过、1 表示失败、2 表示不完整。
-- 新增 14 个离线门禁回归，覆盖漏洞、超时/工具缺失、动态版本冲突、wheel/CLI 版本不一致、跳过检查、锁文件约束以及 Git 状态或跟踪文件不可读。全量 **1013 passed / 34.54 秒**；mypy 53 个源文件、Ruff 121 个文件、八工具契约及 `git diff --check` 通过。独立执行的 `uv audit --locked` 对 40 个包未发现已知漏洞；联网审计为当时的查询结果，不能替代后续复查。
-- 净室阶段实际构建并验证 wheel 资源、锁定安装、CLI 版本、官方 SDK 两种模式、八工具回环链路和七个 replay 场景。端到端自检首次发现 `pytest` 可执行文件无法导入新增测试所需的项目脚本，已改为仓库规定的 `python -m pytest` 入口。
-- 工作区文件盘点见[交付清单](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/worktree-inventory-2026-10-30.md)；清单不代替逐文件内容审查。未改公开 Schema、生产诊断逻辑或运行依赖；未提交、未发布。
+- The pre-release script reads Hatch dynamic versions, checks source-version agreement, and compares wheel metadata/CLI versions during clean installs. Wheels use offline constraints exported from `uv.lock`; skipped builds, dirty-tree allowances, and accepted skipped tests are incomplete.
+- Independent `--audit` runs `uv audit --locked`, blocking on failure/unavailability and explicitly recording when not run. Exit codes are 0 complete, 1 failed, and 2 incomplete.
+- Added 14 offline gate regressions for audit findings, timeout/missing tools, dynamic-version conflicts, wheel/CLI mismatch, skipped checks, lock constraints, and unreadable Git state/tracked files. Full suite **1013 passed / 34.54 seconds**; mypy 53 files, Ruff 121 files, contracts, and `git diff --check` passed. Independent `uv audit --locked` found no known vulnerabilities in 40 packages at that time, not a substitute for later audits.
+- The clean stage built and verified wheel resources, locked installation, CLI version, both official SDK modes, eight-tool loopback paths, and seven replays. Initial end-to-end checks found the pytest executable could not import project scripts required by new tests; switched to the prescribed `python -m pytest` entry point.
+- See the [worktree inventory](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/worktree-inventory-2026-10-30.md), which does not replace file-content review. Public Schema, production diagnostics, and runtime dependencies were unchanged; not committed or published in that round.
 
-## 未发布 — 2026-10-23 热门生产项目 Nacos 四小时持续运行
+## Unreleased — 2026-10-23 four-hour Nacos soak
 
-- 新增[Nacos 四小时生产模拟](examples/nacos-soak-matrix/README.md)：从 Nacos、PowerJob、Sentinel 候选中随机抽取 alibaba/nacos 2.4.3 固定提交 `f4f8b189cf16186669de5b692d43630ed2c3fda2`（2,391 个 Java 文件 / 1,526 个主 Java / 22 个 Maven 模块，Boot 2.7.18 / Java 21 / MariaDB 11.2），在回环地址、一次性 MariaDB 和独立管理端口上运行四小时。原始分布 jar 的 SOFA Hessian 3.3.6 与 Nacos 需要的 4.0.63 冲突只在复制 jar 中移除旧版；管理 Bearer、8192 步启动缓冲和业务鉴权关闭均为测试配置。
-- 正式 soak **14,401.542 秒**，**68,260 次真实调用全部满足断言**：519 个可见 Bean 基线 52 页、三个周期各 44 页穷尽且无漂移；1/2.5 小时目标重启恢复 9.964/10.623 秒；1.5/3 小时 MariaDB 暂停后 readiness 超时并在解锁后首次检查恢复；最大完整回包 15,242 字节；中位/p95 延迟 242.754/945.435 ms；240 个逐分钟样本，非预期错误为空。结果见[审计报告](.human/reports/nacos-four-hour-2026-10-23.md)、[脱敏聚合](examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.json)和[构建/补丁哈希](examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23-build.json)。
-- 记录目标级健康盲区：Actuator 的 `db` 指标来自内嵌 Derby，外部 MariaDB 暂停时 readiness 超时但 MCP `diagnose_health` 仍为 UP；报告保留 `actuatorObservedExternalDbOutage=false`，不把该结果当作外部数据库健康证明。只验证固定提交的单节点 standalone，不验证集群/HA、配置发布、服务注册、UI、客户端长连接或 JRaft 多节点；未改生产 Python 代码，未提交、未发布。当时离线全量 **999 passed**。
+- Added the [Nacos four-hour simulation](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/nacos-soak-matrix/README.md), randomly selecting alibaba/nacos 2.4.3 commit `f4f8b189cf16186669de5b692d43630ed2c3fda2` from Nacos/PowerJob/Sentinel candidates: 2,391 Java files, 1,526 main Java files, 22 Maven modules, Boot 2.7.18/Java 21/MariaDB 11.2. Ran four hours on loopback with disposable MariaDB and a separate management port. Removed the incompatible SOFA Hessian 3.3.6 from a copied jar because Nacos needs 4.0.63. Management Bearer, 8192-step buffering, and disabled business authentication were test-only settings.
+- Formal soak: **14,401.542 seconds**, **68,260 live calls satisfied every assertion**. Baseline 519 visible Beans across 52 pages; three cycles exhausted 44 pages each without drift. Target restart recovery at 1/2.5 hours took 9.964/10.623 seconds. MariaDB pauses at 1.5/3 hours timed out readiness and recovered on the first post-unpause check. Peak frame 15,242 bytes; median/p95 242.754/945.435 ms; 240 minute samples, no unexpected errors. See [audit](.human/reports/nacos-four-hour-2026-10-23.md), [sanitized aggregate](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.json), and [build/patch hashes](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23-build.json).
+- Retained a target health blind spot: Actuator db observed embedded Derby, so external MariaDB pauses timed out readiness while MCP diagnose_health remained UP. `actuatorObservedExternalDbOutage=false` prevents treating it as external DB health evidence. Verified the pinned single-node standalone only, not cluster/HA, configuration publishing, registration, UI, long-lived client connections, or multinode JRaft. No production Python changes, commit, or publication in that round; offline suite then had **999 passed**.
 
-## 未发布 — 2026-10-23 小型生产调度器 XXL-JOB 验收
+## Unreleased — 2026-10-23 XXL-JOB scheduler acceptance
 
-- 新增[调度器项目矩阵](examples/xxl-job-matrix/README.md)：拉取 XXL-JOB v3.4.0 固定提交 `555b48f2edf0e51cd77971565342d80c15c9f18d`（157 个 Java 文件 / 136 个主 Java，Boot 4.0.5 / Java 21 runtime / MariaDB 11.2），完成八工具功能、稳定性和可用性验收。未修改生产 Python 代码；SSO actuator 放行、管理 Bearer Filter 和 Logback 遮蔽均为临时测试配置。
-- 正式 300 秒运行 **2449 次真实调用全部满足断言**：356 个 Bean / 402 条依赖，356 个可见 Bean 经 35 页穷尽；路由与 db 健康 ok/complete；带原生 SSO 的业务 UI 未绕过；MariaDB 暂停后健康 DOWN、Bean 读取仍可用、恢复后 UP；最大完整回包 15,638 字节；目标停止/同宿主重启恢复。结果见[审计报告](.human/reports/xxl-job-2026-10-23.md)与[脱敏聚合](examples/xxl-job-matrix/results/xxl-job-final-300s.json)。
-- 启动树仍为 partial，迁移端点 404 负向；未验证执行器任务、告警、生产调度集群或 UI。当时全量 **925 passed**；未提交、未发布。
+- Added the [scheduler matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/xxl-job-matrix/README.md) for XXL-JOB v3.4.0 commit `555b48f2edf0e51cd77971565342d80c15c9f18d`: 157 Java/136 main Java files, Boot 4.0.5/Java 21 runtime/MariaDB 11.2. Exercised eight-tool functionality, stability, and availability. No production Python changes; SSO Actuator allowance, management Bearer filter, and Logback masking were temporary test settings.
+- Formal 300-second run: **2449 live calls satisfied every assertion**. 356 Beans/402 dependencies; exhausted 356 visible Beans in 35 pages. Routes/db health ok/complete without bypassing native SSO UI. Pausing MariaDB produced DOWN while Bean reads remained available, then UP after recovery. Peak frame 15,638 bytes; target stop/same-host restart recovered. See [audit](.human/reports/xxl-job-2026-10-23.md) and [sanitized aggregate](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/xxl-job-matrix/results/xxl-job-final-300s.json).
+- Startup trees remained partial and migration endpoints returned negative 404 evidence. Executor jobs, alerts, production scheduler clusters, and UI were not verified. Suite then had **925 passed**; not committed or published in that round.
 
-## 未发布 — 2026-10-23 小众生产项目 HertzBeat 验收
+## Unreleased — 2026-10-23 HertzBeat acceptance
 
-- 新增[小众生产项目矩阵](examples/niche-project-matrix/README.md)：拉取 Apache HertzBeat v1.7.3 固定提交 `67ad4b04ef1b06b62f0e5030a26d0ca069294fa3`（1387 个 Java 文件 / 975 个主 Java，Java 17 / Boot 3.4.2 / Maven / 内嵌 H2），完成八工具功能、稳定性和可用性验收。未修改生产 Python 代码；测试用的管理 Bearer Servlet Filter、Sureness `/actuator/**` 放行规则和 2048 步启动缓冲均只存在于临时副本。
-- 正式 300 秒运行 **1594 次真实调用全部满足断言**：875 个 Bean / 1167 条依赖，873 个可见 Bean 经 87 页穷尽；Flyway 5 条 APPLIED；路由和 db 健康 ok/complete；启动树仍为 partial 并保留节点/深度缺口；最大完整回包 15,072 字节；目标停止/同宿主重启恢复。结果见[审计报告](.human/reports/niche-project-hertzbeat-2026-10-23.md)与[脱敏聚合](examples/niche-project-matrix/results/hertzbeat-final-300s.json)。
-- HertzBeat 的 Spring AI MCP server 保留原生启用，未调用外部模型；首次关闭该 server 会导致 `webMvcSseServerTransportProvider` 缺少依赖 Bean。H2 为内嵌数据库，本轮没有数据库暂停场景；未验证 UI、上游测试、告警投递或生产集群。未提交、未发布。
+- Added the [niche-project matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/niche-project-matrix/README.md) for Apache HertzBeat v1.7.3 commit `67ad4b04ef1b06b62f0e5030a26d0ca069294fa3`: 1387 Java/975 main Java files, Java 17/Boot 3.4.2/Maven/embedded H2. Exercised eight-tool functionality, stability, and availability without production Python changes. Diagnostic Bearer Servlet Filter, Sureness `/actuator/**` allowance, and 2048-step buffering existed only in temporary copies.
+- Formal 300-second run: **1594 live calls satisfied every assertion**. 875 Beans/1167 dependencies; exhausted 873 visible Beans in 87 pages. Flyway had 5 APPLIED records; routes/db health ok/complete. Startup trees remained partial with node/depth gaps. Peak frame 15,072 bytes; target stop/same-host restart recovered. See [audit](.human/reports/niche-project-hertzbeat-2026-10-23.md) and [sanitized aggregate](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/niche-project-matrix/results/hertzbeat-final-300s.json).
+- Kept HertzBeat's native Spring AI MCP server enabled without external model calls; initially disabling it caused a missing dependency Bean for `webMvcSseServerTransportProvider`. H2 was embedded, so no DB-pause case ran. UI, upstream tests, alert delivery, and production clusters were unverified. Not committed/published in that round.
 
-## 未发布 — 2026-10-23 MCP 交付专项门禁
+## Unreleased — 2026-10-23 MCP delivery gate
 
-- MCP 宿主启动时核对八工具契约与处理器集合；缺失或多余处理器立即拒绝启动，移除路由中的 `CAPABILITY_DISABLED` 占位兜底。配置诊断未授权时仍由真实处理器返回该安全拒绝，不修改公开 Schema、依赖或目标策略。
-- 净室门禁逐字节比对 wheel 的 Schema、`py.typed` 与全部 replay JSON；安装后从仓库外执行官方 SDK 两模式、分阶段原始管道握手、八工具真实 HTTP 路由、未掩码配置脱敏、16 KiB 回包和七个 replay 场景。replay 使用 `importlib.resources` 定位包内资源，保留无符号链接、有界文件读取。
-- 修正 source catalog STDIO 测试的 EOF 竞态，读取回复后再关闭输入；配置 CLI 集成测试改为自建回环 fixture，避免探测固定端口上的未知服务。证据及限制见 [MCP 交付专项核验](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/mcp-release-gate-2026-10-23.md)。
+- The host checks eight-tool contract/handler agreement at startup and rejects missing/extra handlers. Removed placeholder CAPABILITY_DISABLED dispatch fallback; unauthorized configuration diagnostics still return that safe denial from real handlers. Public Schema, dependencies, and target policy were unchanged.
+- Clean-install gates compare wheel Schema, `py.typed`, and all replay JSON byte-for-byte. Installed packages run outside the checkout through both official SDK modes, staged raw-pipe handshakes, eight real HTTP tool handlers, unmasked configuration sanitization, 16 KiB frames, and seven replays. replay uses `importlib.resources` while retaining bounded, symlink-rejecting reads.
+- Fixed the source catalog STDIO EOF race by reading replies before closing input. Configuration CLI tests now use self-hosted loopback fixtures rather than probing unknown fixed-port services. See [MCP delivery verification](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/mcp-release-gate-2026-10-23.md) for evidence/limits.
 
-## 未发布 — 2026-10-23 交付前总核验
+## Unreleased — 2026-10-23 final delivery verification
 
-- 源码与依赖闭环：生产代码无 TODO/FIXME/HACK/XXX、`NotImplementedError` 或调试断点；八个公开工具全部绑定真实处理器；运行时第三方导入只有 `mcp` 与 `jsonschema`，二者均已声明；配置诊断默认关闭，未登记时返回 `CAPABILITY_DISABLED`。
-- CLI 启动加固：`--source-catalog` 只接受常规文件，并按 256 KiB 上限分块读取，避免无界内存占用、FIFO 阻塞或设备文件读取；非文件、超限、目标不匹配、缺少令牌变量和非法参数均以具体且不包含值/路径的提示退出（exit 2）。新增 `--version`，与 `__version__`、wheel 元数据一致。
-- 安全依赖：开发依赖 pytest 由 8.4.2 升级至 9.0.3，关闭 `uv audit` 报告的 PYSEC-2026-1845；`uv audit` 对 40 个已解析包报告无已知漏洞。Git 全历史与工作区扫描未发现真实凭证，命中的 PEM/Bearer 均为合成测试向量。
-- 净室验证：wheel 与 sdist 包含 `tools-contract.json`、`py.typed` 与 `replay_data`，不包含测试缓存、`target/` 或示例 jar；在全新 venv 中从 wheel 和 sdist 安装后，`--version`、legacy/2026-07-28 两种 MCP 协议和安装包内 replay 均通过。`uv lock --check` 通过。
-- 文档对齐：README/README.zh-CN/SPEC 增补 `--version`；修正 SPEC 中过期的 `mypy src scripts`、默认测试范围、演示校验命令和“`--version` 未交付”表述；清理文档中的用户主目录绝对路径。
-- 最终离线 **922 passed**，mypy 53 个源文件、Ruff 113 个文件、八工具契约通过；没有 skip/xfail。详见[交付前总核验](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/final-delivery-audit-2026-10-23.md)。版本仍为 0.2.0，Git 无发布标签；本轮未提交、未发布，也不声称新增真实目标或生产矩阵验收。
+- Source/dependency checks found no production TODO/FIXME/HACK/XXX, `NotImplementedError`, or debug breakpoints. All eight tools bind real handlers. Runtime third-party imports were only declared `mcp` and `jsonschema`; configuration diagnostics remain disabled by default with CAPABILITY_DISABLED when unregistered.
+- Hardened --source-catalog to regular files with chunked 256 KiB reads, avoiding unbounded allocation, FIFOs, and device reads. Invalid files, overflow, target mismatch, missing token variables, and invalid arguments exit 2 with specific messages revealing no values/paths. Added --version matching __version__ and wheel metadata.
+- Upgraded development pytest 8.4.2 to 9.0.3 to address PYSEC-2026-1845 reported by uv audit; 40 resolved packages had no known findings. Git history/worktree scans found no real credentials; PEM/Bearer matches were synthetic vectors.
+- Wheel/sdist include tools-contract.json, py.typed, and replay_data, excluding test caches, target/, and example jars. Fresh wheel/sdist venvs passed --version, legacy/2026-07-28 MCP modes, and packaged replay. uv lock --check passed.
+- Added --version to README/README.zh-CN/SPEC, corrected obsolete mypy src scripts, default-test scope, demo commands, and claims that --version was unimplemented; removed user-home absolute paths from docs.
+- Final offline suite **922 passed**; mypy 53 files, Ruff 113 files, and contracts passed, with no skip/xfail. See [final audit](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/final-delivery-audit-2026-10-23.md). Version remained 0.2.0 without release tags at that stage; no commit/publication or expanded real-target/production-matrix claim.
 
-## 未发布 — 2026-10-23 超大型生产系统 Fineract 验收
+## Unreleased — 2026-10-23 Fineract acceptance
 
-- 新增 [超大型项目矩阵](examples/ultra-project-matrix/README.md)：拉取 Apache Fineract 1.9.0 固定提交 `5d96e8cc32ff63f97d5ac15e19c6fafee0c31357`（4565 个 Java 文件 / 4087 个主 Java，Java 17 / Boot 3.1.7 / Gradle 8.5），在一次性 PostgreSQL 16 和回环 HTTP 上启动原生 provider，完成八工具功能、稳定性与可用性验收。临时构建仅在 `pluginManagement` 增加公共镜像以解析已停用 JCenter 的文档插件依赖；Boot/BOM、运行依赖和诊断网络边界未改。
-- 发现并修复 mappings 对 JAX-RS 业务路由的假阴性：Actuator `servlets` 显示 Jersey `/api/*` 覆盖时，查询路径可能由其提供但 DispatcherServlet 无记录；修复后返回 `partial`、`totalMatched=null` 和 `NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED`。新增 4 个离线回归，全量 **913 passed**。
-- 正式 300 秒运行 **1202 次真实调用全部满足断言**：2544 个 Bean / 5626 条依赖，2524 个可见 Bean 经 252 页穷尽；最大完整回包 15,170 字节；数据库暂停后健康不再 UP、Bean 读取仍可用、恢复后 UP；目标停止/同宿主重启恢复；JAX-RS 业务路由探针为 partial/gap。8192 步启动快照触发 `NORMALIZATION_LIMIT`，测试启动器改用 2048 步取得正向证据，保留容量限制。结果见[审计报告](.human/reports/ultra-project-fineract-2026-10-23.md)与[脱敏聚合](examples/ultra-project-matrix/results/fineract-final-300s.json)。
-- 首轮完整门禁在重负载后有 1 个 STDIO 进程测试失败，单独及第二次全量均通过；保留为时序波动，不修改测试或放宽断言。未提交、未发布；不声称生产集群、完整版本矩阵或长期稳定性通过。
+- Added the [ultra-large project matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/ultra-project-matrix/README.md) for Apache Fineract 1.9.0 commit `5d96e8cc32ff63f97d5ac15e19c6fafee0c31357`: 4565 Java/4087 main Java files, Java 17/Boot 3.1.7/Gradle 8.5. Ran the native provider with disposable PostgreSQL 16 and loopback HTTP for eight-tool functionality/stability/availability acceptance. Temporary builds added only a public pluginManagement mirror for documentation-plugin dependencies from retired JCenter; Boot/BOM, runtime dependencies, and diagnostic network boundaries were unchanged.
+- Fixed mappings false negatives for JAX-RS routes when Actuator servlets reports Jersey `/api/*` coverage but DispatcherServlet has no matching record. Such results now retain partial, totalMatched=null, and NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED. Added 4 offline regressions; full suite **913 passed**.
+- Formal 300-second run: **1202 live calls satisfied every assertion**. 2544 Beans/5626 dependencies; exhausted 2524 visible Beans in 252 pages. Peak frame 15,170 bytes. Pausing the DB made health non-UP while Bean reads remained available, then recovered to UP; target stop/same-host restart recovered. JAX-RS probes remained partial/gap. An 8192-step snapshot hit NORMALIZATION_LIMIT; the test launcher used 2048 steps for positive evidence while retaining the capacity limit. See [audit](.human/reports/ultra-project-fineract-2026-10-23.md) and [sanitized aggregate](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/ultra-project-matrix/results/fineract-final-300s.json).
+- The first full gate after heavy load had 1 STDIO process-test failure; isolated and second full runs passed. Retained it as timing variability without modifying tests or weakening assertions. No commit/publication in that round and no production-cluster, full-version-matrix, or long-term-stability claim.
 
-## 未发布 — 2026-10-23 故障矩阵问题修复
+## Unreleased — 2026-10-23 fault-matrix fixes
 
-- 关闭 PC-01、PC-02、LS-01，见[调研、修复与复验](.human/reports/production-chaos-remediation-2026-10-23.md)。说明/异常字段的 name/value 描述符传播 taint，独立出口拒绝未脱敏值；编码或无法安全输出的名称不能恢复关联值，同名 OpenAPI 业务 Schema 保留。健康错误仅提取全限定类型形态，原消息不回显。
-- 游标登记前校验安全性和唯一性，最多 16 次候选；失败不污染缓存。分页改用共享编码快照和偏移，正常续页仅处理当前页，保留原始 60 秒 TTL、32 MiB/LRU、16 KiB 完整回包及凭据策略刷新后的整快照复验/删除。
-- 新增 28 个合成回归，最终 **909 passed**，mypy/Ruff/契约通过。三项真实项目最终 **425 次调用全部满足断言**，ThingsBoard 首次连续 125 页穷尽 1255 个可见 Bean，指令 canary 均未透传，旧失败记录不覆盖。未修改公开 Schema、运行依赖或目标策略，未发布；不声称生产集群或完整版本矩阵通过。
+- Closed PC-01, PC-02, and LS-01; see [investigation, fixes, and verification](.human/reports/production-chaos-remediation-2026-10-23.md). Description/exception name/value descriptors propagate taint, and the independent gate rejects unredacted values. Encoded/unsafe names cannot restore associated values; same-named OpenAPI business Schemas are preserved. Health errors extract fully qualified type shapes only, not original messages.
+- Check cursor safety/uniqueness before registration, trying at most 16 candidates without polluting caches on failure. Pagination shares encoded snapshots and offsets, processing only the current page normally. Retained 60-second TTL, 32 MiB/LRU, 16 KiB complete frames, and whole-snapshot revalidation/removal after credential-policy changes.
+- Added 28 synthetic regressions; final suite **909 passed**, with mypy/Ruff/contracts. Final runs on three live projects had **425 calls satisfying every assertion**. ThingsBoard exhausted 1255 visible Beans across 125 consecutive pages; instruction canaries were not forwarded and prior failures were preserved. Public Schema, runtime dependencies, and target policy were unchanged; no publication or production/full-version-matrix claim.
 
-## 未发布 — 2026-10-23 真实项目故障注入
+## Unreleased — 2026-10-23 live-project fault injection
 
-- 增加[生产采用项目故障矩阵](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/production-chaos-2026-10-23.md)：ShenYu、ThingsBoard、DolphinScheduler 原生后端构建/隔离启动，选定流程 399 次真实 MCP 调用，覆盖 PostgreSQL 暂停、连接池耗尽、启动冲突/缺依赖/循环、1000 个额外实际 Bean、坏响应与取消恢复。ThingsBoard 仅在临时副本增加可选 Actuator，DolphinScheduler 使用开发 Standalone，均不代表生产集群验收。
-- 新确认 PC-01 健康详情 name/value 指令透传，补独立 canary 断言并保留真实失败；PC-02 记录 ThingsBoard 大快照连续分页在绝对 60 秒 TTL 内无法穷尽的可用性限制；旧随机游标 LS-01 仍未修复。新增离线调查探针，退出 0 表示缺陷复现；默认仍 881 passed，不能据此声称安全/稳定性全部通过。生产实现、公开 Schema、Python 运行依赖未改，未提交或发布。
+- Added the [production-adopted project fault matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/production-chaos-2026-10-23.md): native ShenYu, ThingsBoard, and DolphinScheduler backends built/launched in isolation. Selected workflows made 399 live MCP calls covering PostgreSQL pause, pool exhaustion, startup conflicts/missing dependencies/cycles, 1000 extra real Beans, malformed responses, and cancellation recovery. Optional Actuator was added only to a temporary ThingsBoard copy; DolphinScheduler used development Standalone. These were not production-cluster acceptance.
+- Confirmed PC-01 instruction forwarding via health name/value details, adding independent canary assertions and preserving failure evidence. PC-02 recorded large ThingsBoard snapshots that could not be exhausted within the absolute 60-second TTL; random-cursor LS-01 remained unfixed. Added offline investigation probes whose exit 0 means defect reproduction. Default suite remained 881 passed, not proof of complete safety/stability. Production implementation, Schema, and Python runtime dependencies were unchanged; no commit/publication in that round.
 
-## 未发布 — 2026-10-22 综合审查修复
+## Unreleased — 2026-10-22 comprehensive review fixes
 
-- 增加[大型原生项目稳定性矩阵](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/large-project-stability-2026-10-22.md)：Flowable、Spring Cloud Data Flow、Reactive Spring Boot Admin 固定提交构建与隔离运行，最终 1748 次真实调用，覆盖完整可见分页、四路并发、两种 SDK 协议和实例重启恢复。发现并确定复现随机游标与输出安全门冲突；保留真实 `UNSAFE_OUTPUT` 失败，生产修复尚未实施。默认离线测试仍为 881 passed，不将短时运行或 partial 结果声明为完整稳定性/兼容性通过。
-- 关闭遗留 R1–R5：保留 PathItem 非冲突相邻字段，冲突/不可读操作计数 unknown；修复 Schema resource 方言继承；统一受限 RFC3339 校验及精确时间排序，非法启动时间不再冒充完整漂移比较。新增 44 个合成回归，全量 **881 passed**。通过可复现的本地 springdoc 3.1.1 源码补丁修复过早分组实例化及固定文档入口，JHipster 独立管理端口完成 18 次验收，Petclinic REST 复验 15 次通过；缓存 jar、公开工具 Schema 和 Python 运行依赖未改。见[闭环报告与限制](.human/reports/remaining-findings-remediation-2026-10-22.md)。
-- 修复较大项目暴露的两个 OpenAPI 缺陷：共享引用的数组元数据改为有界独立投影；业务属性 `description` 的 Schema 不再被误清空，原始说明/凭据仍受递归脱敏与输出安全门限制。新增 21 个合成回归，全量 837 passed；Petclinic REST 15 次复验通过。JHipster 保留原生 API-docs/JWT/Liquibase 的同端口配置完成 18 次验收；独立管理端口组合的第三方初始化故障仍未修复。见[修复与限制](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/openapi-project-matrix-remediation-2026-10-22.md)。
-- 增加[较大公开项目真实矩阵](examples/project-matrix/README.md)：保留 Petclinic、Petclinic REST、JHipster 的原生 Boot 版本，主矩阵记录 43 次调用，覆盖 416–486 个 Bean、分页、数据库健康、原生 OpenAPI 简单 Schema、JWT 401/403 和 8 条已应用 Liquibase。复杂 OpenAPI 的两个诊断缺陷及 JHipster API-docs 启动阻塞保留为失败，不计作通过；本次只新增验收材料，未修复这些缺陷。
-- 修复真实 WebFlux 函数式路由的嵌套 AND、`Accept:` / `Content-Type:` predicate 解析；未知 OR/NOT/自定义语法继续 partial。新增 34 个离线回归，全量 816 passed；Boot 3.2.4 / WebFlux / Java 21 的 12 次真实调用验收通过，原始失败证据保留。见 [修复与复验](.human/reports/webflux-predicate-remediation-2026-10-22.md)。
-- 关闭 [综合审查](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/comprehensive-review-2026-10-22.md)的 CR-01 至 CR-13；逐项证据见[修复验收报告](.human/reports/comprehensive-remediation-2026-10-22.md)。超长请求 ID 在 SDK 前拒绝并以 null ID 结束会话；真实 SDK 工具出口再次检查 16 KiB 上限。
-- 下沉共享 `Services` 与安全诊断信封，八工具共用每目标两个读取槽和一个 15 秒 deadline；排队、读取、协作分析及输出检查使用同一预算。
-- 修复 OpenAPI 组合/字典 Schema、本地 PathItem/Response 引用及 3.0/3.1 `$ref` 语义；未知 Schema 语义明确 partial。修复迁移缺证据推导、checksum 可比性、Bean 类型查询的父子遮蔽、成功迁移状态及隐藏 UP 组件的可见性结论。
-- STDIO 进程测试按回复完成再关闭输入，并使用有时限的管道读取。CI/发布复用校验工作流，发布依赖全部门禁且校验版本标签；没有执行发布。
-- 增加 `uv.lock`、固定开发工具版本及 wheel 的 `py.typed`。隔离安装通过官方 SDK 2.3.0 客户端的 legacy / 2026-07-28 发现及工具错误检查。
-- 增加本地受信 `--token-env` Bearer 绑定，限制令牌格式并纳入已知秘密脱敏；不增加任意头透传或 Basic 支持，不改变工具公开 Schema、运行依赖或回环边界。
-- 明确批准后，针对 `<TDD checkout>` 的已提交 S8 副本完成 Boot 3.5.16 / Java 21 / MVC / JWT / 临时 PostgreSQL 16 验收。TDD 原工作区保留未完成业务代码，只新增已批准的可选 Actuator Maven profile。六个诊断端点均只读，匿名拒绝，环境和配置值端点关闭；结果见 [Shop 摘要](examples/tdd-runtime/verification.json)。这不代表全版本矩阵或 TDD 当前红阶段业务已完成。
-- 离线全量 **782 passed**，mypy 51 文件、Ruff、八工具契约、wheel/sdist 构建及安装验证通过。
-- 交付审计追加修复：drift 在 startup 证据缺失时返回显式 `STARTUP_EVIDENCE_UNAVAILABLE` 而不是 `ok`；mappings 对不可读 patterns/methods 标记 partial 并禁止伪造 unrestricted；Bean 缺失类型/scope、health details/startup tags 截断、迁移预算耗尽及 date-time 输出契约均显式标注；配置诊断新增 `--config-prefix/--config-property/--config-profiles/--config-allow-values`；replay fixtures 随包分发，安装 wheel 后可重放。修复与验证证据见 [交付审计修复与验证](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/delivery-audit-remediation-2026-10-22.md)。
+- Added the [large native-project stability matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/large-project-stability-2026-10-22.md): pinned Flowable, Spring Cloud Data Flow, and reactive Spring Boot Admin builds/isolated runs made 1748 live calls, exercising full visible pagination, four-way concurrency, both SDK modes, and restart recovery. Reproduced random-cursor/output-gate conflicts, preserving real UNSAFE_OUTPUT failures before production fixes. Default offline tests remained 881 passed; short runs/partial results were not treated as complete stability/compatibility.
+- Closed R1–R5: retain nonconflicting PathItem siblings, keep conflict/unreadable counts unknown, fix Schema resource dialect inheritance, and unify restricted RFC3339/exact-time sorting so invalid startup times cannot imply complete drift comparison. Added 44 synthetic regressions; **881 passed**. A reproducible local springdoc 3.1.1 source patch fixed early grouped instantiation/fixed document entry. JHipster separate management-port acceptance had 18 calls; Petclinic REST recheck had 15 passes. Cached jars, public Schema, and Python runtime dependencies were unchanged. See [closure and limits](.human/reports/remaining-findings-remediation-2026-10-22.md).
+- Fixed two OpenAPI defects found in larger projects: independently bounded shared-array metadata projections and preservation of business-property description Schemas while still sanitizing original descriptions/credentials. Added 21 regressions; 837 passed, with 15 Petclinic REST rechecks. Native same-port JHipster API-docs/JWT/Liquibase had 18 passing calls; third-party separate-management-port initialization remained unfixed. See [fixes and limits](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/openapi-project-matrix-remediation-2026-10-22.md).
+- Added the [larger public-project live matrix](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/project-matrix/README.md), preserving native Petclinic, Petclinic REST, and JHipster Boot versions. The main matrix recorded 43 calls over 416–486 Beans, pagination, DB health, native simple OpenAPI Schemas, JWT 401/403, and 8 applied Liquibase records. Two complex-OpenAPI diagnostic defects and JHipster API-docs startup blockage remained failures, not passes. This round added acceptance evidence without fixing those defects.
+- Fixed native WebFlux functional-route nested AND and Accept:/Content-Type: predicate parsing; unknown OR/NOT/custom syntax remains partial. Added 34 offline regressions; 816 passed. 12 live Boot 3.2.4/WebFlux/Java 21 calls passed while preserving original failures. See [fix and recheck](.human/reports/webflux-predicate-remediation-2026-10-22.md).
+- Closed CR-01 through CR-13 from the [comprehensive review](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/comprehensive-review-2026-10-22.md); see [per-finding acceptance](.human/reports/comprehensive-remediation-2026-10-22.md). Reject oversized request IDs before the SDK, ending the session with a null ID; the actual SDK tool-send boundary rechecks 16 KiB.
+- Shared Services and safe diagnostic envelopes now coordinate two read slots per target and one 15-second deadline across all tools, including queueing, reads, cooperative analysis, and output checks.
+- Fixed composed/dictionary OpenAPI Schemas, local PathItem/Response references, and 3.0/3.1 $ref semantics; unknown semantics remain partial. Fixed unsupported migration inference, checksum comparability, Bean type-query parent/child shadowing, successful migration states, and hidden-UP visibility conclusions.
+- STDIO tests close input only after replies and use bounded pipe reads. CI/release share validation, with release dependent on all gates and matching tags. No publication was executed in that round.
+- Added uv.lock, pinned development tools, and wheel py.typed. Isolated installation passed official SDK 2.3.0 legacy/2026-07-28 discovery and tool-error checks.
+- Added trusted local --token-env Bearer binding with format restrictions and known-secret sanitization. No arbitrary header forwarding or Basic support; public Schema, runtime dependencies, and loopback scope were unchanged.
+- After explicit approval, verified a committed S8 copy of `<TDD checkout>` with Boot 3.5.16/Java 21/MVC/JWT/disposable PostgreSQL 16. Preserved unfinished business code in the original TDD worktree, adding only an approved optional Actuator Maven profile. Six diagnostic endpoints were read-only with anonymous rejection and env/config value endpoints disabled. See [Shop summary](https://github.com/neilmorse/spring-runtime-mcp/blob/v0.2.10/examples/tdd-runtime/verification.json). This does not establish a full-version matrix or completion of red-stage TDD business work.
+- Full offline suite **782 passed**, with mypy 51 files, Ruff, eight-tool contracts, wheel/sdist builds, and installation checks.
+- Additional audit fixes: missing startup evidence yields STARTUP_EVIDENCE_UNAVAILABLE rather than ok in drift; unreadable mappings patterns/methods remain partial without invented unrestricted status. Missing Bean type/scope, truncated health details/startup tags, migration budget exhaustion, and date-time contracts retain explicit evidence. Added --config-prefix/--config-property/--config-profiles/--config-allow-values; packaged replay works after wheel installation. See [audit fixes and verification](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/delivery-audit-remediation-2026-10-22.md).
 
 ## v0.2.0 — 2026-10-22
 
-- 关闭 2026-10-18 逻辑与边界审计的 TC-BUG-01 至 15；连接器增加数字地址固定与 peer 校验，安全静态清单仅对 `transport/actuator_http.py` 放行 `socket`/`http.client` 导入并新增禁止原始套接字写入。全量 730 passed。
-- 工具契约 JSON 移至 `src/spring_runtime_mcp/schemas/`，通过 `importlib.resources` 加载，随 wheel 分发。
-- 增加 hatchling 构建后端、Apache-2.0 许可证、英文 README、`SECURITY.md` 与 GitHub Actions CI（Python 3.11–3.14 测试、mypy/ruff、wheel 构建及干净环境 stdio 握手）。`uv build` 产物已在隔离虚拟环境安装并完成 `initialize`/`tools/list`。
-- STDIO 宿主迁移到官方 `mcp` Python SDK 2.x 的 lowlevel `Server`，新增运行依赖 `mcp>=2.3,<3`。握手协商、初始化门禁、JSON-RPC 错误映射与取消由 SDK 负责；工具描述符、outputSchema 校验、脱敏与 16 KiB 预算是本项目逻辑。
-- 协议行为变化，客户端可能感知：
-  - `initialize` 之前只接受 `ping`；提前的 `tools/*` 返回 JSON-RPC `-32602`。
-  - 未知工具返回 `-32602`（此前为 `-32600` 或失败信封）。
-  - 不支持握手版本（如 `2026-07-28`）协商到 SDK 的最新 handshake 版本 `2025-11-25`，不回显请求版本。
-  - 传输层无法解析的帧（非法 JSON、`jsonrpc` 非 `"2.0"`、非字符串/布尔/浮点 id、`params` 非对象）被直接丢弃而不回应；原有“不触达处理器、零 IO”的安全性质由 SDK 解析边界保证，对应测试改为断言该性质。
-  - 16 KiB 预算现在包含 2026-era 响应的 `io.modelcontextprotocol/serverInfo` `_meta` 戳。
-- 安全静态清单把 `mcp`/`mcp_types` 的导入范围限制在 `server.py` 与 `cli.py`；`transport/stdio.py` 仍只服务重放 CLI。
-- 真实应用验证：新增 `examples/spring-boot-demo`（Spring Boot 3.4.5 / Java 21、H2 + Flyway、独立只读管理端口、`BufferingApplicationStartup`）与 `scripts/check_demo_app.py`；提交的 `transcript.jsonl` 覆盖 initialize、tools/list 及六个读工具。
-- 修复真实 `/actuator/beans` 互操作缺陷：Boot 仅对子上下文输出 `parentId`，缺省应视为根上下文而不是未知父容器；此前所有真实单上下文应用都会被判为 partial 且缺失 Bean 分析无法给出阻塞链。对应回归见 `tests/unit/test_bean_graph.py` 与 `test_rw06_architecture_regressions.py`。
-- 验证计数更新为 730 passed；真实应用验证不属于默认离线门禁，需先启动演示应用且只访问回环管理端口。
+- Closed TC-BUG-01 through 15 from the 2026-10-18 logic/boundary audit. Added numeric-address pinning and peer checks; static safety rules permit socket/http.client imports only in transport/actuator_http.py and prohibit raw socket writes. Full suite: 730 passed.
+- Moved tool-contract JSON into src/spring_runtime_mcp/schemas/, loaded with importlib.resources and distributed in the wheel.
+- Added hatchling, Apache-2.0, an English README, SECURITY.md, and GitHub Actions CI: Python 3.11–3.14, mypy/ruff, wheel builds, and clean STDIO handshakes. Isolated uv build artifacts completed initialize/tools/list.
+- Migrated STDIO to the official mcp Python SDK 2.x lowlevel Server with mcp>=2.3,<3. The SDK handles negotiation, initialization gates, JSON-RPC errors, and cancellation. Tool descriptors, outputSchema validation, sanitization, and 16 KiB budgets remain project logic.
+- Client-visible protocol changes:
+  - Only ping is accepted before initialize; early tools/* returns JSON-RPC -32602.
+  - Unknown tools return -32602, previously -32600 or a failed envelope.
+  - Unsupported handshake versions such as 2026-07-28 negotiate to the SDK's latest handshake version, 2025-11-25, rather than echoing the request.
+  - Unparseable transport frames (invalid JSON, jsonrpc other than "2.0", unsupported id types, or nonobject params) are discarded without replies. The SDK parse boundary preserves the no-handler/no-I/O safety property, which the corresponding tests now assert.
+  - The 16 KiB budget now includes the io.modelcontextprotocol/serverInfo _meta stamp in 2026-era responses.
+- Static safety rules restrict mcp/mcp_types imports to server.py and cli.py; transport/stdio.py remains for replay CLI only.
+- Added live-application verification with examples/spring-boot-demo (Boot 3.4.5/Java 21, H2/Flyway, separate read-only management port, BufferingApplicationStartup) and scripts/check_demo_app.py. The committed transcript.jsonl covers initialize, tools/list, and six read tools.
+- Fixed real /actuator/beans interoperability: Boot emits parentId only for children, so absence means root rather than unknown parent. Previously real single-Context apps were classified partial and could not produce missing-Bean blocking chains. Regressions are in tests/unit/test_bean_graph.py and test_rw06_architecture_regressions.py.
+- Updated the count to 730 passed. Live-application checks are outside the default offline gate and require a running demo with loopback management access only.
 
 ## v0.1.0 — 2026-10-17
 
-首次源码封板，版本号与 `pyproject.toml`、MCP `serverInfo.version` 一致。本记录描述本地 Git 提交范围，不代表包发布、部署或生产验收。
+Initial source freeze, with version matching pyproject.toml and MCP serverInfo.version. This records local Git scope, not package publication, deployment, or production acceptance.
 
-### 交付范围
+### Delivered scope
 
-- 八个按名称排序注册的诊断工具：Bean/条件、路由、健康、迁移、启动、配置、OpenAPI 与漂移。
-- Bean 别名和父子容器依赖图、嵌套条件三值归因、同文档 OpenAPI 引用展开，以及缺证据时的 partial/unknown 结果。
-- 自实现 STDIO JSON-RPC 宿主、启动时登记 origin 的标准库 HTTP 连接器和固定场景离线重放 CLI。
-- 固定 GET 端点、不跟随重定向、字段投影和双层脱敏、查询绑定游标，以及包含 structuredContent 与文本副本的 16,384 字节完整回包预算。
-- 八工具 JSON 契约、合成多版本 fixtures、离线/回环集成及安全回归，目标配置与客户端接入文档。
+- Eight name-sorted tools: Beans/conditions, routes, health, migrations, startup, configuration, OpenAPI, and drift.
+- Bean aliases/parent-child dependency graphs, three-valued nested conditions, in-document OpenAPI references, and partial/unknown results when evidence is missing.
+- A custom STDIO JSON-RPC host, standard-library HTTP connector bound to a startup-registered origin, and fixed-scenario offline replay CLI.
+- Fixed GET endpoints, no redirects, field projection/two-layer sanitization, query-bound cursors, and a 16,384-byte complete-response budget including structuredContent and text copies.
+- Eight-tool JSON contracts, synthetic multi-version fixtures, offline/loopback integration and security regressions, target setup, and client guides.
 
-### 封板验证
+### Source-freeze validation
 
-在仓库根目录实际执行，全部使用缓存依赖；未连接真实 Spring Boot 或生产目标。HTTP 集成仅使用测试自行启动的回环 fixture 服务。
+Executed at the repository root with cached dependencies, without real Spring Boot or production targets. HTTP integration used test-created loopback fixture services only.
 
-| 检查 | 命令 | 结果 |
+| Check | Command | Result |
 | --- | --- | --- |
-| 全量测试 | `uv run --offline --no-project --with pytest==8.4.2 --with jsonschema==4.25.1 python -m pytest -q` | 639 passed，22.35 秒 |
-| 类型检查 | `uv run --offline --no-project --with mypy==1.18.2 --with jsonschema==4.25.1 python -m mypy src/spring_runtime_mcp` | 48 个源文件通过 |
-| Lint | `uv run --offline --no-project --with ruff==0.14.1 ruff check src tests scripts` | 通过 |
-| 格式 | `uv run --offline --no-project --with ruff==0.14.1 ruff format --check src tests scripts` | 75 个文件通过 |
-| 契约 | `uv run --offline --no-project --with jsonschema==4.25.1 python scripts/validate_tool_contract.py` | 8 组独立 input/output schemas、144+ 合成断言通过 |
+| Full suite | `uv run --offline --no-project --with pytest==8.4.2 --with jsonschema==4.25.1 python -m pytest -q` | 639 passed, 22.35 seconds |
+| Types | `uv run --offline --no-project --with mypy==1.18.2 --with jsonschema==4.25.1 python -m mypy src/spring_runtime_mcp` | 48 source files passed |
+| Lint | `uv run --offline --no-project --with ruff==0.14.1 ruff check src tests scripts` | Passed |
+| Format | `uv run --offline --no-project --with ruff==0.14.1 ruff format --check src tests scripts` | 75 files passed |
+| Contract | `uv run --offline --no-project --with jsonschema==4.25.1 python scripts/validate_tool_contract.py` | 8 isolated input/output schemas and 144+ synthetic assertions passed |
 
-本次未单独执行 Node 包装入口、wheel/sdist 构建、客户端互操作或真实实例版本矩阵。
+Node wrappers, wheel/sdist builds, client interoperability, and live-instance version matrices were not independently checked in this round.
 
-### 已知限制
+### Known limitations
 
-- 当前宿主未使用官方 MCP Python SDK；有限 JSON-RPC 方法测试不能证明完整 MCP 协议合规或所有客户端兼容。
-- HTTP 连接器尚无完整的 DNS 全组白名单验证、数字 IP 固定建连、实际 peer IP/port 校验和目标凭据绑定；HTTPS 使用默认 TLS 上下文，尚无真实 TLS/SNI 矩阵验收。远程/生产使用仍需完成安全规格的独立验收。
-- 上游读取有字节上限和套接字超时，但完整绝对时限、解压预算与在途请求取消仍需独立验收。
-- Boot 2.7/3.x/4.x、MVC/WebFlux 的证据来自合成 fixtures，未完成真实 Java/Boot/认证组合验收；源码类型与工厂关联仍依赖显式 SourceCatalog 事实。
-- 尚无显式构建后端、依赖锁文件或已验证的分发产物。本版不宣称满足 SPEC 中全部产品目标。
-- [红队审计](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/security-redteam-2026-10-17.md)及其机器清单是较早代码基线的历史证据，不是新增模块的完整审计。
+- The host did not yet use the official MCP Python SDK. Limited JSON-RPC method tests did not establish full protocol compliance or every client's compatibility.
+- The HTTP connector lacked complete resolved-address validation, numeric-address pinning, actual peer IP/port checks, and target credential binding. HTTPS used a default TLS context without a live TLS/SNI matrix. Remote/production use still required independent safety-spec acceptance.
+- Upstream reads had byte limits/socket timeouts, but complete absolute deadlines, decompression budgets, and in-flight cancellation still required separate acceptance.
+- Boot 2.7/3.x/4.x and MVC/WebFlux evidence came from synthetic fixtures, without a real Java/Boot/authentication matrix. Source-type/factory correlations still required explicit SourceCatalog facts.
+- No explicit build backend, dependency lock, or verified distribution artifacts existed at this stage. This version did not claim every SPEC product goal.
+- The [red-team audit](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/audits/security-redteam-2026-10-17.md) and machine inventory describe an earlier baseline, not complete auditing of new modules.
 
-本次封板整理不改变公开 inputSchema/outputSchema、运行依赖、目标白名单或目标配置。
+The source-freeze cleanup did not change public inputSchema/outputSchema, runtime dependencies, target allowlists, or target configuration.

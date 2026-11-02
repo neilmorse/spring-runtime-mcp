@@ -1,6 +1,6 @@
 # Spring Boot Runtime Diagnostics MCP
 
-[中文说明](README.zh-CN.md)
+[Chinese README](README.zh-CN.md)
 
 Give your coding assistant access to what is actually running in a Spring Boot application. This MCP server reads authorized Actuator and OpenAPI data to help investigate Beans, routes, health, database migrations and startup problems.
 
@@ -28,7 +28,9 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --version
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --base-url http://127.0.0.1:18081
 ```
 
-Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [first-query guide](docs/first-query.md) or use the [client configuration templates](docs/client-configuration.md) (both in Chinese).
+Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [English first-query guide](docs/first-query.md); additional [client configuration templates](docs/client-configuration.md) cover other clients.
+
+Try the [synthetic route demo](docs/demo.md) using the public package without preparing an application, then [share first-query feedback](docs/trial-feedback.md). The replay needs no Spring process and does not establish live application or client compatibility.
 
 ## Boundaries
 
@@ -38,6 +40,6 @@ Tools do not write to the target, restart applications, or read heap dumps or ra
 
 [Documentation](docs/README.md) · [Tool contract](src/spring_runtime_mcp/schemas/tools-contract.json) · [Source facts](docs/source-catalog.md) · [Development and checks](docs/launch/README.md)
 
-[Apache-2.0](LICENSE) · [Report a security issue](SECURITY.md)
+[Apache-2.0](LICENSE) · [Contributing](CONTRIBUTING.md) · [Report a security issue](SECURITY.md)
 
 <!-- mcp-name: io.github.neilmorse/spring-runtime-mcp -->

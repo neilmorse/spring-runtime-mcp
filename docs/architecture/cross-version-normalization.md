@@ -1,60 +1,60 @@
-# 当前响应归一化与关系分析
+# Response normalization and relationship analysis
 
-归一化处理经过固定 HTTP 门禁的 Actuator/OpenAPI JSON。实际端点和安全边界见[安全架构](security-and-sanitization.md)；字段以 [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) 为准。
+Normalization processes Actuator/OpenAPI JSON accepted by fixed HTTP gates. See [security architecture](security-and-sanitization.md) for actual endpoints and boundaries; the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) defines fields.
 
-## 输入与版本证据
+## Inputs and version evidence
 
-ResponseGateReader 接受普通 JSON 及 Actuator v2/v3 媒体类型，构造带 target、snapshot、observation、observedAt 和 endpoint 身份的 ParsedObservation。适配器依据报告结构读取上下文和领域数据；精确 Boot 版本没有可用证据时为 null。在线链路按工具需要读取固定端点，不执行自动能力握手、版本探测或多路径回退。
+ResponseGateReader accepts ordinary JSON and Actuator v2/v3 media types, constructing ParsedObservation with target, snapshot, observation, observedAt, and endpoint identities. Adapters read Contexts and domain data from reported structures; exact Boot version is null without evidence. Online calls read required fixed endpoints without automatic capability handshakes, version probing, or multi-path fallback.
 
-| 领域 | 当前归一化行为 |
+| Domain | Normalization behavior |
 | --- | --- |
-| beans | 解析 contexts/beans、类型、scope、aliases 和 dependencies，建立 Context 与 Bean 身份及可见依赖图 |
-| conditions | 读取 positiveMatches/negativeMatches，识别有界已知条件消息并归一化 outcome；未知语法保留缺口 |
-| mappings | 提取 MVC dispatcher、WebFlux 注解及可识别函数式路由中的路径、方法、handler、Context 和栈 |
-| health | 遍历 components/details 等可见组件，区分聚合状态、详情隐藏、不可读状态及树深度限制 |
-| flyway/liquibase | 分别读取报告库存及上下文/迁移 Bean 身份，投影版本、changeSet、checksum、顺序和状态 |
-| startup | 解析 timeline/events 的事件身份、父节点和持续时间，筛选慢步骤并输出祖先链 |
-| env/configprops | 在登记策略内归一化来源、绑定与有效值；配置默认关闭且值默认隐藏 |
-| openapi | 识别支持的 OpenAPI 文档结构，投影操作或 Schema 并有界解析同文档引用 |
+| beans | Parse contexts/beans, types, scope, aliases, and dependencies to establish Context/Bean identities and the visible dependency graph. |
+| conditions | Read positiveMatches/negativeMatches, recognize bounded known condition messages, and normalize outcome; preserve gaps for unknown syntax. |
+| mappings | Extract paths, methods, handlers, Contexts, and stacks from MVC dispatchers, WebFlux annotations, and recognizable functional routes. |
+| health | Traverse visible components/details; distinguish aggregate status, hidden details, unreadable state, and tree-depth limits. |
+| flyway/liquibase | Read each engine's reported inventory and Context/migration-Bean identity; project versions, changeSets, checksums, order, and state. |
+| startup | Parse timeline/events identities, parents, and durations; filter slow steps and include ancestor chains. |
+| env/configprops | Normalize sources, bindings, and effective values within registered policy; configuration is disabled and values hidden by default. |
+| openapi | Recognize supported document structures, project operations or Schemas, and resolve bounded in-document references. |
 
-Boot 2.7/3.x/4.x 相关形状与 MVC/WebFlux 有合成测试和部分隔离样本；精确版本及客户端组合须单独验收。结构可识别不等于完整兼容矩阵通过。
+Synthetic tests and some isolated samples cover Boot 2.7/3.x/4.x-related shapes and MVC/WebFlux. Exact versions and client combinations require separate acceptance; recognizing a structure does not establish a complete compatibility matrix.
 
-## Bean 图与 Context 可见性
+## Bean graphs and Context visibility
 
-Bean 身份包含 target、Context、canonicalName 和 beanKind。每个 Context 建立 canonicalName/alias 双向索引，同名冲突保持未解析。依赖先在当前 Context 查找，再沿 parentId 逐层查找；子容器同名 Bean 遮蔽祖先，父容器不会反向到子容器解析依赖。
+Bean identity includes target, Context, canonicalName, and beanKind. Each Context builds bidirectional canonicalName/alias indices; name conflicts stay unresolved. Resolve dependencies in the current Context first, then follow parentId upward. Child Beans shadow same-named ancestors; parents do not resolve dependencies downward into children.
 
-完整可见图及反向索引在过滤和分页前构造，依赖/被依赖方向均可多跳遍历。环、缺失父节点、未暴露依赖、歧义别名和访问预算进入 gaps；达到深度或节点上限时保留可用事实并标记不完整。
+Build the full visible graph and reverse index before filtering/pagination, supporting multi-hop traversal in both directions. Cycles, missing parents, unexposed dependencies, ambiguous aliases, and visit budgets produce gaps. Retain usable facts and mark incompleteness when depth/node limits are reached.
 
-Source catalog 仅提供操作者核实的类型继承和生产者事实；运行 Bean 与目录生产者按 Context、名称/别名、类型及 source key 等证据关联。未扫描类型不能用空继承列表表示已扫描，未提供目录不能推断 Bean 不存在。目录格式与限制见[接入指南](../source-catalog.md)。
+The Source catalog provides operator-verified type inheritance and producer facts only. Correlate runtime Beans with catalog producers using Context, name/aliases, type, source keys, and other evidence. An unscanned type cannot be represented as a scanned empty inheritance list; a missing catalog cannot establish Bean absence. See the [catalog guide](../source-catalog.md) for format and limits.
 
-## 条件与阻塞链
+## Conditions and blocking chains
 
-AnyNestedCondition、AllNestedConditions、NoneNestedConditions 以 ANY/ALL/NONE 递归三值结果处理。已报告 outcome、识别出的条件语法、搜索范围及源码生产者关联共同限制归因；冲突、截断和未知实现保持 unknown。
+Evaluate AnyNestedCondition, AllNestedConditions, and NoneNestedConditions recursively using three-valued ANY/ALL/NONE results. Reported outcomes, recognized syntax, search scope, and source-producer associations jointly constrain attribution. Conflicts, truncation, and unknown implementations remain unknown.
 
-ConditionalOnBean 支持现有可识别类型及严格匹配的单一具名缺失消息。单一 names 选择器的 `did not find any beans named <name>` 仅在后缀与选择器完全一致时识别；复合要求、名称不符和无法唯一解析时不生成确定链。MissingBean 按其相反条件方向处理。
+ConditionalOnBean supports currently recognizable types and strictly matching single-name missing messages. Recognize `did not find any beans named <name>` for a single names selector only when the suffix exactly matches that selector. Compound requirements, mismatched names, or nonunique resolution cannot produce a definite chain. MissingBean uses the inverse condition direction.
 
-有证据的阻塞路径可沿 `REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND/PROPERTY_VALUE_MISMATCH` 传递。跨层关联必须有唯一目录生产者和精确 conditionSources；局部条件已知时，外层仍可能因其他证据缺口保持 partial。运行代理类型与源码声明类型分别保留，不能用虚构类型或工厂关系补齐缺口。
+Evidence-backed blocking paths may follow `REQUIRED_BEAN_MISSING → SOURCE_FACTORY_NOT_CREATED → PROPERTY_NOT_FOUND/PROPERTY_VALUE_MISMATCH`. Cross-layer correlation requires a unique catalog producer and exact conditionSources. An outer result can remain partial despite a known local condition. Keep runtime-proxy and source-declared types separate; never invent types or factory relationships to fill gaps.
 
-## 路由、健康、迁移与启动
+## Routes, health, migrations, and startup
 
-MVC/WebFlux 的注册事实来自 mappings，不调用业务 URL。函数式 predicate 仅解析已支持的正向组合及媒体约束；OR/NOT/未知语法保留缺口。非 DispatcherServlet（如 Jersey）可能覆盖查询路径时，空 dispatcher 结果使用 NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED 和未知总数。
+MVC/WebFlux registration facts come from mappings, without business-URL requests. Functional predicates support only recognized positive combinations and media constraints; OR/NOT/unknown syntax preserve gaps. If a non-DispatcherServlet such as Jersey may cover the requested path, empty dispatcher results include NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED and an unknown total.
 
-健康总状态与可见子组件分别保留。不可读组件、缺失状态或详情/深度受限时返回 partial；影响筛选计数的缺口令 totalMatched 为 null。固定健康探针的 503 是可解析证据，不代表连接成功即健康。
+Preserve overall health and visible child components separately. Unreadable components, missing status, or detail/depth restrictions produce partial results. Gaps affecting filtered counts make totalMatched null. A fixed health probe's 503 is parseable evidence; connection success alone does not mean healthy.
 
-迁移排序使用引擎报告的安装顺序及稳定身份，缺失字段保持 null/UNKNOWN。Flyway 预期版本比较使用安装顺序中最新的成功且有版本记录；Liquibase 不提供等价标准版本语义，版本预期无法支持时明确报告。未报告的 pending、耗时或失败不能补造，MARK_RAN 只表达引擎报告状态。
+Sort migrations using engine-reported installation order and stable identities, retaining null/UNKNOWN for missing fields. Flyway version expectations use the latest successful versioned record in installation order. Liquibase has no equivalent standard version semantics; explicitly report unsupported version expectations. Never invent unreported pending state, duration, or failure; MARK_RAN expresses only engine-reported state.
 
-启动时间线保留单位、事件、父链和截断证据。父节点缺失、非树关系、深度或节点预算受限时标记 partial；重叠事件耗时不求和为 JVM 总启动时间。采集由目标应用在 run 前配置 BufferingApplicationStartup，指南见[目标配置](../target-app-setup.md)。
+Startup timelines retain units, events, parent chains, and truncation evidence. Missing parents, non-tree relationships, or depth/node limits produce partial results. Do not sum overlapping durations into total JVM startup time. The target must configure BufferingApplicationStartup before run; see [target setup](../target-app-setup.md).
 
-## OpenAPI 引用
+## OpenAPI references
 
-在线读取固定 `/actuator/openapi`；文档内支持的版本/方言按现有解析器处理。同文档 JSON Pointer 处理 `~0`/`~1` 转义，引用展开默认两阶、最多八阶；共享引用独立投影，使用有界访问与输出预算。
+Online reads use fixed `/actuator/openapi`; supported versions/dialects follow the existing parser. In-document JSON Pointers handle `~0`/`~1` escapes. Reference expansion defaults to two levels and allows at most eight. Shared references are projected independently within visit and output budgets.
 
-直接和二阶引用均保留可追溯事实。循环、未解析引用、远程引用、方言或层级不可确定时记录 gaps；远程 `$ref` 从不联网读取。PathItem 的非冲突相邻字段可以保留；字段冲突或操作不可读影响完整计数时 totalMatched 为 null。
+Retain traceable facts from direct and second-level references. Record gaps for cycles, unresolved or remote references, and uncertain dialects or levels; remote `$ref` is never fetched. Nonconflicting PathItem siblings may be retained. If conflicts or unreadable operations affect complete counts, totalMatched is null.
 
-Schema 中名为 description 的业务属性与原始自由文本说明分别处理；投影保留允许的结构字段，同时始终执行脱敏和输出安全门。
+Handle a business Schema property named description separately from raw descriptive free text. Projection retains permitted structural fields while always applying sanitization and the output gate.
 
-## 漂移与证据分级
+## Drift and evidence strength
 
-漂移只比较调用者明确提供的维度。数组缺省表示不比较，显式空数组表示预期为空；只有 expectedScopeComplete=true 且运行证据完整时才能判断额外运行对象。Bean 图可传播影响，sourceRevision/sourceModifiedAt 是调用者声明。
+Drift compares only caller-supplied dimensions. An omitted array means no comparison; an explicit empty array means an empty expectation. Extra runtime objects can be established only with expectedScopeComplete=true and complete runtime evidence. Bean graphs may propagate impact; sourceRevision/sourceModifiedAt are caller declarations.
 
-版本、时间、Context、实例或启动证据不充分时保持 candidate/unknown；不将文件较新直接写成“进程未重启”。配方和错误只由本地安全模板生成，HTTP 状态本身不能确定采集、配置或业务根因。
+Insufficient version, time, Context, instance, or startup evidence remains candidate/unknown. A newer source file alone does not prove that the process was not restarted. Recipes/errors come only from local safe templates; an HTTP status alone cannot establish a collection, configuration, or business root cause.

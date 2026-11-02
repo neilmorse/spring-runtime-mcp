@@ -1,132 +1,33 @@
-# ADR 001: 快照 60 秒 TTL 和 32 MiB 预算
+# ADR 001: Snapshot TTL and storage budget
 
-**状态**：已接受
+**Status**: implemented
 
-**日期**：2024-11
+## Constraint
 
----
+SnapshotStore uses a **60-second absolute TTL** and a **32 MiB total storage budget**, with LRU eviction. Snapshots contain sanitized shared encoded records; they are process-local and are lost on restart.
 
-## Context（上下文）
+The TTL starts when a snapshot is created. Access and continuation pages do not extend it. Eviction can remove a snapshot before its TTL expires, so a cursor does not guarantee future availability.
 
-MCP 工具需要支持分页查询，续页时应使用原查询的快照而非重新读取目标。快照需要：
+## Pagination behavior
 
-1. **缓存时长**：平衡续页体验和内存占用
-2. **内存预算**：限制单进程内存使用
-3. **淘汰策略**：多目标或高频查询时的缓存管理
+A continuation request keeps the original tool, target, and normalized query and adds the returned cursor. The cursor records an offset into the original snapshot; normal continuation decodes/projects the current page without rereading the target.
 
-关键约束：
-- 编码助手通常在几秒内完成续页
-- 单次工具调用时限 15 秒
-- 进程内存应保持可控
-- 快照包含脱敏后的完整数据
+If the cursor expires or the process restarts, start a new query without cursor. New results are a new observation, not continuation of the old snapshot. CURSOR_QUERY_MISMATCH requires restoring the original arguments or starting a new query.
 
-## Decision（决策）
+Policy-stamp changes trigger safety revalidation of the complete snapshot. Unsafe cached content causes associated handles to be removed. Policy stamps do not store plaintext credentials.
 
-采用以下快照策略：
+## Operational effects
 
-### 1. 绝对 TTL：60 秒
+- Reusing a snapshot avoids repeated target reads during ordinary pagination.
+- Expiration and LRU eviction bound retention, but callers must handle expired cursors.
+- Large queries share the total memory budget with other snapshots.
+- Snapshot storage, upstream response limits, and the 16 KiB response-frame budget are independent constraints.
 
-- 首次查询创建快照时开始计时
-- 续页不延长 TTL
-- 过期后返回 `CURSOR_EXPIRED`，要求重新查询
+There is no measured success-rate guarantee for continuation intervals. Snapshot availability also depends on query size, other queries, policy changes, and process lifetime.
 
-### 2. 总预算：32 MiB
+## References
 
-- 所有快照共享 32 MiB 内存上限
-- 使用 LRU 淘汰策略
-- 单个快照超限时拒绝缓存
-
-### 3. 进程重启后快照丢失
-
-- 不持久化快照到磁盘
-- 重启后游标全部失效
-
-## Consequences（后果）
-
-### 正面影响
-
-1. **续页体验良好**
-   - 60 秒足够完成大部分续页场景
-   - 编码助手通常在 5-10 秒内完成续页
-
-2. **内存可控**
-   - 32 MiB 上限防止内存泄漏
-   - LRU 淘汰确保高频查询优先
-
-3. **实现简单**
-   - 无需持久化机制
-   - 无需跨进程共享
-
-4. **安全边界清晰**
-   - 过期快照自动清理敏感数据
-   - 重启后快照全部失效
-
-### 负面影响
-
-1. **续页时间受限**
-   - 超过 60 秒需重新查询
-   - 人工续页可能超时
-
-2. **重复读取目标**
-   - 游标过期后需重新读取
-   - 增加目标应用负载
-
-3. **无法跨进程续页**
-   - 负载均衡或重启后游标失效
-
-### 缓解措施
-
-1. **明确错误提示**
-   - `CURSOR_EXPIRED` 包含重新查询建议
-   - 文档说明 60 秒 TTL
-
-2. **优化查询参数**
-   - 鼓励使用精确筛选减少续页需求
-   - 提供 `maxResults` 上限指导
-
-3. **监控续页模式**
-   - 测试验证 60 秒足够覆盖主流场景
-
-## 替代方案
-
-### 方案 A：更长 TTL（5 分钟）
-
-- **优点**：更宽容的续页窗口
-- **缺点**：敏感数据缓存时间过长，内存压力增大
-
-### 方案 B：无 TTL（直到 LRU 淘汰）
-
-- **优点**：最大化续页成功率
-- **缺点**：安全风险，敏感数据可能长期驻留
-
-### 方案 C：持久化快照到磁盘
-
-- **优点**：跨进程、跨重启续页
-- **缺点**：增加复杂度，敏感数据落盘风险
-
-### 决策理由
-
-选择 60 秒绝对 TTL 是因为：
-- 覆盖 95%+ 编码助手续页场景
-- 安全优先，敏感数据自动过期
-- 实现简单，无需持久化
-- 内存可控，32 MiB 足够应对常见工作负载
-
-## 相关决策
-
-- [ADR 002: maxResults 上限 50](002-max-results-limit.md) - 影响单个快照大小
-- [ADR 003: 响应上限 16 KiB](003-response-size-cap.md) - 影响分页策略
-
-## 实现细节
-
-- 快照存储：`src/spring_runtime_mcp/snapshots.py`
-- LRU 淘汰：`collections.OrderedDict`
-- TTL 检查：查询时验证 `created_at + 60s`
-
-## 监控指标
-
-建议监控以下指标评估决策效果：
-- 游标过期率（`CURSOR_EXPIRED` 频率）
-- 平均续页间隔
-- 快照内存峰值
-- LRU 淘汰频率
+- [Snapshot implementation](../../../src/spring_runtime_mcp/snapshots.py)
+- [Calling policy](../../contracts/tool-calling-policy.md)
+- [ADR 002: record limit](002-max-results-limit.md)
+- [ADR 003: response-frame limit](003-response-size-cap.md)

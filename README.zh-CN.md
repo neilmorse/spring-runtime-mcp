@@ -30,6 +30,8 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --base-ur
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令；直接在终端运行会等待客户端请求。完整步骤见[首次查询](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
 
+尚无可用应用时，可以先运行公开包内的[合成路由演示（英文）](docs/demo.md)，再按[试用反馈说明](docs/trial-feedback.md)记录实际结果。合成 replay 无需 Spring 进程，不代表真实应用或客户端兼容性验证。另有[英文首次接入指南](docs/first-query.en.md)。
+
 ## 使用边界
 
 当前只连接本地回环地址，使用固定端点和可选 Bearer 环境变量鉴权；OpenAPI 固定读取 `/actuator/openapi`。配置诊断默认关闭，需通过 CLI 参数显式启用（`--config-prefix`、`--config-property`、`--config-profiles`）；启用后配置值仍默认隐藏，输出值还需要 `--config-allow-values` 和工具参数 `includeValues=true`。输出始终脱敏，每次工具结果最多 16 KiB。证据不足会明确返回 `partial/unknown`。
@@ -38,4 +40,4 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11 --base-ur
 
 [全部文档](docs/README.md) · [工具契约](src/spring_runtime_mcp/schemas/tools-contract.json) · [源码事实接入](docs/source-catalog.md) · [开发与验证](docs/launch/README.md)
 
-[Apache-2.0](LICENSE) · [安全问题反馈](SECURITY.md)
+[Apache-2.0](LICENSE) · [参与贡献](CONTRIBUTING.md) · [安全问题反馈](SECURITY.md)
