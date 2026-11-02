@@ -991,6 +991,22 @@ class NacosSoakAcceptance(Acceptance):
             )
 
 
+def _reserve_result_paths(output: Path, progress: Path) -> None:
+    """Claim both result files before any target resources are initialized."""
+    if output == progress:
+        raise ValueError("result paths must differ")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("x"):
+        pass
+    try:
+        progress.parent.mkdir(parents=True, exist_ok=True)
+        with progress.open("x"):
+            pass
+    except OSError:
+        output.unlink()
+        raise
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name", default="nacos", choices=("nacos",))
@@ -1017,6 +1033,11 @@ def main() -> int:
         parser.error("--worker-delay must be between 0.1 and 10")
     if not 5 <= args.sample_seconds <= 300:
         parser.error("--sample-seconds must be between 5 and 300")
+    args.progress = args.progress or args.output.with_suffix(".jsonl")
+    try:
+        _reserve_result_paths(args.output, args.progress)
+    except (OSError, ValueError):
+        parser.error("output and progress must be distinct new writable files")
     return NacosSoakAcceptance(args).run()
 
 

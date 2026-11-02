@@ -8,7 +8,7 @@
 - `application-runtime-diagnostics.properties` 是外置 overlay。`DiagnosticsLauncher.java` 使用真实 `ShopApplication` 和项目已有 Testcontainers 测试依赖，先创建临时 PostgreSQL，再启动副本；数据库只绑定回环。独立业务/管理端口均绑定 `127.0.0.1`，实际验收由启动器将管理端口也设为随机端口。
 - 只暴露 health、beans、conditions、mappings、flyway、startup，设置全局 `read-only`，env/configprops 关闭。`BufferingApplicationStartup` 在启动前设置，MCP 仅 GET startup。
 - Python 启动脚本移除既有应用/JVM覆盖变量，临时生成 JWT 密钥与令牌，仅放入子进程环境。现有 JWT 过滤器认证令牌；MCP 通过 `--token-env` 绑定凭据。没有放开匿名权限，也不调用登录或其他业务接口。
-- 原始响应和框架日志不写入报告、fixture 或 transcript；保存的仅为通过契约、出口秘密检查和回包预算检查的状态摘要。默认 pytest 不运行本脚本，也不需要 Docker/JDK。
+- 原始响应和框架日志不写入报告、fixture 或 transcript；保存的仅为通过契约、出口秘密检查和回包预算检查的状态摘要。默认 pytest 不运行本脚本，也不需要 Docker；完整默认回归中的 Java 静态事实用例需要 JDK，见[验证流程](../../docs/launch/README.md)。
 
 ## 验收内容与限制
 

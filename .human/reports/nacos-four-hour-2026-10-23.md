@@ -50,7 +50,7 @@ classpath 索引项；原始构建产物和源码均不改。
 - `DiagnosticManagementSecurity` 只在管理子上下文注册：匿名 401、普通 Bearer 403、
   管理员放行、非 GET/HEAD 405。业务端点鉴权在隔离副本中关闭，仅用于测试；
   全程不调用配置发布、服务注册、UI 登录或其他写路径。
-- `env`/`configprops` 的 `show-values=never`，MCP 配置诊断仍默认关闭；所有 MCP
+- 历史配置写入了 `env`/`configprops` 的 `show-values=never`，但 Boot 2.7 不支持该属性，不能作为目标端全量值屏蔽证据。MCP 配置诊断仍默认关闭；所有 MCP
   响应继续经过 outputSchema、独立安全出口和 16,384 字节完整帧预算。
 
 ## 四小时执行与记录

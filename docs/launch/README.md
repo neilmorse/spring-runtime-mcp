@@ -4,7 +4,7 @@
 
 ## 本地离线验证
 
-首次使用锁定开发环境：
+完整默认回归还需要可用的完整 JDK（`java` 与 `javac`；本项目静态事实用例已在 Java 21 下验收）。这些用例只编译仓库 helper 并解析合成源码，不启动 Spring Boot，也不需要 Maven 或 Docker。缺少 JDK 时相关用例会 skipped；普通 pytest 可结束，但正式发布门禁拒绝跳过测试。先检查 `java -version` 与 `javac -version`，再同步锁定开发环境：
 
 ```bash
 uv sync --dev --locked

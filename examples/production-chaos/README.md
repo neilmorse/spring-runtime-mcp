@@ -70,7 +70,7 @@ uv run --no-sync python scripts/check_production_chaos.py \
 
 应用只向宿主 `127.0.0.1` 发布随机管理端口，数据库不发布宿主端口；独立 Docker bridge、只读应用根文件系统、限制内存/CPU，临时目录和自有控制文件可写。此 bridge **不是完整出网沙箱**；显式关闭上游外部客户端与遥测，不触及其他生产服务。不提交业务任务、工作流或设备数据。
 
-Bearer admin/user 和数据库密码随机生成，仅内存及环境传递；不写 properties/摘要/命令参数。管理专用 Servlet Filter 先强制 GET/HEAD 与 401/403，再交给原生安全链。Boot 2 使用 javax，Boot 3 使用 jakarta；不替换业务鉴权。ShenYu 的原生 Shiro 管理路径委托发生在属性绑定之前；仅管理路径进入该强制过滤器。health details 在管理鉴权后可读；env/configprops 值始终 never，MCP 配置诊断仍默认关闭。记录仅含有界异常类型、Bean 标识和固定阶段码，原生日志/异常消息/堆栈均丢弃；Docker log driver 关闭。
+Bearer admin/user 和数据库密码随机生成，仅内存及环境传递；不写 properties/摘要/命令参数。管理专用 Servlet Filter 先强制 GET/HEAD 与 401/403，再交给原生安全链。Boot 2 使用 javax，Boot 3 使用 jakarta；不替换业务鉴权。ShenYu 的原生 Shiro 管理路径委托发生在属性绑定之前；仅管理路径进入该强制过滤器。health details 在管理鉴权后可读；配置为 env/configprops 设置了 show-values=never；该属性适用于本矩阵的 Boot 3 目标，DolphinScheduler 的 Boot 2.7 不支持它，不能据此声称值始终隐藏。MCP 配置诊断仍默认关闭；旧版目标的值保护须按[目标指南](../../docs/target-app-setup.md)单独审查。记录仅含有界异常类型、Bean 标识和固定阶段码，原生日志/异常消息/堆栈均丢弃；Docker log driver 关闭。
 
 额外的 `ChaosConfiguration` 是自编故障组件，不属于原生应用。它提供健康异常、实际 DataSource 连接池占满、缺失依赖/重复定义/构造器循环，以及 1000 个实际注册的 Spring Bean 和别名/依赖链。ThingsBoard 另暂停/恢复本轮私有 PostgreSQL。启动失败的异常类型来自运维启动器；Actuator 不可用时，MCP 只能报告 unavailable，不能声称自己诊断出了启动根因。
 

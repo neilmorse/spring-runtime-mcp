@@ -46,5 +46,5 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.1 --base-url
 
 [awesome-mcp-servers PR #18153](https://github.com/punkpeye/awesome-mcp-servers/pull/18153)
 已补真实 Glama 徽章并恢复审核，等待上游维护者处理。Glama 条目已公开，
-发现八个工具并显示 TDQS A（3.9/5.0）；详见 [Glama 投稿记录](../../docs/launch/glama/README.md)。
+发现八个工具并显示 TDQS A（3.9/5.0）；详见 [Glama 投稿记录](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/launch/glama/README.md)。
 其他目录与跨平台社区帖子未发送，已准备[公告文案](https://github.com/neilmorse/spring-runtime-mcp/blob/b547f770d5852db05d142e04b131c7ac497ad2f3/docs/launch/announcement.md)。

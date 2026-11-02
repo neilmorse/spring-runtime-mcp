@@ -78,7 +78,7 @@ Bearer admin/user 令牌只生成在内存并经环境传递，绝不写入 prop
 Jakarta Servlet / Reactive 使用最高优先级且仅匹配 `/actuator` 的鉴权链；Data Flow 的旧版
 `WebSecurityConfigurer` 不能与独立 `SecurityFilterChain` 混用，因此使用 Actuator 专用
 Servlet Filter，在原生忽略路径之前强制鉴权。三项均拒绝非 GET/HEAD、无认证和权限不足访问。
-保留原生业务安全配置。Flowable 默认空 role prefix，health 的授权角色须显式使用
+保留原生业务安全配置。共享 properties 中的 show-values=never 对 Data Flow 的 Boot 2.7 不生效，不能将其视为全量值屏蔽；旧版配置保护见[目标指南](../../docs/target-app-setup.md)。Flowable 默认空 role prefix，health 的授权角色须显式使用
 `ROLE_DIAGNOSTICS`。其未暴露端点可能被原生 `/error` 安全链转换为 401，按不可读取记录，
 不能推断为成功观察到了 404。
 目标框架日志关闭；启动异常仅保留有界类型、Bean 标识和固定阶段码，丢弃消息与堆栈。

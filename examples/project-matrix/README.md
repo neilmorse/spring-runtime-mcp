@@ -21,7 +21,7 @@ for project in petclinic petclinic-rest; do
   MAVEN_OPTS='-Xmx512m -Djava.awt.headless=true' mvn -B -q --no-transfer-progress \
     -f "$PROJECT_MATRIX_WORK/$project/pom.xml" -DskipTests compile \
     org.apache.maven.plugins:maven-dependency-plugin:3.8.1:build-classpath \
-    -Dmdep.includeScope=runtime \
+    -DincludeScope=runtime \
     -Dmdep.outputFile="$PROJECT_MATRIX_WORK/$project/classpath.txt"
 done
 
@@ -29,7 +29,7 @@ MAVEN_OPTS='-Xmx512m -Djava.awt.headless=true' mvn -B -q --no-transfer-progress 
   -f "$PROJECT_MATRIX_WORK/jhipster/pom.xml" '-Pdev,!webapp,!docker-compose' \
   -DskipTests -Dspotless.skip=true compile \
   org.apache.maven.plugins:maven-dependency-plugin:3.8.1:build-classpath \
-  -Dmdep.includeScope=runtime \
+  -DincludeScope=runtime \
   -Dmdep.outputFile="$PROJECT_MATRIX_WORK/jhipster/classpath.txt"
 ```
 
