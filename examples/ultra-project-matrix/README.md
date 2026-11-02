@@ -50,7 +50,7 @@ JCenter，Gradle 插件门户返回缺失。临时副本在 `settings.gradle` �
 
 `FineractDiagnosticsLauncher.java` 只做三件事：反射调用 Fineract 原生
 `ServerApplication.configureApplication` 保留原生配置，注入
-`BufferingApplicationStartup(8192)`，并注册管理专用 `DiagnosticSecurity`。
+`BufferingApplicationStartup(2048)`，并注册管理专用 `DiagnosticSecurity`。
 `DiagnosticSecurity` 复用大型矩阵模板，只匹配 `/actuator/**`，强制 GET/HEAD、
 匿名 401、非管理员 403、管理员 `ROLE_DIAGNOSTICS`；不替换 `/api/**` 原生 Basic Auth。
 

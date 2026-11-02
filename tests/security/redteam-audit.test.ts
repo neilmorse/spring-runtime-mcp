@@ -8,8 +8,7 @@ const root = path.resolve(__dirname, '../..');
 for (const vector of ['network', 'readonly', 'leakage', 'injection', 'stdio']) {
   test(`red-team ${vector}: actual Python production paths`, () => {
     const result = spawnSync('uv', [
-      'run', '--offline', '--no-project', '--with', 'pytest==9.0.3',
-      '--with', 'jsonschema==4.25.1', 'python', '-m', 'pytest', '-q',
+      'run', '--no-sync', 'python', '-m', 'pytest', '-q',
       `tests/security/test_redteam_${vector}.py`,
     ], { cwd: root, encoding: 'utf8', timeout: 60000, maxBuffer: 2 * 1024 * 1024 });
     assert.ifError(result.error);

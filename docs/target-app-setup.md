@@ -61,43 +61,11 @@ include 是诊断能力的明确列表，exclude 额外拒绝危险读取。`env
 
 沿用上一节的端口、exposure、show-values 和 health 设置，但删除 `management.endpoints.access` 及两个端点的 `access` 属性。用 `management.endpoint.env.enabled: false` 和 `management.endpoint.configprops.enabled: false` 保持配置诊断默认关闭；显式启用时仍保留 show-values=never。旧版本必须另用安全层拒绝写方法，不能用 enabled/exposure 替代方法授权。
 
-若应用已有 Spring Security 6，下面是 MVC 的可选诊断链示例；放入目标应用的组件扫描范围，并先与现有链的顺序和凭据提供器合并审阅。示例包名为 `com.example.diagnostics`，角色 `MCP_DIAGNOSTIC` 必须由应用现有认证系统提供；这里不创建默认账号或密码。
+旧版接入沿用应用已有的 Bearer 认证。由维护者在实际处理 Actuator 请求的安全链中合并规则：只允许获权诊断角色读取所需固定路径的 GET，其他方法及未批准路径拒绝。优先从 `health`、`beans`、`conditions`、`mappings` 的最小集合开始；需要健康组时另行批准 `/actuator/health/liveness` 和 `/actuator/health/readiness`。
 
-```java
-package com.example.diagnostics;
+必须同时核对链的匹配范围、顺序、Bearer 验证器及角色映射。独立高优先级链不会自动继承其他链的认证配置；仅添加 `httpBasic()` 无法让 MCP 的 Bearer 获得认证。MVC 使用现有 `SecurityFilterChain`，WebFlux 使用现有 `SecurityWebFilterChain`，保留业务路径的原有保护。具体认证机制取决于应用已有实现，不能用一段通用新建链代码代替合并审查。[Spring Boot 安全链说明](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html#actuator.endpoints.security)。
 
-import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration(proxyBeanMethods = false)
-@Profile("local-mcp")
-public class LocalMcpSecurity {
-    @Bean
-    @Order(0)
-    SecurityFilterChain diagnosticsOnly(HttpSecurity http) throws Exception {
-        String[] paths = {
-            "/actuator/health", "/actuator/beans", "/actuator/conditions",
-            "/actuator/mappings", "/actuator/flyway", "/actuator/liquibase",
-            "/actuator/startup", "/actuator/info", "/actuator/configprops", "/actuator/env"
-        };
-        http.securityMatcher(EndpointRequest.toAnyEndpoint());
-        http.authorizeHttpRequests(rules -> rules
-            .requestMatchers(HttpMethod.GET, paths).hasRole("MCP_DIAGNOSTIC")
-            .anyRequest().denyAll());
-        http.httpBasic(Customizer.withDefaults());
-        return http.build();
-    }
-}
-```
-
-该链只准许列出的根路径 GET，未批准子路径、HEAD 和所有写方法均拒绝；组件下钻若确实需要，另行登记具体只读路径。保留应用原有业务安全链；不要仅添加这一条链就假设其他 URL 也受保护。WebFlux 使用现有 `SecurityWebFilterChain` 实现同等“固定路径 GET + 已有角色 + 其他拒绝”的规则，不能把 Servlet 的 HttpSecurity 示例粘到 Reactive 应用中。无法确认目标安全规则时，保持端点关闭或先升级版本。[Spring Boot 安全链说明](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html#actuator.endpoints.security)。
+如果管理入口只支持 Basic，当前 MCP 不能直接接入；维护者确认并配置可用 Bearer 入口后，再按[首次接入指南](first-query.md)转发命名环境变量并完成一次实际工具查询。
 
 ### Boot 2.7
 
@@ -130,13 +98,7 @@ management:
       show-details: never
 ```
 
-Boot 2.7/Spring Security 5.7 的 MVC 链使用上一节相同 paths、角色和 denyAll 策略，但替换三个方法配置语句为以下代码；其他 imports/注解、httpBasic 和 build 保持不变。它只适用于现有 MVC SecurityFilterChain，不是全应用安全配置的替代品。[Boot 2.7 安全说明](https://docs.spring.io/spring-boot/docs/2.7.18/reference/html/actuator.html#actuator.endpoints.security)。
-
-```java
-http.requestMatcher(EndpointRequest.toAnyEndpoint());
-http.authorizeRequests().antMatchers(HttpMethod.GET, paths).hasRole("MCP_DIAGNOSTIC");
-http.authorizeRequests().anyRequest().denyAll();
-```
+Boot 2.7/Spring Security 5.7 同样需要在现有 Bearer 认证链中合并固定路径 GET 与角色授权；使用该版本支持的 API，保留业务链与认证提供器。默认关闭 env/configprops，避免将旧版值保护误作新版本属性已生效。[Boot 2.7 安全说明](https://docs.spring.io/spring-boot/docs/2.7.18/reference/html/actuator.html#actuator.endpoints.security)。
 
 不要在未配置方法级拒绝规则的旧版应用中开放 startup。若需要 env/configprops，必须先单独审查现有安全策略、取消对应 enabled/exclude 禁令并保持全键屏蔽；这不应成为默认本地启动配置。
 
@@ -169,7 +131,9 @@ application.run(args);
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local-mcp
 ```
 
-保留现有认证规则。下面命令使用示例诊断用户名 `mcp-reader`；先确保你的应用已有该用户且具有上述角色，否则改用实际已授权账号。curl 会提示输入密码，不把密码放入命令、URL、配置或聊天。命令只输出 HTTP 状态，不保存诊断 JSON，也不跟随重定向。
+MCP 接入以已有 Bearer 和实际工具查询为验收依据，凭据转发见[首次接入指南](first-query.md)。以下 Basic 命令仅供维护者核验已经支持 Basic 的管理入口；即使返回成功，也不证明 MCP 可以认证，不应为运行这些命令新增 Basic。
+
+下面命令使用示例诊断用户名 `mcp-reader`；先确保你的应用已有该用户且具有获权诊断角色，否则改用实际已授权账号。curl 会提示输入密码，不把密码放入命令、URL、配置或聊天。命令只输出 HTTP 状态，不保存诊断 JSON，也不跟随重定向。
 
 ```bash
 curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request GET --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:18081/actuator/health

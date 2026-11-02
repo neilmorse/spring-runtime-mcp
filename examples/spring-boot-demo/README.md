@@ -29,10 +29,11 @@ The app listens on `http://127.0.0.1:8080` and Actuator on
 
 ## Verify the MCP server against it
 
-From the repository root, with the app running:
+From the repository root, prepare the locked development environment with
+`uv sync --dev --locked` (add `--offline` once cached), then use the running app:
 
 ```bash
-PYTHONPATH=src uv run --no-project --with jsonschema==4.25.1 --with mcp \
+uv run --no-sync \
   python -m spring_runtime_mcp.cli \
   --base-url http://127.0.0.1:18081 \
   --source-catalog examples/spring-boot-demo/source-catalog.json
@@ -41,12 +42,13 @@ PYTHONPATH=src uv run --no-project --with jsonschema==4.25.1 --with mcp \
 Or regenerate the committed transcript end to end:
 
 ```bash
-PYTHONPATH=src uv run --no-project --with jsonschema==4.25.1 --with mcp \
+uv run --no-sync \
   python scripts/check_demo_app.py
 ```
 
 `transcript.jsonl` records `initialize`, `tools/list` and one call to each of
-the read tools.
+six tools: Beans, mappings, health, migrations, startup and drift. Configuration
+and OpenAPI calls are not covered by this demo.
 
 ## What the transcript shows
 

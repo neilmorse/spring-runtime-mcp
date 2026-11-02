@@ -1,14 +1,18 @@
 # Red-Team Regression Suite
 
-Run the requested TypeScript entry with Node 22+ (no npm dependencies):
+Prepare the locked development environment with `uv sync --dev --locked`
+(add `--offline` once cached). Run the TypeScript entry with Node 22+
+(no npm dependencies):
 
 ```bash
 node --test tests/security/redteam-audit.test.ts
 ```
 
 It uses Node's built-in runner to execute five Python test modules
-through cached, offline uv environments; the table also includes the separate boundaries suite. TAP is test output, not MCP STDIO.
-Run the same cases directly with:
+through the prepared project environment using `uv run --no-sync`; it does not
+resolve a separate dependency set. The table also includes the separate boundaries
+suite. TAP is test output, not MCP STDIO.
+Run all six Python security modules, including boundaries, directly with:
 
 ```bash
 uv run --no-sync python -m pytest -q tests/security

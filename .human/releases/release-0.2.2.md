@@ -29,7 +29,7 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --version
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.2 --base-url http://127.0.0.1:18081
 ```
 
-目标先按[配置指南](../../docs/target-app-setup.md)准备。第二条命令是持续等待客户端的 STDIO 宿主；Bearer 目标参见主 README 的 --token-env 与 env_vars 示例。配置诊断保持默认关闭。
+目标先按[配置指南](../../docs/target-app-setup.md)准备。第二条命令是持续等待客户端的 STDIO 宿主；Bearer 目标参见[客户端配置指南](../../docs/client-configuration.md)中的 --token-env 与 env_vars 示例。配置诊断保持默认关闭。
 
 ## 发布批次
 

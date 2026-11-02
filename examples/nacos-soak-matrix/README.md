@@ -63,17 +63,20 @@ JAVA_HOME=/usr/lib/jvm/java-21-openjdk mvn -B -q --no-transfer-progress \
 - 业务端点 `nacos.core.auth.enabled=false` 是本轮隔离副本配置，不等同于生产建议；
   测试只发 GET，不调用配置发布、服务注册、命名实例写入或 UI 登录。
 - Actuator 暴露 health、info、beans、conditions、mappings、startup、env、configprops；
-  env/configprops 的 `show-values=never`，MCP 自身的配置诊断仍默认关闭。
+  配置中虽有 `show-values=never`，但 Boot 2.7 不支持该属性，不能据此认为目标值已全量屏蔽。MCP 自身的配置诊断仍默认关闭；目标端值保护须按[旧版配置指南](../../docs/target-app-setup.md)另行审查。
 
 ## 四小时运行
 
+在本仓库根目录执行，先按[验证流程](../../docs/launch/README.md)准备锁定环境。每次新建结果目录：入口在启动资源前独占创建 JSON 与 JSONL 文件，任一路径已存在（含符号链接）或两者相同时退出 2。未指定 `--progress` 时使用 output 的 `.jsonl` 同名路径。启动中断可能留下空占位文件，重新运行时使用新目录。
+
 ```bash
+NACOS_RESULT_DIR=$(mktemp -d /tmp/spring-runtime-nacos-XXXXXXXX)
 uv run --no-sync python scripts/check_nacos_soak.py \
   --project "$NACOS_CACHE/nacos" \
   --distribution "$NACOS_CACHE/nacos/distribution/target/nacos-server-2.4.3/nacos" \
   --classpath-file "$NACOS_CACHE/nacos/console/classpath-runtime.txt" \
-  --output examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.json \
-  --progress examples/nacos-soak-matrix/results/nacos-four-hour-2026-10-23.jsonl \
+  --output "$NACOS_RESULT_DIR/result.json" \
+  --progress "$NACOS_RESULT_DIR/progress.jsonl" \
   --soak-seconds 14400 --workers 4 --worker-delay 0.5 --sample-seconds 60
 ```
 
