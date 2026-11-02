@@ -1,12 +1,12 @@
-# Bean 源码目录接入与证据边界
+# Bean source catalogs and evidence boundaries
 
-Context ID 使用运行报告中的精确文本身份；`shop-product` 等连字符名称可以登记。
+Context IDs preserve the exact text identity from runtime reports; hyphenated names such as `shop-product` can be registered.
 
-先按[首次接入指南](first-query.md)完成基础查询；source catalog 是按需增强，不是首次接入前提。
+Complete a basic query using the [first-query guide](first-query.md). A source catalog is an optional enhancement, not a prerequisite.
 
-`--source-catalog` 接受操作者整理的 JSON 事实，不扫描、执行或下载源码。
-可使用仓库内的[受限静态事实生成器](source-facts-generation.md)处理显式登记的 Java 文件，或按已核实源码手工整理最小子集。生成器只处理有限 AST 子集，不是完整 Spring 扫描器；生成结果仍须操作者审核。
-目录由 [CLI](../src/spring_runtime_mcp/cli.py) 在启动时加载，使用[现有加载器](../src/spring_runtime_mcp/adapters/source_catalog.py)校验；不属于工具调用参数。
+`--source-catalog` accepts operator-prepared JSON facts; it does not scan, execute, or download source.
+Use the repository's [restricted static-fact generator](source-facts-generation.md) on explicitly registered Java files, or manually prepare a minimal subset from verified source. The generator handles a limited AST subset, not full Spring scanning; operators must review its output.
+The [CLI](../src/spring_runtime_mcp/cli.py) loads the catalog at startup using the [existing loader](../src/spring_runtime_mcp/adapters/source_catalog.py). It is not a tool-call argument.
 
 ```bash
 uv run --no-sync python -m spring_runtime_mcp.cli \
@@ -14,40 +14,40 @@ uv run --no-sync python -m spring_runtime_mcp.cli \
   --token-env SHOP_ACTUATOR_TOKEN --source-catalog /abs/path/source-catalog.json
 ```
 
-凭据由已登记环境变量提供，不写入目录。目录 `targetId` 必须与 `--target-id` 一致；应用端仍需独立配置获权的 beans/conditions 读取。
+Credentials come from registered environment variables, not the catalog. Catalog `targetId` must match `--target-id`; the application still needs independently authorized beans/conditions access.
 
-## 真实字段与关联
+## Fields and correlation
 
-顶层仅有 `targetId`、可选 `sourceRevision`、`types`、`producers`。文件最多 262,144 字节，types 与 producers 合计最多 1,000 条。
-每个 type 必须包含 `name`、`directSupertypes`。每个 producer 必须包含以下全部字段：
+Top-level fields are `targetId`, optional `sourceRevision`, `types`, and `producers` only. Files are capped at 262,144 bytes and 1,000 combined types/producers.
+Each type requires `name` and `directSupertypes`. Each producer requires every field below:
 
-| 字段 | 登记依据 |
+| Field | Registration evidence |
 | --- | --- |
-| `contextId` | beans/conditions 实际报告的 Context ID，逐字匹配；`shop-product` 与 `shop_product` 不等价。允许 1–256 字符文本，拒绝 C0（U+0000–U+001F）与 DEL（U+007F），不按 Java 类型名校验。 |
-| `beanName`、`aliases` | 源码中可核实的 Bean 名称与别名；不能从类名猜测未核实的注册名称。 |
-| `declaredType`、`implementationType` | 源码声明类型与已知实现；实现未知用 null。运行代理类型不等同于源码实现类型。 |
-| `configurationClass`、`factoryMethod` | 实际配置类/工厂方法；非工厂生产者的 factoryMethod 为 null。 |
-| `conditionSources` | 与 conditions 中 source key 精确对应的数组；不从 Bean 名称拼接。嵌套类的二进制类型名可能含 `$`，条件 source key 可能使用 `.`，须分别核实。 |
-| `sourceFile`、`sourceLine` | 相对获权源码快照的文件路径与正整数行号；禁止绝对路径、上级路径、反斜杠及 C0 控制字符。 |
+| `contextId` | Exact beans/conditions Context ID; `shop-product` differs from `shop_product`. Text length 1–256, rejecting C0 (U+0000–U+001F) and DEL (U+007F); not validated as a Java type name. |
+| `beanName`, `aliases` | Bean names/aliases verified from source; do not infer unverified registration names from class names. |
+| `declaredType`, `implementationType` | Source-declared type and known implementation; use null for unknown implementations. Runtime proxy types differ from source implementation types. |
+| `configurationClass`, `factoryMethod` | Actual configuration class/factory method; factoryMethod is null for nonfactory producers. |
+| `conditionSources` | Array exactly matching conditions source keys; never concatenate from Bean names. Nested binary type names may contain `$` while condition keys may use `.`; verify separately. |
+| `sourceFile`, `sourceLine` | File path relative to the authorized source snapshot and positive line number. Reject absolute paths, parent traversal, backslashes, and C0 controls. |
 
-除 contextId 外的符号字段仍使用现有有界 Java 符号校验。目录不能添加 `complete`、依赖边或自定义条件消息等字段。
-`sourceRevision` 是操作者声明，不证明运行实例来自该版本；文件/行号也不会由服务器再次读取验证，应在仓库外保留源码摘要与目录覆盖说明。
+Symbol fields other than contextId retain bounded Java-symbol validation. Do not add `complete`, dependency edges, or custom condition-message fields.
+`sourceRevision` is an operator declaration, not proof of the running version. The server does not reread files/lines to verify them. Keep source digests and catalog-coverage notes outside the repository.
 
-只登记已核实的直接父类型。没有扫描某类型时应省略该 type，不能用 `directSupertypes: []` 代替“不知道”。
-没有全局扫描完整性字段意味着不能借目录宣称整个应用完整；目录未覆盖的类型、生产者和条件须继续保留 unknown/partial。
+Register verified direct parents only. Omit an unscanned type instead of using `directSupertypes: []` to represent unknown information.
+There is no global scan-completeness field, so a catalog cannot establish whole-application completeness. Uncovered types, producers, and conditions remain unknown/partial.
 
-## 判断接入是否有价值
+## Assessing the enhancement
 
-在同一实例上重复同一查询，对照可见事实与缺口，而非只数 partial：
+Repeat the same query against the same instance and compare visible facts and gaps, rather than counting partial results:
 
-- 对已存在 Bean，只有 Context、名称/别名与实际类型均满足现有匹配规则时，才新增 `producer`，证据级别为 `correlated`。CGLIB 代理类型与源码类型不一致时可能仍为 null；不要虚构代理类型的源码事实来强行关联。
-- 对未创建 Bean，目录负责将源码预期的生产者关联到 conditions 的配置类/方法。条件报告才是条件是否匹配的运行证据；目录本身不证明未创建原因。
-- 属性条件的已知负向消息可给出 `PROPERTY_NOT_FOUND` / `PROPERTY_VALUE_MISMATCH`。未识别的语法保持 unknown；其它条件或图证据不完整时，局部原因可见而整体仍为 partial。
-- 没有目录、条件权限不足、source key/Context 错配时，不应把空 items 写成“Bean 不存在”。`totalMatched: null` 表示不能确认完整匹配数。
+- For an existing Bean, add `producer` with `correlated` evidence only when Context, name/aliases, and actual type satisfy existing matching rules. CGLIB/source mismatches may still produce null; never invent proxy source facts to force correlation.
+- For an uncreated Bean, correlate the source-expected producer with the conditions configuration class/method. The condition report is runtime evidence of matching; the catalog alone does not establish why creation failed.
+- Recognized negative property conditions can yield `PROPERTY_NOT_FOUND` / `PROPERTY_VALUE_MISMATCH`. Unknown syntax remains unknown; other incomplete condition/graph evidence can leave the overall result partial despite a known local cause.
+- Missing catalogs, insufficient condition permissions, or source-key/Context mismatches cannot turn empty items into proof of Bean absence. `totalMatched: null` means a complete matching count cannot be established.
 
-单一具名 `ConditionalOnBean` 的负向消息只有在后缀名称与唯一 names 选择器一致时才解析；精确 conditionSources 与唯一目录生产者可将其关联到上游属性条件。未加载目录、Context/source 错配、多个要求无法归因或条件不可读时，继续返回 unknown/partial。已知类型选择器及传递条件使用同一证据链；未知语法保持证据缺口。
+Parse a single-name `ConditionalOnBean` negative message only when its suffix matches the unique names selector. Exact conditionSources and a unique catalog producer can correlate it with an upstream property condition. Missing catalogs, Context/source mismatches, unattributable compound requirements, or unreadable conditions remain unknown/partial. Recognized type selectors and transitive conditions use the same evidence chain; unknown syntax retains gaps.
 
-Bean 名称解析与目录中的 Java 类型/source 校验分别处理；条件消息支持的有界连字符名称，不代表所有名称都满足目录符号字段校验。运行代理与源码类型的全部组合、任意上游消息及完整 Boot 版本矩阵尚未验证。
+Bean-name parsing and catalog Java type/source validation are separate. Bounded hyphenated names supported by condition messages do not imply all such names satisfy catalog symbol validation. All runtime-proxy/source-type combinations, arbitrary upstream messages, and the full Boot matrix remain unverified.
 
-图深度/关联上限、运行响应引用了未暴露 Bean、敏感标识脱敏、未扫描的类型关系不会因目录加载而消失。
-详见[调用策略](contracts/tool-calling-policy.md)与[跨版本归一化](architecture/cross-version-normalization.md)。
+Loading a catalog does not remove graph depth/association limits, unexposed runtime dependencies, sensitive-identifier redaction, or unscanned type relationships.
+See the [calling policy](contracts/tool-calling-policy.md) and [cross-version normalization](architecture/cross-version-normalization.md).

@@ -1,48 +1,48 @@
-# springboot_check_migrations - 数据库迁移审计
+# springboot_check_migrations - Migration audit
 
-返回所有容器和迁移 Bean 的已报告迁移、校验和、顺序及异常状态；排查迁移失败或版本差异时调用，未报告的待执行状态需要可信预期，且不会执行 SQL 或迁移。
+Return reported migrations, checksums, ordering, and anomalous states across Contexts and migration Beans. Use for failures or version differences. Unreported pending state requires trusted expectations; the tool executes no SQL or migrations.
 
-字段依据 [工具 Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json)，公共结果见[信封说明](common-envelope.md)。
+Fields follow the [tool Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json); shared results are described in the [common envelope](common-envelope.md).
 
-## 调用规则
+## Calling rules
 
-engine=auto 分别读取两引擎；只根据已报告库存或完整可信基线表达 pending，不执行迁移。expectedSetComplete 允许对完整读取引擎中未出现的预期记录推导 PENDING，不表示实现了额外迁移检测。Liquibase 不具有 Flyway 的标准版本语义。
+engine=auto reads both engines separately. Express pending only from reported inventory or a complete trusted baseline; never execute migrations. expectedSetComplete permits PENDING inference for expected records absent from a completely read engine; it does not add a separate migration detector. Liquibase lacks Flyway's standard version semantics.
 
-pattern 为区分大小写的有界 glob，仅 `*`、`?` 是通配符；多条件按 AND。参数不接受额外字段，约束失败不读取目标。
+Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcards. Combine filters with AND. Additional arguments are rejected; invalid arguments do not read the target.
 
-## 输入字段
+## Input fields
 
 ### `arguments`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `targetId` | string | 否 | "local" | 最短 `1`；最长 `64`；正则 `^[A-Za-z0-9_-]+$(?![\s\S])` |
-| `maxResults` | integer | 否 | 50 | 最小值 `1`；最大值 `50` |
-| `cursor` | string | 否 | — | 最短 `1`；最长 `2048` |
-| `engine` | "auto" / "flyway" / "liquibase" | 否 | "auto" | — |
-| `contextId` | string | 否 | — | 最短 `1`；最长 `256`；正则 `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
-| `migrationBean` | string | 否 | — | 最短 `1`；最长 `256`；正则 `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
-| `state` | array<"APPLIED" / "PENDING" / "FAILED" / "OUT_OF_ORDER" / "MISSING_FAILED" / "UNKNOWN"> | 否 | — | 最多项 `6`；元素唯一 |
-| `version` | string | 否 | — | 最长 `128` |
-| `expectedMigrations` | array<object> | 否 | — | 最多项 `100` |
-| `expectedSetComplete` | boolean | 否 | false | — |
+| `targetId` | string | No | "local" | minLength `1`; maxLength `64`; pattern `^[A-Za-z0-9_-]+$(?![\s\S])` |
+| `maxResults` | integer | No | 50 | minimum `1`; maximum `50` |
+| `cursor` | string | No | — | minLength `1`; maxLength `2048` |
+| `engine` | "auto" / "flyway" / "liquibase" | No | "auto" | — |
+| `contextId` | string | No | — | minLength `1`; maxLength `256`; pattern `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
+| `migrationBean` | string | No | — | minLength `1`; maxLength `256`; pattern `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
+| `state` | array<"APPLIED" / "PENDING" / "FAILED" / "OUT_OF_ORDER" / "MISSING_FAILED" / "UNKNOWN"> | No | — | maxItems `6`; unique items |
+| `version` | string | No | — | maxLength `128` |
+| `expectedMigrations` | array<object> | No | — | maxItems `100` |
+| `expectedSetComplete` | boolean | No | false | — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `arguments.expectedMigrations[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `engine` | "flyway" / "liquibase" | 是 | — | — |
-| `contextId` | string | 是 | — | 最短 `1`；最长 `256`；正则 `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
-| `migrationBean` | string | 是 | — | 最短 `1`；最长 `256`；正则 `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
-| `identity` | string | 是 | — | 最短 `1`；最长 `256`；正则 `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
-| `version` | string / null | 否 | — | 最长 `128`；— |
-| `checksum` | string / null | 否 | — | 最长 `128`；— |
+| `engine` | "flyway" / "liquibase" | Yes | — | — |
+| `contextId` | string | Yes | — | minLength `1`; maxLength `256`; pattern `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
+| `migrationBean` | string | Yes | — | minLength `1`; maxLength `256`; pattern `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
+| `identity` | string | Yes | — | minLength `1`; maxLength `256`; pattern `^[^\u0000-\u001f\u007f]+$(?![\s\S])` |
+| `version` | string / null | No | — | maxLength `128`; — |
+| `checksum` | string / null | No | — | maxLength `128`; — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-## 查询示例
+## Query examples
 
 ```json
 {
@@ -59,50 +59,50 @@ pattern 为区分大小写的有界 glob，仅 `*`、`?` 是通配符；多条�
 }
 ```
 
-## data 字段
+## Data fields
 
-以下为非空 data 的字段结构；失败时 data 为 null。表中必填允许同时具有 null 类型，不能将 null 补成确定事实。
+The following fields describe nonnull data; failures return data=null. Required fields can still allow null. Never replace null with an invented definite fact.
 
 ### `data`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `pendingVisibility` | "reported" / "baselineInferred" / "unknown" | 是 | — | — |
-| `items` | array<object> | 是 | — | 最多项 `50` |
+| `pendingVisibility` | "reported" / "baselineInferred" / "unknown" | Yes | — | — |
+| `items` | array<object> | Yes | — | maxItems `50` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `data.items[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `id` | string | 是 | — | 最长 `96` |
-| `endpointId` | "flyway" / "liquibase" | 是 | — | — |
-| `observationId` | string | 是 | — | 最长 `96` |
-| `contextId` | string / null | 是 | — | 最长 `256`；— |
-| `parentContextId` | string / null | 是 | — | 最长 `256`；— |
-| `engine` | "flyway" / "liquibase" | 是 | — | — |
-| `migrationBean` | string | 是 | — | 最长 `256` |
-| `identity` | string | 是 | — | 最长 `256` |
-| `script` | string / null | 是 | — | 最长 `256`；— |
-| `changeLog` | string / null | 是 | — | 最长 `256`；— |
-| `changeSetId` | string / null | 是 | — | 最长 `256`；— |
-| `author` | string / null | 是 | — | 最长 `256`；— |
-| `version` | string / null | 是 | — | 最长 `128`；— |
-| `description` | string / null | 是 | — | 最长 `256`；— |
-| `checksum` | string / null | 是 | — | 最长 `128`；— |
-| `checksumType` | "number" / "string" / "absent" | 是 | — | — |
-| `checksumAlgorithm` | string / null | 是 | — | 最长 `64`；— |
-| `executionTimeMs` | number / null | 是 | — | 最小值 `0`；— |
-| `orderExecuted` | integer / null | 是 | — | 最小值 `0`；— |
-| `executedAt` | string / null | 是 | — | 最长 `64`；— |
-| `rawState` | string / null | 是 | — | 最长 `64`；— |
-| `state` | "APPLIED" / "PENDING" / "FAILED" / "OUT_OF_ORDER" / "MISSING_FAILED" / "UNKNOWN" | 是 | — | — |
-| `stateEvidence` | "reported" / "baselineInferred" / "unknown" | 是 | — | — |
-| `attentionRequired` | boolean | 是 | — | — |
+| `id` | string | Yes | — | maxLength `96` |
+| `endpointId` | "flyway" / "liquibase" | Yes | — | — |
+| `observationId` | string | Yes | — | maxLength `96` |
+| `contextId` | string / null | Yes | — | maxLength `256`; — |
+| `parentContextId` | string / null | Yes | — | maxLength `256`; — |
+| `engine` | "flyway" / "liquibase" | Yes | — | — |
+| `migrationBean` | string | Yes | — | maxLength `256` |
+| `identity` | string | Yes | — | maxLength `256` |
+| `script` | string / null | Yes | — | maxLength `256`; — |
+| `changeLog` | string / null | Yes | — | maxLength `256`; — |
+| `changeSetId` | string / null | Yes | — | maxLength `256`; — |
+| `author` | string / null | Yes | — | maxLength `256`; — |
+| `version` | string / null | Yes | — | maxLength `128`; — |
+| `description` | string / null | Yes | — | maxLength `256`; — |
+| `checksum` | string / null | Yes | — | maxLength `128`; — |
+| `checksumType` | "number" / "string" / "absent" | Yes | — | — |
+| `checksumAlgorithm` | string / null | Yes | — | maxLength `64`; — |
+| `executionTimeMs` | number / null | Yes | — | minimum `0`; — |
+| `orderExecuted` | integer / null | Yes | — | minimum `0`; — |
+| `executedAt` | string / null | Yes | — | maxLength `64`; — |
+| `rawState` | string / null | Yes | — | maxLength `64`; — |
+| `state` | "APPLIED" / "PENDING" / "FAILED" / "OUT_OF_ORDER" / "MISSING_FAILED" / "UNKNOWN" | Yes | — | — |
+| `stateEvidence` | "reported" / "baselineInferred" / "unknown" | Yes | — | — |
+| `attentionRequired` | boolean | Yes | — | — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-## 结果解读
+## Interpreting results
 
-按 totalMatched、truncated、coverage.gaps 和 nextAction 共同解读；totalMatched=null 表示完整匹配数未知。续页使用原查询和 nextCursor，快照默认 60 秒绝对 TTL。错误配方及各类预算见[调用策略](../tool-calling-policy.md)。
+Interpret totalMatched, truncated, coverage.gaps, and nextAction together; totalMatched=null means the complete matching count is unknown. Continue using the original query and nextCursor; snapshots default to a 60-second absolute TTL. See [calling policy](../tool-calling-policy.md) for error recipes and budgets.

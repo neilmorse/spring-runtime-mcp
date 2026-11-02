@@ -1,32 +1,32 @@
-# springboot_analyze_startup - 启动瓶颈诊断
+# springboot_analyze_startup - Startup bottlenecks
 
-返回非破坏性启动快照中的版本、时间线跨度、最慢步骤及父子链；排查慢启动时调用，不用于当前请求延迟，也不执行排空缓冲区的 POST。
+Return reported version, timeline span, slowest steps, and parent chains from a nondestructive startup snapshot. Use for slow startup, not current request latency; never POST to drain the buffer.
 
-字段依据 [工具 Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json)，公共结果见[信封说明](common-envelope.md)。
+Fields follow the [tool Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json); shared results are described in the [common envelope](common-envelope.md).
 
-## 调用规则
+## Calling rules
 
-读取固定 GET startup 快照；时间线跨度不是 JVM 完整启动时间，重叠步骤不相加。单位、父节点或时间证据缺失时保留 gaps。
+Read fixed GET startup snapshots. Timeline span is not complete JVM startup time; do not sum overlapping steps. Preserve gaps for missing unit, parent, or timing evidence.
 
-pattern 为区分大小写的有界 glob，仅 `*`、`?` 是通配符；多条件按 AND。参数不接受额外字段，约束失败不读取目标。
+Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcards. Combine filters with AND. Additional arguments are rejected; invalid arguments do not read the target.
 
-## 输入字段
+## Input fields
 
 ### `arguments`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `targetId` | string | 否 | "local" | 最短 `1`；最长 `64`；正则 `^[A-Za-z0-9_-]+$(?![\s\S])` |
-| `maxResults` | integer | 否 | 50 | 最小值 `1`；最大值 `50` |
-| `cursor` | string | 否 | — | 最短 `1`；最长 `2048` |
-| `stepNamePattern` | string | 否 | — | 最短 `1`；最长 `128`；正则 `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
-| `beanNamePattern` | string | 否 | — | 最短 `1`；最长 `128`；正则 `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
-| `minDurationMs` | number | 否 | 0 | 最小值 `0` |
-| `maxDepth` | integer | 否 | 4 | 最小值 `0`；最大值 `16` |
+| `targetId` | string | No | "local" | minLength `1`; maxLength `64`; pattern `^[A-Za-z0-9_-]+$(?![\s\S])` |
+| `maxResults` | integer | No | 50 | minimum `1`; maximum `50` |
+| `cursor` | string | No | — | minLength `1`; maxLength `2048` |
+| `stepNamePattern` | string | No | — | minLength `1`; maxLength `128`; pattern `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
+| `beanNamePattern` | string | No | — | minLength `1`; maxLength `128`; pattern `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
+| `minDurationMs` | number | No | 0 | minimum `0` |
+| `maxDepth` | integer | No | 4 | minimum `0`; maximum `16` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-## 查询示例
+## Query examples
 
 ```json
 {
@@ -42,51 +42,51 @@ pattern 为区分大小写的有界 glob，仅 `*`、`?` 是通配符；多条�
 }
 ```
 
-## data 字段
+## Data fields
 
-以下为非空 data 的字段结构；失败时 data 为 null。表中必填允许同时具有 null 类型，不能将 null 补成确定事实。
+The following fields describe nonnull data; failures return data=null. Required fields can still allow null. Never replace null with an invented definite fact.
 
 ### `data`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `springBootVersion` | string / null | 是 | — | 最长 `64`；— |
-| `totalDurationMs` | number / null | 是 | — | 最小值 `0`；— |
-| `durationBasis` | "timelineSpan" / "unknown" | 是 | — | — |
-| `timelineComplete` | boolean | 是 | — | — |
-| `items` | array<object> | 是 | — | 最多项 `50` |
+| `springBootVersion` | string / null | Yes | — | maxLength `64`; — |
+| `totalDurationMs` | number / null | Yes | — | minimum `0`; — |
+| `durationBasis` | "timelineSpan" / "unknown" | Yes | — | — |
+| `timelineComplete` | boolean | Yes | — | — |
+| `items` | array<object> | Yes | — | maxItems `50` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `data.items[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `id` | string | 是 | — | 最长 `96` |
-| `endpointId` | "startup" | 是 | — | — |
-| `observationId` | string | 是 | — | 最长 `96` |
-| `stepId` | string | 是 | — | 最长 `20`；正则 `^[0-9]+$(?![\s\S])` |
-| `parentStepId` | string / null | 是 | — | 最长 `20`；正则 `^[0-9]+$(?![\s\S])`；— |
-| `name` | string | 是 | — | 最长 `256` |
-| `startedAt` | string / null | 是 | — | 格式 `date-time`；— |
-| `durationNanos` | string / null | 是 | — | 最长 `30`；正则 `^[0-9]+$(?![\s\S])`；— |
-| `durationMs` | number / null | 是 | — | 最小值 `0`；— |
-| `tags` | array<object> | 是 | — | 最多项 `10` |
-| `ancestorIds` | array<string> | 是 | — | 最多项 `16` |
-| `relationState` | "resolved" / "orphan" / "cycle" / "duplicate" | 是 | — | — |
-| `bottleneckCode` | "BEAN_INSTANTIATION" / "PACKAGE_SCAN" / "AUTO_CONFIGURATION" / "OTHER" / "UNKNOWN" | 是 | — | — |
+| `id` | string | Yes | — | maxLength `96` |
+| `endpointId` | "startup" | Yes | — | — |
+| `observationId` | string | Yes | — | maxLength `96` |
+| `stepId` | string | Yes | — | maxLength `20`; pattern `^[0-9]+$(?![\s\S])` |
+| `parentStepId` | string / null | Yes | — | maxLength `20`; pattern `^[0-9]+$(?![\s\S])`; — |
+| `name` | string | Yes | — | maxLength `256` |
+| `startedAt` | string / null | Yes | — | format `date-time`; — |
+| `durationNanos` | string / null | Yes | — | maxLength `30`; pattern `^[0-9]+$(?![\s\S])`; — |
+| `durationMs` | number / null | Yes | — | minimum `0`; — |
+| `tags` | array<object> | Yes | — | maxItems `10` |
+| `ancestorIds` | array<string> | Yes | — | maxItems `16` |
+| `relationState` | "resolved" / "orphan" / "cycle" / "duplicate" | Yes | — | — |
+| `bottleneckCode` | "BEAN_INSTANTIATION" / "PACKAGE_SCAN" / "AUTO_CONFIGURATION" / "OTHER" / "UNKNOWN" | Yes | — | — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `data.items[].tags[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `key` | string | 是 | — | 最长 `128` |
-| `value` | string / null | 是 | — | 最长 `256`；— |
+| `key` | string | Yes | — | maxLength `128` |
+| `value` | string / null | Yes | — | maxLength `256`; — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-## 结果解读
+## Interpreting results
 
-按 totalMatched、truncated、coverage.gaps 和 nextAction 共同解读；totalMatched=null 表示完整匹配数未知。续页使用原查询和 nextCursor，快照默认 60 秒绝对 TTL。错误配方及各类预算见[调用策略](../tool-calling-policy.md)。
+Interpret totalMatched, truncated, coverage.gaps, and nextAction together; totalMatched=null means the complete matching count is unknown. Continue using the original query and nextCursor; snapshots default to a 60-second absolute TTL. See [calling policy](../tool-calling-policy.md) for error recipes and budgets.

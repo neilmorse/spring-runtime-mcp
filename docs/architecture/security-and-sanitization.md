@@ -1,53 +1,53 @@
-# 当前安全架构与脱敏边界
+# Security architecture and sanitization boundaries
 
-本项目只读诊断登记的回环 Spring Boot 实例。网络边界由 [actuator_http.py](../../src/spring_runtime_mcp/transport/actuator_http.py) 实现，能力门禁由 [response_gate.py](../../src/spring_runtime_mcp/transport/response_gate.py) 实现，工具参数与输出由 [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) 约束。
+The project performs read-only diagnostics on registered loopback Spring Boot instances. [actuator_http.py](../../src/spring_runtime_mcp/transport/actuator_http.py) implements the network boundary, [response_gate.py](../../src/spring_runtime_mcp/transport/response_gate.py) gates capabilities, and the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) constrains tool arguments and output.
 
-## 目标、连接与凭据
+## Targets, connections, and credentials
 
-CLI 登记单个 origin/target。origin 允许 http/https、host 和 port，拒绝凭据、路径、query、fragment、控制字符及非规范危险地址。每次连接解析 DNS 后先验证全组地址均为回环，再使用数字 IP 建连并核对实际 peer；IPv4 映射等地址按现有校验处理，不能绕过回环限制。
+The CLI registers one origin/target. Origins allow http/https, host, and port, rejecting credentials, paths, query, fragment, control characters, and unsafe noncanonical addresses. Each connection resolves DNS, verifies the entire address set is loopback, connects by numeric IP, and checks the actual peer. IPv4-mapped and related forms follow existing validation and cannot bypass loopback restrictions.
 
-连接器使用标准库 `http.client`，通过工作线程执行阻塞 I/O；不读取环境代理，不跟随重定向。HTTPS 使用默认验证上下文，保持证书验证和原 host 的 TLS 名称验证。Basic、任意 headers、远程地址与自定义基路径不提供入口。
+The connector uses standard-library `http.client`, running blocking I/O in worker threads. It neither reads environment proxies nor follows redirects. HTTPS uses the default verification context, preserving certificate validation and TLS name checks against the original host. There is no entry point for Basic, arbitrary headers, remote addresses, or custom base paths.
 
-`--token-env` 只登记环境变量名称；生产代码仅在 CLI 读取值，随后绑定该连接器和 SanitizerPipeline 的已知秘密集合。请求只向已登记 origin 的固定端点发送该 Bearer。凭据不进入日志、错误信息、工具定义或原始响应缓存。
+`--token-env` registers only a variable name. Production code reads its value only in the CLI, then binds it to the connector and SanitizerPipeline's known-secret set. The Bearer credential is sent only to fixed endpoints on the registered origin. Credentials never enter logs, error messages, tool definitions, or raw-response caches.
 
-## 固定端点与只读门禁
+## Fixed endpoints and read-only gates
 
-ResponseGateReader 先验证登记目标和启用能力，再固定调用 GET、`follow_redirects=False`。连接器独立强制 GET；其他方法及跟随重定向请求均拒绝。
+ResponseGateReader checks the registered target and enabled capability before making a fixed GET with `follow_redirects=False`. The connector independently enforces GET and rejects other methods or requests to follow redirects.
 
-| 逻辑端点 | 固定路径 |
+| Logical endpoint | Fixed path |
 | --- | --- |
 | beans、conditions、mappings | `/actuator/beans`、`/actuator/conditions`、`/actuator/mappings` |
 | health | `/actuator/health` |
 | health-liveness、health-readiness | `/actuator/health/liveness`、`/actuator/health/readiness` |
 | flyway、liquibase、startup | `/actuator/flyway`、`/actuator/liquibase`、`/actuator/startup` |
 | openapi | `/actuator/openapi` |
-| env、configprops | `/actuator/env`、`/actuator/configprops`；默认关闭 |
+| env, configprops | `/actuator/env`, `/actuator/configprops`; disabled by default |
 
-路径来自连接器内固定表，不拼接工具参数。禁止 heapdump、原始 logfile、目标写方法与业务端点调用；startup POST 会排空缓冲区，始终禁止。404、鉴权失败和重定向不触发其他路径或匿名重试。
+Paths come from the connector's fixed table, never tool-argument concatenation. heapdump, raw logfile, target writes, and business-endpoint requests are prohibited. startup POST drains the buffer and is always forbidden. A 404, authentication failure, or redirect never triggers an alternative path or anonymous retry.
 
-## 响应、时限与取消
+## Responses, deadlines, and cancellation
 
-- HTTP 状态及 Content-Type 在正文读取前检查；重定向、401/403 和不支持的媒体类型直接拒绝。健康系列 503 允许读取为健康证据。
-- 接受 `application/json` 和 Actuator v2/v3 JSON 媒体类型；Accept 固定为 `application/json`。响应表示来自媒体类型，不据此推断精确 Boot 版本。
-- 响应头累计最多 32 KiB；正文最多 8 MiB。支持无编码、identity 和单层 gzip，压缩前后分别限额；其它编码拒绝。
-- Content-Length 未收满、畸形 gzip、重复 JSON 键、非有限数字及有界 JSON 深度/节点超限均显式失败，不回显原响应。
-- 多地址连接尝试共享 2 秒建连预算。Reader 默认 5 秒，Services 读取等待最多 5 秒并受工具 15 秒总时限约束；等待每目标两个读取槽也计时。
-- 超时或取消时中止连接，短暂等待工作线程清理后重抛。系统 DNS 调用不能强制终止，不宣称所有底层线程在工具超时瞬间停止。
+- Check HTTP status and Content-Type before reading the body. Reject redirects, 401/403, and unsupported media types immediately. Health-family 503 responses may be read as health evidence.
+- Accept `application/json` and Actuator v2/v3 JSON media types; the Accept header is fixed to `application/json`. Media types identify representation, not an exact Boot version.
+- Headers have a cumulative 32 KiB limit; bodies are capped at 8 MiB. Support no encoding, identity, and a single gzip layer, with limits before and after decompression. Reject other encodings.
+- Fail explicitly on incomplete Content-Length, malformed gzip, duplicate JSON keys, nonfinite numbers, or bounded JSON depth/node violations, without echoing the original response.
+- Address attempts share a 2-second connection budget. The reader defaults to 5 seconds; Services waits at most 5 seconds within the shared 15-second tool deadline. Waiting for either of the target's two read slots also counts.
+- On timeout or cancellation, abort the connection, briefly wait for worker cleanup, then re-raise. System DNS calls cannot be forcibly terminated; not every underlying thread is guaranteed to stop the instant a tool times out.
 
-## 配置读取与两层脱敏
+## Configuration reads and two-layer sanitization
 
-env/configprops 需要操作者显式登记读取策略。网络仍读取固定完整端点，在上游预算内本地投影；登记范围限制可见字段，不限制应用实际生成的响应大小。查询与登记属性/前缀取交集，profiles 读取单独登记。
+env/configprops require an explicitly registered read policy. The network still reads complete fixed endpoints, with local projection inside upstream budgets. Registration restricts visible fields, not the size of the application's actual response. Intersect queries with registered properties/prefixes; register profile reads separately.
 
-[SanitizerPipeline](../../src/spring_runtime_mcp/policy/sanitization.py) 负责字段白名单、敏感键和值、描述符上下文传播、连接串、origin、已知秘密及编码/嵌入值处理；敏感值使用 `[REDACTED_BY_MCP]` 或省略。配置值默认隐藏；显式 includeValues 也只能输出登记范围内允许的脱敏值。输入值、绑定值及 origin 的关联敏感性一起传播。
+[SanitizerPipeline](../../src/spring_runtime_mcp/policy/sanitization.py) handles field allowlists, sensitive keys/values, descriptor-context propagation, connection strings, origin, known secrets, and encoded/embedded values. Sensitive values become `[REDACTED_BY_MCP]` or are omitted. Configuration values are hidden by default; explicit includeValues can expose only allowed sanitized values within the registered scope. Sensitivity propagates across input values, bound values, and origin associations.
 
-原始 env/configprops 树、健康异常文本、条件消息和 OpenAPI descriptions 不出站。健康只保留批准的结构化字段，origin 只保留可安全表示的来源标识及位置；证据不可用使用 null、Fact 状态或 gaps。redactions 使用安全输出字段/索引，不包含原始秘密键或秘密摘要。
+Raw env/configprops trees, health exception text, condition messages, and OpenAPI descriptions never leave the boundary. Health retains only approved structured fields; origin retains only safe source identifiers and positions. Unavailable evidence uses null, Fact states, or gaps. redactions refers to safe output fields/indices, never raw secret keys or secret digests.
 
-独立 [output_guard](../../src/spring_runtime_mcp/policy/output_guard.py) 检查序列化与缓存出口。快照仅存脱敏数据，策略戳不保存明文凭据；策略变化后复验整个快照，失败则删除相关游标。该机制降低已识别格式的泄露和指令透传风险，不构成任意语义提示注入免疫。
+The independent [output_guard](../../src/spring_runtime_mcp/policy/output_guard.py) checks serialization and cache output. Snapshots contain sanitized data only; policy stamps contain no plaintext credentials. Revalidate whole snapshots after policy changes and remove associated cursors on failure. This reduces leakage and instruction-forwarding risks for recognized formats; it does not guarantee immunity to arbitrary semantic prompt injection.
 
-## 协议出口与失败处理
+## Protocol output and failure handling
 
-STDIO stdout 只承载 JSON-RPC，安全日志与 CLI 错误写 stderr。宿主验证工具输入、输出与 RFC3339 时间；非法参数不联网。安全错误转换为固定本地消息，禁止异常 repr、堆栈、远端建议或原始响应出站。
+STDIO stdout carries JSON-RPC only; safe logs and CLI errors go to stderr. The host validates tool input/output and RFC3339 timestamps; invalid arguments cause no network access. Safety errors become fixed local messages. Exception repr, stacks, remote suggestions, and raw responses never leave the boundary.
 
-每个工具结果包含 structuredContent 与同内容的文本副本；完整 JSON-RPC 响应最多 16,384 UTF-8 字节。工具分页、宿主结果构造与 SDK 实际发送层分别执行预算检查；安全检查失败不会降级为原文输出。静态 tools/list 不受工具结果 16 KiB 上限裁剪。
+Each tool result contains structuredContent and an equivalent text copy. The complete JSON-RPC response is capped at 16,384 UTF-8 bytes. Pagination, host result construction, and the actual SDK send layer independently check this budget. A safety failure never falls back to raw output. Static tools/list is not trimmed by the 16 KiB tool-result limit.
 
-默认测试与合成安全回归见 [tests/security](../../tests/security/README.md)，检查命令见[发布流程](../launch/README.md)。自建回环 TLS 测试与固定项目样本不代表完整真实 TLS/SNI、平台或客户端矩阵通过。
+See [tests/security](../../tests/security/README.md) for default tests and synthetic security regressions, and the [release workflow](../launch/README.md) for commands. Self-hosted loopback TLS checks and fixed-project samples do not establish a complete real TLS/SNI, platform, or client matrix.

@@ -1,24 +1,24 @@
-# 被诊断 Spring Boot 应用配置指南
+# Target Spring Boot application setup
 
-本指南只配置被诊断应用的标准观测能力，不安装自定义 Agent，不把业务方法改成 MCP 工具。当前宿主可只读连接登记的回环 origin，支持 `--token-env` 绑定现有 Bearer 凭据；Basic、自定义管理基路径和远程目标尚未交付。首次安装、凭据转发和查询见[首次接入指南](first-query.md)，客户端模板见[配置指南](client-configuration.md)。目标依赖、暴露与重启仍须应用维护者明确授权。
+This guide configures standard observability in the target application. It installs no custom agent and does not turn business methods into MCP tools. The host reads registered loopback origins and supports `--token-env` binding to existing Bearer credentials. Basic, custom management base paths, and remote targets are unsupported. See [first query](first-query.md) for installation, credential forwarding, and queries, and [client configuration](client-configuration.md) for templates. Target dependencies, exposure, and restarts still require explicit application-maintainer authorization.
 
-## 1. 先确认版本和现有授权
+## 1. Check the version and existing authorization
 
-目标应用需要已有 `spring-boot-starter-actuator`；依赖版本由自身 Spring Boot BOM 管理。Flyway、Liquibase 和 springdoc 均只在应用本来需要时使用，不为诊断安装业务 MCP Starter、数据库工具或字节码 Agent。
+The target needs `spring-boot-starter-actuator`, versioned by its own Spring Boot BOM. Use Flyway, Liquibase, and springdoc only when already needed by the application; diagnostics do not require business MCP starters, database tools, or bytecode agents.
 
-| Boot 版本 | 只读上限 | env/configprops 值保护 | 本指南策略 |
+| Boot version | Read-only ceiling | env/configprops value protection | Guide policy |
 | --- | --- | --- | --- |
-| 3.4+ / 4.x | 支持 `management.endpoints.access.max-permitted` | `show-values: never` | 使用下一节模板；配置诊断默认关闭 |
-| 3.0–3.3 | 无上述全局访问上限 | `show-values: never` | 删除不支持的 access 配置，必须使用现有安全层限制 GET |
-| 2.7 | 无上述全局访问上限 | 使用旧版 keys-to-sanitize，不把 show-values 当成有效防线 | 使用独立旧版模板，默认禁用 env/configprops，并限制 HTTP 方法 |
+| 3.4+ / 4.x | Supports `management.endpoints.access.max-permitted` | `show-values: never` | Use the next template; configuration diagnostics stay disabled by default. |
+| 3.0–3.3 | No equivalent global access ceiling | `show-values: never` | Remove unsupported access settings; enforce GET with the existing security layer. |
+| 2.7 | No equivalent global access ceiling | Use legacy keys-to-sanitize; do not rely on show-values | Use the separate legacy template, disable env/configprops by default, and restrict HTTP methods. |
 
-版本依据：[Boot 3.4 访问控制](https://docs.spring.io/spring-boot/3.4/reference/actuator/endpoints.html#actuator.endpoints.access)、[Boot 3.3 端点机制](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html)、[Boot 3.0 值屏蔽](https://docs.spring.io/spring-boot/docs/3.0.13/reference/html/actuator.html#actuator.endpoints.sanitization)。旧版属性见 [2.7 env API](https://docs.spring.io/spring-boot/docs/2.7.18/api/org/springframework/boot/actuate/autoconfigure/env/EnvironmentEndpointProperties.html)与 [configprops API](https://docs.spring.io/spring-boot/docs/2.7.18/api/org/springframework/boot/actuate/autoconfigure/context/properties/ConfigurationPropertiesReportEndpointProperties.html)。
+Version references: [Boot 3.4 access controls](https://docs.spring.io/spring-boot/3.4/reference/actuator/endpoints.html#actuator.endpoints.access), [Boot 3.3 endpoints](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html), and [Boot 3.0 value masking](https://docs.spring.io/spring-boot/docs/3.0.13/reference/html/actuator.html#actuator.endpoints.sanitization). Legacy properties: [2.7 env API](https://docs.spring.io/spring-boot/docs/2.7.18/api/org/springframework/boot/actuate/autoconfigure/env/EnvironmentEndpointProperties.html) and [configprops API](https://docs.spring.io/spring-boot/docs/2.7.18/api/org/springframework/boot/actuate/autoconfigure/context/properties/ConfigurationPropertiesReportEndpointProperties.html).
 
-仅设 include 不等于授权；仅设 read-only 也不等于所有 GET 安全，heapdump/logfile 仍须排除。现有 Spring Security、TLS、鉴权和业务安全链继续有效，不通过 `permitAll`、关闭 CSRF 或 `show-values=always` 绕过故障。
+An include list is not authorization; read-only does not make every GET safe. Exclude heapdump/logfile. Retain existing Spring Security, TLS, authentication, and business security chains; do not work around failures with `permitAll`, disabled CSRF, or `show-values=always`.
 
 ## 2. Boot 3.4+/4.x：application-local-mcp.yml
 
-将下面完整内容保存到**目标应用**的 `src/main/resources/application-local-mcp.yml`。业务端口使用示例值 8080，独立管理端口使用 18081；如应用原有业务端口不同，保留实际值，管理端口必须与其不同且未被占用。
+Save the complete template below in the **target application's** `src/main/resources/application-local-mcp.yml`. Example business and separate management ports are 8080 and 18081. Preserve the actual business port if different; the management port must be distinct and available.
 
 ```yaml
 server:
@@ -49,27 +49,27 @@ management:
       show-details: never
 ```
 
-`management.server.address` 的独立绑定依赖独立管理端口；只写 address 而与业务共用端口，不能据此宣称管理端点已隔离。[管理监听地址说明](https://docs.spring.io/spring-boot/3.4/reference/actuator/monitoring.html)。不要把地址改成 `0.0.0.0`，也不要为容器/远程开发自动开放端口。127.0.0.1 属于目标进程所在网络命名空间，不自动指向开发者宿主机。
+Independent `management.server.address` binding requires a separate management port. Setting address while sharing the business port does not establish management isolation. See [management listener configuration](https://docs.spring.io/spring-boot/3.4/reference/actuator/monitoring.html). Do not change it to `0.0.0.0` or automatically expose ports for container/remote development. 127.0.0.1 belongs to the target process's namespace, not automatically the developer host.
 
-include 是诊断能力的明确列表，exclude 额外拒绝危险读取。`env/configprops` 虽在候选列表中，仍因 `access: none` 不可用；这与本项目默认关闭配置诊断一致。日常只检查 Bean/路由时可继续把 include 精简成 `health,beans,conditions,mappings`。启用某个端点前先确认需要和授权；Flyway/Liquibase 未安装时不会凭配置生成迁移数据。
+include explicitly lists diagnostic capabilities; exclude additionally rejects dangerous reads. `env/configprops` remain unavailable through `access: none` despite appearing in the candidate list, matching this project's default. For ordinary Bean/route queries, narrow include to `health,beans,conditions,mappings`. Confirm need and authorization before enabling endpoints. Configuration cannot create migration data if Flyway/Liquibase is not installed.
 
-仅在需要配置来源诊断且获得授权后，把 env/configprops 各自的 `access: none` 改为 `access: read-only`，保持两处 `show-values: never`。不要粘贴整份原始 env/configprops 响应；`origin`、自定义详情和资源字段仍可能携带敏感内容，MCP 读取执行独立脱敏和登记范围投影。
+Only when configuration-source diagnostics are needed and authorized, change each env/configprops `access: none` to `access: read-only`, keeping both `show-values: never`. Do not paste complete raw responses: `origin`, custom details, and resource fields may remain sensitive. MCP reads apply independent sanitization and registered-scope projection.
 
-## 3. 旧版本：不要依赖被忽略的属性
+## 3. Legacy versions: remove unsupported properties
 
 ### Boot 3.0–3.3
 
-沿用上一节的端口、exposure、show-values 和 health 设置，但删除 `management.endpoints.access` 及两个端点的 `access` 属性。用 `management.endpoint.env.enabled: false` 和 `management.endpoint.configprops.enabled: false` 保持配置诊断默认关闭；显式启用时仍保留 show-values=never。旧版本必须另用安全层拒绝写方法，不能用 enabled/exposure 替代方法授权。
+Keep the previous ports, exposure, show-values, and health settings, but remove `management.endpoints.access` and both endpoint `access` properties. Set `management.endpoint.env.enabled: false` and `management.endpoint.configprops.enabled: false` to keep configuration diagnostics disabled. Explicit enablement must still retain show-values=never. Legacy applications need security-layer rejection of writes; enabled/exposure is not method authorization.
 
-旧版接入沿用应用已有的 Bearer 认证。由维护者在实际处理 Actuator 请求的安全链中合并规则：只允许获权诊断角色读取所需固定路径的 GET，其他方法及未批准路径拒绝。优先从 `health`、`beans`、`conditions`、`mappings` 的最小集合开始；需要健康组时另行批准 `/actuator/health/liveness` 和 `/actuator/health/readiness`。
+Use the application's existing Bearer authentication. Maintainers must merge rules into the security chain actually handling Actuator: permit authorized diagnostic roles to GET required fixed paths and reject other methods/unapproved paths. Start with `health`, `beans`, `conditions`, and `mappings`; separately approve `/actuator/health/liveness` and `/actuator/health/readiness` if needed.
 
-必须同时核对链的匹配范围、顺序、Bearer 验证器及角色映射。独立高优先级链不会自动继承其他链的认证配置；仅添加 `httpBasic()` 无法让 MCP 的 Bearer 获得认证。MVC 使用现有 `SecurityFilterChain`，WebFlux 使用现有 `SecurityWebFilterChain`，保留业务路径的原有保护。具体认证机制取决于应用已有实现，不能用一段通用新建链代码代替合并审查。[Spring Boot 安全链说明](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html#actuator.endpoints.security)。
+Check chain scope, ordering, Bearer validators, and role mapping together. A separate higher-priority chain does not automatically inherit another chain's authentication. Adding `httpBasic()` cannot authenticate the MCP Bearer token. Use existing `SecurityFilterChain` for MVC and `SecurityWebFilterChain` for WebFlux, preserving business-route protection. Authentication depends on the application's implementation; generic new-chain code cannot replace a merge review. See [Boot security chains](https://docs.spring.io/spring-boot/3.3/reference/actuator/endpoints.html#actuator.endpoints.security).
 
-如果管理入口只支持 Basic，当前 MCP 不能直接接入；维护者确认并配置可用 Bearer 入口后，再按[首次接入指南](first-query.md)转发命名环境变量并完成一次实际工具查询。
+A Basic-only management entry cannot be used directly by this MCP host. After a maintainer verifies and configures a usable Bearer entry, follow [first query](first-query.md) to forward the named variable and perform an actual tool call.
 
 ### Boot 2.7
 
-用下面完整模板替代第 2 节，不混入 3.4 的 access 或 3.x 的 show-values 属性。`keys-to-sanitize: [".*"]` 对旧版所有属性键采取保守屏蔽，但不构成任意 origin/异常文本都安全的保证；env/configprops 因此仍默认关闭且不在 exposure 中。
+Replace section 2 with the complete template below; do not mix in 3.4 access or 3.x show-values properties. `keys-to-sanitize: [".*"]` conservatively masks all legacy property keys but cannot guarantee safe arbitrary origins/exception text. env/configprops therefore remain disabled and excluded from exposure.
 
 ```yaml
 server:
@@ -98,20 +98,20 @@ management:
       show-details: never
 ```
 
-Boot 2.7/Spring Security 5.7 同样需要在现有 Bearer 认证链中合并固定路径 GET 与角色授权；使用该版本支持的 API，保留业务链与认证提供器。默认关闭 env/configprops，避免将旧版值保护误作新版本属性已生效。[Boot 2.7 安全说明](https://docs.spring.io/spring-boot/docs/2.7.18/reference/html/actuator.html#actuator.endpoints.security)。
+Boot 2.7/Spring Security 5.7 likewise needs fixed-path GET/role rules merged into the existing Bearer chain, using supported APIs while preserving business chains and authentication providers. Keep env/configprops disabled and do not mistake legacy value protection for active modern properties. See [Boot 2.7 security](https://docs.spring.io/spring-boot/docs/2.7.18/reference/html/actuator.html#actuator.endpoints.security).
 
-不要在未配置方法级拒绝规则的旧版应用中开放 startup。若需要 env/configprops，必须先单独审查现有安全策略、取消对应 enabled/exclude 禁令并保持全键屏蔽；这不应成为默认本地启动配置。
+Do not expose startup on legacy applications without method-level rejection rules. env/configprops require separate security review, removal of their enabled/exclude restrictions, and continued all-key masking; this is not the default local startup configuration.
 
-## 4. 开启非破坏性启动快照
+## 4. Enable nondestructive startup snapshots
 
-在应用入口文件导入以下两个标准类。`Application` 在本例中表示目标应用自己的 `@SpringBootApplication` 主类；如果实际主类叫 `OrdersApplication`，下方第一行使用 `OrdersApplication.class`。
+Import these two standard classes in the application entry point. `Application` represents the target's own `@SpringBootApplication` class; use `OrdersApplication.class` in the first line below if that is its actual name.
 
 ```java
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.metrics.buffering.BufferingApplicationStartup;
 ```
 
-在现有 `main(String[] args)` 内，用以下 **3 行**替换直接的 `SpringApplication.run(...)`：
+Inside the existing `main(String[] args)`, replace direct `SpringApplication.run(...)` with these **three lines**:
 
 ```java
 SpringApplication application = new SpringApplication(Application.class);
@@ -119,45 +119,45 @@ application.setApplicationStartup(new BufferingApplicationStartup(2048));
 application.run(args);
 ```
 
-这是原生启动采集配置，不修改业务逻辑、不安装第三方 Agent；设置必须先于 run。2048 是缓冲容量，不是耗时阈值。采集需要从新一次启动开始；提出改入口或重启建议不等于 Agent 获准自动执行。[官方启动采集说明](https://docs.spring.io/spring-boot/3.4/reference/features/spring-application.html#features.spring-application.application-startup)。
+This configures native startup collection, without business changes or a third-party agent, before run. 2048 is buffer capacity, not a duration threshold. Collection begins with a new startup; proposing an entry-point change or restart does not authorize automatic execution. See [official startup collection](https://docs.spring.io/spring-boot/3.4/reference/features/spring-application.html#features.spring-application.application-startup).
 
-只读取 `GET /actuator/startup` 快照。`POST /actuator/startup` 会读取并排空缓冲区，不用于采集、恢复或排障验证。容量不足、未采集或被其他消费者排空的数据不能补回；空时间线不能证明没有瓶颈。[Startup Web API](https://docs.spring.io/spring-boot/3.4/api/rest/actuator/startup.html)。
+Read only `GET /actuator/startup`. `POST /actuator/startup` reads and drains the buffer and is not used for collection, recovery, or troubleshooting verification. Missing, capacity-limited, or previously drained events cannot be restored; an empty timeline does not establish absence of bottlenecks. See the [Startup Web API](https://docs.spring.io/spring-boot/3.4/api/rest/actuator/startup.html).
 
-## 5. 激活与人工核验
+## 5. Activate and verify manually
 
-在**被诊断应用仓库**启动已有 Maven Wrapper 项目时，可使用下面的命令；本 MCP 仓库没有该 wrapper，不在这里执行。若应用依赖其他开发 Profile，按其原有启动方式同时启用 local-mcp，并确认最终生效配置。
+For an existing Maven Wrapper project, run this in the **target application's repository**, not the MCP repository, which has no wrapper. Retain required development profiles alongside local-mcp using the target's existing startup process, and verify the effective configuration.
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=local-mcp
 ```
 
-MCP 接入以已有 Bearer 和实际工具查询为验收依据，凭据转发见[首次接入指南](first-query.md)。以下 Basic 命令仅供维护者核验已经支持 Basic 的管理入口；即使返回成功，也不证明 MCP 可以认证，不应为运行这些命令新增 Basic。
+MCP acceptance uses existing Bearer authentication and actual tool queries; see [first query](first-query.md) for forwarding. The Basic commands below are only for maintainers checking an entry that already supports Basic. Their success does not establish MCP authentication; do not add Basic just to run them.
 
-下面命令使用示例诊断用户名 `mcp-reader`；先确保你的应用已有该用户且具有获权诊断角色，否则改用实际已授权账号。curl 会提示输入密码，不把密码放入命令、URL、配置或聊天。命令只输出 HTTP 状态，不保存诊断 JSON，也不跟随重定向。
+The example diagnostic user is `mcp-reader`; first confirm an existing user with the authorized role, or substitute the actual authorized account. curl prompts for a password, keeping it out of commands, URLs, configuration, and chat. These commands print HTTP status only, save no diagnostic JSON, and follow no redirects.
 
 ```bash
 curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request GET --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:18081/actuator/health
 curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request GET --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:18081/actuator/startup
 ```
 
-这些命令假设示例管理端口使用本地 HTTP；已有 HTTPS 的实例继续使用其真实 HTTPS 地址和受信证书，不能使用 `-k`。Bearer-only 应用应沿用现有受保护凭据流程，不为测试降级成 Basic 或把 token 粘到 shell 历史。宿主通过 `--token-env` 独立绑定既有 Bearer 凭据，不接受客户端 MCP Token 透传。
+These examples assume local HTTP on the management port. For existing HTTPS, retain the real HTTPS origin and trusted certificates; do not use `-k`. Bearer-only applications should use their existing protected credential process, without downgrading to Basic or placing tokens in shell history. The host independently binds existing Bearer credentials through `--token-env`; it does not forward a client's MCP token.
 
-| 观察 | 下一步 |
+| Observation | Next check |
 | --- | --- |
-| 连接拒绝/超时 | 核查 Profile、监听地址、18081 是否启动及当前网络命名空间，不扩大绑定范围 |
-| 401/403 | 检查已有凭据、角色和诊断链顺序，不改为 permitAll |
-| 301/302 或 `/login` | 检查现有认证入口；不 `curl -L`、不把 HTML 当 JSON |
-| 404 | 区分未启用、未暴露、被 access=none 移除、路径/端口错误和缺少对应原生能力 |
-| health 200/503 但只有 status | 详情当前不可见；保留未知，按需申请 when-authorized 详情，不默认 always |
-| startup 404/空 events | 核对 exposure、版本方法守卫、原生采集器和新启动；不要 POST 补救 |
-| env/configprops 不可用 | 默认关闭是预期行为；只为明确的配置诊断启用，并保持目标与本地两层脱敏 |
+| Connection refused/timeout | Check profiles, listener, whether 18081 is running, and the network namespace without broadening binding. |
+| 401/403 | Check existing credentials, roles, and diagnostic-chain ordering; do not use permitAll. |
+| 301/302 or `/login` | Check the existing authentication entry; do not use `curl -L` or treat HTML as JSON. |
+| 404 | Distinguish disabled/unexposed endpoints, access=none, incorrect path/port, and missing native capability. |
+| health 200/503 with status only | Details are not visible; retain unknowns and request when-authorized details only if needed, not always by default. |
+| startup 404/empty events | Check exposure, version-specific method guards, the native collector, and a fresh startup; never repair with POST. |
+| env/configprops unavailable | Disabled is the default; enable only for an explicit diagnostic need, retaining target and local sanitization. |
 
-核对启动日志和实际监听，确保管理端口只在 127.0.0.1；环境变量、命令行参数或其他 Profile 可以覆盖 YAML，不能仅凭文件内容断言监听安全。info 和自定义 Health 内容也应保持最少信息，目标端掩码不能替代本地二次脱敏。
+Verify startup information and actual listeners to ensure the management port binds only to 127.0.0.1. Environment variables, arguments, or other profiles can override YAML; a file alone cannot establish safe binding. Keep info/custom Health details minimal; target masking does not replace local sanitization.
 
-## 6. OpenAPI 与诊断结束后的收敛
+## 6. OpenAPI and cleanup
 
-已有 springdoc 的应用默认可在业务端口提供 `/v3/api-docs`。当前连接器只读取登记 origin 的固定 `/actuator/openapi`；自定义 `springdoc.api-docs.path` 不会自动回退，管理端口的 `/actuator/openapi` 是否可用必须由维护者按安装版本确认；本指南不自动启用新文档路径、不切换端口、不启用 springdoc 的 MCP 业务工具。
+An application using springdoc may expose `/v3/api-docs` on the business port by default. This connector reads only fixed `/actuator/openapi` on the registered origin. Custom `springdoc.api-docs.path` does not trigger fallback; maintainers must confirm management-endpoint availability for the installed version. This guide does not automatically enable another path, switch ports, or enable springdoc business MCP tools.
 
-上述 Actuator access 规则不自动保护业务端口上的 springdoc 路径，文档仍受应用现有安全规则约束。OpenAPI `servers`、远程 `$ref` 或 description 不能扩展诊断目标。当前已有 `springboot_search_openapi`；仅有业务端口的 `/v3/api-docs` 不代表固定管理端点可用，人工访问成功也不等于 MCP 检索已通过。
+The Actuator access rules above do not automatically protect business-port springdoc paths; existing application security still applies. OpenAPI `servers`, remote `$ref`, and description cannot extend diagnostic targets. `springboot_search_openapi` already exists, but an available business `/v3/api-docs` does not establish fixed management-endpoint availability or successful MCP search.
 
-诊断结束后停用 local-mcp Profile 或收窄 exposure，撤销临时授权；变更与重启由应用维护者决定。保留脱敏结构化结论，不归档原始 env、configprops、健康异常栈、日志或内存转储。
+After diagnostics, deactivate local-mcp or narrow exposure and revoke temporary authorization. Application maintainers decide configuration changes and restarts. Retain sanitized structured conclusions, not raw env/configprops, health exception stacks, logs, or memory dumps.

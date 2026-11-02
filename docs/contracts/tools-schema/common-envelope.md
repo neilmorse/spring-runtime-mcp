@@ -1,120 +1,120 @@
-# 公共信封结构
+# Common envelope
 
-八工具的领域结果同时以 structuredContent 和同内容的紧凑 JSON 文本提供；完整 JSON-RPC 工具回包最多 16,384 UTF-8 字节。字段以[工具 Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json)为准。
+Each of the eight domain results is provided as structuredContent and an equivalent compact JSON text copy. The complete JSON-RPC tool response is capped at 16,384 UTF-8 bytes. The [tool Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json) defines the fields.
 
-## 状态与证据
+## Status and evidence
 
-schemaVersion 是字符串常量 "2"。ok/partial 为有效诊断（isError=false）；健康 DOWN、迁移失败或漂移事实不等于工具调用错误。失败信封的 data、totalMatched、nextCursor 为 null，errors 至少一项，coverage.state=unavailable。
+schemaVersion is the string constant "2". ok/partial are valid diagnoses (isError=false); health DOWN, failed migrations, or drift facts are not tool-call errors. Failure envelopes have null data, totalMatched, and nextCursor, nonempty errors, and coverage.state=unavailable.
 
-failed() 当前将 INVALID_ARGUMENT 映射为 invalid，将 ENDPOINT_UNAUTHORIZED/TARGET_NOT_REGISTERED 映射为 denied，其余失败映射为 unavailable。too_large 是 Schema 允许的状态，不能据此宣称当前每个预算错误都会返回该状态。
+failed() maps INVALID_ARGUMENT to invalid, ENDPOINT_UNAUTHORIZED/TARGET_NOT_REGISTERED to denied, and other failures to unavailable. The Schema permits too_large, but that does not mean every current budget error returns that status.
 
-证据不足保留 null/unknown/partial。truncated 还可能由深度、关联或分析预算导致，并不保证存在可续页记录。redactions 记录安全输出字段/索引，不是固定的脱敏类型枚举。时间字段使用受限 RFC3339 校验，详见[实现约定](../../architecture/implementation-conventions.md)。
+Preserve null/unknown/partial when evidence is insufficient. Depth, association, or analysis budgets can also cause truncated, so continuation records are not guaranteed. redactions identifies safe output fields/indices, not a fixed redaction-type enum. Time fields use restricted RFC3339 validation; see [implementation conventions](../../architecture/implementation-conventions.md).
 
-## 信封字段
+## Envelope fields
 
 ### `envelope`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `schemaVersion` | "2" | 是 | — | — |
-| `status` | "ok" / "partial" / "denied" / "unavailable" / "invalid" / "too_large" | 是 | — | — |
-| `source` | object | 是 | — | — |
-| `totalMatched` | integer / null | 是 | — | 最小值 `0`；— |
-| `truncated` | boolean | 是 | — | — |
-| `truncationReasons` | array<string> | 是 | — | 最多项 `8` |
-| `coverage` | object | 是 | — | — |
-| `warnings` | array<object> | 是 | — | 最多项 `10` |
-| `redactions` | array<string> | 是 | — | 最多项 `50` |
-| `nextCursor` | string / null | 是 | — | 最长 `2048`；— |
-| `nextAction` | object | 是 | — | — |
-| `errors` | array<DiagnosticError> | 是 | — | 最多项 `8` |
+| `schemaVersion` | "2" | Yes | — | — |
+| `status` | "ok" / "partial" / "denied" / "unavailable" / "invalid" / "too_large" | Yes | — | — |
+| `source` | object | Yes | — | — |
+| `totalMatched` | integer / null | Yes | — | minimum `0`; — |
+| `truncated` | boolean | Yes | — | — |
+| `truncationReasons` | array<string> | Yes | — | maxItems `8` |
+| `coverage` | object | Yes | — | — |
+| `warnings` | array<object> | Yes | — | maxItems `10` |
+| `redactions` | array<string> | Yes | — | maxItems `50` |
+| `nextCursor` | string / null | Yes | — | maxLength `2048`; — |
+| `nextAction` | object | Yes | — | — |
+| `errors` | array<DiagnosticError> | Yes | — | maxItems `8` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `envelope.source`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `targetId` | string | 是 | — | 最长 `64` |
-| `snapshotId` | string / null | 是 | — | 最长 `96`；— |
-| `observedAt` | string | 是 | — | 格式 `date-time` |
-| `endpointIds` | array<"startup" / "flyway" / "liquibase" / "beans" / "conditions" / "mappings" / "health" / "health-liveness" / "health-readiness" / "env" / "configprops" / "env-property" / "info" / "openapi"> | 是 | — | 最多项 `14`；元素唯一 |
-| `bootVersion` | string / null | 是 | — | 最长 `64`；— |
-| `adapterVersion` | string | 是 | — | 最长 `32` |
-| `policyVersion` | string | 是 | — | 最长 `32` |
+| `targetId` | string | Yes | — | maxLength `64` |
+| `snapshotId` | string / null | Yes | — | maxLength `96`; — |
+| `observedAt` | string | Yes | — | format `date-time` |
+| `endpointIds` | array<"startup" / "flyway" / "liquibase" / "beans" / "conditions" / "mappings" / "health" / "health-liveness" / "health-readiness" / "env" / "configprops" / "env-property" / "info" / "openapi"> | Yes | — | maxItems `14`; unique items |
+| `bootVersion` | string / null | Yes | — | maxLength `64`; — |
+| `adapterVersion` | string | Yes | — | maxLength `32` |
+| `policyVersion` | string | Yes | — | maxLength `32` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `envelope.coverage`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `state` | "complete" / "partial" / "unavailable" | 是 | — | — |
-| `scope` | string | 是 | — | 最长 `256` |
-| `gaps` | array<string> | 是 | — | 最多项 `10` |
+| `state` | "complete" / "partial" / "unavailable" | Yes | — | — |
+| `scope` | string | Yes | — | maxLength `256` |
+| `gaps` | array<string> | Yes | — | maxItems `10` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `envelope.warnings[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `code` | string | 是 | — | 最长 `64` |
-| `recordId` | string / null | 是 | — | 最长 `96`；— |
+| `code` | string | Yes | — | maxLength `64` |
+| `recordId` | string / null | Yes | — | maxLength `96`; — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `envelope.nextAction`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `kind` | "done" / "refine" / "page" / "remediate" | 是 | — | — |
-| `reasonCode` | string | 是 | — | 最长 `64`；正则 `^[A-Z][A-Z0-9_]*$(?![\s\S])` |
-| `filterSuggestions` | array<object> | 是 | — | 最多项 `4` |
+| `kind` | "done" / "refine" / "page" / "remediate" | Yes | — | — |
+| `reasonCode` | string | Yes | — | maxLength `64`; pattern `^[A-Z][A-Z0-9_]*$(?![\s\S])` |
+| `filterSuggestions` | array<object> | Yes | — | maxItems `4` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `envelope.nextAction.filterSuggestions[]`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `parameter` | string | 是 | — | 最长 `64` |
-| `value` | ['string', 'number', 'boolean', 'null'] / array<string> | 是 | — | 最长 `512`；最多项 `10` |
+| `parameter` | string | Yes | — | maxLength `64` |
+| `value` | ['string', 'number', 'boolean', 'null'] / array<string> | Yes | — | maxLength `512`; maxItems `10` |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-data 是各工具定义的 object 或 null，具体字段见对应工具文档。source.endpointIds 的 Schema 枚举也包含保留身份，不能据此推导支持动态 env-property 或 info 请求；实际固定端点见[安全架构](../../architecture/security-and-sanitization.md)。
+data is a tool-specific object or null; see the corresponding tool reference. The source.endpointIds Schema enum includes reserved identities and does not establish support for dynamic env-property or info requests. See [security architecture](../../architecture/security-and-sanitization.md) for actual fixed endpoints.
 
 ### `DiagnosticError`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `code` | string | 是 | — | 最长 `64`；正则 `^[A-Z][A-Z0-9_]*$(?![\s\S])` |
-| `endpointId` | "startup" / "flyway" / "liquibase" / "beans" / "conditions" / "mappings" / "health" / "health-liveness" / "health-readiness" / "env" / "configprops" / "env-property" / "info" / "openapi" / null | 是 | — | —；— |
-| `httpStatus` | integer / null | 是 | — | 最小值 `100`；最大值 `599`；— |
-| `retryable` | boolean | 是 | — | — |
-| `message` | string | 是 | — | 最长 `256` |
-| `remediation` | object | 是 | — | — |
+| `code` | string | Yes | — | maxLength `64`; pattern `^[A-Z][A-Z0-9_]*$(?![\s\S])` |
+| `endpointId` | "startup" / "flyway" / "liquibase" / "beans" / "conditions" / "mappings" / "health" / "health-liveness" / "health-readiness" / "env" / "configprops" / "env-property" / "info" / "openapi" / null | Yes | — | —; — |
+| `httpStatus` | integer / null | Yes | — | minimum `100`; maximum `599`; — |
+| `retryable` | boolean | Yes | — | — |
+| `message` | string | Yes | — | maxLength `256` |
+| `remediation` | object | Yes | — | — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
 ### `DiagnosticError.remediation`
 
-| 字段 | 类型或枚举 | 必填 | 默认值 | 约束 |
+| Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
-| `recipeId` | string | 是 | — | 最长 `96` |
-| `action` | "refineQuery" / "configureCapability" / "reviewExposure" / "reviewAuthorization" / "configureStartup" / "reviewTarget" / "reviewSource" / "stop" | 是 | — | — |
-| `configKeys` | array<string> | 是 | — | 最多项 `8` |
-| `steps` | array<string> | 是 | — | 最多项 `4` |
-| `requiresApproval` | boolean | 是 | — | — |
-| `retryAfterMs` | integer / null | 是 | — | 最小值 `0`；最大值 `5000`；— |
+| `recipeId` | string | Yes | — | maxLength `96` |
+| `action` | "refineQuery" / "configureCapability" / "reviewExposure" / "reviewAuthorization" / "configureStartup" / "reviewTarget" / "reviewSource" / "stop" | Yes | — | — |
+| `configKeys` | array<string> | Yes | — | maxItems `8` |
+| `steps` | array<string> | Yes | — | maxItems `4` |
+| `requiresApproval` | boolean | Yes | — | — |
+| `retryAfterMs` | integer / null | Yes | — | minimum `0`; maximum `5000`; — |
 
-此对象不接受未列出的字段。
+This object rejects additional fields.
 
-## 分页与错误处理
+## Pagination and errors
 
-首次查询不传 cursor；续页重发原工具和所有规范化查询参数，只增加服务端返回的 nextCursor。游标为不透明句柄，不解码或自行拼接。默认快照 TTL 60 秒、总预算 32 MiB，续页不延长期限，过期或进程重启后需建立新查询。
+Omit cursor on the first query. Continue with the original tool and normalized arguments, adding only the returned nextCursor. Cursors are opaque: do not decode or construct them. Default snapshot TTL is 60 seconds with a 32 MiB total budget; continuation does not extend TTL. Expiry or process restart requires a new query.
 
-记录数、字节、关联和深度预算分别约束输出。通用分页会收缩条目数，Bean 工具还可裁剪关联；仍无法安全容纳时返回固定错误。不存在所有工具统一“自动减半且至少保留一条”的保证。
+Record, byte, association, and depth budgets constrain output separately. Generic pagination reduces records; Bean tools can also trim associations. If safe output still cannot fit, return a fixed error. There is no universal guarantee of automatic halving or retaining at least one item.
 
-错误消息、配方由本地模板产生，不回显上游建议。retryable 当前固定 false，retryAfterMs 固定 null；INVALID_ARGUMENT 配方 requiresApproval=false，其他为 true，仍需核对已有同范围授权。错误码与状态、配方的对应关系见[调用策略](../tool-calling-policy.md)。
+Local templates generate error messages and recipes without echoing upstream suggestions. retryable is currently false and retryAfterMs null. INVALID_ARGUMENT recipes use requiresApproval=false; others use true, subject to existing same-scope authorization. See [calling policy](../tool-calling-policy.md) for code/status/recipe mappings.
