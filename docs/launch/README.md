@@ -48,6 +48,8 @@ uv run --no-sync python scripts/pre_release_check.py --allow-dirty
 
 授权发行时核对唯一版本源、`server.json`、安装示例、CHANGELOG 和候选产物摘要；旧标签和已发布产物保持不可变。公开包安装验证要使用仓库外全新环境并注明索引、平台、Python/SDK 版本与证据范围，不能用源码运行代替公开包安装。
 
+当前发行渠道、产物摘要及公开包验证环境见[发布验证记录](publication-verification.json)。该记录只描述已执行的验证，不代替后续版本的发行门禁。
+
 ## MCP Registry 与源码容器
 
 [Registry 工作流](../../.github/workflows/publish-registry.yml) 是 master 上手动触发的固定发行任务，校验仓库身份、精确标签/提交、版本及 PyPI 所有权标记。它下载固定版本且校验摘要的官方 publisher，使用 GitHub OIDC 发布，再回读精确条目。版本和提交以工作流中的实际常量为准，不当作可接收任意版本输入的通用发布器。
