@@ -4,8 +4,10 @@
 
 - [x] 核对工作树、发行流程、现有渠道版本和 PyPI 环境保护。
 - [x] 校正新文档的字段与 CLI 示例，17 个工具查询示例通过真实参数校验。
-- [ ] 干净候选完整门禁、候选 PR 与 Python 3.11–3.14 检查。
-- [ ] 合并候选、推送精确标签、PyPI 与 GitHub Alpha Release、Registry 发布。
-- [ ] 核对产物摘要、官方索引仓库外净室安装及发布记录。
+- [x] 干净候选完整门禁、候选 PR 与 Python 3.11–3.14 检查。
+- [x] 合并候选、推送精确标签、PyPI 与 GitHub Alpha Release、Registry 发布。
+- [x] 核对产物摘要、官方索引仓库外净室安装及发布记录。
 
 不连接真实 Spring Boot，不覆盖旧标签或产物。环境审批沿用既有保护，Registry 固定到本次实际发行提交。
+
+完成：源码 PR #27 已合并；三渠道发布和精确条目回读成功。正式流水线 Python 3.11–3.14、完整门禁通过，本地/候选/正式/PyPI/GitHub 两产物摘要一致。公开包首次命名解析尚不可见，核对官方 simple 索引后同源无缓存重试通过；Linux x86_64 / Python 3.12.15 / SDK 2.3.0 的两模式、八工具回环与七 replay 均通过。记录见 docs/launch/publication-verification.json。
