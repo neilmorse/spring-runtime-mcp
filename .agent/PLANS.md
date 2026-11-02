@@ -1,14 +1,11 @@
-# Task: English documentation and contributor onboarding
+# Task: Release 0.2.12 Alpha
 
-Scope: make root Markdown documents English, retaining README.zh-CN.md in place as the Chinese overview; translate applicable current subdirectory documentation. Preserve technical contracts, safety rules, evidence limits, and existing local example files. Keep historical human archives outside this task. Root CHANGELOG.md is included in the requested root-document translation scope.
+Scope: merge the reviewed English documentation and onboarding changes, prepare an immutable 0.2.12 release, run complete gates, publish verified artifacts, and record public installation checks. Preserve the Chinese README, ignored local examples, existing protection rules, and older release tags/artifacts. Historical record access is limited to the current release entry and required gate scanning.
 
-- [x] Prepare and exercise the public-package route demo and English installation instructions in new external environments.
-- [x] Prepare feedback, invitation, contribution, and PR templates.
-- [x] Translate root agent rules and product scope; preserve the Chinese README exception.
-- [x] Translate current architecture, tool references, setup, troubleshooting, validation, and release notes.
-- [x] Validate wording, links/anchors, fenced configurations, examples, and translation fidelity.
-- [x] Review the final documentation diff and prepare factual commit and PR descriptions.
+- [x] Verify and merge documentation PR #33 after Python 3.11–3.14 and lint checks.
+- [x] Prepare version metadata and current release notes.
+- [ ] Run the complete clean-source release gate and candidate CI; compare artifact digests.
+- [ ] Merge the release candidate and push the exact source tag; publish PyPI, GitHub Alpha Release, and Registry metadata.
+- [ ] Verify public digests, clean installation, SDK modes, replay/demo commands, and publication records.
 
-No runtime, dependency, public Schema, endpoint configuration, or release change is part of this task. No invitations or user reports have been sent. The route demo is synthetic and does not establish live application or client compatibility.
-
-Validation: 51 current Markdown files checked; 261 local links; 30 Bash, 32 JSON, 3 TOML, and 3 YAML blocks; 1 Python block and 1 embedded Python block; Issue metadata; 23 valid tool-query examples and 1 intentional invalid example. Protected historical references were preserved without opening the archive. Existing tool-reference code blocks, release dates, source hashes, and numerical release evidence were preserved; 11 historical example links now use immutable v0.2.10 paths. The public-package install/replay checks from this task passed outside the source checkout. Runtime files, public Schema, dependencies, workflows, and examples ignore rules are unchanged.
+Runtime code, tool Schemas, runtime dependencies, target configuration, and real Spring applications are outside the change scope. Public descriptions cover technical changes and actual evidence only.

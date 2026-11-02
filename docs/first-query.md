@@ -2,7 +2,7 @@
 
 [Chinese overview](../README.zh-CN.md) · [Synthetic route demo](demo.md) · [Share trial feedback](trial-feedback.md)
 
-This guide uses **0.2.11 Alpha** on Linux. You need Python 3.11+, [uv](https://docs.astral.sh/uv/getting-started/installation/), a working MCP client, and permission to read an existing local application's management endpoints. The MCP server needs no JDK or source checkout. Windows/macOS and the complete Boot/client matrix remain unverified.
+This guide uses **0.2.12 Alpha** on Linux. You need Python 3.11+, [uv](https://docs.astral.sh/uv/getting-started/installation/), a working MCP client, and permission to read an existing local application's management endpoints. The MCP server needs no JDK or source checkout. Windows/macOS and the complete Boot/client matrix remain unverified.
 
 If you have no authorized application ready, start with the [synthetic demo](demo.md). It runs the packaged tool handlers offline; it does not test a live Spring Boot application or an MCP client connection.
 
@@ -15,12 +15,12 @@ python3 --version
 uv --version
 trial_dir="$(mktemp -d /tmp/spring-runtime-trial.XXXXXX)"
 uv venv "$trial_dir/venv"
-uv pip install --python "$trial_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.11
+uv pip install --python "$trial_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12
 "$trial_dir/venv/bin/spring-runtime-mcp" --version
 printf 'MCP executable: %s\n' "$trial_dir/venv/bin/spring-runtime-mcp"
 ```
 
-The version command should print `spring-runtime-mcp 0.2.11`. Copy the absolute executable path printed last. This verifies installation only; it does not contact an application.
+The version command should print `spring-runtime-mcp 0.2.12`. Copy the absolute executable path printed last. This verifies installation only; it does not contact an application.
 
 If `uv` is missing, install it using its official instructions and restart the terminal that launches your client. If the index cannot resolve the release, record the command and error and check the official index before retrying. An existing PyPI project page alone does not prove that an install succeeded.
 

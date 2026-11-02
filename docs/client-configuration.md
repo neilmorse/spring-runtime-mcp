@@ -11,7 +11,7 @@ Merge into `~/.codex/config.toml` or a trusted project's `.codex/config.toml`. S
 ```toml
 [mcp_servers.spring_runtime]
 command = "uvx"
-args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.11", "--base-url", "http://127.0.0.1:18081"]
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.12", "--base-url", "http://127.0.0.1:18081"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
@@ -25,7 +25,7 @@ Keep token values out of TOML, command arguments, and prompts. `env_vars` forwar
 ```toml
 [mcp_servers.spring_runtime]
 command = "uvx"
-args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.11", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.12", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
 env_vars = ["SHOP_ACTUATOR_TOKEN"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30

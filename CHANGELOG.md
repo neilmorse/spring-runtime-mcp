@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.12] - 2026-11-02
+
+### Documentation and onboarding
+
+- Standardize current product, architecture, tool, setup, troubleshooting, validation, and release documentation in English while retaining README.zh-CN.md as the Chinese overview.
+- Add a canonical first-query guide, a reproducible public-package route replay, and feedback/contribution/Issue/PR templates.
+- Clarify pagination, upstream collection, error attribution, and compatibility limits; remove unverified performance claims from decision notes and pin historical example links to v0.2.10.
+- Preserve runtime behavior, public tool Schemas, runtime dependencies, fixed endpoints, security boundaries, and ignored local examples.
+
+
 ## [0.2.11] - 2026-11-02
 
 - Published to PyPI, GitHub Alpha Release, and MCP Registry at source tag `e7ad1e79fed8ce81812928c7461f8c6d4d71d1dc`. Public artifact digests match and exclude `examples/`; uncached official-PyPI clean installation, both SDK modes, eight-tool loopback HTTP, and seven replays passed. See the [publication verification record](docs/launch/publication-verification.json).
