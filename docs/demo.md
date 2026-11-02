@@ -93,6 +93,6 @@ PY
 
 Expect `get-route: passed (synthetic replay)` and `post-route: passed (synthetic replay)`.
 
-The GET/POST expectations and equality of the text/structured envelopes were checked with package 0.2.11, Python 3.12.15, and MCP SDK 2.3.0 on Linux. For the current release installation and protocol evidence, see the [publication record](launch/publication-verification.json). These synthetic checks do not extend the live compatibility matrix.
+The documented installation blocks and GET/POST expectations, including equality of the text/structured envelopes, were checked with the public 0.2.12 package in fresh environments outside the repository, using Python 3.12.15 and MCP SDK 2.3.0 on Linux. For the current release installation and protocol evidence, see the [publication record](launch/publication-verification.json). These synthetic checks do not extend the live compatibility matrix.
 
 To try the same question through an MCP client against your own authorized application, follow the [first-query guide](first-query.md). The application must already grant read access to the fixed mappings endpoint. The [feedback template](trial-feedback.md) distinguishes synthetic replay from a live query; a replay success alone is not a live integration or external-adoption claim.
