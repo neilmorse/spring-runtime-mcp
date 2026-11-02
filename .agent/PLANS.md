@@ -3,9 +3,11 @@
 用户明确要求将 examples 加入 .gitignore 后重新提交、推送和发布。停止跟踪 examples 并保留本地文件，显式排除源码发行包，修正现行说明及发行元数据。历史资料访问限于本次发行条目和完整门禁凭据扫描。
 
 - [x] 核对 Git 跟踪、打包与文档依赖，准备 0.2.11。
-- [ ] 干净源码完整门禁，核对本地 examples 未改变且产物不包含 examples。
-- [ ] 候选 PR 和 Python 3.11–3.14 检查，合并并推送精确标签。
-- [ ] PyPI、GitHub Alpha Release 和 MCP Registry 发布与公开包验证。
-- [ ] 发布验证记录、合并及工作区收尾。
+- [x] 干净源码完整门禁，核对本地 examples 未改变且产物不包含 examples。
+- [x] 候选 PR 和 Python 3.11–3.14 检查，合并并推送精确标签。
+- [x] PyPI、GitHub Alpha Release 和 MCP Registry 发布与公开包验证。
+- [x] 发布验证记录、合并及工作区收尾。
 
 不连接真实 Spring Boot；保留已发布版本与现有环境保护，不改运行依赖或公开 Schema。
+
+发布结果：源码 PR #31；候选 41434957512、正式发布 41435400621、Registry 41435879554 均通过。1224 项默认测试、完整六阶段门禁和 Python 3.11–3.14 通过；两类产物无 examples，公开摘要与本地/候选/正式产物一致。112 个先前跟踪的本地 examples 文件保留、当前跟踪数为零。PyPI 首次命名安装因索引尚未可解析失败，确认官方 simple 索引列出产物后以原命令重试成功；Python 3.12.15/Linux x86_64、MCP SDK 2.3.0 的仓库外净室验证通过 SDK 两模式、八工具回环 HTTP 和七个打包 replay。发布记录通过独立文档 PR 收口，未连接真实 Spring Boot。

@@ -2,6 +2,8 @@
 
 ## [0.2.11] - 2026-11-02
 
+- 已发布至 PyPI、GitHub Alpha Release 与 MCP Registry，源码标签锁定 `e7ad1e79fed8ce81812928c7461f8c6d4d71d1dc`；公开产物摘要一致且均不含 `examples/`，官方 PyPI 无缓存净室安装及 SDK 两模式、八工具回环 HTTP、七个 replay 通过。详见[发布验证记录](docs/launch/publication-verification.json)。
+
 ### 发行内容整理
 
 - 将 `examples/` 加入根目录忽略规则并停止 Git 跟踪，保留维护者本地副本；源码发行包显式排除该目录。
