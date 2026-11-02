@@ -1,0 +1,77 @@
+{
+  "verificationDate": "2026-11-02",
+  "timezone": "Asia/Shanghai",
+  "version": "0.2.8",
+  "status": "published-and-verified",
+  "githubReleasePrerelease": true,
+  "sourceCommit": "8397866e853e6440379475590b909d87d1aea566",
+  "tag": "v0.2.8",
+  "sourcePullRequest": "https://github.com/neilmorse/spring-runtime-mcp/pull/24",
+  "channels": {
+    "pypi": "https://pypi.org/project/spring-runtime-mcp/0.2.8/",
+    "github": "https://github.com/neilmorse/spring-runtime-mcp/releases/tag/v0.2.8",
+    "mcpRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.neilmorse%2Fspring-runtime-mcp/versions/0.2.8"
+  },
+  "workflows": {
+    "candidate": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41317373957",
+    "release": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41317652716",
+    "registry": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41317943399"
+  },
+  "artifacts": [
+    {
+      "filename": "spring_runtime_mcp-0.2.8-py3-none-any.whl",
+      "sha256": "206d8d4aca7a1ec9773a8f5158a035846c9f6b8ff809fcf06fe03e00264957fd"
+    },
+    {
+      "filename": "spring_runtime_mcp-0.2.8.tar.gz",
+      "sha256": "56353926bd9835463ef7ba4dc425e33439e1307bba3677c3b43f34a93098c1a7"
+    }
+  ],
+  "artifactChecks": {
+    "pypiMatchesReleaseWorkflow": true,
+    "githubAssetsMatchReleaseWorkflow": true,
+    "publicWheelDownloadMatchesDigest": true
+  },
+  "checks": {
+    "strictReleaseGate": "all-six-stages-passed-no-bypass-flags",
+    "vulnerabilityAudit": "passed",
+    "pythonMatrix": [
+      "3.11",
+      "3.12",
+      "3.13",
+      "3.14"
+    ],
+    "localPytestPassed": 1195,
+    "optInMcpAcceptanceCallsPassed": 48
+  },
+  "publicInstall": {
+    "index": "https://pypi.org/simple",
+    "noCache": true,
+    "freshEnvironmentOutsideRepository": true,
+    "python": "3.12.15",
+    "os": "Linux",
+    "architecture": "x86_64",
+    "mcpSdk": "2.3.0",
+    "packageVersion": "0.2.8",
+    "versionAndModuleLocation": "passed",
+    "sdkModes": [
+      "legacy",
+      "2026-07-28"
+    ],
+    "sdkDiscoveryAndErrors": "passed",
+    "eightToolHttpFixture": "passed",
+    "schemaHintsSanitizationAndFrameBudget": "passed",
+    "packagedReplayScenariosPassed": 7
+  },
+  "scope": {
+    "runtimeRequiresJdk": false,
+    "sourceMaintenanceToolsRequireFullJdk": true,
+    "runtimeBuildIdentity": "notCollected",
+    "sourceAst": "registered-supported-subset",
+    "realProjects": [
+      "spring-boot-demo",
+      "spring-boot-admin"
+    ],
+    "migrationFailureDatabase": "disposable-H2"
+  }
+}
