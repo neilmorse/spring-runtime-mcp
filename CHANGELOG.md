@@ -4,6 +4,7 @@
 
 ### Documentation and onboarding
 
+- Publish and verify 0.2.12 Alpha on PyPI, GitHub Releases, and the MCP Registry from immutable source `af8a4ac`; record artifact digests, public installation/protocol checks, and executed onboarding/demo commands in the [publication record](docs/launch/publication-verification.json).
 - Standardize current product, architecture, tool, setup, troubleshooting, validation, and release documentation in English while retaining README.zh-CN.md as the Chinese overview.
 - Add a canonical first-query guide, a reproducible public-package route replay, and feedback/contribution/Issue/PR templates.
 - Clarify pagination, upstream collection, error attribution, and compatibility limits; remove unverified performance claims from decision notes and pin historical example links to v0.2.10.
