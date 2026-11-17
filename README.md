@@ -2,7 +2,9 @@
 
 [Chinese README](README.zh-CN.md)
 
-Give your coding assistant access to what is actually running in a Spring Boot application. This MCP server reads authorized Actuator and OpenAPI data to help investigate Beans, routes, health, database migrations and startup problems.
+Give your coding assistant read-only access to the runtime state of a local Spring Boot application. Eight MCP tools use authorized Actuator and OpenAPI data to diagnose issues such as missing beans, unregistered routes, and slow startup.
+
+Listed in [Awesome MCP Servers (Developer Tools)](https://github.com/punkpeye/awesome-mcp-servers/pull/18153/files) · [View the tools on Glama](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp)
 
 ## What can it check?
 
@@ -21,7 +23,13 @@ For example, ask: “Check whether GET /orders/{id} is registered and tell me wh
 
 ## Get started
 
-You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and an authorized local Spring Boot application. Confirm its management endpoints and permissions using the [target setup guide](docs/target-app-setup.md), then check and start **0.2.12 Alpha**:
+### Try the demo without a Spring Boot app
+
+The [synthetic route demo](docs/demo.md) uses the public package and bundled data to show which controller handles a route. It runs without a Spring process or an MCP client.
+
+### Connect an MCP client to your app
+
+You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and permission to read a local Spring Boot application's management endpoints. Confirm the endpoints and permissions in the [target setup guide](docs/target-app-setup.md). These commands use **0.2.12 Alpha**.
 
 ```bash
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12 --version
@@ -30,7 +38,7 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12 --base-ur
 
 Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [English first-query guide](docs/first-query.md); additional [client configuration templates](docs/client-configuration.md) cover other clients.
 
-Try the [synthetic route demo](docs/demo.md) using the public package without preparing an application, then [share first-query feedback](docs/trial-feedback.md). The replay needs no Spring process and does not establish live application or client compatibility.
+[Share first-query feedback](docs/trial-feedback.md)
 
 ## Boundaries
 

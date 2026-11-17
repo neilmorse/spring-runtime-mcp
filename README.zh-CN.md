@@ -2,7 +2,9 @@
 
 [English](README.md)
 
-让编码助手看见 Spring Boot 应用的实际运行状态。它读取应用已授权的 Actuator 和 OpenAPI 数据，帮你排查 Bean、接口、健康、数据库迁移和启动问题。
+让编码助手读取本地 Spring Boot 应用的实际运行状态。8 个只读 MCP 工具使用已授权的 Actuator 和 OpenAPI 数据，帮你排查 Bean 未创建、路由未注册、启动缓慢等问题。
+
+已收录于 [Awesome MCP Servers（Developer Tools）](https://github.com/punkpeye/awesome-mcp-servers/pull/18153/files) · [在 Glama 查看工具](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp)
 
 ## 能帮你查什么
 
@@ -21,16 +23,22 @@
 
 ## 开始使用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和已获权读取的本地 Spring Boot 应用。先按[目标配置指南](docs/target-app-setup.md)确认管理端点与权限，再检查并启动 **0.2.12 Alpha**：
+### 无需 Spring Boot 应用，先试演示
+
+[合成路由演示（英文）](docs/demo.md)使用公开包和内置数据，展示如何查到处理路由的 Controller。运行演示无需 Spring 进程或 MCP 客户端。
+
+### 用 MCP 客户端连接你的应用
+
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和读取本地 Spring Boot 应用管理端点的权限。先按[目标配置指南](docs/target-app-setup.md)确认端点与权限。以下命令使用 **0.2.12 Alpha**。
 
 ```bash
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12 --version
 uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.12 --base-url http://127.0.0.1:18081
 ```
 
-把第二条命令配置为 MCP 客户端的 STDIO 启动命令；直接在终端运行会等待客户端请求。完整步骤见[首次查询](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
+把第二条命令配置为 MCP 客户端的 STDIO 启动命令。直接在终端运行时，它会等待客户端请求。完整步骤见[首次查询（英文）](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
 
-尚无可用应用时，可以先运行公开包内的[合成路由演示（英文）](docs/demo.md)，再按[试用反馈说明](docs/trial-feedback.md)记录实际结果。合成 replay 无需 Spring 进程，不代表真实应用或客户端兼容性验证。另有[英文首次接入指南](docs/first-query.en.md)。
+[分享首次查询反馈](docs/trial-feedback.md)
 
 ## 使用边界
 
