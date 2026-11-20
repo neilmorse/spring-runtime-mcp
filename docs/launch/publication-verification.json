@@ -1,30 +1,30 @@
 {
-  "verificationDate": "2026-11-02",
+  "verificationDate": "2026-11-20",
   "timezone": "Asia/Shanghai",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "status": "published-and-verified",
   "githubReleasePrerelease": true,
-  "sourceCommit": "af8a4ac4cf8a6552a61f33e0e54a0b0379099a47",
-  "tag": "v0.2.12",
-  "sourcePullRequest": "https://github.com/neilmorse/spring-runtime-mcp/pull/34",
+  "sourceCommit": "3d677904b7d5dab3347c1e09e191ee91e3753d95",
+  "tag": "v0.2.13",
+  "sourcePullRequest": "https://github.com/neilmorse/spring-runtime-mcp/pull/36",
   "channels": {
-    "pypi": "https://pypi.org/project/spring-runtime-mcp/0.2.12/",
-    "github": "https://github.com/neilmorse/spring-runtime-mcp/releases/tag/v0.2.12",
-    "mcpRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.neilmorse%2Fspring-runtime-mcp/versions/0.2.12"
+    "pypi": "https://pypi.org/project/spring-runtime-mcp/0.2.13/",
+    "github": "https://github.com/neilmorse/spring-runtime-mcp/releases/tag/v0.2.13",
+    "mcpRegistry": "https://registry.modelcontextprotocol.io/v0.1/servers/io.github.neilmorse%2Fspring-runtime-mcp/versions/0.2.13"
   },
   "workflows": {
-    "candidate": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41463278351",
-    "release": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41463903203",
-    "registry": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/41464773287"
+    "candidate": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/44655759980",
+    "release": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/44656071569",
+    "registry": "https://github.com/neilmorse/spring-runtime-mcp/actions/runs/44656505270"
   },
   "artifacts": [
     {
-      "filename": "spring_runtime_mcp-0.2.12-py3-none-any.whl",
-      "sha256": "6f6983419e3e558a4fcd6c740660895bb547b54aec22f6f7d219548e5dd3a573"
+      "filename": "spring_runtime_mcp-0.2.13-py3-none-any.whl",
+      "sha256": "ea41bbe29f77fd7bdc039833abc7619064fa2e87d2ee46362acaafdda2a229f7"
     },
     {
-      "filename": "spring_runtime_mcp-0.2.12.tar.gz",
-      "sha256": "9816ef18671d1ae5550c4fee2c52f9ed85674071702a7d0b9c56edcf404067c4"
+      "filename": "spring_runtime_mcp-0.2.13.tar.gz",
+      "sha256": "affb88b51316982a31f18bb94caf08115418a03d1c68db381ea71fc6fdbf9d2a"
     }
   ],
   "artifactChecks": {
@@ -32,7 +32,8 @@
     "pypiMatchesReleaseWorkflow": true,
     "githubAssetsMatchReleaseWorkflow": true,
     "publicWheelDownloadMatchesDigest": true,
-    "localMatchesReleaseWorkflow": true
+    "localMatchesReleaseWorkflow": true,
+    "publicSdistDownloadMatchesDigest": true
   },
   "checks": {
     "strictReleaseGate": "all-six-stages-passed-no-bypass-flags",
@@ -43,17 +44,7 @@
       "3.13",
       "3.14"
     ],
-    "localPytestPassed": 1224,
-    "localDocLinksValidated": 262,
-    "localDocBashBlocksValidated": 30,
-    "documentationMarkdownFilesValidated": 51,
-    "documentationJsonBlocksValidated": 32,
-    "documentationTomlBlocksValidated": 3,
-    "documentationYamlBlocksValidated": 3,
-    "validDocumentedQueriesChecked": 23,
-    "intentionallyInvalidDocumentedQueriesRejected": 1,
-    "publicationRecordFilesValidated": 4,
-    "publicationRecordLocalLinksValidated": 8
+    "localPytestPassed": 1230
   },
   "publicInstall": {
     "index": "https://pypi.org/simple",
@@ -63,7 +54,7 @@
     "os": "Linux",
     "architecture": "x86_64",
     "mcpSdk": "2.3.0",
-    "packageVersion": "0.2.12",
+    "packageVersion": "0.2.13",
     "versionAndModuleLocation": "passed",
     "sdkModes": [
       "legacy",
@@ -81,16 +72,13 @@
       },
       {
         "noCache": true,
-        "result": "download-timeout"
-      },
-      {
-        "noCache": true,
         "systemCertificates": true,
         "concurrentDownloads": 2,
         "httpTimeoutSeconds": 30,
         "result": "passed-same-official-index"
       }
-    ]
+    ],
+    "openTelemetryApi": "1.45.2"
   },
   "scope": {
     "runtimeRequiresJdk": false,
@@ -98,7 +86,7 @@
     "runtimeBuildIdentity": "notCollected",
     "realProjectsRerun": [],
     "publicToolSchemaChanged": false,
-    "runtimeDependenciesChanged": false
+    "runtimeDependenciesChanged": true
   },
   "exampleDirectory": {
     "ignored": true,
@@ -106,11 +94,10 @@
     "wheelContainsExamples": false,
     "sdistContainsExamples": false
   },
-  "documentationPullRequest": "https://github.com/neilmorse/spring-runtime-mcp/pull/33",
   "documentationExecution": {
     "index": "https://pypi.org/simple",
     "freshEnvironmentsOutsideRepository": true,
-    "packageVersion": "0.2.12",
+    "packageVersion": "0.2.13",
     "python": "3.12.15",
     "mcpSdk": "2.3.0",
     "os": "Linux",
