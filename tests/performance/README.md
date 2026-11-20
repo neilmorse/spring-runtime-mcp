@@ -69,6 +69,25 @@ To run performance tests in CI:
 
 Tool calls must return ok/partial without errors. Bean samples must contain the selected orderController and its expected resolved chain; these assertions run after the timed operation. With 10 samples, the reported empirical p95/p99 are both the sample maximum, not a production tail-latency guarantee.
 
+## Database Health Composition Replay
+
+```bash
+uv run --no-sync python -m pytest -q -s tests/integration/test_health_composition_replay.py
+```
+
+The replay uses the Boot 3.4 fixture with an explicit association between the `db` health component and the `application` Context's `dataSource` Bean. The replay adds that Bean to the child Context, where its `connectionFactory` dependency resolves to the parent. Both paths call the same registered handlers and use the response serializer with server metadata and both content copies.
+
+One Linux run with Python 3.12.15 measured 20 samples per path.
+
+| Path | JSON-RPC response frames | Fixture reads | Total response bytes | Median processing time |
+| --- | ---: | ---: | ---: | ---: |
+| Separate health and Bean results | 2 | 2 | 5,084 | 8.61 ms |
+| Combined replay candidate | 1 | 2 | 3,415 | 7.98 ms |
+
+The candidate used 32.8% fewer response bytes and fit within the 16,384-byte frame cap. It includes the health observation, the selected Bean and its wiring, and separate evidence sources and coverage. Timing covers local handler processing and frame serialization. The single candidate frame is produced inside the test, so these measurements quantify frame size and local processing cost. MCP client round-trip latency, upstream HTTP latency, and model token counts are outside the measurement.
+
+Healthy and hidden-detail components and unknown associations use one fixture read. A denied or timed-out Bean read yields a partial candidate with the original health observation and unavailable Bean evidence.
+
 ## Future Enhancements
 
 - [ ] Add memory profiling
