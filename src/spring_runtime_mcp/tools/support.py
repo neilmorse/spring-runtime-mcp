@@ -36,7 +36,9 @@ def tool_handler(handler: ToolHandler) -> ToolHandler:
         )
         try:
             async with asyncio.timeout(scope.check()):
-                result = await handler(arguments, services)
+                async with services.admit_call():
+                    scope.check()
+                    result = await handler(arguments, services)
                 scope.check()
                 return result
         except TimeoutError:

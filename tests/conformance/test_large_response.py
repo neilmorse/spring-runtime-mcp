@@ -74,3 +74,40 @@ def test_2500_beans_default_depth_preserves_known_records_with_bounded_associati
     assert result["totalMatched"] == 2500
     assert result["data"]["items"] and result["truncated"] is True
     assert "ASSOCIATION_LIMIT" in result["coverage"]["gaps"]
+
+
+def test_later_bean_pages_keep_their_own_associations():
+    beans = {
+        f"service{i:02d}": {
+            "aliases": [f"alias{i:02d}"],
+            "scope": "singleton",
+            "type": "example.Service",
+            "dependencies": [],
+        }
+        for i in range(60)
+    }
+    reader = FixtureReader({"beans": {"contexts": {"app": {"beans": beans}}}})
+    services = Services(
+        reader,
+        SourceCatalog("local", None, {}, (), ()),
+        SanitizerPipeline(),
+        SnapshotStore(),
+    )
+
+    async def read_all():
+        arguments = {"beanNamePattern": "service*", "maxResults": 10}
+        result = await inspect_beans(arguments, services)
+        seen = []
+        while True:
+            assert_contract("springboot_inspect_beans", result)
+            for item in result["data"]["items"]:
+                assert item["aliases"] == [item["name"].replace("service", "alias")]
+                seen.append(item["name"])
+            if result["nextCursor"] is None:
+                return seen
+            result = await inspect_beans(
+                {**arguments, "cursor": result["nextCursor"]}, services
+            )
+
+    assert asyncio.run(read_all()) == sorted(beans)
+    assert reader.calls == ["beans"]

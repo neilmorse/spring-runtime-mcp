@@ -36,6 +36,7 @@ SAFE_CODES = frozenset(
         "RESPONSE_TOO_LARGE",
         "RESPONSE_HEADERS_TOO_LARGE",
         "TARGET_TIMEOUT",
+        "SERVER_BUSY",
         "GRAPH_LIMIT_REACHED",
         "NORMALIZATION_LIMIT",
         "NON_TREE_JSON",

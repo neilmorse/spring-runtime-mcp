@@ -249,7 +249,8 @@ async def detect_drift(
             services, query, snapshot, result
         )
         failures.extend(startup_errors)
-        compared = compare_drift(
+        compared = await services.analyze(
+            compare_drift,
             query,
             beans=bodies.get("beans"),
             mappings_body=None if "mappings" not in bodies else bodies["mappings"].body,

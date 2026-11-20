@@ -39,6 +39,8 @@ Initial queries collect runtime evidence; cursor queries retain the original arg
 
 Services permits at most two concurrent reads per target, with slot waits counted toward the deadline. A Services read waits at most 5 seconds, bounded by the remaining deadline. The CLI reader timeout defaults to 5 seconds and accepts values greater than 0 and no more than 60 seconds. See [security architecture](security-and-sanitization.md) for DNS and worker-thread cleanup limits.
 
+Services admits four active tool calls and up to 16 waiting calls. This limits how many calls can retain parsed observations between endpoint reads. Route normalization and drift comparison share one analysis worker slot, held until the worker exits. Their queueing time counts toward the tool deadline.
+
 ## Tools and evidence
 
 Eight tools are registered in name order. Their selectors and results follow the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) and [calling policy](../contracts/tool-calling-policy.md). Fact distinguishes known, unknown, notReported, and redacted; missing evidence propagates through gaps to tools, yielding partial results and unknown totals when necessary.

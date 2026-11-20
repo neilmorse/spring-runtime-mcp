@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
 import socket
+import threading
 from types import SimpleNamespace
 from typing import Any
 
@@ -13,6 +15,7 @@ from spring_runtime_mcp.transport.actuator_http import (
     _ExchangeState,
 )
 from spring_runtime_mcp.transport import actuator_http
+from spring_runtime_mcp.transport.response_gate import HttpResponse
 
 
 @pytest.mark.parametrize("deadline", [0.2, 5.0])
@@ -86,3 +89,49 @@ def test_multiple_addresses_share_one_connect_deadline(
     with pytest.raises(TimeoutError):
         connection._create_connection(("localhost", 18081))
     assert attempts == [2.0, 0.5]
+
+
+def test_cancelled_call_keeps_worker_slot_until_exchange_returns(monkeypatch):
+    transport = ActuatorHttpTransport(
+        "http://localhost:18081", targets=frozenset({"local"})
+    )
+
+    async def run():
+        started: asyncio.Queue[None] = asyncio.Queue()
+        finish = threading.Event()
+        loop = asyncio.get_running_loop()
+
+        def exchange(*args):
+            loop.call_soon_threadsafe(started.put_nowait, None)
+            assert finish.wait(5)
+            return HttpResponse(200, "application/json", b"{}")
+
+        async def request(timeout):
+            return await transport.request(
+                "local",
+                "health",
+                method="GET",
+                follow_redirects=False,
+                timeout=timeout,
+                max_bytes=1024,
+            )
+
+        monkeypatch.setattr(transport, "_exchange", exchange)
+        first = [asyncio.create_task(request(4)) for _ in range(2)]
+        try:
+            for _ in first:
+                await asyncio.wait_for(started.get(), 2)
+            for task in first:
+                task.cancel()
+            assert all(
+                isinstance(result, asyncio.CancelledError)
+                for result in await asyncio.gather(*first, return_exceptions=True)
+            )
+            with pytest.raises(TimeoutError):
+                await request(0.03)
+            assert started.empty()
+        finally:
+            finish.set()
+        assert (await request(2)).status == 200
+
+    asyncio.run(run())

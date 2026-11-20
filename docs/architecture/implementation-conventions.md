@@ -38,10 +38,14 @@ Generic `tools.support.finalize` sanitizes before pagination, measuring the JSON
 
 SnapshotStore retains shared immutable encoded records and cursor offsets. Continuation pages decode/project only the current page and advance by the actual consumed count. Cursors bind the tool and normalized query; policy-stamp changes trigger safety revalidation. TTL starts at snapshot creation and is not extended by reads or continuation pages.
 
+Bean snapshots retain sanitized per-record associations within analysis and snapshot budgets. Page construction applies the response's association and byte limits. Snapshot insertion checks the header and each record independently and enforces the cumulative storage limit as records are encoded.
+
 | Limit | Current value and implementation |
 | --- | --- |
 | Total tool deadline | 15 seconds; `tools/support.py`, host callback |
+| Tool call admission | 4 active, 16 waiting; `services.py` |
 | Concurrent reads per target | 2; `services.py` |
+| Concurrent HTTP workers per connector | 2, held until the exchange exits |
 | Services read wait | At most 5 seconds and the remaining call deadline |
 | Socket connection budget | 2 seconds shared by all candidate addresses, bounded by the read deadline |
 | HTTP response headers | 32 KiB cumulative |

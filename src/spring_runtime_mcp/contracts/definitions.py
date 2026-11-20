@@ -11,7 +11,7 @@ from functools import lru_cache
 from importlib.resources import files
 from typing import Any, Literal, cast, overload
 
-from ..models.common import NormalizationError
+from ..models.common import NormalizationError, remaining_seconds
 from ..models.timestamps import parse_rfc3339
 from ..models.queries import (
     ConfigQuery,
@@ -411,8 +411,11 @@ def glob_matches(pattern: str, value: str) -> bool:
     """Linear-space glob DP; user input is never evaluated as a regex."""
     if len(pattern) > 128 or len(value) > 4096:
         return False
+    if "*" not in pattern and "?" not in pattern:
+        return pattern == value
     previous = [True] + [False] * len(value)
     for char in pattern:
+        remaining_seconds()
         current = [False] * (len(value) + 1)
         current[0] = char == "*" and previous[0]
         for index, actual in enumerate(value, 1):

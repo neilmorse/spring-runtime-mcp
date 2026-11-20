@@ -31,7 +31,8 @@ async def verify_mappings(
         observation = await read_checked(
             services, query.target_id, "mappings", snapshot
         )
-        items, gaps = normalize_mappings(
+        items, gaps = await services.analyze(
+            normalize_mappings,
             observation.body,
             path_pattern=query.path_pattern,
             http_method=query.http_method,

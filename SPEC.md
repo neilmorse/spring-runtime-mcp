@@ -30,7 +30,7 @@ The fixed tool list is published alphabetically by name with all four explicit r
 - Establish all visible facts and associations before filtering, stable sorting, and pagination. maxResults defaults to and is capped at 50.
 - Domain envelopes contain Schema fields including source, data, totalMatched, truncated, coverage, nextAction, and errors. Unknown totals use null; insufficient evidence uses partial/unknown.
 - Each tool result includes structuredContent and an equivalent compact JSON text copy. The complete JSON-RPC tool response is capped at 16,384 UTF-8 bytes.
-- Each tool call has a shared 15-second deadline and two shared read slots per target; queueing counts toward the deadline. Upstream bodies are capped at 8 MiB and headers at 32 KiB.
+- Each tool call has a shared 15-second deadline that includes queueing. The process admits four active calls and up to 16 waiting calls, with two shared read slots per target. Requests beyond the admission limit return SERVER_BUSY. Upstream bodies are capped at 8 MiB and headers at 32 KiB.
 - Cache sanitized snapshots only: default absolute TTL 60 seconds, total budget 32 MiB. Continuation pages retain the original query and snapshot; restarting the process loses snapshots.
 - All external evidence passes through SanitizerPipeline and an independent output gate. Never emit raw credentials, exception stacks, OpenAPI free-text descriptions, complete env/configprops value trees, or remote instructions.
 - Prohibit target writes, heapdump, raw logfile, arbitrary business requests, and bypasses of authentication, TLS, sanitization, or budgets. startup always uses GET.

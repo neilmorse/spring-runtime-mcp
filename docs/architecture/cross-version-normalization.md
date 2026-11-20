@@ -51,6 +51,8 @@ Online reads use fixed `/actuator/openapi`; supported versions/dialects follow t
 
 Retain traceable facts from direct and second-level references. Record gaps for cycles, unresolved or remote references, and uncertain dialects or levels; remote `$ref` is never fetched. Nonconflicting PathItem siblings may be retained. If conflicts or unreadable operations affect complete counts, totalMatched is null.
 
+An OpenAPI parameter with an unreadable location is omitted with OPENAPI_PARAMETERS_UNREADABLE. Other readable parameters and operations remain available.
+
 Handle a business Schema property named description separately from raw descriptive free text. Projection retains permitted structural fields while always applying sanitization and the output gate.
 
 ## Drift and evidence strength

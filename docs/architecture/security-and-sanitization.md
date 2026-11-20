@@ -32,7 +32,7 @@ Paths come from the connector's fixed table, never tool-argument concatenation. 
 - Headers have a cumulative 32 KiB limit; bodies are capped at 8 MiB. Support no encoding, identity, and a single gzip layer, with limits before and after decompression. Reject other encodings.
 - Fail explicitly on incomplete Content-Length, malformed gzip, duplicate JSON keys, nonfinite numbers, or bounded JSON depth/node violations, without echoing the original response.
 - Address attempts share a 2-second connection budget. The reader defaults to 5 seconds; Services waits at most 5 seconds within the shared 15-second tool deadline. Waiting for either of the target's two read slots also counts.
-- On timeout or cancellation, abort the connection, briefly wait for worker cleanup, then re-raise. System DNS calls cannot be forcibly terminated; not every underlying thread is guaranteed to stop the instant a tool times out.
+- On timeout or cancellation, abort the connection, briefly wait for worker cleanup, then re-raise. The connector keeps one of its two worker slots occupied until the underlying exchange returns. System DNS calls cannot be forcibly terminated and can delay subsequent HTTP reads until a worker is free.
 
 ## Configuration reads and two-layer sanitization
 

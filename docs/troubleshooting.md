@@ -86,6 +86,10 @@ Other rejected HTTP statuses, including 405, use ENDPOINT_UNAVAILABLE. Health-fa
 
 ## Network and timeout errors
 
+### SERVER_BUSY
+
+Four tool calls are active and the 16 waiting slots are occupied. Wait for outstanding calls to finish before submitting more.
+
 ### TARGET_TIMEOUT
 
 A read or shared tool deadline expired. Check the target's load, responsiveness, network namespace, read queue, and the work requested.

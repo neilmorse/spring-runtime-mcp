@@ -44,6 +44,25 @@ def project(entry: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
     return items[0]["schema"], document
 
 
+@pytest.mark.parametrize("location", [[], {}])
+def test_unreadable_parameter_location_preserves_other_operations(
+    location: Any,
+) -> None:
+    operation = {"responses": {"200": {}}}
+    document = {
+        "openapi": "3.1.0",
+        "paths": {
+            "/a": {"get": {**operation, "parameters": [{"name": "x", "in": location}]}},
+            "/b": {"get": deepcopy(operation)},
+        },
+    }
+    _, _, items, gaps, _ = normalize_openapi(document, OpenApiQuery(path_pattern="/*"))
+    assert [item["path"] for item in items] == ["/a", "/b"]
+    assert items[0]["parameters"] == []
+    assert items[0]["expansionComplete"] is False
+    assert gaps == ["OPENAPI_PARAMETERS_UNREADABLE"]
+
+
 @pytest.mark.parametrize(
     "metadata",
     [

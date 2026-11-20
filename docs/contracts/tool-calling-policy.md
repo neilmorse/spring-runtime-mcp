@@ -56,6 +56,7 @@ outputSchema validates the domain envelope in structuredContent. Fixed local log
 | Other rejected status, including 405 | ENDPOINT_UNAVAILABLE; startup 5xx suggests configureStartup, others use general endpoint guidance |
 | Unsupported media/encoding or incomplete response | UNEXPECTED_CONTENT_TYPE / UNSUPPORTED_CONTENT_ENCODING / INCOMPLETE_RESPONSE |
 | Timeout/connection failure | TARGET_TIMEOUT / TARGET_CONNECTION_REFUSED / TARGET_CONNECTION_FAILED |
+| Tool call queue full | SERVER_BUSY |
 | Unsafe output/cache or budget violation | Fixed codes such as UNSAFE_OUTPUT / SANITIZATION_FAILED / RESPONSE_TOO_LARGE; stop that branch |
 | Expired cursor/changed query | CURSOR_EXPIRED / CURSOR_QUERY_MISMATCH; rebuild the query or restore original arguments |
 
@@ -67,7 +68,7 @@ The implementation fixes retryable=false and retryAfterMs=null. INVALID_ARGUMENT
 
 Results contain structuredContent and one TextContent whose text is the same sanitized object in compact JSON. Complete results use resultType=complete. The full JSON-RPC tool response, including request id, SDK metadata, and both copies, is capped at 16,384 UTF-8 bytes and rechecked by the host and actual send layer. Static tools/list Schemas are not trimmed to this tool-result limit.
 
-The server enforces a 15-second tool deadline and two read slots per target. Agents should limit a round to four calls and 64 KiB combined results, then summarize and narrow scope. This cross-call policy is caller-managed, not a host session counter. Stop the affected branch on authorization, network, safety, or evidence blockers while completing independent diagnostics.
+The server enforces a 15-second tool deadline and two read slots per target. It admits four active calls, queues up to 16, and returns SERVER_BUSY if the queue is full. Agents should limit a round to four calls and 64 KiB combined results, then summarize and narrow scope. Stop the affected branch on authorization, network, safety, or evidence blockers while completing independent diagnostics.
 
 ## Offline contract checks
 
