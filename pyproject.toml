@@ -33,7 +33,7 @@ classifiers = [
   "Topic :: System :: Monitoring",
   "Typing :: Typed",
 ]
-dependencies = ["jsonschema==4.25.1", "mcp>=2.3,<3"]
+dependencies = ["jsonschema==4.25.1", "mcp>=2.3,<3", "opentelemetry-api>=1.45.2"]
 
 [dependency-groups]
 dev = [
