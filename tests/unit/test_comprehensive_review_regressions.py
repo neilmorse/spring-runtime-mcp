@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import threading
 from copy import deepcopy
 from typing import Any
 
@@ -17,6 +18,7 @@ from spring_runtime_mcp.policy.sanitization import SanitizerPipeline
 from spring_runtime_mcp.services import Services
 from spring_runtime_mcp.snapshots import SnapshotStore
 from spring_runtime_mcp.tools import support
+from spring_runtime_mcp.tools import verify_mappings as mapping_handler
 from spring_runtime_mcp.tools.registry import call_tool
 from spring_runtime_mcp.transport.response_gate import EndpointReadError
 
@@ -429,3 +431,59 @@ def test_cr02_queued_cancellation_never_opens_an_extra_read() -> None:
 
     asyncio.run(run())
     assert reader.peak == 2 and len(reader.calls) == 3 and reader.active == 0
+
+
+def test_call_admission_bounds_the_waiting_queue_and_recovers() -> None:
+    reader = Reader({"health": {"status": "UP", "components": {}}}, delay=0.02)
+    env = services(reader)
+
+    async def run() -> None:
+        calls = [
+            asyncio.create_task(call_tool("springboot_diagnose_health", {}, env))
+            for _ in range(21)
+        ]
+        refused = await calls[-1]
+        assert refused["errors"][0]["code"] == "SERVER_BUSY"
+        calls[-2].cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await calls[-2]
+        assert all(
+            result["status"] == "ok" for result in await asyncio.gather(*calls[:19])
+        )
+        assert (await call_tool("springboot_diagnose_health", {}, env))[
+            "status"
+        ] == "ok"
+
+    asyncio.run(run())
+    assert len(reader.calls) == 20
+
+
+def test_mapping_analysis_does_not_block_health(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    env = services(Reader({"health": {"status": "UP"}, "mappings": {"contexts": {}}}))
+
+    async def run() -> None:
+        loop = asyncio.get_running_loop()
+        entered = asyncio.Event()
+        release = threading.Event()
+
+        def normalize(*args: Any, **kwargs: Any) -> tuple[list[Any], list[str]]:
+            loop.call_soon_threadsafe(entered.set)
+            assert release.wait(5)
+            return [], []
+
+        monkeypatch.setattr(mapping_handler, "normalize_mappings", normalize)
+        mapping = asyncio.create_task(
+            call_tool("springboot_verify_mappings", {"httpMethod": "GET"}, env)
+        )
+        try:
+            await asyncio.wait_for(entered.wait(), 2)
+            health = await call_tool("springboot_diagnose_health", {}, env)
+            assert health["data"]["overallStatus"] == "UP"
+            assert not mapping.done()
+        finally:
+            release.set()
+        assert (await mapping)["status"] == "ok"
+
+    asyncio.run(run())

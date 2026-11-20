@@ -219,12 +219,12 @@ class SnapshotStore:
             deadline = min(deadline, expires_at)
         if deadline <= self._clock():
             raise NormalizationError("CURSOR_EXPIRED")
-        ensure_safe_output(envelope, sanitizer=sanitizer)
         items = envelope["data"]["items"]
         if not 0 <= offset < len(items):
             raise ValueError("INVALID_PAGE_OFFSET")
 
         def encode(value: Any) -> bytes:
+            ensure_safe_output(value, sanitizer=sanitizer)
             return json.dumps(
                 value,
                 sort_keys=True,
@@ -234,11 +234,17 @@ class SnapshotStore:
             ).encode("utf-8")
 
         header = encode(page_envelope(envelope, []))
-        records = tuple(encode(item) for item in items)
-        size = len(header) + sum(len(item) + 32 for item in records) + 128
+        size = len(header) + 128
+        records: list[bytes] = []
+        for item in items:
+            record = encode(item)
+            size += len(record) + 32
+            if size + 256 > self._max_bytes:
+                raise NormalizationError("SNAPSHOT_TOO_LARGE")
+            records.append(record)
         snapshot = _PagedSnapshot(
             header,
-            records,
+            tuple(records),
             self._digest(query),
             deadline,
             size,

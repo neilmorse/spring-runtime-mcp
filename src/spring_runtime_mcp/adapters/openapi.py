@@ -520,7 +520,12 @@ def _parameters(
             expander.gaps.add("OPENAPI_PARAMETERS_UNREADABLE")
             continue
         location = item.get("in")
-        if location not in {"path", "query", "header", "cookie"}:
+        if not isinstance(location, str) or location not in {
+            "path",
+            "query",
+            "header",
+            "cookie",
+        }:
             expander.gaps.add("OPENAPI_PARAMETERS_UNREADABLE")
             continue
         selected[(location, item["name"])] = item

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.13] - 2026-11-20
+
+- Bound tool calls to four active and 16 waiting per service instance. Return `SERVER_BUSY` when admission is full.
+- Run route normalization and drift comparison in a bounded worker, and retain HTTP worker slots until cancelled or timed-out exchanges finish.
+- Preserve sanitized Bean associations across continuation pages and keep readable OpenAPI operations when a parameter location is malformed.
+- Require OpenTelemetry API 1.45.2 or later to address CVE-2026-126360.
+
 ## [0.2.12] - 2026-11-02
 
 ### Documentation and onboarding

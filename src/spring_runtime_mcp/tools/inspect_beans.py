@@ -194,7 +194,6 @@ async def inspect_beans(
             gaps.append("BEAN_GRAPH_INCOMPLETE")
         items: list[dict[str, Any]] = []
         graph_exhausted = False
-        association_credits = 50
         for key, bean in sorted(graph.beans.items()):
             # The bounded normalized index still contains valid scalar facts
             # after traversal fuel runs out. Preserve them for filtering/paging.
@@ -267,14 +266,11 @@ async def inspect_beans(
                 "type": clean(actual),
                 "scope": clean(bean.scope.value, max_length=64),
                 "resource": services.sanitizer.resource(bean.resource.value),
-                "aliases": [
-                    clean(a) for a in bean.aliases[: min(16, association_credits)]
-                ],
+                "aliases": [clean(a) for a in bean.aliases[:16]],
                 "producer": None,
                 "dependencies": [],
                 "dependents": [],
             }
-            association_credits -= len(item["aliases"])
             if len(bean.aliases) > len(item["aliases"]):
                 gaps.append("ASSOCIATION_LIMIT")
                 result["truncated"] = True
@@ -302,14 +298,6 @@ async def inspect_beans(
                     continue
                 if graph_exhausted:
                     continue
-                if association_credits == 0:
-                    index = (
-                        graph.forward if direction == "dependencies" else graph.reverse
-                    )
-                    if index.get(key):
-                        gaps.append("ASSOCIATION_LIMIT")
-                        result["truncated"] = True
-                    continue
                 sliced = slice_dependencies(
                     graph,
                     (key,),
@@ -318,11 +306,10 @@ async def inspect_beans(
                     budget=budget,
                 )
                 gaps.extend(sliced.gaps)
-                kept_edges = min(16, association_credits)
+                kept_edges = 16
                 if sliced.truncated or len(sliced.edges) > kept_edges:
                     gaps.append("ASSOCIATION_LIMIT")
                     result["truncated"] = True
-                association_credits -= min(len(sliced.edges), kept_edges)
                 for edge, depth in sliced.edges[:kept_edges]:
                     target = (
                         edge.resolution.candidates[0]
@@ -424,7 +411,11 @@ async def inspect_beans(
             if not derived:
                 derived = list(result["truncationReasons"]) or ["RESPONSE_BUDGET"]
             result["truncationReasons"] = derived
-        return _page(services.sanitizer.sanitize(result), query, services)
+        sanitized = services.sanitizer.sanitize(page_envelope(result, []))
+        sanitized["data"]["items"] = [
+            services.sanitizer.sanitize(item) for item in items
+        ]
+        return _page(sanitized, query, services)
     except NormalizationError as exc:
         return failed(
             exc.code,

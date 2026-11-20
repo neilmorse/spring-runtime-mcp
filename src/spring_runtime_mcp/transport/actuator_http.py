@@ -263,6 +263,7 @@ class ActuatorHttpTransport:
         self._host = host
         self._port = port
         self._targets = targets
+        self._worker_slots = asyncio.Semaphore(2)
         if bearer_token is not None and (
             not isinstance(bearer_token, str)
             or not 1 <= len(bearer_token) <= 8192
@@ -282,6 +283,8 @@ class ActuatorHttpTransport:
         max_bytes: int,
     ) -> HttpResponse:
         state = _ExchangeState(float(timeout))
+        async with asyncio.timeout(state.remaining()):
+            await self._worker_slots.acquire()
         worker = asyncio.create_task(
             asyncio.to_thread(
                 self._exchange,
@@ -294,9 +297,18 @@ class ActuatorHttpTransport:
                 state,
             )
         )
+
+        def release(task: asyncio.Task[HttpResponse]) -> None:
+            self._worker_slots.release()
+            if not task.cancelled():
+                task.exception()
+
+        # An expired caller can leave a resolver running. Keep its slot until
+        # the underlying worker actually returns.
+        worker.add_done_callback(release)
         try:
             return await asyncio.wait_for(
-                asyncio.shield(worker), timeout=float(timeout)
+                asyncio.shield(worker), timeout=state.remaining()
             )
         except (TimeoutError, asyncio.CancelledError):
             state.abort()
@@ -304,10 +316,6 @@ class ActuatorHttpTransport:
             # exceptions. A resolver syscall itself is owned by the OS.
             with contextlib.suppress(Exception, asyncio.CancelledError):
                 await asyncio.wait_for(asyncio.shield(worker), timeout=0.25)
-            if not worker.done():
-                worker.add_done_callback(
-                    lambda task: task.exception() if not task.cancelled() else None
-                )
             raise
         except ssl.SSLError:
             raise NormalizationError("TLS_VERIFICATION_FAILED") from None
