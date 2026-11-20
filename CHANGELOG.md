@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.14] - 2026-11-20
+
+- Add an offline database health and Bean composition replay. The synthetic comparison measures two separate results against one candidate frame and tests missing supplemental evidence. The candidate is test-only.
+
 ## [0.2.13] - 2026-11-20
 
 - Bound tool calls to four active and 16 waiting per service instance. Return `SERVER_BUSY` when admission is full.

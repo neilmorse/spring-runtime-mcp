@@ -2,7 +2,7 @@
 
 [First live query](first-query.md) · [Chinese overview](../README.zh-CN.md) · [Trial feedback](trial-feedback.md)
 
-This demo uses the **0.2.13 Alpha public package** and its bundled synthetic data. It needs Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/) on Linux, with package-index access for installation. After installation, the replay commands read package resources offline. No source checkout, `examples/` directory, JDK, Docker, Spring process, or model API is required.
+This demo uses the **0.2.14 Alpha public package** and its bundled synthetic data. It needs Python 3.11+ and [uv](https://docs.astral.sh/uv/getting-started/installation/) on Linux, with package-index access for installation. After installation, the replay commands read package resources offline. No source checkout, `examples/` directory, JDK, Docker, Spring process, or model API is required.
 
 The replay entry point invokes the actual tool handlers and emits a serialized JSON-RPC-shaped result. It does not start a STDIO MCP session or make HTTP requests. This demonstrates normalization and result semantics, not application authentication, MCP-client interoperability, or real-version Spring compatibility. `boot-3.4-servlet` is a synthetic scenario label, not evidence that Boot 3.4 was run.
 
@@ -13,11 +13,11 @@ Run the blocks in this page in the same terminal; `demo_dir` identifies the new 
 ```bash
 demo_dir="$(mktemp -d /tmp/spring-runtime-demo.XXXXXX)"
 uv venv "$demo_dir/venv"
-uv pip install --python "$demo_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.13
+uv pip install --python "$demo_dir/venv/bin/python" --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14
 "$demo_dir/venv/bin/spring-runtime-mcp" --version
 ```
 
-Expect `spring-runtime-mcp 0.2.13` before continuing.
+Expect `spring-runtime-mcp 0.2.14` before continuing.
 
 ## 2. Ask whether GET /orders is registered
 
