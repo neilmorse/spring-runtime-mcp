@@ -29,11 +29,11 @@ The [synthetic route demo](docs/demo.md) uses the public package and bundled dat
 
 ### Connect an MCP client to your app
 
-You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and permission to read a local Spring Boot application's management endpoints. Confirm the endpoints and permissions in the [target setup guide](docs/target-app-setup.md). These commands use **0.2.14 Alpha**.
+You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and permission to read a local Spring Boot application's management endpoints. Confirm the endpoints and permissions in the [target setup guide](docs/target-app-setup.md). These commands use **0.2.15 Alpha**.
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --base-url http://127.0.0.1:18081
 ```
 
 Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [English first-query guide](docs/first-query.md); additional [client configuration templates](docs/client-configuration.md) cover other clients.

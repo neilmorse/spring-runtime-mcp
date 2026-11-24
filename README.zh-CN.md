@@ -29,11 +29,11 @@
 
 ### 用 MCP 客户端连接你的应用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和读取本地 Spring Boot 应用管理端点的权限。先按[目标配置指南](docs/target-app-setup.md)确认端点与权限。以下命令使用 **0.2.14 Alpha**。
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和读取本地 Spring Boot 应用管理端点的权限。先按[目标配置指南](docs/target-app-setup.md)确认端点与权限。以下命令使用 **0.2.15 Alpha**。
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --base-url http://127.0.0.1:18081
 ```
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令。直接在终端运行时，它会等待客户端请求。完整步骤见[首次查询（英文）](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
