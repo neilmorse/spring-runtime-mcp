@@ -88,6 +88,17 @@ The candidate used 32.8% fewer response bytes and fit within the 16,384-byte fra
 
 Healthy and hidden-detail components and unknown associations use one fixture read. A denied or timed-out Bean read yields a partial candidate with the original health observation and unavailable Bean evidence.
 
+## Local Boot Health Supplement Acceptance
+
+A separate loopback acceptance used Spring Boot 3.4.8 and JDK 21 with a test-only database health indicator and a registered `application/dataSource` Bean depending on `connectionFactory`. A local STDIO client compared standalone health and direct-dependency Bean calls with an opt-in health call over the same fault. Tomcat access logs verified the GET counts. Frames included both MCP content representations.
+
+| DOWN workflow | MCP calls | Upstream GETs | Response bytes | Median local round trip |
+| --- | ---: | ---: | ---: | ---: |
+| Health and Bean separately | 2 | 2 | 5,094 | 101.72 ms |
+| Health with Bean evidence | 1 | 2 | 3,574 | 35.94 ms |
+
+The comparison used 20 pairs in one local session. Timing includes local STDIO and HTTP and excludes model time. The separate UP run produced `notApplicable` and one health GET. These observations apply to the isolated application and local client setup.
+
 ## Future Enhancements
 
 - [ ] Add memory profiling

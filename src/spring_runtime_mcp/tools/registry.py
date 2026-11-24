@@ -5,8 +5,9 @@ from __future__ import annotations
 from collections.abc import Awaitable, Callable, Mapping
 from typing import Any
 
-from ..contracts.definitions import list_tools
+from ..contracts.definitions import THREAD_TOOL, list_tools
 from .analyze_startup import analyze_startup
+from .analyze_threads import analyze_threads
 from .check_migrations import check_migrations
 from .detect_drift import detect_drift
 from .diagnose_health import diagnose_health
@@ -21,6 +22,7 @@ Handler = Callable[[Mapping[str, Any], Services], Awaitable[dict[str, Any]]]
 
 HANDLERS: dict[str, Handler] = {
     "springboot_analyze_startup": analyze_startup,
+    THREAD_TOOL: analyze_threads,
     "springboot_check_migrations": check_migrations,
     "springboot_detect_drift": detect_drift,
     "springboot_diagnose_health": diagnose_health,
@@ -32,7 +34,7 @@ HANDLERS: dict[str, Handler] = {
 
 
 def validate_handlers() -> None:
-    if set(HANDLERS) != {item["name"] for item in list_tools()}:
+    if set(HANDLERS) != {item["name"] for item in list_tools(include_threads=True)}:
         raise RuntimeError("INVALID_TOOL_HANDLER_REGISTRATION")
 
 
@@ -41,7 +43,7 @@ async def call_tool(
 ) -> dict[str, Any]:
     handler = HANDLERS.get(name)
     if handler is None:
-        known = {item["name"] for item in list_tools()}
+        known = {item["name"] for item in list_tools(include_threads=True)}
         if name in known:
             raise RuntimeError("INVALID_TOOL_HANDLER_REGISTRATION")
         return failed("UNKNOWN_TOOL")

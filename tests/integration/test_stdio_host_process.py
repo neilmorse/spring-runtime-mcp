@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import os
 import selectors
+import ssl
 import subprocess
 import sys
 import threading
@@ -487,9 +488,12 @@ def test_cr01_request_identity_is_bounded_before_sdk_dispatch(
 
 def test_cr02_real_stdio_limits_authenticated_reads_and_sanitizes_credentials(
     monkeypatch: pytest.MonkeyPatch,
+    loopback_tls: tuple[ssl.SSLContext, Path],
 ) -> None:
+    context, ca_file = loopback_tls
     token = "synthetic-review-bearer-33"
     monkeypatch.setenv("REVIEW_BEARER", token)
+    monkeypatch.setenv("SSL_CERT_FILE", str(ca_file))
     lock = threading.Lock()
     state = {"active": 0, "peak": 0, "authorized": 0}
 
@@ -524,10 +528,11 @@ def test_cr02_real_stdio_limits_authenticated_reads_and_sanitizes_credentials(
                     state["active"] -= 1
 
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    server.socket = context.wrap_socket(server.socket, server_side=True)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     session = Session(
-        base_url=f"http://127.0.0.1:{server.server_port}",
+        base_url=f"https://127.0.0.1:{server.server_port}",
         args=["--token-env", "REVIEW_BEARER"],
     )
     try:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from importlib.metadata import version as distribution_version
+from pathlib import Path
 
 import pytest
 
@@ -106,3 +107,27 @@ def test_startup_errors_do_not_echo_a_registered_token(
     captured = capsys.readouterr()
     assert token not in captured.err
     assert token not in captured.out
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        b'{"componentPath":[],"contextId":"application","beanName":"private-example"}',
+        b'{"componentPath":["db"],"contextId":"application","beanName":42}',
+        b'{"componentPath":["db"],"contextId":"application","contextId":"other","beanName":"dataSource"}',
+        b" " * 4097,
+    ],
+)
+def test_invalid_health_bean_binding_fails_before_stdio(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], payload: bytes
+) -> None:
+    binding = tmp_path / "binding.json"
+    binding.write_bytes(payload)
+    with pytest.raises(SystemExit) as exc:
+        main(["--health-bean-binding", str(binding)])
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "--health-bean-binding" in captured.err
+    assert "private-example" not in captured.err
+    assert str(binding) not in captured.err

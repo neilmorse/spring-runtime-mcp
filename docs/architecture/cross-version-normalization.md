@@ -11,6 +11,7 @@ ResponseGateReader accepts ordinary JSON and Actuator v2/v3 media types, constru
 | beans | Parse contexts/beans, types, scope, aliases, and dependencies to establish Context/Bean identities and the visible dependency graph. |
 | conditions | Read positiveMatches/negativeMatches, recognize bounded known condition messages, and normalize outcome; preserve gaps for unknown syntax. |
 | mappings | Extract paths, methods, handlers, Contexts, and stacks from MVC dispatchers, WebFlux annotations, and recognizable functional routes. |
+| gateway-routes | Read the verbose Spring Cloud Gateway inventory in reported order. Retain valid route IDs, standalone Path predicates, signed route order, and named load-balanced destinations. |
 | health | Traverse visible components/details; distinguish aggregate status, hidden details, unreadable state, and tree-depth limits. |
 | flyway/liquibase | Read each engine's reported inventory and Context/migration-Bean identity; project versions, changeSets, checksums, order, and state. |
 | startup | Parse timeline/events identities, parents, and durations; filter slow steps and include ancestor chains. |
@@ -39,11 +40,13 @@ Evidence-backed blocking paths may follow `REQUIRED_BEAN_MISSING → SOURCE_FACT
 
 MVC/WebFlux registration facts come from mappings, without business-URL requests. Functional predicates support only recognized positive combinations and media constraints; OR/NOT/unknown syntax preserve gaps. If a non-DispatcherServlet such as Jersey may cover the requested path, empty dispatcher results include NON_DISPATCHER_SERVLET_ROUTES_UNOBSERVED and an unknown total.
 
+The Gateway mode recognizes bounded standalone `Paths: [...], match trailing slash: ...` predicates and plain `lb://service` destinations. Compound and legacy opaque predicates leave paths unknown. Unreadable rows, unsupported fields, and counts beyond 2,000 observed rows preserve partial coverage and an unknown total. Path filtering applies only to recognized declared patterns. Request matching has to account for Gateway predicates and filters.
+
 Preserve overall health and visible child components separately. Unreadable components, missing status, or detail/depth restrictions produce partial results. Gaps affecting filtered counts make totalMatched null. A fixed health probe's 503 is parseable evidence; connection success alone does not mean healthy.
 
 Sort migrations using engine-reported installation order and stable identities, retaining null/UNKNOWN for missing fields. Flyway version expectations use the latest successful versioned record in installation order. Liquibase has no equivalent standard version semantics; explicitly report unsupported version expectations. Never invent unreported pending state, duration, or failure; MARK_RAN expresses only engine-reported state.
 
-Startup timelines retain units, events, parent chains, and truncation evidence. Missing parents, non-tree relationships, or depth/node limits produce partial results. Do not sum overlapping durations into total JVM startup time. The target must configure BufferingApplicationStartup before run; see [target setup](../target-app-setup.md).
+Startup analysis indexes event identities within the shared analysis budget before resolving parent chains. It reuses ancestor counts for overlapping chains, then ranks eligible steps by descending duration and stable identity before retaining up to 500 steps for pagination. Missing parents, non-tree relationships, or depth/node limits produce partial results. Do not sum overlapping durations into total JVM startup time. The target must configure BufferingApplicationStartup before run; see [target setup](../target-app-setup.md).
 
 ## OpenAPI references
 

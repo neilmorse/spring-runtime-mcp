@@ -4,13 +4,28 @@ from __future__ import annotations
 
 import json
 import socket
-from collections.abc import Callable
+import ssl
+from collections.abc import Callable, Iterator
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any, NoReturn
 
 import pytest
 
+from scripts.runtime_benchmarks.fixture_tls import write_certificates
+
 FIXTURE_ROOT = Path(__file__).parent / "fixtures" / "bean_graph"
+
+
+@pytest.fixture
+def loopback_tls() -> Iterator[tuple[ssl.SSLContext, Path]]:
+    """Server identity and public CA for a single loopback test."""
+    with TemporaryDirectory() as temporary:
+        directory = Path(temporary)
+        write_certificates(directory)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+        context.load_cert_chain(directory / "server.pem")
+        yield context, directory / "ca.pem"
 
 
 @pytest.fixture(autouse=True)

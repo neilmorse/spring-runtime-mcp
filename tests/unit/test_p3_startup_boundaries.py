@@ -75,3 +75,65 @@ def test_missing_parent_is_partial_even_when_duration_filter_hides_the_step() ->
     assert result["data"]["items"] == []
     assert result["data"]["timelineComplete"] is False
     assert "STARTUP_ORPHAN_STEP" in result["coverage"]["gaps"]
+
+
+def test_large_timeline_ranks_late_steps_and_resolves_late_parents() -> None:
+    events = [_event(2, 1)] + [_event(step_id) for step_id in range(3, 503)]
+    events += [_event(1), _event(503)]
+    events[-1]["duration"] = "PT3S"
+    events[-1]["endTime"] = "2026-11-01T00:00:03Z"
+    events[0]["duration"] = "PT2S"
+    events[0]["endTime"] = "2026-11-01T00:00:02Z"
+
+    result = _invoke(events, maxResults=2)
+
+    assert result["status"] == "partial"
+    assert result["totalMatched"] is None
+    assert result["data"]["totalDurationMs"] == 3000
+    assert [row["stepId"] for row in result["data"]["items"]] == ["503", "2"]
+    child = result["data"]["items"][1]
+    assert child["ancestorIds"] == ["1"]
+    assert child["relationState"] == "resolved"
+    assert "STARTUP_NODE_LIMIT" in result["coverage"]["gaps"]
+    assert "STARTUP_ORPHAN_STEP" not in result["coverage"]["gaps"]
+
+    filtered = _invoke(events, stepNamePattern="sample.step503")
+    assert filtered["status"] == "ok"
+    assert filtered["totalMatched"] == 1
+    assert filtered["data"]["items"][0]["stepId"] == "503"
+
+
+def test_depth_limit_applies_at_maximum_supported_depth() -> None:
+    events = [_event(1)] + [_event(step_id, step_id - 1) for step_id in range(2, 20)]
+
+    result = _invoke(events, stepNamePattern="sample.step19", maxDepth=16)
+
+    assert result["status"] == "partial"
+    assert result["data"]["items"] == []
+    assert "STARTUP_DEPTH_LIMIT" in result["coverage"]["gaps"]
+
+
+def test_cycle_through_late_step_is_retained() -> None:
+    events = [_event(1, 2)] + [_event(step_id) for step_id in range(3, 503)]
+    events.append(_event(2, 1))
+
+    result = _invoke(events, stepNamePattern="sample.step1")
+
+    assert result["status"] == "partial"
+    item = result["data"]["items"][0]
+    assert item["relationState"] == "cycle"
+    assert item["ancestorIds"] == ["2", "1"]
+    assert "STARTUP_CYCLE" in result["coverage"]["gaps"]
+    assert "STARTUP_ORPHAN_STEP" not in result["coverage"]["gaps"]
+
+
+def test_long_shared_ancestry_preserves_shallow_evidence_within_budget() -> None:
+    events = [_event(step_id, step_id - 1) for step_id in range(1500, 1, -1)]
+    events.append(_event(1))
+
+    result = _invoke(events, stepNamePattern="sample.step3")
+
+    assert result["status"] == "partial"
+    assert result["data"]["items"][0]["ancestorIds"] == ["2", "1"]
+    assert "STARTUP_DEPTH_LIMIT" in result["coverage"]["gaps"]
+    assert "STARTUP_ORPHAN_STEP" not in result["coverage"]["gaps"]

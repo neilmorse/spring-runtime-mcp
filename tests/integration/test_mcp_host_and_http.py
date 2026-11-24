@@ -19,7 +19,9 @@ import pytest
 
 from mcp_types.version import LATEST_HANDSHAKE_VERSION
 
-from spring_runtime_mcp.server import build_services
+from spring_runtime_mcp.server import SERVER_INFO_META, build_services
+from spring_runtime_mcp.services import HealthBeanBinding
+from spring_runtime_mcp.transport.responses import serialize_response
 from spring_runtime_mcp.diagnostics import SAFE_CODES
 
 from harness.host import dispatch
@@ -271,6 +273,162 @@ def test_server_tools_are_readonly_on_wire_and_reject_request_overrides(
     assert state.requests == expected
     assert state.writes == 0
     assert state.startup_buffer == [1, 2, 3]
+
+
+def test_gateway_routes_read_only_and_opt_in(mounted: Any) -> None:
+    server, state = mounted
+    path = "/actuator/gateway/routes"
+    tool = "springboot_verify_mappings"
+    query = {"routeSource": "gateway", "maxResults": 1}
+    routes = [
+        {
+            "route_id": "catalog",
+            "predicate": "Paths: [/api/catalog/**], match trailing slash: true",
+            "uri": "lb://shop-product",
+            "order": -1,
+            "filters": ["synthetic-filter-value"],
+        },
+        {
+            "route_id": "auth",
+            "predicate": "Paths: [/api/auth/**], match trailing slash: false",
+            "uri": "lb://shop-auth",
+            "order": 0,
+        },
+    ]
+    state.responses[path] = (200, json.dumps(routes).encode())
+    disabled = _call_server(build_services(_base(server)), tool, query)[
+        "structuredContent"
+    ]
+    assert disabled["errors"][0]["code"] == "CAPABILITY_DISABLED"
+    assert disabled["errors"][0]["endpointId"] == "gateway-routes"
+    assert not state.requests
+
+    services = build_services(_base(server), gateway_routes=True)
+    first = _call_server(services, tool, query)["structuredContent"]
+    assert first["source"]["endpointIds"] == ["gateway-routes"]
+    assert first["totalMatched"] == 2
+    assert first["truncated"] is True
+    assert first["nextAction"]["kind"] == "page"
+    item = first["data"]["items"][0]
+    assert {
+        key: item[key]
+        for key in ("routeId", "paths", "order", "targetService", "matchTrailingSlash")
+    } == {
+        "routeId": "catalog",
+        "paths": ["/api/catalog/**"],
+        "order": -1,
+        "targetService": "shop-product",
+        "matchTrailingSlash": True,
+    }
+    assert "synthetic-filter-value" not in json.dumps(first)
+    cursor = first["nextCursor"]
+    second = _call_server(services, tool, {**query, "cursor": cursor})[
+        "structuredContent"
+    ]
+    assert second["data"]["items"][0]["routeId"] == "auth"
+    assert second["nextCursor"] is None
+    assert state.requests == [("GET", path)]
+
+    mismatch = _call_server(
+        services, tool, {"pathPattern": "*", "maxResults": 1, "cursor": cursor}
+    )["structuredContent"]
+    assert mismatch["errors"][0]["code"] == "CURSOR_QUERY_MISMATCH"
+    for invalid in (
+        {"method": "POST"},
+        {"httpMethod": "DELETE"},
+        {"controllerClassPattern": "*"},
+        {"contextId": "gateway"},
+        {"path": "/actuator/gateway/refresh"},
+        {"endpointId": "gateway-routes"},
+        {"operation": "create"},
+        {"operation": "delete"},
+    ):
+        response = _call_server(services, tool, {**query, **invalid})[
+            "structuredContent"
+        ]
+        assert response["errors"][0]["code"] == "INVALID_ARGUMENT"
+    assert state.requests == [("GET", path)]
+    assert state.writes == 0
+
+
+def test_gateway_routes_preserve_unknown_evidence(mounted: Any) -> None:
+    server, state = mounted
+    path = "/actuator/gateway/routes"
+    services = build_services(_base(server), gateway_routes=True)
+    tool = "springboot_verify_mappings"
+    routes = [
+        {
+            "route_id": "known",
+            "uri": "lb://shop-product",
+            "predicate": "Paths: [/catalog, /catalog/**], match trailing slash: true",
+            "order": 0,
+        },
+        {
+            "route_id": "uncertain",
+            "uri": "https://user:synthetic-password@example.invalid/private",
+            "predicate": "(Paths: [/catalog], match trailing slash: true || synthetic-raw-predicate)",
+            "order": True,
+        },
+    ]
+    state.responses[path] = (200, json.dumps(routes).encode())
+    query = {"routeSource": "gateway"}
+    result = _call_server(services, tool, query)["structuredContent"]
+    assert result["status"] == "partial"
+    assert result["totalMatched"] is None
+    uncertain = result["data"]["items"][1]
+    assert uncertain["paths"] is None
+    assert uncertain["matchTrailingSlash"] is None
+    assert uncertain["targetService"] is None
+    assert uncertain["order"] is None
+    assert "synthetic-password" not in json.dumps(result)
+    assert "synthetic-raw-predicate" not in json.dumps(result)
+
+    filtered = _call_server(services, tool, {**query, "pathPattern": "/catalog*"})[
+        "structuredContent"
+    ]
+    assert [item["routeId"] for item in filtered["data"]["items"]] == ["known"]
+    assert filtered["totalMatched"] is None
+
+    state.responses[path] = (200, b"{}")
+    malformed = _call_server(services, tool, query)["structuredContent"]
+    assert malformed["errors"][0]["code"] == "UNSUPPORTED_SHAPE"
+    assert malformed["data"] is None
+    state.responses[path] = (404, b"{}")
+    unavailable = _call_server(services, tool, query)["structuredContent"]
+    assert unavailable["errors"][0]["code"] == "ENDPOINT_NOT_EXPOSED"
+    assert unavailable["errors"][0]["endpointId"] == "gateway-routes"
+    assert state.requests == [("GET", path)] * 4
+
+
+def test_gateway_route_analysis_limit_does_not_offer_an_unavailable_page(
+    mounted: Any,
+) -> None:
+    server, state = mounted
+    path = "/actuator/gateway/routes"
+    route = {
+        "route_id": "catalog",
+        "uri": "lb://shop-product",
+        "predicate": "Paths: [/catalog/**], match trailing slash: true",
+        "order": 0,
+    }
+    state.responses[path] = (
+        200,
+        json.dumps(
+            [route, *([None] * 1_999), {**route, "route_id": "unobserved"}]
+        ).encode(),
+    )
+    response = _call_server(
+        build_services(_base(server), gateway_routes=True),
+        "springboot_verify_mappings",
+        {"routeSource": "gateway"},
+    )["structuredContent"]
+    assert response["status"] == "partial"
+    assert response["totalMatched"] is None
+    assert response["truncated"] is True
+    assert response["truncationReasons"] == ["GATEWAY_ROUTE_LIMIT"]
+    assert response["nextCursor"] is None
+    assert [item["routeId"] for item in response["data"]["items"]] == ["catalog"]
+    assert state.requests == [("GET", path)]
 
 
 @pytest.mark.parametrize(
@@ -800,3 +958,394 @@ def test_mcp_stdio_lifecycle_drift_and_unknown_tool(mounted: Any) -> None:
             process.wait(timeout=5)
         stderr = process.stderr.read() if process.stderr else b""
         assert b"Traceback" not in stderr
+
+
+@pytest.mark.parametrize(
+    ("case", "evidence_state", "read_beans"),
+    [
+        ("default", None, False),
+        ("up", "notApplicable", False),
+        ("filtered", "notApplicable", False),
+        ("hidden", "unknown", False),
+        ("unregistered", "unknown", False),
+        ("missing", "unknown", True),
+        ("unauthorized", "unknown", True),
+        ("forbidden", "unknown", True),
+        ("down", "observed", True),
+    ],
+)
+def test_health_with_registered_bean_over_mcp(
+    mounted: Any, case: str, evidence_state: str | None, read_beans: bool
+) -> None:
+    server, state = mounted
+    services = build_services(_base(server))
+    if case != "unregistered":
+        name = "missingBean" if case == "missing" else "stripeService"
+        services.health_bean_binding = HealthBeanBinding(("db",), "application", name)
+    health_status = "UP" if case == "up" else "DOWN"
+    db = {"status": health_status}
+    if case != "hidden":
+        db["details"] = {"database": "H2"}
+    state.responses["/actuator/health"] = (
+        200 if case == "up" else 503,
+        json.dumps({"status": health_status, "components": {"db": db}}).encode(),
+    )
+    if case in {"unauthorized", "forbidden"}:
+        state.responses["/actuator/beans"] = (
+            401 if case == "unauthorized" else 403,
+            b'{"message":"upstream-private-details"}',
+        )
+    else:
+        state.responses["/actuator/beans"] = (
+            200,
+            b'{"contexts":{"application":{"beans":{"stripeService":{"aliases":[],"type":"example.StripeService","scope":"singleton","dependencies":["factory"]},"factory":{"aliases":[],"type":"example.Factory","scope":"singleton","dependencies":[]}}}}}',
+        )
+
+    arguments: dict[str, Any] = (
+        {"includeBeanEvidence": True} if case != "default" else {}
+    )
+    if case == "filtered":
+        arguments["componentPath"] = ["redis"]
+    result = _call_server(services, "springboot_diagnose_health", arguments)
+
+    assert result["isError"] is False
+    envelope = result["structuredContent"]
+    assert json.loads(result["content"][0]["text"]) == envelope
+    assert envelope["data"]["overallStatus"] == health_status
+    expected = [("GET", "/actuator/health")]
+    if read_beans:
+        expected.append(("GET", "/actuator/beans"))
+    assert state.requests == expected
+    if evidence_state is None:
+        assert "beanEvidence" not in envelope["data"]
+        return
+    evidence = envelope["data"]["beanEvidence"]
+    assert evidence["state"] == evidence_state
+    if evidence_state == "observed":
+        assert evidence["source"]["endpointId"] == "beans"
+        assert evidence["source"]["snapshotId"] != envelope["source"]["snapshotId"]
+        assert evidence["bean"]["name"] == "stripeService"
+        assert evidence["bean"]["dependencies"][0]["targetName"] == "factory"
+        assert envelope["totalMatched"] == 1
+    if case in {"unauthorized", "forbidden"}:
+        assert envelope["status"] == "partial"
+        assert evidence["bean"] is None
+        (failure,) = evidence["errors"]
+        assert failure["code"] == "ENDPOINT_UNAUTHORIZED"
+        assert failure["httpStatus"] == (401 if case == "unauthorized" else 403)
+        assert "upstream-private-details" not in result["content"][0]["text"]
+
+
+def test_health_bean_evidence_timeout_retains_health(
+    mounted: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from spring_runtime_mcp.models.common import ParsedObservation
+
+    server, state = mounted
+    services = build_services(_base(server))
+    services.health_bean_binding = HealthBeanBinding(
+        ("db",), "application", "stripeService"
+    )
+    state.responses["/actuator/health"] = (
+        503,
+        b'{"status":"DOWN","components":{"db":{"status":"DOWN","details":{"database":"H2"}}}}',
+    )
+    read = services.read
+
+    async def read_with_timeout(
+        target: str, endpoint: str, snapshot_id: str
+    ) -> ParsedObservation:
+        if endpoint == "beans":
+            raise TimeoutError
+        return await read(target, endpoint, snapshot_id=snapshot_id)
+
+    monkeypatch.setattr(services, "read", read_with_timeout)
+    result = _call_server(
+        services, "springboot_diagnose_health", {"includeBeanEvidence": True}
+    )
+    assert not result["isError"]
+    envelope = result["structuredContent"]
+    assert envelope["status"] == "partial"
+    assert envelope["totalMatched"] == 1
+    assert envelope["data"]["items"][0]["status"] == "DOWN"
+    evidence = envelope["data"]["beanEvidence"]
+    assert evidence["errors"][0]["code"] == "TARGET_TIMEOUT"
+    assert evidence["bean"] is None
+
+
+def test_health_bean_evidence_pages_and_trims_before_health_items(mounted: Any) -> None:
+    server, state = mounted
+    services = build_services(_base(server))
+    services.health_bean_binding = HealthBeanBinding(
+        ("db",), "application", "dataSource"
+    )
+    names = [f"factory{i}" + "x" * 240 for i in range(8)]
+    beans = {
+        name: {
+            "aliases": [],
+            "scope": "singleton",
+            "type": "example.Factory",
+            "dependencies": [],
+        }
+        for name in names
+    }
+    beans["dataSource"] = {
+        "aliases": [],
+        "scope": "singleton",
+        "type": "example.DataSource",
+        "dependencies": names,
+    }
+    state.responses["/actuator/beans"] = (
+        200,
+        json.dumps({"contexts": {"application": {"beans": beans}}}).encode(),
+    )
+    detail = {"d" + str(index): "x" * 512 for index in range(10)}
+    state.responses["/actuator/health"] = (
+        503,
+        json.dumps(
+            {
+                "status": "DOWN",
+                "components": {
+                    "db": {"status": "DOWN", "details": detail},
+                    "redis": {"status": "DOWN", "details": {"database": "H2"}},
+                },
+            }
+        ).encode(),
+    )
+    arguments = {"includeBeanEvidence": True, "includeDetails": True, "maxResults": 1}
+    first = _call_server(services, "springboot_diagnose_health", arguments)[
+        "structuredContent"
+    ]
+    second = _call_server(
+        services,
+        "springboot_diagnose_health",
+        {**arguments, "cursor": first["nextCursor"]},
+    )["structuredContent"]
+
+    assert state.requests == [("GET", "/actuator/health"), ("GET", "/actuator/beans")]
+    assert first["nextAction"]["kind"] == "page"
+    assert first["totalMatched"] == second["totalMatched"] == 2
+    assert first["data"]["items"][0]["details"]
+    first_evidence = first["data"]["beanEvidence"]
+    second_evidence = second["data"]["beanEvidence"]
+    assert first_evidence["source"] == second_evidence["source"]
+    assert "HEALTH_BEAN_EVIDENCE_BUDGET" in first["truncationReasons"]
+    assert len(second_evidence["bean"]["dependencies"]) == 8
+    for envelope in (first, second):
+        assert (
+            len(serialize_response(envelope, 1, server_meta=SERVER_INFO_META)) <= 16_384
+        )
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_thread_tool_cli_registration_and_snapshot(mounted: Any, enabled: bool) -> None:
+    server, state = mounted
+    thread_rows = [
+        {
+            "threadId": 1,
+            "threadState": "BLOCKED",
+            "lockOwnerId": 2,
+            "threadName": "PRIVATE_THREAD",
+        },
+        {"threadId": 2, "threadState": "TIMED_WAITING", "lockOwnerId": 1},
+        {
+            "threadId": 3,
+            "threadState": "BLOCKED",
+            "lockOwnerId": 4,
+            "stackTrace": [{"fileName": "PRIVATE_PATH"}],
+        },
+        {"threadId": 4, "threadState": "RUNNABLE", "lockOwnerId": -1},
+    ]
+    state.responses["/actuator/threaddump"] = (
+        200,
+        json.dumps({"threads": thread_rows}).encode(),
+    )
+    with subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "spring_runtime_mcp.cli",
+            "--base-url",
+            _base(server),
+            *(["--enable-thread-diagnostics"] if enabled else []),
+        ],
+        cwd=ROOT,
+        env=dict(os.environ, PYTHONPATH=str(ROOT / "src")),
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+    ) as process:
+        initialization = _frame(
+            process,
+            {
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "initialize",
+                "params": {
+                    "protocolVersion": LATEST_HANDSHAKE_VERSION,
+                    "capabilities": {},
+                    "clientInfo": {"name": "thread-test", "version": "1"},
+                },
+            },
+        )
+        assert initialization["id"] == 1
+        assert process.stdin is not None
+        process.stdin.write(b'{"jsonrpc":"2.0","method":"notifications/initialized"}\n')
+        process.stdin.flush()
+        listed = _frame(process, {"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
+        tools = listed["result"]["tools"]
+        names = [tool["name"] for tool in tools]
+        name = "springboot_analyze_threads"
+        assert names == sorted(names) and len(names) == (9 if enabled else 8)
+        assert (name in names) == enabled
+        assert state.requests == []
+        request = {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "tools/call",
+            "params": {"name": name, "arguments": {"maxResults": 1}},
+        }
+        first = _frame(process, request)
+        if not enabled:
+            assert first["error"]["code"] == -32602
+            assert state.requests == []
+            process.stdin.close()
+            return
+        info = next(tool for tool in tools if tool["name"] == name)
+        assert info["annotations"]["readOnlyHint"] is True
+        assert info["annotations"]["destructiveHint"] is False
+        assert info["annotations"]["idempotentHint"] is True
+        assert info["annotations"]["openWorldHint"] is False
+        first_result = first["result"]
+        assert not first_result["isError"]
+        first_data = first_result["structuredContent"]
+        assert first_data["data"]["items"] == [
+            {
+                "kind": "cycle",
+                "threadIds": ["1", "2"],
+                "length": 2,
+                "containsTimedWait": True,
+            }
+        ]
+
+        request["id"] = 4
+        request["params"]["arguments"]["cursor"] = first_data["nextCursor"]
+        second_result = _frame(process, request)["result"]
+        process.stdin.close()
+        assert not second_result["isError"]
+        second_data = second_result["structuredContent"]
+        assert second_data["data"]["items"] == [
+            {
+                "kind": "chain",
+                "threadIds": ["3", "4"],
+                "end": "endOfObservedChain",
+            }
+        ]
+        assert first_data["source"] == second_data["source"]
+        assert first_data["totalMatched"] == second_data["totalMatched"] == 2
+        assert second_data["nextCursor"] is None
+        for result in (first_result, second_result):
+            assert (
+                json.loads(result["content"][0]["text"]) == result["structuredContent"]
+            )
+            assert "PRIVATE_" not in result["content"][0]["text"]
+        assert state.requests == [("GET", "/actuator/threaddump")]
+    assert process.returncode == 0
+
+
+@pytest.mark.parametrize(
+    ("status", "body", "error_code"),
+    [
+        (401, b'{"error":"private upstream body"}', "ENDPOINT_UNAUTHORIZED"),
+        (403, b'{"error":"private upstream body"}', "ENDPOINT_UNAUTHORIZED"),
+        (404, b"{}", "ENDPOINT_NOT_EXPOSED"),
+        (503, b'{"threads":[]}', "ENDPOINT_UNAVAILABLE"),
+        (200, b"x" * (8 * 1024 * 1024 + 1), "RESPONSE_TOO_LARGE"),
+    ],
+)
+def test_thread_dump_rejects_unusable_http_response(
+    mounted: Any, status: int, body: bytes, error_code: str
+) -> None:
+    server, state = mounted
+    state.responses["/actuator/threaddump"] = (status, body)
+    result = _call_server(
+        build_services(_base(server), thread_diagnostics=True),
+        "springboot_analyze_threads",
+        {},
+    )
+    assert result["isError"]
+    evidence = result["structuredContent"]
+    assert evidence["data"] is None and evidence["totalMatched"] is None
+    error = evidence["errors"][0]
+    assert error["code"] == error_code
+    assert error["endpointId"] == "threaddump"
+    assert "private upstream" not in result["content"][0]["text"]
+    assert state.requests == [("GET", "/actuator/threaddump")]
+
+
+def test_thread_tool_enforces_wire_budget_without_losing_snapshot_items(
+    mounted: Any,
+) -> None:
+    server, state = mounted
+    services = build_services(_base(server), thread_diagnostics=True)
+    rows = []
+    for start in range(55):
+        root = 9_000_000_000_000_000_000 + start * 20
+        for offset in range(16):
+            rows.append(
+                {
+                    "threadId": root + offset,
+                    "threadState": "BLOCKED" if offset < 15 else "RUNNABLE",
+                    "lockOwnerId": root + offset + 1 if offset < 15 else -1,
+                }
+            )
+    state.responses["/actuator/threaddump"] = (
+        200,
+        json.dumps({"threads": rows}).encode(),
+    )
+    arguments: dict[str, Any] = {}
+    collected = []
+    snapshot_id = None
+    for page in range(55):
+        result = _call_server(services, "springboot_analyze_threads", arguments)
+        assert not result["isError"]
+        evidence = result["structuredContent"]
+        assert (
+            len(serialize_response(evidence, 1, server_meta=SERVER_INFO_META)) <= 16_384
+        )
+        assert evidence["totalMatched"] == 55
+        assert evidence["data"]["waitChainCount"] == 55
+        if page == 0:
+            assert 0 < len(evidence["data"]["items"]) < 50
+            snapshot_id = evidence["source"]["snapshotId"]
+        assert evidence["source"]["snapshotId"] == snapshot_id
+        collected.extend(item["threadIds"][0] for item in evidence["data"]["items"])
+        if evidence["nextCursor"] is None:
+            break
+        arguments = {"cursor": evidence["nextCursor"]}
+    assert collected == [str(9_000_000_000_000_000_000 + i * 20) for i in range(55)]
+    assert state.requests == [("GET", "/actuator/threaddump")]
+
+
+def test_thread_tool_preserves_unknown_owner_and_rejects_query_overrides(
+    mounted: Any,
+) -> None:
+    server, state = mounted
+    services = build_services(_base(server), thread_diagnostics=True)
+    tool = "springboot_analyze_threads"
+    invalid = _call_server(services, tool, {"path": "/actuator/health"})
+    assert invalid["structuredContent"]["errors"][0]["code"] == "INVALID_ARGUMENT"
+    assert state.requests == []
+    state.responses["/actuator/threaddump"] = (
+        200,
+        b'{"threads":[{"threadId":1,"threadState":"BLOCKED","lockOwnerId":2}]}',
+    )
+    result = _call_server(services, tool, {})
+    assert not result["isError"]
+    evidence = result["structuredContent"]
+    assert evidence["status"] == "partial"
+    assert evidence["totalMatched"] is None
+    assert evidence["data"]["waitCycleStatus"] == "unknown"
+    assert evidence["data"]["items"] == [
+        {"kind": "chain", "threadIds": ["1", "2"], "end": "ownerUnobserved"},
+    ]
+    assert evidence["coverage"]["gaps"] == ["THREAD_LOCK_OWNER_UNOBSERVED"]

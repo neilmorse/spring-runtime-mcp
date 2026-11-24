@@ -22,13 +22,15 @@ uv run --no-sync ruff format --check src tests scripts
 
 Python changes require pytest and Ruff lint/format; src type changes also require mypy; Schema/contract-validator changes require contract checks. Documentation-only changes need wording, path, anchor, and link checks. Packaging/resource changes require builds and artifact resource checks. Stop expanding validation once the appropriate checks pass; see [AGENTS.md](../../AGENTS.md).
 
+Run the [real Spring Boot benchmark matrix](../runtime-benchmarks.md) separately when authorized. It records per-case verdicts against pinned targets, including the observed coverage and actual tool-response wire sizes.
+
 ## Builds and local distribution checks
 
 ```bash
 uv build
 ```
 
-The wheel must contain `spring_runtime_mcp/schemas/tools-contract.json`, `py.typed`, and replay resources. The sdist contains current source, tests, scripts, and docs. `.human/` remains in Git but is explicitly excluded from wheel/sdist. `examples/` holds ignored local application fixtures and diagnostic results and is not distributed. Maintenance scripts depending on it require separately prepared fixtures; default synthetic tests and release gates do not depend on that directory.
+The wheel must contain `spring_runtime_mcp/schemas/tools-contract.json`, `py.typed`, and replay resources. The sdist contains current source, tests, scripts, and docs. `.human/` remains in Git but is explicitly excluded from wheel/sdist. The real benchmark runner fetches its targets into temporary directories. The default synthetic checks and release gates use bundled fixtures.
 
 Development self-check entry point:
 
@@ -36,7 +38,7 @@ Development self-check entry point:
 uv run --no-sync python scripts/pre_release_check.py --allow-dirty
 ```
 
-The script checks the worktree, secrets, versions, offline tests, and static quality; builds wheel/sdist; and independently verifies clean installation, resources/versions, two SDK modes, self-hosted loopback HTTP tool calls, and offline replay. Installing verification environments may use an index/cache, but never real diagnostic targets.
+The script checks the worktree, secrets, versions, offline tests, and static quality; builds wheel/sdist; and independently verifies clean installation, resources/versions, two SDK modes, Bearer-authenticated loopback HTTPS tool calls using a disposable test CA, and offline replay. Installing verification environments may use an index/cache, but never real diagnostic targets.
 
 `--audit` enables a network dependency vulnerability audit; the complete release gate uses `--audit --output-dir dist`. Failure exits 1. Incomplete checks such as skipped audit/build, dirty-tree allowance, or accepted skipped tests exit 2. Only a fully successful gate supports formal publication.
 

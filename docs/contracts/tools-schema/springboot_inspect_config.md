@@ -8,6 +8,8 @@ Fields follow the [tool Schema](../../../src/spring_runtime_mcp/schemas/tools-co
 
 Require prefix or propertyKeyPattern. Diagnostics are disabled by default; intersect queries with CLI registration. includeValues=true also needs --config-allow-values, and values are always sanitized. The network still reads complete fixed env/configprops endpoints; local filters do not reduce upstream response size.
 
+An unavailable source or an inventory gap gives a null totalMatched. An observed empty inventory has a count of zero.
+
 Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcards. Combine filters with AND. Additional arguments are rejected; invalid arguments do not read the target.
 
 ## Input fields

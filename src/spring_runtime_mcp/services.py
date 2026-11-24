@@ -26,6 +26,13 @@ class RuntimeReader(Protocol):
     ) -> ParsedObservation: ...
 
 
+@dataclass(frozen=True)
+class HealthBeanBinding:
+    component_path: tuple[str, ...]
+    context_id: str
+    bean_name: str
+
+
 @dataclass
 class Services:
     reader: RuntimeReader
@@ -34,6 +41,8 @@ class Services:
     snapshots: SnapshotStore
     targets: frozenset[str] = frozenset({"local"})
     config_policy: ConfigReadPolicy | None = None
+    health_bean_binding: HealthBeanBinding | None = None
+    thread_diagnostics: bool = False
     _read_slots: dict[str, asyncio.Semaphore] = field(default_factory=dict, init=False)
     _call_slots: asyncio.Semaphore = field(
         default_factory=lambda: asyncio.Semaphore(_ACTIVE_CALLS), init=False

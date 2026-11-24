@@ -31,7 +31,7 @@ Ask the application maintainer for:
 - An authorized management origin, reachable from the MCP process, such as `http://127.0.0.1:18081`. An origin has no path, query, fragment, or embedded credentials.
 - An existing fixed `/actuator` base path. The first route query requires authorized GET access to `/actuator/mappings`; health needs `/actuator/health` instead.
 - A local registration ID, such as `local`. This identifies the target and is independent of Spring Context IDs.
-- If authentication is required, an existing Bearer token supplied through an agreed environment variable, such as `SHOP_ACTUATOR_TOKEN`.
+- For Bearer authentication, a loopback HTTPS origin covered by a trusted certificate and an existing token supplied through an agreed environment variable, such as `SHOP_ACTUATOR_TOKEN`.
 
 Only registered loopback targets, fixed endpoints, and optional Bearer authentication are supported. Basic authentication, arbitrary headers, remote targets, and custom Actuator base paths are unsupported. Keep existing HTTPS and trusted certificate validation. In a container or remote workspace, loopback refers to that process's network namespace.
 
@@ -44,13 +44,13 @@ Merge the table below into your existing `~/.codex/config.toml`, preserving othe
 ```toml
 [mcp_servers.spring_runtime]
 command = "/tmp/spring-runtime-trial.REPLACE/venv/bin/spring-runtime-mcp"
-args = ["--base-url", "http://127.0.0.1:18081", "--target-id", "local", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+args = ["--base-url", "https://localhost:18081", "--target-id", "local", "--token-env", "SHOP_ACTUATOR_TOKEN"]
 env_vars = ["SHOP_ACTUATOR_TOKEN"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
-For an authorized target that needs no authentication, remove `--token-env`, its following variable name, and the `env_vars` line. Keep authentication enabled for targets that require it.
+Set the HTTPS origin to the registered loopback name covered by the target certificate. For an authorized target that needs no authentication, remove `--token-env`, its following variable name, and the `env_vars` line. Keep authentication enabled for targets that require it.
 
 Have your existing credential mechanism supply the token to the parent process that launches Codex. `env_vars` forwards a variable; it does not create or refresh a token. The value has no `Bearer ` prefix or whitespace. Keep token values out of TOML, command arguments, prompts, and feedback reports. A token set in a different terminal may not be inherited by the client.
 

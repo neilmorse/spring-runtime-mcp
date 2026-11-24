@@ -17,7 +17,6 @@ from mcp.server.stdio import stdio_server
 from mcp.shared.exceptions import MCPError
 from mcp.shared.message import SessionMessage
 
-from . import __version__
 from .contracts.definitions import list_tools
 from .models.source_catalog import SourceCatalog
 from .models.timestamps import parse_rfc3339
@@ -32,19 +31,15 @@ from .tools.support import TOOL_TIMEOUT_SECONDS
 from .transport.actuator_http import ActuatorHttpTransport
 from .transport.response_gate import ENDPOINTS, ResponseGateReader
 from .transport.responses import serialize_response, tool_result
-from .transport.responses import MAX_RESPONSE_BYTES, _check_request_id
+from .transport.responses import (
+    MAX_RESPONSE_BYTES,
+    SERVER_INFO_META,
+    SERVER_NAME,
+    SERVER_VERSION,
+    _check_request_id,
+)
 
 MAX_FRAME_BYTES = 64 * 1024
-SERVER_NAME = "spring-runtime-mcp"
-SERVER_VERSION = __version__
-# The SDK stamps this on every 2026-era result; the budget measurement includes
-# it so a response that fits our cap also fits the stamped wire frame.
-SERVER_INFO_META: dict[str, Any] = {
-    "io.modelcontextprotocol/serverInfo": {
-        "name": SERVER_NAME,
-        "version": SERVER_VERSION,
-    }
-}
 _FORMAT_CHECKER = FormatChecker()
 
 
@@ -63,18 +58,25 @@ def build_services(
     config_policy: ConfigReadPolicy | None = None,
     source_catalog: SourceCatalog | None = None,
     bearer_token: str | None = None,
+    thread_diagnostics: bool = False,
+    gateway_routes: bool = False,
 ) -> Services:
     """Assemble the real reader. No connection is opened until a tool calls it."""
     targets = frozenset({target_id})
     transport = ActuatorHttpTransport(
         base_url, targets=targets, bearer_token=bearer_token
     )
+    endpoints = ENDPOINTS
+    if config_policy is None:
+        endpoints -= {"env", "configprops"}
+    if not thread_diagnostics:
+        endpoints -= {"threaddump"}
+    if not gateway_routes:
+        endpoints -= {"gateway-routes"}
     reader = ResponseGateReader(
         transport,
         targets=targets,
-        enabled_endpoints=ENDPOINTS - {"env", "configprops"}
-        if config_policy is None
-        else ENDPOINTS,
+        enabled_endpoints=endpoints,
         timeout=timeout,
     )
     if source_catalog is None:
@@ -93,11 +95,8 @@ def build_services(
         SnapshotStore(),
         targets=targets,
         config_policy=config_policy,
+        thread_diagnostics=thread_diagnostics,
     )
-
-
-def _tool_models() -> list[types.Tool]:
-    return [types.Tool.model_validate(item, by_alias=True) for item in list_tools()]
 
 
 def _valid_envelope(schema: dict[str, Any], envelope: object) -> bool:
@@ -111,10 +110,12 @@ def _valid_envelope(schema: dict[str, Any], envelope: object) -> bool:
 
 
 async def _call_tool(
-    ctx: Any, params: types.CallToolRequestParams, services: Services
+    ctx: Any,
+    params: types.CallToolRequestParams,
+    services: Services,
+    catalog: dict[str, dict[str, Any]],
 ) -> types.CallToolResult:
     name = params.name
-    catalog = {item["name"]: item for item in list_tools()}
     arguments = params.arguments or {}
     if name not in catalog:
         # Unknown names are protocol errors, not tool execution results.
@@ -167,12 +168,21 @@ def _result(
 
 def build_server(services: Services) -> Server[Services]:
     validate_handlers()
+    catalog = {
+        item["name"]: item
+        for item in list_tools(include_threads=services.thread_diagnostics)
+    }
 
     async def list_tools_handler(
         ctx: Any, params: types.PaginatedRequestParams | None
     ) -> types.ListToolsResult:
         # Re-publish each committed contract entry unchanged, outputSchema included.
-        return types.ListToolsResult(tools=_tool_models())
+        return types.ListToolsResult(
+            tools=[
+                types.Tool.model_validate(item, by_alias=True)
+                for item in catalog.values()
+            ]
+        )
 
     async def call_tool_handler(
         ctx: Any, params: types.CallToolRequestParams
@@ -181,7 +191,7 @@ def build_server(services: Services) -> Server[Services]:
         token = CALL_BUDGET.set(scope)
         try:
             async with asyncio.timeout(scope.check()):
-                result = await _call_tool(ctx, params, services)
+                result = await _call_tool(ctx, params, services, catalog)
                 scope.check()
                 return result
         except (TimeoutError, NormalizationError):

@@ -13,6 +13,7 @@ from ..models.queries import HealthQuery
 from ..transport.response_gate import EndpointReadError
 from ..services import Services
 from ..diagnostics import failed, partial
+from .health_bean_evidence import collect_bean_evidence, trim_bean_evidence
 from .support import tool_handler, finalize, read_checked, resume, shell, stamp
 
 _ENDPOINTS = {
@@ -31,8 +32,9 @@ async def diagnose_health(
         query = validate_arguments(arguments, "springboot_diagnose_health")
         request_target = query.target_id
         assert isinstance(query, HealthQuery)
+        trim = trim_bean_evidence if query.include_bean_evidence else None
         if query.cursor:
-            return resume(services, query)
+            return resume(services, query, trim=trim)
         endpoint = _ENDPOINTS[query.group]
         snapshot = uuid4().hex
         observation = await read_checked(services, query.target_id, endpoint, snapshot)
@@ -66,13 +68,25 @@ async def diagnose_health(
         } & set(gaps)
         result["totalMatched"] = None if limited or incomplete_count else len(items)
         partial(result, gaps)
+        if query.include_bean_evidence:
+            evidence = await collect_bean_evidence(
+                query, observation.body, items, services
+            )
+            result["data"]["beanEvidence"] = evidence
+            if evidence["coverage"]["gaps"]:
+                partial(result, ["HEALTH_BEAN_EVIDENCE_INCOMPLETE"])
+            if "HEALTH_BEAN_EVIDENCE_LIMIT" in evidence["coverage"]["gaps"]:
+                result["truncated"] = True
+                result["truncationReasons"] = sorted(
+                    {*result["truncationReasons"], "HEALTH_BEAN_EVIDENCE_LIMIT"}
+                )
         if "HEALTH_DETAILS_NOT_VISIBLE" in result["coverage"]["gaps"]:
             result["nextAction"] = {
                 "kind": "remediate",
                 "reasonCode": "HEALTH_DETAILS_NOT_VISIBLE",
                 "filterSuggestions": [],
             }
-        return finalize(result, services, query)
+        return finalize(result, services, query, trim=trim)
     except NormalizationError as exc:
         return failed(
             exc.code,

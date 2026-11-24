@@ -25,14 +25,14 @@ Keep token values out of TOML, command arguments, and prompts. `env_vars` forwar
 ```toml
 [mcp_servers.spring_runtime]
 command = "uvx"
-args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.14", "--base-url", "http://127.0.0.1:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
+args = ["--default-index", "https://pypi.org/simple", "spring-runtime-mcp==0.2.14", "--base-url", "https://localhost:18081", "--token-env", "SHOP_ACTUATOR_TOKEN"]
 env_vars = ["SHOP_ACTUATOR_TOKEN"]
 startup_timeout_sec = 20
 tool_timeout_sec = 30
 ```
 
 Forwarding does not create a missing parent-process variable; the MCP host will fail to start without it.
-For source commands, likewise append `--token-env SHOP_ACTUATOR_TOKEN` and add `env_vars`.
+Use the loopback HTTPS name covered by the target certificate. For source commands, set the HTTPS origin, append `--token-env SHOP_ACTUATOR_TOKEN` and add `env_vars`.
 Read inputSchema from the actual `tools/list` response before calling. For example, `springboot_verify_mappings` accepts
 `{"pathPattern":"/orders/{id}","httpMethod":"GET","maxResults":1}`; `path`/`method` aliases are unsupported.
 `maxResults` must be an integer from 1 to 50. This call reads mapping metadata only, never the business URL.

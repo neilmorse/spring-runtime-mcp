@@ -4,7 +4,7 @@ Use this page to check actual interfaces and propagation paths before editing mo
 
 ## Interfaces and data
 
-Python uses snake_case and PascalCase; public JSON uses camelCase. All eight tool handlers are wrapped by `@tool_handler`, accept `arguments: Mapping[str, Any]` and `services: Services`, and asynchronously return domain envelopes.
+Python uses snake_case and PascalCase; public JSON uses camelCase. All tool handlers are wrapped by `@tool_handler`, accept `arguments: Mapping[str, Any]` and `services: Services`, and asynchronously return domain envelopes.
 
 Each adapter defines its own inputs and outputs; do not impose an assumed common signature:
 
@@ -15,8 +15,10 @@ Each adapter defines its own inputs and outputs; do not impose an assumed common
 | `normalize_config` | env, configprops, ConfigQuery, SanitizerPipeline, optional policy → profiles/items/gaps |
 | `normalize_health` | body plus component, detail, health-filter, and depth arguments → overall/items/gaps |
 | `normalize_mappings` | body plus route, method, controller, and Context arguments → items/gaps |
+| `normalize_gateway_routes` | Bounded route inventory, optional path selector, and sanitizer → items/gaps |
 | `normalize_migrations` | flyway, liquibase, MigrationQuery → items/gaps/status |
 | `normalize_openapi` | body、OpenApiQuery → version/candidate/items/gaps/blocked |
+| `analyze_thread_dump` | Parsed Actuator JSON object → bounded thread paths, observed counts and coverage gaps. |
 | `normalize_startup` | body plus name, duration, and depth arguments → six-element tuple unpacked by the tool |
 | `load_source_catalog` | Parsed Mapping, target_id, and budget → SourceCatalog; the CLI reads the file. |
 

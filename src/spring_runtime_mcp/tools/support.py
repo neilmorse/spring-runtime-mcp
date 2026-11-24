@@ -11,7 +11,7 @@ from typing import Any
 
 from ..models.common import CALL_BUDGET, CallBudget, NormalizationError
 from ..snapshots import SnapshotStore, page_envelope
-from ..transport.responses import serialize_response
+from ..transport.responses import SERVER_INFO_META, serialize_response
 from ..services import Services
 from ..diagnostics import _check, failed, partial
 
@@ -111,7 +111,13 @@ async def read_checked(
 
 
 def finalize(
-    result: dict[str, Any], services: Services, query: Any, *, more: bool = False
+    result: dict[str, Any],
+    services: Services,
+    query: Any,
+    *,
+    more: bool = False,
+    include_server_meta: bool = False,
+    trim: Callable[[dict[str, Any]], bool] | None = None,
 ) -> dict[str, Any]:
     """Slice items to the query limit and the serialized response budget."""
     result = services.sanitizer.sanitize(result)
@@ -119,6 +125,7 @@ def finalize(
         return result
     items = list(result["data"].get("items") or [])
     count = min(len(items), query.max_results)
+    server_meta = SERVER_INFO_META if trim or include_server_meta else None
     while True:
         page = page_envelope(result, items[:count])
         remaining = more or count < len(items)
@@ -134,15 +141,26 @@ def finalize(
                 "filterSuggestions": [],
             }
             page["nextCursor"] = "x" * 64
-        try:
-            serialize_response(page, "\0" * 128, sanitizer=services.sanitizer)
+        while True:
+            try:
+                serialize_response(
+                    page,
+                    "\0" * 128,
+                    sanitizer=services.sanitizer,
+                    server_meta=server_meta,
+                )
+                break
+            except NormalizationError as exc:
+                if exc.code != "RESPONSE_TOO_LARGE":
+                    raise
+                if trim is not None and trim(page):
+                    continue
+                if count <= 1:
+                    return failed("RESPONSE_TOO_LARGE", query.target_id)
+                count //= 2
+                break
+        if len(page["data"]["items"]) == count:
             break
-        except NormalizationError as exc:
-            if exc.code != "RESPONSE_TOO_LARGE":
-                raise
-            if count <= 1:
-                return failed("RESPONSE_TOO_LARGE", query.target_id)
-            count //= 2
     if remaining:
         page["nextCursor"] = (
             services.snapshots.advance(
@@ -153,15 +171,30 @@ def finalize(
                 result, query, offset=count, sanitizer=services.sanitizer
             )
         )
-        serialize_response(page, "\0" * 128, sanitizer=services.sanitizer)
+        serialize_response(
+            page, "\0" * 128, sanitizer=services.sanitizer, server_meta=server_meta
+        )
     return page
 
 
-def resume(services: Services, query: Any) -> dict[str, Any]:
+def resume(
+    services: Services,
+    query: Any,
+    *,
+    include_server_meta: bool = False,
+    trim: Callable[[dict[str, Any]], bool] | None = None,
+) -> dict[str, Any]:
     stored, more = services.snapshots.get_page(
         query.cursor, query, sanitizer=services.sanitizer
     )
-    return finalize(stored, services, query, more=more)
+    return finalize(
+        stored,
+        services,
+        query,
+        more=more,
+        include_server_meta=include_server_meta,
+        trim=trim,
+    )
 
 
 # Re-export for handlers that only need the store type in annotations.

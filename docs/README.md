@@ -17,11 +17,13 @@ These pages describe implemented behavior. Select the relevant chapters for your
 | MCP client configuration | [Client templates](client-configuration.md) |
 | Troubleshooting by error code | [Troubleshooting](troubleshooting.md) |
 | Synthetic performance benchmarks | [Running and interpreting benchmarks](../tests/performance/README.md) |
+| Opt-in real Spring Boot acceptance | [Runtime benchmark matrix](runtime-benchmarks.md) |
 | Architecture decisions | [Decision index](architecture/decisions/README.md) |
 | Target application setup and authorization | [Target setup](target-app-setup.md) |
 | Registering Bean source facts | [Source catalog](source-catalog.md) |
 | Static expectations and local build evidence | [Java static facts](source-facts-generation.md); [build evidence](build-evidence.md) |
 | Offline replay and debugging | [Replay implementation](../src/spring_runtime_mcp/replay.py) |
+| JVM thread waits and local replay | [Thread diagnostics](thread-dump-replay.md) |
 | Offline checks, builds, and releases | [Release workflow](launch/README.md) |
 | Glama source container builds | [Build guide](launch/glama/README.md) |
 

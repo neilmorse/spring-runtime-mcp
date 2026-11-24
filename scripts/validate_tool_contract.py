@@ -145,13 +145,16 @@ def main() -> None:
     assert bundle["protocolVersion"] == "2026-07-28"
     tools = bundle["tools"]
     assert [tool["name"] for tool in tools] == sorted(EXPECTED_NAMES)
+    optional = bundle["optionalTools"]
+    assert [tool["name"] for tool in optional] == ["springboot_analyze_threads"]
+    tools = [*tools, *optional]
     checks = 0
 
     # New checks
     description_checks = 0
     default_checks = 0
     ref_checks = 0
-    for tool, arguments in zip(tools, VALID_INPUTS, strict=True):
+    for tool, arguments in zip(tools, [*VALID_INPUTS, {}], strict=True):
         hints = tool["annotations"]
         assert hints["title"]
         assert hints["readOnlyHint"] is True
@@ -280,8 +283,15 @@ def main() -> None:
     drift.validate({"expectedProfiles": []})
     config = input_validator("springboot_inspect_config")
     rejects(config, {"prefix": "../../env"})
+    mappings = input_validator("springboot_verify_mappings")
+    mappings.validate({"routeSource": "gateway"})
+    mappings.validate({"routeSource": "gateway", "pathPattern": "/api/*"})
+    rejects(mappings, {"routeSource": "application"})
+    rejects(mappings, {"routeSource": "gateway", "httpMethod": "GET"})
+    rejects(mappings, {"routeSource": "gateway", "contextId": "gateway"})
+    checks += 5
     print(
-        f"Validated 8 isolated input/output schemas; {checks}+ synthetic contract assertions passed."
+        f"Validated {len(tools)} isolated input/output schemas; {checks}+ synthetic contract assertions passed."
     )
     print(
         f"Enhanced validations: {description_checks} descriptions, {default_checks} defaults, {ref_checks} $ref references."

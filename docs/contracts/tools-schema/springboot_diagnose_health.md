@@ -22,6 +22,7 @@ Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcard
 | `componentPath` | array<string> | No | — | maxItems `16` |
 | `group` | "application" / "liveness" / "readiness" | No | "application" | — |
 | `includeDetails` | boolean | No | false | — |
+| `includeBeanEvidence` | boolean | No | false | true is only valid for group=application |
 | `includeHealthy` | boolean | No | false | — |
 | `maxDepth` | integer | No | 4 | minimum `0`; maximum `16` |
 
@@ -58,6 +59,7 @@ The following fields describe nonnull data; failures return data=null. Required 
 | Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
 | `overallStatus` | string / null | Yes | — | maxLength `64`; — |
+| `beanEvidence` | object | No | Present on successful/partial opt-in calls | See below |
 | `activeGroup` | "application" / "liveness" / "readiness" | Yes | — | — |
 | `items` | array<object> | Yes | — | maxItems `50` |
 
@@ -88,6 +90,27 @@ This object rejects additional fields.
 | `value` | ['string', 'number', 'boolean', 'null'] | Yes | — | maxLength `512` |
 
 This object rejects additional fields.
+
+## Optional Bean evidence
+
+The operator can register one association for the CLI target using `--health-bean-binding /path/to/binding.json`. Use a regular JSON file of at most 4,096 bytes with exactly these fields.
+
+```json
+{"componentPath":["db"],"contextId":"application","beanName":"dataSource"}
+```
+
+Call the application group with `{"componentPath":["db"],"includeBeanEvidence":true}`. The component must be visible and explicitly `DOWN` or `OUT_OF_SERVICE` with visible details for the extra fixed Bean GET. `includeDetails` independently controls whether health detail values are included in the response. The mapping selects the exact canonical Bean name in the requested Context and represents an operator declaration about the relationship.
+
+| Field | Meaning |
+| --- | --- |
+| `state` | `observed` when Bean identity is available, `notApplicable` for a known healthy or filtered component, or `unknown` when evidence is missing. |
+| `componentPath` | Registered path, or null when unavailable. |
+| `source` | Independent Bean endpoint, observation ID, snapshot ID and timestamp, or null. |
+| `coverage` | `state` and diagnostic `gaps` for supplemental evidence. |
+| `bean` | Exact Context and name, nullable reported type and up to eight direct dependencies with resolution and nullable target fields, or null. |
+| `errors` | At most one sanitized supplemental read error. |
+
+The original health count and observations survive supplemental failure. Continuation pages reuse the sanitized snapshot and may trim the supplemental projection to fit the frame, with explicit truncation reasons. Existing calls that omit the opt-in receive the original result shape. Clients opting in should refresh their copy of the tool Schema before sending the new argument or validating enriched results.
 
 ## Interpreting results
 

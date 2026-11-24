@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import math
-from typing import Any
+from typing import Any, TypeVar
 
 from ..models.common import NormalizationError, remaining_seconds
+
+_Root = TypeVar("_Root", dict[str, Any], list[Any])
 
 
 def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -37,6 +39,16 @@ def loads_bounded(
     max_depth: int = 64,
     max_nodes: int = 100_000,
 ) -> dict[str, Any]:
+    return _loads_bounded(data, dict, max_bytes, max_depth, max_nodes)
+
+
+def loads_bounded_array(data: bytes, *, max_bytes: int = 8 * 1024 * 1024) -> list[Any]:
+    return _loads_bounded(data, list, max_bytes, 64, 100_000)
+
+
+def _loads_bounded(
+    data: bytes, root: type[_Root], max_bytes: int, max_depth: int, max_nodes: int
+) -> _Root:
     if len(data) > max_bytes:
         raise NormalizationError("RESPONSE_TOO_LARGE")
     try:
@@ -75,7 +87,7 @@ def loads_bounded(
         value = json.loads(
             text, object_pairs_hook=_pairs, parse_constant=_constant, parse_int=_integer
         )
-        if not isinstance(value, dict):
+        if not isinstance(value, root):
             raise NormalizationError("UNSUPPORTED_SHAPE")
         validate_tree(
             value, max_bytes=max_bytes, max_depth=max_depth, max_nodes=max_nodes

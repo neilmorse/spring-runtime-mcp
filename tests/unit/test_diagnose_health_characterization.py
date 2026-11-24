@@ -123,6 +123,8 @@ def test_a1_defaults_hide_healthy_components_and_details() -> None:
         {"maxDepth": None},
         {"includeDetails": "true"},
         {"includeHealthy": None},
+        {"includeBeanEvidence": "true"},
+        {"group": "readiness", "includeBeanEvidence": True},
         {"group": "unknown"},
         {"targetId": ""},
         {"componentPath": ["db"] * 17},

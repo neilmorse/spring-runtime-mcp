@@ -8,7 +8,7 @@ The CLI registers one origin/target. Origins allow http/https, host, and port, r
 
 The connector uses standard-library `http.client`, running blocking I/O in worker threads. It neither reads environment proxies nor follows redirects. HTTPS uses the default verification context, preserving certificate validation and TLS name checks against the original host. There is no entry point for Basic, arbitrary headers, remote addresses, or custom base paths.
 
-`--token-env` registers only a variable name. Production code reads its value only in the CLI, then binds it to the connector and SanitizerPipeline's known-secret set. The Bearer credential is sent only to fixed endpoints on the registered origin. Credentials never enter logs, error messages, tool definitions, or raw-response caches.
+`--token-env` registers only a variable name. Production code reads its value only in the CLI, then binds it to the connector and SanitizerPipeline's known-secret set. The Bearer credential is sent only to fixed endpoints on a registered HTTPS origin. Registering a Bearer token with a plain HTTP origin fails at startup. Credentials never enter logs, error messages, tool definitions, or raw-response caches.
 
 ## Fixed endpoints and read-only gates
 
@@ -17,13 +17,21 @@ ResponseGateReader checks the registered target and enabled capability before ma
 | Logical endpoint | Fixed path |
 | --- | --- |
 | beans、conditions、mappings | `/actuator/beans`、`/actuator/conditions`、`/actuator/mappings` |
+| gateway-routes | `/actuator/gateway/routes`; requires `--enable-gateway-routes` |
 | health | `/actuator/health` |
+| threaddump | `/actuator/threaddump`; requires `--enable-thread-diagnostics` |
 | health-liveness、health-readiness | `/actuator/health/liveness`、`/actuator/health/readiness` |
 | flyway、liquibase、startup | `/actuator/flyway`、`/actuator/liquibase`、`/actuator/startup` |
 | openapi | `/actuator/openapi` |
 | env, configprops | `/actuator/env`, `/actuator/configprops`; disabled by default |
 
 Paths come from the connector's fixed table, never tool-argument concatenation. heapdump, raw logfile, target writes, and business-endpoint requests are prohibited. startup POST drains the buffer and is always forbidden. A 404, authentication failure, or redirect never triggers an alternative path or anonymous retry.
+
+Gateway route diagnostics accept a bounded top-level array only at the registered Gateway collection path. The adapter projects recognized paths and load-balanced service names before sanitization. Raw destination URIs, filter arguments, predicate strings, and metadata are omitted. Gateway destinations are evidence and never become network targets.
+
+Application health calls may explicitly request supplemental Bean evidence. A bounded, operator-registered local file binds one health component to an exact Context and canonical Bean name. The extra read uses the already registered fixed Bean endpoint, common request deadline, and the same two output sanitization layers. A denied, timed-out, or inconclusive supplemental read leaves the available health observations intact.
+
+Thread diagnostics require explicit startup registration. A single on-demand JSON dump passes the upstream budgets and is projected to numeric IDs, counts, and fixed status labels, with the same dual-layer output checks. Thread and lock names, stack frames, and raw dumps stay outside the result and snapshot.
 
 ## Responses, deadlines, and cancellation
 

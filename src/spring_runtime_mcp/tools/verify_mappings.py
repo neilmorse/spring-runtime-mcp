@@ -1,4 +1,4 @@
-"""Read-only MVC and WebFlux mapping handler."""
+"""Read-only application mappings and Spring Cloud Gateway routes."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from typing import Any
 from uuid import uuid4
 
+from ..adapters.gateway_routes import normalize_gateway_routes
 from ..adapters.mappings import normalize_mappings
 from ..contracts.definitions import validate_arguments
 from ..models.common import NormalizationError
@@ -28,24 +29,39 @@ async def verify_mappings(
         if query.cursor:
             return resume(services, query)
         snapshot = uuid4().hex
-        observation = await read_checked(
-            services, query.target_id, "mappings", snapshot
+        gateway = query.route_source == "gateway"
+        endpoint = "gateway-routes" if gateway else "mappings"
+        observation = await read_checked(services, query.target_id, endpoint, snapshot)
+        if gateway:
+            items, gaps = await services.analyze(
+                normalize_gateway_routes,
+                observation.body,
+                path_pattern=query.path_pattern,
+                sanitizer=services.sanitizer,
+            )
+        else:
+            items, gaps = await services.analyze(
+                normalize_mappings,
+                observation.body,
+                path_pattern=query.path_pattern,
+                http_method=query.http_method,
+                controller_pattern=query.controller_class_pattern,
+                context_id=query.context_id,
+            )
+        result = shell(
+            query.target_id,
+            "registered target mappings",
+            "gateway-routes-1" if gateway else "mappings-1",
         )
-        items, gaps = await services.analyze(
-            normalize_mappings,
-            observation.body,
-            path_pattern=query.path_pattern,
-            http_method=query.http_method,
-            controller_pattern=query.controller_class_pattern,
-            context_id=query.context_id,
-        )
-        result = shell(query.target_id, "registered target mappings", "mappings-1")
-        stamp(result, observation, "mappings", snapshot)
+        stamp(result, observation, endpoint, snapshot)
         for item in items:
-            item["endpointId"] = "mappings"
+            item["endpointId"] = endpoint
             item["observationId"] = observation.observation_id
         result["data"] = {"items": items}
         result["totalMatched"] = None if gaps else len(items)
+        if "GATEWAY_ROUTE_LIMIT" in gaps:
+            result["truncated"] = True
+            result["truncationReasons"] = ["GATEWAY_ROUTE_LIMIT"]
         partial(result, gaps)
         return finalize(result, services, query)
     except NormalizationError as exc:
