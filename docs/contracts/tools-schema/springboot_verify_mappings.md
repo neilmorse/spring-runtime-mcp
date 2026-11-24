@@ -1,12 +1,14 @@
 # springboot_verify_mappings - Route registration
 
-Return normalized MVC/WebFlux routes, handlers, and method descriptors. Use for missing path/method/Controller registrations. Never request business URLs or equate a registration match with guaranteed request success.
+Return normalized MVC/WebFlux handlers or Spring Cloud Gateway forwarding routes. All queries read fixed Actuator metadata. A reported route is evidence of registration and does not establish the result of a business request.
 
 Fields follow the [tool Schema](../../../src/spring_runtime_mcp/schemas/tools-contract.json); shared results are described in the [common envelope](common-envelope.md).
 
 ## Calling rules
 
-Require pathPattern, httpMethod, or controllerClassPattern. Read mappings only, without business-path calls. Non-DispatcherServlet coverage and unparsed predicates preserve partial/gaps; empty results cannot establish nonregistration without sufficient evidence.
+Application mode requires pathPattern, httpMethod, or controllerClassPattern. It reads `/actuator/mappings`. Non-DispatcherServlet coverage and unparsed predicates preserve partial evidence.
+
+Gateway mode requires the operator to start the CLI with `--enable-gateway-routes` and register the Gateway origin. The target needs the read-only Gateway Actuator endpoint. The tool reads `GET /actuator/gateway/routes` and can filter declared paths locally.
 
 Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcards. Combine filters with AND. Additional arguments are rejected; invalid arguments do not read the target.
 
@@ -19,6 +21,7 @@ Patterns are bounded, case-sensitive globs with `*` and `?` as the only wildcard
 | `targetId` | string | No | "local" | minLength `1`; maxLength `64`; pattern `^[A-Za-z0-9_-]+$(?![\s\S])` |
 | `maxResults` | integer | No | 50 | minimum `1`; maximum `50` |
 | `cursor` | string | No | — | minLength `1`; maxLength `2048` |
+| `routeSource` | "application" / "gateway" | No | "application" | Gateway mode allows pathPattern as its optional selector |
 | `pathPattern` | string | No | — | minLength `1`; maxLength `128`; pattern `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
 | `httpMethod` | "GET" / "HEAD" / "POST" / "PUT" / "PATCH" / "DELETE" / "OPTIONS" / "TRACE" / "CONNECT" | No | — | — |
 | `controllerClassPattern` | string | No | — | minLength `1`; maxLength `128`; pattern `^[A-Za-z0-9_.$/{}:*?+@! -]+$(?![\s\S])` |
@@ -28,33 +31,7 @@ This object rejects additional fields.
 
 ### Selector constraints
 
-The Schema defines these combined selector constraints:
-
-```json
-{
-  "allOf": [
-    {
-      "anyOf": [
-        {
-          "required": [
-            "pathPattern"
-          ]
-        },
-        {
-          "required": [
-            "httpMethod"
-          ]
-        },
-        {
-          "required": [
-            "controllerClassPattern"
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
+Gateway mode rejects httpMethod, controllerClassPattern, and contextId. Its continuation must keep routeSource and the same selectors.
 
 ## Query examples
 
@@ -71,6 +48,14 @@ The Schema defines these combined selector constraints:
 }
 ```
 
+```json
+{
+  "targetId": "tdd_gateway",
+  "routeSource": "gateway",
+  "pathPattern": "/api/catalog/*"
+}
+```
+
 ## Data fields
 
 The following fields describe nonnull data; failures return data=null. Required fields can still allow null. Never replace null with an invented definite fact.
@@ -83,7 +68,7 @@ The following fields describe nonnull data; failures return data=null. Required 
 
 This object rejects additional fields.
 
-### `data.items[]`
+### Application mode items
 
 | Field | Type or enum | Required | Default | Constraints |
 | --- | --- | --- | --- | --- |
@@ -116,6 +101,20 @@ This object rejects additional fields.
 | `negated` | boolean | Yes | — | — |
 
 This object rejects additional fields.
+
+### Gateway mode items
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `id`, `observationId` | string | Record and observation identifiers |
+| `endpointId` | "gateway-routes" | Gateway route collection |
+| `routeId` | string | Reported route identifier |
+| `paths` | array<string> / null | Up to 16 recognized path patterns from a standalone Path predicate |
+| `matchTrailingSlash` | boolean / null | Reported Path predicate setting |
+| `order` | integer / null | Reported signed 32-bit route order |
+| `targetService` | string / null | Service name from a plain `lb://service` destination |
+
+Rows retain the inventory's reported order. Unknown path predicates, destinations, row IDs, or orders produce coverage gaps. A path filter returns confirmed matches and leaves the total unknown if unparsed predicates could qualify. The tool projects at most 2,000 upstream rows before the standard pagination and response budgets. An upstream inventory beyond that limit remains truncated even on the last captured page.
 
 ## Interpreting results
 

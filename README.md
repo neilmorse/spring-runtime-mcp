@@ -1,8 +1,8 @@
 # Spring Boot Runtime Diagnostics MCP
 
-[Chinese README](README.zh-CN.md)
+[中文](README.zh-CN.md)
 
-Give your coding assistant read-only access to the runtime state of a local Spring Boot application. Eight MCP tools use authorized Actuator and OpenAPI data to diagnose issues such as missing beans, unregistered routes, and slow startup.
+Give your coding assistant read-only access to the runtime state of a local Spring Boot application. Eight default MCP tools use authorized Actuator and OpenAPI data to diagnose issues such as missing beans, unregistered routes, and slow startup.
 
 Listed in [Awesome MCP Servers (Developer Tools)](https://github.com/punkpeye/awesome-mcp-servers/pull/18153/files) · [View the tools on Glama](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp)
 
@@ -29,11 +29,11 @@ The [synthetic route demo](docs/demo.md) uses the public package and bundled dat
 
 ### Connect an MCP client to your app
 
-You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and permission to read a local Spring Boot application's management endpoints. Confirm the endpoints and permissions in the [target setup guide](docs/target-app-setup.md). These commands use **0.2.14 Alpha**.
+You need Python 3.11+, [uv](https://docs.astral.sh/uv/) and permission to read a local Spring Boot application's management endpoints. Confirm the endpoints and permissions in the [target setup guide](docs/target-app-setup.md). These commands use **0.2.15 Alpha**.
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --base-url http://127.0.0.1:18081
 ```
 
 Use the second command as your MCP client's STDIO server command. In a terminal it waits for client requests. Follow the [English first-query guide](docs/first-query.md); additional [client configuration templates](docs/client-configuration.md) cover other clients.
@@ -42,7 +42,7 @@ Use the second command as your MCP client's STDIO server command. In a terminal 
 
 ## Boundaries
 
-The server connects only to loopback addresses, uses fixed endpoints and supports optional Bearer authentication from a named environment variable. OpenAPI uses `/actuator/openapi`. Configuration diagnostics are disabled by default and require explicit opt-in via CLI flags (`--config-prefix`, `--config-property`, `--config-profiles`). When enabled, values remain hidden unless both `--config-allow-values` and the tool’s `includeValues=true` are set. Output is sanitized, and each tool response is capped at 16 KiB. Missing evidence is reported as `partial`/`unknown`.
+The server connects only to loopback addresses, uses fixed endpoints and supports optional Bearer authentication over verified HTTPS using a named environment variable. OpenAPI uses `/actuator/openapi`. Configuration diagnostics are disabled by default and require explicit opt-in via CLI flags (`--config-prefix`, `--config-property`, `--config-profiles`). When enabled, values remain hidden unless both `--config-allow-values` and the tool’s `includeValues=true` are set. Output is sanitized, and each tool response is capped at 16 KiB. Missing evidence is reported as `partial`/`unknown`.
 
 Tools do not write to the target, restart applications, or read heap dumps or raw logs. The complete Boot/Java/client matrix, Windows/macOS and production-cluster compatibility remain unverified.
 

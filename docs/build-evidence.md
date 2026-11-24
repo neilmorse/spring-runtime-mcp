@@ -20,9 +20,3 @@ The interface returns aggregate SHA-256 for registered source files, artifact SH
 Build `outcome` reflects only the caller-supplied exit code; `artifactProducedByBuild` is always `unknown`. Neither a zero exit code nor changed artifact digests prove an artifact was built from the stated source. A failed build may leave an old artifact. Different local artifact digests establish only that the bytes read differ.
 
 `runtimeIdentity.state` is always `notCollected`; runtime comparison is `unknown`. A local jar digest, declared source revision, or launch command does not prove the running process loaded that jar. MCP route/drift observations are separate runtime facts alongside local digests, not observed runtime build identity.
-
-The isolated `scripts/check_injected_build_faults.py` demo records two cases in temporary copies: source edited without rebuilding, and successful rebuild while an old process remains alive. Each is checked using read-only MCP route queries. It copies the launch jar to a separate path to avoid overwriting a live JVM's file. This acceptance requires Maven's offline cache, Java, Linux `/proc`, and newly created loopback instances; the output path must not exist:
-
-```bash
-uv run --no-sync python scripts/check_injected_build_faults.py --output /tmp/build-evidence-check.json
-```

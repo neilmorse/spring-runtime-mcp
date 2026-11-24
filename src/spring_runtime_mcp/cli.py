@@ -8,6 +8,7 @@ import os
 import re
 import stat
 import sys
+from typing import NoReturn
 
 from . import __version__
 from .adapters.source_catalog import load_source_catalog
@@ -15,7 +16,7 @@ from .models.common import AnalysisBudget, NormalizationError
 from .models.source_catalog import SourceCatalog
 from .policy.configuration import ConfigReadPolicy
 from .server import build_services, run_stdio
-from .services import Services
+from .services import HealthBeanBinding, Services
 from .transport.bounded_json import loads_bounded
 
 SOURCE_CATALOG_MAX_BYTES = 262144
@@ -27,6 +28,9 @@ _CONFIG_HINTS = {
     ),
     "INVALID_TIMEOUT": "--timeout must be greater than 0 and at most 60 seconds",
     "INVALID_TARGET_REGISTRATION": "--target-id must match [A-Za-z0-9_-]{1,64}",
+    "CREDENTIAL_REQUIRES_TLS": (
+        "--token-env requires an HTTPS management origin with a trusted certificate"
+    ),
     "INVALID_CREDENTIAL_REGISTRATION": (
         "--token-env names an environment variable whose value is not a "
         "supported Bearer token"
@@ -36,6 +40,12 @@ _CONFIG_HINTS = {
     ),
     "SOURCE_TARGET_MISMATCH": "--source-catalog targetId must equal --target-id",
 }
+
+
+class _ArgumentParser(argparse.ArgumentParser):
+    def error(self, message: str) -> NoReturn:
+        self.print_usage(sys.stderr)
+        self.exit(2, f"{self.prog}: invalid command-line arguments. See --help.\n")
 
 
 class ConfigurationError(Exception):
@@ -70,14 +80,14 @@ def _bearer(name: str | None) -> str | None:
     return token
 
 
-def _read_source_catalog(path: str) -> bytes:
+def _read_registration(path: str, flag: str, limit: int) -> bytes:
     flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NONBLOCK", 0)
     descriptor = os.open(path, flags)
     try:
         if not stat.S_ISREG(os.fstat(descriptor).st_mode):
-            raise ConfigurationError("--source-catalog must name a regular file")
+            raise ConfigurationError(f"{flag} must name a regular file")
         chunks: list[bytes] = []
-        remaining = SOURCE_CATALOG_MAX_BYTES + 1
+        remaining = limit + 1
         while remaining:
             chunk = os.read(descriptor, min(65536, remaining))
             if not chunk:
@@ -86,17 +96,16 @@ def _read_source_catalog(path: str) -> bytes:
             remaining -= len(chunk)
     finally:
         os.close(descriptor)
-    if sum(map(len, chunks)) > SOURCE_CATALOG_MAX_BYTES:
-        raise ConfigurationError(
-            f"--source-catalog exceeds {SOURCE_CATALOG_MAX_BYTES} bytes"
-        )
+    if remaining == 0:
+        raise ConfigurationError(f"{flag} exceeds {limit} bytes")
     return b"".join(chunks)
 
 
 def _catalog(path: str, target_id: str) -> SourceCatalog:
     try:
         payload = loads_bounded(
-            _read_source_catalog(path), max_bytes=SOURCE_CATALOG_MAX_BYTES
+            _read_registration(path, "--source-catalog", SOURCE_CATALOG_MAX_BYTES),
+            max_bytes=SOURCE_CATALOG_MAX_BYTES,
         )
         return load_source_catalog(
             payload, target_id=target_id, budget=AnalysisBudget()
@@ -114,6 +123,43 @@ def _catalog(path: str, target_id: str) -> SourceCatalog:
             else "INVALID_SOURCE_CATALOG"
         )
         raise ConfigurationError(f"--source-catalog is invalid ({code})") from None
+
+
+def _health_bean_binding(path: str) -> HealthBeanBinding:
+    try:
+        body = loads_bounded(
+            _read_registration(path, "--health-bean-binding", 4096), max_bytes=4096
+        )
+    except (OSError, NormalizationError, UnicodeError):
+        raise ConfigurationError(
+            "--health-bean-binding must be readable JSON"
+        ) from None
+    if isinstance(body, dict) and body.keys() == {
+        "componentPath",
+        "contextId",
+        "beanName",
+    }:
+        components, context, name = (
+            body["componentPath"],
+            body["contextId"],
+            body["beanName"],
+        )
+        if (
+            isinstance(components, list)
+            and 1 <= len(components) <= 16
+            and all(
+                isinstance(part, str) and re.fullmatch(r"[^\x00-\x1f\x7f]{1,128}", part)
+                for part in components
+            )
+            and isinstance(context, str)
+            and re.fullmatch(r"[^\x00-\x1f\x7f]{1,256}", context)
+            and isinstance(name, str)
+            and re.fullmatch(r"[^\x00-\x1f\x7f]{1,256}", name)
+        ):
+            return HealthBeanBinding(tuple(components), context, name)
+    raise ConfigurationError(
+        "--health-bean-binding requires componentPath, contextId and beanName"
+    )
 
 
 def _config_policy(args: argparse.Namespace) -> ConfigReadPolicy | None:
@@ -160,6 +206,8 @@ def _services(
             source_catalog=catalog,
             config_policy=config_policy,
             bearer_token=bearer_token,
+            thread_diagnostics=args.enable_thread_diagnostics,
+            gateway_routes=args.enable_gateway_routes,
         )
     except NormalizationError as exc:
         raise ConfigurationError(
@@ -172,7 +220,7 @@ def _services(
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="spring-runtime-mcp")
+    parser = _ArgumentParser(prog="spring-runtime-mcp")
     parser.add_argument(
         "--version", action="version", version=f"%(prog)s {__version__}"
     )
@@ -194,8 +242,23 @@ def main(argv: list[str] | None = None) -> None:
         help="Operator-registered JSON workspace facts for this target.",
     )
     parser.add_argument(
+        "--enable-thread-diagnostics",
+        action="store_true",
+        help="Enable read-only summaries from the registered target's thread dump.",
+    )
+    parser.add_argument(
+        "--enable-gateway-routes",
+        action="store_true",
+        help="Enable read-only route inventory for the registered Spring Cloud Gateway.",
+    )
+    parser.add_argument(
+        "--health-bean-binding",
+        metavar="FILE",
+        help="Register one local health component to Bean association from JSON.",
+    )
+    parser.add_argument(
         "--token-env",
-        help="Name of the environment variable holding this target's Bearer token.",
+        help="Name of the environment variable holding the Bearer token for this HTTPS target.",
     )
     parser.add_argument(
         "--config-prefix",
@@ -238,6 +301,10 @@ def main(argv: list[str] | None = None) -> None:
             config_policy=config_policy,
             bearer_token=bearer_token,
         )
+        if args.health_bean_binding is not None:
+            services.health_bean_binding = _health_bean_binding(
+                args.health_bean_binding
+            )
     except ConfigurationError as exc:
         sys.stderr.write(f"spring-runtime-mcp: {exc}\n")
         raise SystemExit(2) from None

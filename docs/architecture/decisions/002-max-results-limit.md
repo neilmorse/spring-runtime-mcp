@@ -4,7 +4,7 @@
 
 ## Constraint
 
-All eight tools use **50** as the default and maximum maxResults. Valid values are integers from 1 through 50; invalid values are rejected rather than silently clamped.
+All tools use **50** as the default and maximum maxResults. Valid values are integers from 1 through 50; invalid values are rejected rather than silently clamped.
 
 maxResults controls returned records. It does not limit how many upstream records the fixed Actuator endpoint returns, nor replace graph, depth, read, or output-byte budgets. Build the complete visible graph and associations before filtering and pagination.
 

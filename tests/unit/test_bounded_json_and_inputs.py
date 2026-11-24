@@ -13,7 +13,11 @@ from spring_runtime_mcp.contracts.definitions import (
     validate_arguments,
 )
 from spring_runtime_mcp.models.common import NormalizationError
-from spring_runtime_mcp.transport.bounded_json import loads_bounded, validate_tree
+from spring_runtime_mcp.transport.bounded_json import (
+    loads_bounded,
+    loads_bounded_array,
+    validate_tree,
+)
 
 
 @pytest.mark.parametrize("payload", [b'{"x":1,"x":2}', b'{"x":{"y":1,"y":2}}'])
@@ -52,6 +56,28 @@ def test_preparse_byte_and_node_limits():
     for value in (["not an object"], None):
         with pytest.raises(NormalizationError, match="UNSUPPORTED_SHAPE"):
             loads_bounded(json.dumps(value).encode())
+
+
+@pytest.mark.parametrize(
+    ("payload", "code"),
+    [
+        (b'{"routes":[]}', "UNSUPPORTED_SHAPE"),
+        (b'[{"route_id":"one","route_id":"two"}]', "DUPLICATE_JSON_KEY"),
+        (b"[1e999]", "INVALID_JSON"),
+        (b"[" * 65 + b"0" + b"]" * 65, "NORMALIZATION_LIMIT"),
+    ],
+)
+def test_array_reader_preserves_json_boundaries(payload: bytes, code: str) -> None:
+    with pytest.raises(NormalizationError, match=code):
+        loads_bounded_array(payload)
+
+
+def test_array_reader_distinguishes_empty_evidence_from_unsupported_shape() -> None:
+    assert loads_bounded_array(b"[]") == []
+    with pytest.raises(NormalizationError, match="UNSUPPORTED_SHAPE"):
+        loads_bounded(b"[]")
+    with pytest.raises(NormalizationError, match="RESPONSE_TOO_LARGE"):
+        loads_bounded_array(b"[]", max_bytes=1)
 
 
 def test_tree_counts_large_integers_and_escape_expansion():

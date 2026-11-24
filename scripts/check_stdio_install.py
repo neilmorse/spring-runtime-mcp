@@ -8,7 +8,9 @@ import json
 import os
 import queue
 import shutil
+import ssl
 import subprocess
+import sys
 import tempfile
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -40,7 +42,7 @@ SECRET = "synthetic-release-gate-secret"
 FIELD_SECRET = "synthetic-config-value"
 
 
-def verify_pipes(command: str) -> None:
+def verify_pipes(command: str, tls_directory: Path) -> None:
     """Read initialize before sending later requests; inspect every stdout byte."""
     resource = files("spring_runtime_mcp")
     profile = resource.joinpath("replay_data/conformance/boot-3.4-servlet")
@@ -91,6 +93,9 @@ def verify_pipes(command: str) -> None:
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self) -> None:
             requests.append((self.command, self.path))
+            if self.headers.get("Authorization") != "Bearer " + SECRET:
+                self.send_error(401)
+                return
             payload = json.dumps(bodies.get(self.path, {})).encode()
             self.send_response(200 if self.path in bodies else 404)
             self.send_header("Content-Type", "application/json")
@@ -101,9 +106,11 @@ def verify_pipes(command: str) -> None:
         def log_message(self, *args: Any) -> None:
             pass
 
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.load_cert_chain(tls_directory / "server.pem")
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    server.socket = context.wrap_socket(server.socket, server_side=True)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
     environment = {
         key: value
         for key, value in os.environ.items()
@@ -111,10 +118,11 @@ def verify_pipes(command: str) -> None:
         and key not in {"PYTHONPATH", "PYTHONHOME"}
     }
     environment["RELEASE_GATE_TOKEN"] = SECRET
+    environment["SSL_CERT_FILE"] = str(tls_directory / "ca.pem")
     command_args = [
         command,
         "--base-url",
-        f"http://127.0.0.1:{server.server_port}",
+        f"https://127.0.0.1:{server.server_port}",
         "--token-env",
         "RELEASE_GATE_TOKEN",
         "--config-prefix",
@@ -122,7 +130,11 @@ def verify_pipes(command: str) -> None:
         "--config-allow-values",
     ]
     lines: queue.Queue[bytes] = queue.Queue()
-    with tempfile.TemporaryFile() as errors, tempfile.TemporaryDirectory() as cwd:
+    with (
+        server,
+        tempfile.TemporaryFile() as errors,
+        tempfile.TemporaryDirectory() as cwd,
+    ):
         process = subprocess.Popen(
             command_args,
             stdin=subprocess.PIPE,
@@ -131,6 +143,7 @@ def verify_pipes(command: str) -> None:
             env=environment,
             cwd=cwd,
         )
+        thread.start()
 
         def collect() -> None:
             assert process.stdout is not None
@@ -222,10 +235,9 @@ def verify_pipes(command: str) -> None:
                 process.kill()
                 process.wait(timeout=5)
             server.shutdown()
-            server.server_close()
             thread.join(timeout=5)
     print(
-        "Raw stdio passed: staged 2024-11-05 handshake, 8 real HTTP handlers, schemas, hints, sanitization and 16 KiB frames."
+        "Raw stdio passed: staged 2024-11-05 handshake, 8 authenticated HTTPS tool calls, schemas, hints, sanitization and 16 KiB frames."
     )
 
 
@@ -312,7 +324,15 @@ def main() -> None:
         parser.error("--command must name an installed spring-runtime-mcp entrypoint")
     command = str(Path(installed_command).absolute())
     asyncio.run(verify(command))
-    verify_pipes(command)
+    with tempfile.TemporaryDirectory(prefix="spring-install-tls-") as temporary:
+        # Keep repository directories off the isolated installation's import path.
+        issuer = (
+            Path(__file__).resolve().parent / "runtime_benchmarks" / "fixture_tls.py"
+        )
+        subprocess.run(
+            [sys.executable, "-I", str(issuer), temporary], check=True, timeout=20
+        )
+        verify_pipes(command, Path(temporary))
     verify_replay(command)
 
 

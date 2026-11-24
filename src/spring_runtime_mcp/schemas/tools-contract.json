@@ -728,9 +728,14 @@
           "group": {"enum": ["application","liveness","readiness"],"default": "application"},
           "includeDetails": {"type": "boolean","default": false},
           "includeHealthy": {"type": "boolean","default": false},
+          "includeBeanEvidence": {"type": "boolean","default": false,"description": "请求部署方已登记健康组件对应的 Bean 装配证据，仅应用健康组支持。"},
           "maxDepth": {"type": "integer","minimum": 0,"maximum": 16,"default": 4}
         },
         "required": [],
+        "anyOf": [
+          {"type": "object","properties": {"includeBeanEvidence": {"enum": [false]}}},
+          {"type": "object","properties": {"group": {"enum": ["application"]}}}
+        ],
         "additionalProperties": false
       },
       "outputSchema": {
@@ -765,6 +770,7 @@
                 "properties": {
                   "overallStatus": {"anyOf": [{"type": "string","maxLength": 64},{"type": "null"}]},
                   "activeGroup": {"enum": ["application","liveness","readiness"]},
+                  "beanEvidence": {"$ref": "#/$defs/HealthBeanEvidence"},
                   "items": {
                     "type": "array",
                     "items": {
@@ -870,6 +876,61 @@
           }
         ],
         "$defs": {
+          "HealthBeanEvidence": {
+            "type": "object",
+            "properties": {
+              "state": {"enum": ["observed","notApplicable","unknown"]},
+              "componentPath": {"type": ["array","null"],"items": {"type": "string","maxLength": 128},"maxItems": 16},
+              "source": {
+                "type": ["object","null"],
+                "properties": {
+                  "endpointId": {"const": "beans"},
+                  "snapshotId": {"type": "string","maxLength": 96},
+                  "observationId": {"type": "string","maxLength": 96},
+                  "observedAt": {"type": "string","format": "date-time"}
+                },
+                "required": ["endpointId","snapshotId","observationId","observedAt"],
+                "additionalProperties": false
+              },
+              "coverage": {
+                "type": "object",
+                "properties": {
+                  "state": {"enum": ["complete","partial","unavailable"]},
+                  "gaps": {"type": "array","items": {"type": "string","maxLength": 64},"maxItems": 10}
+                },
+                "required": ["state","gaps"],
+                "additionalProperties": false
+              },
+              "bean": {
+                "type": ["object","null"],
+                "properties": {
+                  "contextId": {"type": "string","maxLength": 256},
+                  "name": {"type": "string","maxLength": 256},
+                  "type": {"type": ["string","null"],"maxLength": 256},
+                  "dependencies": {
+                    "type": "array",
+                    "maxItems": 8,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "requestedName": {"type": "string","maxLength": 256},
+                        "targetContextId": {"type": ["string","null"],"maxLength": 256},
+                        "targetName": {"type": ["string","null"],"maxLength": 256},
+                        "resolution": {"enum": ["resolved","ambiguous","unresolved"]}
+                      },
+                      "required": ["requestedName","targetContextId","targetName","resolution"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["contextId","name","type","dependencies"],
+                "additionalProperties": false
+              },
+              "errors": {"type": "array","items": {"$ref": "#/$defs/DiagnosticError"},"maxItems": 1}
+            },
+            "required": ["state","componentPath","source","coverage","bean","errors"],
+            "additionalProperties": false
+          },
           "DiagnosticError": {
             "type": "object",
             "properties": {
@@ -1672,7 +1733,7 @@
     },
     {
       "name": "springboot_verify_mappings",
-      "description": "返回统一的 MVC/WebFlux 路由、处理器和方法描述符；排查路径、方法或 Controller 未注册时调用，不向业务 URL 发请求，也不把注册匹配等同于请求一定成功。",
+      "description": "返回 MVC/WebFlux 路由、处理器和方法描述符，或用 routeSource=gateway 查询已注册 Spring Cloud Gateway 的转发路由。只读取固定 Actuator 端点，不向业务 URL 或下游目标发送请求。",
       "annotations": {"title": "HTTP 路由注册核验","readOnlyHint": true,"destructiveHint": false,"idempotentHint": true,"openWorldHint": false},
       "inputSchema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1681,6 +1742,7 @@
           "targetId": {"type": "string","minLength": 1,"maxLength": 64,"pattern": "^[A-Za-z0-9_-]+$(?![\\s\\S])","default": "local"},
           "maxResults": {"type": "integer","minimum": 1,"maximum": 50,"default": 50},
           "cursor": {"type": "string","maxLength": 2048,"minLength": 1},
+          "routeSource": {"enum": ["application","gateway"],"default": "application"},
           "pathPattern": {
             "type": "string",
             "minLength": 1,
@@ -1700,7 +1762,18 @@
         },
         "required": [],
         "additionalProperties": false,
-        "allOf": [{"anyOf": [{"required": ["pathPattern"]},{"required": ["httpMethod"]},{"required": ["controllerClassPattern"]}]}]
+        "anyOf": [
+          {
+            "not": {"type": "object","properties": {"routeSource": {"const": "gateway"}},"required": ["routeSource"]},
+            "anyOf": [{"required": ["pathPattern"]},{"required": ["httpMethod"]},{"required": ["controllerClassPattern"]}]
+          },
+          {
+            "type": "object",
+            "properties": {"routeSource": {"const": "gateway"}},
+            "required": ["routeSource"],
+            "not": {"anyOf": [{"required": ["httpMethod"]},{"required": ["controllerClassPattern"]},{"required": ["contextId"]}]}
+          }
+        ]
       },
       "outputSchema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -1716,7 +1789,7 @@
               "observedAt": {"type": "string","format": "date-time"},
               "endpointIds": {
                 "type": "array",
-                "items": {"enum": ["startup","flyway","liquibase","beans","conditions","mappings","health","health-liveness","health-readiness","env","configprops","env-property","info","openapi"]},
+                "items": {"enum": ["startup","flyway","liquibase","beans","conditions","mappings","gateway-routes","health","health-liveness","health-readiness","env","configprops","env-property","info","openapi"]},
                 "maxItems": 14,
                 "uniqueItems": true
               },
@@ -1786,6 +1859,32 @@
                         "conditions",
                         "matchingComplete"
                       ],
+                      "additionalProperties": false
+                    },
+                    "maxItems": 50
+                  }
+                },
+                "required": ["items"],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {"type": "string","maxLength": 96},
+                        "endpointId": {"const": "gateway-routes"},
+                        "observationId": {"type": "string","maxLength": 96},
+                        "routeId": {"type": "string","minLength": 1,"maxLength": 128},
+                        "paths": {"anyOf": [{"type": "array","items": {"type": "string","maxLength": 256},"minItems": 1,"maxItems": 16},{"type": "null"}]},
+                        "matchTrailingSlash": {"type": ["boolean","null"]},
+                        "order": {"type": ["integer","null"],"minimum": -2147483648,"maximum": 2147483647},
+                        "targetService": {"anyOf": [{"type": "string","minLength": 1,"maxLength": 128},{"type": "null"}]}
+                      },
+                      "required": ["id","endpointId","observationId","routeId","paths","matchTrailingSlash","order","targetService"],
                       "additionalProperties": false
                     },
                     "maxItems": 50
@@ -1871,7 +1970,7 @@
               "code": {"type": "string","maxLength": 64,"pattern": "^[A-Z][A-Z0-9_]*$(?![\\s\\S])"},
               "endpointId": {
                 "anyOf": [
-                  {"enum": ["startup","flyway","liquibase","beans","conditions","mappings","health","health-liveness","health-readiness","env","configprops","env-property","info","openapi"]},
+                  {"enum": ["startup","flyway","liquibase","beans","conditions","mappings","gateway-routes","health","health-liveness","health-readiness","env","configprops","env-property","info","openapi"]},
                   {"type": "null"}
                 ]
               },
@@ -1883,6 +1982,266 @@
                 "properties": {
                   "recipeId": {"type": "string","maxLength": 96},
                   "action": {"enum": ["refineQuery","configureCapability","reviewExposure","reviewAuthorization","configureStartup","reviewTarget","reviewSource","stop"]},
+                  "configKeys": {"type": "array","items": {"type": "string","maxLength": 128},"maxItems": 8},
+                  "steps": {"type": "array","items": {"type": "string","maxLength": 256},"maxItems": 4},
+                  "requiresApproval": {"type": "boolean"},
+                  "retryAfterMs": {"anyOf": [{"type": "integer","minimum": 0,"maximum": 5000},{"type": "null"}]}
+                },
+                "required": ["recipeId","action","configKeys","steps","requiresApproval","retryAfterMs"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["code","endpointId","httpStatus","retryable","message","remediation"],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ],
+  "optionalTools": [
+    {
+      "name": "springboot_analyze_threads",
+      "description": "统计平台线程快照中的状态，返回可见锁等待链和等待环；用于排查阻塞和疑似死锁，包含定时等待的环仅作线索。",
+      "annotations": {
+        "title": "JVM 线程等待诊断",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "inputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "targetId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9_-]+$(?![\\s\\S])",
+            "default": "local"
+          },
+          "maxResults": {"type": "integer","minimum": 1,"maximum": 50,"default": 50},
+          "cursor": {"type": "string","maxLength": 2048,"minLength": 1}
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "schemaVersion": {"const": "2"},
+          "status": {"enum": ["ok","partial","denied","unavailable","invalid","too_large"]},
+          "source": {
+            "type": "object",
+            "properties": {
+              "targetId": {"type": "string","maxLength": 64},
+              "snapshotId": {"anyOf": [{"type": "string","maxLength": 96},{"type": "null"}]},
+              "observedAt": {"type": "string","format": "date-time"},
+              "endpointIds": {"type": "array","items": {"enum": ["threaddump"]},"maxItems": 14,"uniqueItems": true},
+              "bootVersion": {"anyOf": [{"type": "string","maxLength": 64},{"type": "null"}]},
+              "adapterVersion": {"type": "string","maxLength": 32},
+              "policyVersion": {"type": "string","maxLength": 32}
+            },
+            "required": ["targetId","snapshotId","observedAt","endpointIds","bootVersion","adapterVersion","policyVersion"],
+            "additionalProperties": false
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "observedThreads": {"type": "integer","minimum": 0},
+                  "stateCounts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "state": {"enum": ["NEW","RUNNABLE","BLOCKED","WAITING","TIMED_WAITING","TERMINATED"]},
+                        "count": {"type": "integer","minimum": 0}
+                      },
+                      "required": ["state","count"],
+                      "additionalProperties": false
+                    },
+                    "minItems": 0,
+                    "maxItems": 6
+                  },
+                  "waitCycleStatus": {"enum": ["noneObserved","observed","unknown"]},
+                  "waitCycleCount": {"type": "integer","minimum": 0},
+                  "waitChainCount": {"type": "integer","minimum": 0},
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {"const": "cycle"},
+                            "threadIds": {
+                              "type": "array",
+                              "items": {"type": "string","maxLength": 19,"pattern": "^[0-9]+$(?![\\s\\S])"},
+                              "minItems": 1,
+                              "maxItems": 16
+                            },
+                            "length": {"type": "integer","minimum": 1},
+                            "containsTimedWait": {"type": "boolean"}
+                          },
+                          "required": ["kind","threadIds","length","containsTimedWait"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "kind": {"const": "chain"},
+                            "threadIds": {
+                              "type": "array",
+                              "items": {"type": "string","maxLength": 19,"pattern": "^[0-9]+$(?![\\s\\S])"},
+                              "minItems": 1,
+                              "maxItems": 16
+                            },
+                            "end": {"enum": ["observedCycle","ownerUnobserved","endOfObservedChain","depthLimit"]}
+                          },
+                          "required": ["kind","threadIds","end"],
+                          "additionalProperties": false
+                        }
+                      ]
+                    },
+                    "minItems": 0,
+                    "maxItems": 50
+                  }
+                },
+                "required": ["observedThreads","stateCounts","waitCycleStatus","waitCycleCount","waitChainCount","items"],
+                "additionalProperties": false
+              },
+              {"type": "null"}
+            ]
+          },
+          "totalMatched": {"anyOf": [{"type": "integer","minimum": 0},{"type": "null"}]},
+          "truncated": {"type": "boolean"},
+          "truncationReasons": {"type": "array","items": {"type": "string","maxLength": 64},"maxItems": 8},
+          "coverage": {
+            "type": "object",
+            "properties": {
+              "state": {"enum": ["complete","partial","unavailable"]},
+              "scope": {"type": "string","maxLength": 256},
+              "gaps": {"type": "array","items": {"type": "string","maxLength": 64},"maxItems": 10}
+            },
+            "required": ["state","scope","gaps"],
+            "additionalProperties": false
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {"type": "string","maxLength": 64},
+                "recordId": {"anyOf": [{"type": "string","maxLength": 96},{"type": "null"}]}
+              },
+              "required": ["code","recordId"],
+              "additionalProperties": false
+            },
+            "maxItems": 10
+          },
+          "redactions": {"type": "array","items": {"type": "string","maxLength": 128},"maxItems": 50},
+          "nextCursor": {"anyOf": [{"type": "string","maxLength": 2048},{"type": "null"}]},
+          "nextAction": {
+            "type": "object",
+            "properties": {
+              "kind": {"enum": ["done","refine","page","remediate"]},
+              "reasonCode": {"type": "string","maxLength": 64,"pattern": "^[A-Z][A-Z0-9_]*$(?![\\s\\S])"},
+              "filterSuggestions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "parameter": {"type": "string","maxLength": 64},
+                    "value": {
+                      "anyOf": [
+                        {"type": ["string","number","boolean","null"],"maxLength": 512},
+                        {"type": "array","items": {"type": "string","maxLength": 256},"maxItems": 10}
+                      ]
+                    }
+                  },
+                  "required": ["parameter","value"],
+                  "additionalProperties": false
+                },
+                "maxItems": 4
+              }
+            },
+            "required": ["kind","reasonCode","filterSuggestions"],
+            "additionalProperties": false
+          },
+          "errors": {"type": "array","items": {"$ref": "#/$defs/DiagnosticError"},"maxItems": 8}
+        },
+        "required": [
+          "schemaVersion",
+          "status",
+          "source",
+          "data",
+          "totalMatched",
+          "truncated",
+          "truncationReasons",
+          "coverage",
+          "warnings",
+          "redactions",
+          "nextCursor",
+          "nextAction",
+          "errors"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {"properties": {"status": {"enum": ["denied","unavailable","invalid","too_large"]}},"required": ["status"]},
+            "then": {
+              "properties": {
+                "data": {"type": "null"},
+                "totalMatched": {"type": "null"},
+                "nextCursor": {"type": "null"},
+                "errors": {"minItems": 1},
+                "coverage": {"properties": {"state": {"const": "unavailable"}}}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"const": "ok"}},"required": ["status"]},
+            "then": {
+              "properties": {
+                "data": {"type": "object"},
+                "errors": {"maxItems": 0},
+                "coverage": {"properties": {"state": {"const": "complete"}}}
+              }
+            }
+          },
+          {
+            "if": {"properties": {"status": {"const": "partial"}},"required": ["status"]},
+            "then": {"properties": {"data": {"type": "object"},"coverage": {"properties": {"state": {"const": "partial"}}}}}
+          }
+        ],
+        "$defs": {
+          "DiagnosticError": {
+            "type": "object",
+            "properties": {
+              "code": {"type": "string","maxLength": 64,"pattern": "^[A-Z][A-Z0-9_]*$(?![\\s\\S])"},
+              "endpointId": {"anyOf": [{"enum": ["threaddump"]},{"type": "null"}]},
+              "httpStatus": {"anyOf": [{"type": "integer","minimum": 100,"maximum": 599},{"type": "null"}]},
+              "retryable": {"type": "boolean"},
+              "message": {"type": "string","maxLength": 256,"description": "Local static template only; never upstream text."},
+              "remediation": {
+                "type": "object",
+                "properties": {
+                  "recipeId": {"type": "string","maxLength": 96},
+                  "action": {
+                    "enum": [
+                      "refineQuery",
+                      "configureCapability",
+                      "reviewExposure",
+                      "reviewAuthorization",
+                      "configureStartup",
+                      "reviewTarget",
+                      "reviewSource",
+                      "stop"
+                    ]
+                  },
                   "configKeys": {"type": "array","items": {"type": "string","maxLength": 128},"maxItems": 8},
                   "steps": {"type": "array","items": {"type": "string","maxLength": 256},"maxItems": 4},
                   "requiresApproval": {"type": "boolean"},

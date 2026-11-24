@@ -32,9 +32,11 @@ _PATHS = {
     "beans": "/actuator/beans",
     "conditions": "/actuator/conditions",
     "health": "/actuator/health",
+    "threaddump": "/actuator/threaddump",
     "health-liveness": "/actuator/health/liveness",
     "health-readiness": "/actuator/health/readiness",
     "mappings": "/actuator/mappings",
+    "gateway-routes": "/actuator/gateway/routes",
     "flyway": "/actuator/flyway",
     "liquibase": "/actuator/liquibase",
     "startup": "/actuator/startup",
@@ -270,6 +272,8 @@ class ActuatorHttpTransport:
             or re.fullmatch(r"[A-Za-z0-9._~+/-]+=*", bearer_token) is None
         ):
             raise ValueError("INVALID_CREDENTIAL_REGISTRATION")
+        if bearer_token is not None and scheme != "https":
+            raise ValueError("CREDENTIAL_REQUIRES_TLS")
         self._bearer_token = bearer_token
 
     async def request(

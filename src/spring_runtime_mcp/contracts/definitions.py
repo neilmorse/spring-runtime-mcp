@@ -11,6 +11,8 @@ from functools import lru_cache
 from importlib.resources import files
 from typing import Any, Literal, cast, overload
 
+from jsonschema import Draft202012Validator
+
 from ..models.common import NormalizationError, remaining_seconds
 from ..models.timestamps import parse_rfc3339
 from ..models.queries import (
@@ -26,30 +28,44 @@ from ..models.queries import (
     MigrationQuery,
     OpenApiQuery,
     StartupQuery,
+    ThreadQuery,
 )
 
 TOOL = "springboot_inspect_beans"
+THREAD_TOOL = "springboot_analyze_threads"
 
 
 @lru_cache(maxsize=1)
-def _definitions() -> tuple[dict[str, Any], ...]:
+def _bundle() -> dict[str, Any]:
     resource = files("spring_runtime_mcp").joinpath("schemas/tools-contract.json")
-    bundle = json.loads(resource.read_text(encoding="utf-8"))
+    return cast(dict[str, Any], json.loads(resource.read_text(encoding="utf-8")))
+
+
+@lru_cache(maxsize=2)
+def _definitions(include_threads: bool) -> tuple[dict[str, Any], ...]:
+    bundle = _bundle()
     definitions = tuple(bundle["tools"])
     if len(definitions) != 8 or [d["name"] for d in definitions] != sorted(
         d["name"] for d in definitions
     ):
         raise RuntimeError("INVALID_TOOL_REGISTRATION_ORDER")
-    return definitions
+    if not include_threads:
+        return definitions
+    optional = bundle["optionalTools"]
+    if [tool["name"] for tool in optional] != [THREAD_TOOL] or any(
+        tool["name"] == THREAD_TOOL for tool in definitions
+    ):
+        raise RuntimeError("INVALID_TOOL_REGISTRATION_ORDER")
+    return tuple(sorted((*definitions, *optional), key=lambda tool: tool["name"]))
 
 
-def list_tools() -> list[dict[str, Any]]:
-    """Return defensive copies so a caller cannot mutate future tool listings."""
-    return deepcopy(list(_definitions()))
+def list_tools(*, include_threads: bool = False) -> list[dict[str, Any]]:
+    """Return defensive copies of the requested host's tool definitions."""
+    return deepcopy(list(_definitions(include_threads)))
 
 
 def definition(name: str) -> dict[str, Any]:
-    for item in _definitions():
+    for item in _definitions(name == THREAD_TOOL):
         if item["name"] == name:
             return deepcopy(item)
     raise NormalizationError("UNKNOWN_TOOL")
@@ -156,6 +172,10 @@ def _matches(schema: Mapping[str, Any], value: Any) -> bool:
         and isinstance(value, dict)
         and any(key not in value for key in schema["required"])
     ):
+        return False
+    if "const" in schema and not Draft202012Validator(
+        {"const": schema["const"]}
+    ).is_valid(value):
         return False
     if "enum" in schema and value not in schema["enum"]:
         return False
@@ -276,6 +296,12 @@ def validate_arguments(
         if "default" in item
     }
     values.update(arguments)
+    if tool_name == THREAD_TOOL:
+        return ThreadQuery(
+            target_id=values["targetId"],
+            max_results=values["maxResults"],
+            cursor=values.get("cursor"),
+        )
     if tool_name == "springboot_diagnose_health":
         return HealthQuery(
             target_id=values["targetId"],
@@ -285,6 +311,7 @@ def validate_arguments(
             group=values["group"],
             include_details=values["includeDetails"],
             include_healthy=values["includeHealthy"],
+            include_bean_evidence=values["includeBeanEvidence"],
             max_depth=values["maxDepth"],
         )
     if tool_name == "springboot_verify_mappings":
@@ -296,6 +323,7 @@ def validate_arguments(
             http_method=values.get("httpMethod"),
             controller_class_pattern=values.get("controllerClassPattern"),
             context_id=values.get("contextId"),
+            route_source=values["routeSource"],
         )
     if tool_name == "springboot_check_migrations":
         expected = tuple(

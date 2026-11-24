@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.15] - 2026-11-24
+
+- Require verified loopback HTTPS for Bearer authentication. HTTP origins with a registered token are rejected before connecting. The installation check and authenticated benchmarks use a disposable test CA.
+- Validate explicit application and Gateway route selections against their published Schema. Return an unknown configuration count when a required endpoint or normalization step supplies incomplete evidence.
+- Add opt-in Gateway route inspection and a ninth, opt-in tool for JVM thread waits and cycles. Health queries can include registered component-to-Bean evidence. Startup analysis resolves parent links independently of event order and ranks the slowest eligible steps.
+- Replace the individual real-instance benchmark scripts with a shared runner. Preserve unique container names when passing private environment variables, and keep invalid CLI arguments out of error output.
+
 ## [0.2.14] - 2026-11-20
 
 - Add an offline database health and Bean composition replay. The synthetic comparison measures two separate results against one candidate frame and tests missing supplemental evidence. The candidate is test-only.

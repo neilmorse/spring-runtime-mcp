@@ -78,7 +78,7 @@ async def inspect_config(
                 item["endpointId"], "observation_config"
             )
         result["data"] = {"activeProfiles": profiles, "items": items}
-        result["totalMatched"] = None if "CONFIG_SCOPE_LIMITED" in gaps else len(items)
+        result["totalMatched"] = None if failures or gaps else len(items)
         result["errors"] = failures
         if "CONFIGPROPS_NESTED_LIMIT" in gaps:
             result["truncated"] = True

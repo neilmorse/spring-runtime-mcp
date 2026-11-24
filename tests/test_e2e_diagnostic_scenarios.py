@@ -381,6 +381,7 @@ def test_scenario_acceptance_runs_every_diagnostic_handler() -> None:
     assert "async def detect_drift" in production_python
     assert set(HANDLERS) == {
         "springboot_analyze_startup",
+        "springboot_analyze_threads",
         "springboot_check_migrations",
         "springboot_detect_drift",
         "springboot_diagnose_health",

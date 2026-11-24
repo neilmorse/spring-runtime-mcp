@@ -74,6 +74,16 @@ def _codes(path: tuple[str, ...], hidden: bool) -> list[str]:
     return ["REVIEW_HEALTH_COMPONENT"]
 
 
+def component_status(body: Any, path: tuple[str, ...]) -> str | None:
+    node = body
+    for part in path:
+        if not isinstance(node, dict):
+            return None
+        node = _children(node).get(part)
+    status = node.get("status") if isinstance(node, dict) else None
+    return status if isinstance(status, str) else None
+
+
 def normalize_health(
     body: Any,
     *,

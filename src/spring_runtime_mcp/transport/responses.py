@@ -5,12 +5,23 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from .. import __version__
 from ..models.common import NormalizationError
 from ..policy.output_guard import ensure_safe_output
 from ..policy.sanitization import SanitizerPipeline
 
 MAX_RESPONSE_BYTES = 16_384
 MAX_SAFE_INTEGER = 2**53 - 1
+SERVER_NAME = "spring-runtime-mcp"
+SERVER_VERSION = __version__
+# The SDK stamps this on every 2026-era result; the budget measurement includes
+# it so a response that fits our cap also fits the stamped wire frame.
+SERVER_INFO_META: dict[str, Any] = {
+    "io.modelcontextprotocol/serverInfo": {
+        "name": SERVER_NAME,
+        "version": SERVER_VERSION,
+    }
+}
 
 
 def _check_request_id(request_id: object) -> None:

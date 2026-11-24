@@ -10,7 +10,7 @@ The [CLI](../src/spring_runtime_mcp/cli.py) loads the catalog at startup using t
 
 ```bash
 uv run --no-sync python -m spring_runtime_mcp.cli \
-  --base-url http://127.0.0.1:18081 --target-id local \
+  --base-url https://localhost:18081 --target-id local \
   --token-env SHOP_ACTUATOR_TOKEN --source-catalog /abs/path/source-catalog.json
 ```
 

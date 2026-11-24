@@ -45,11 +45,13 @@ The required capability is disabled. Configuration diagnostics are disabled by d
 
 Value output additionally needs both --config-allow-values and includeValues=true. Registration cannot widen target permissions or bypass sanitization. For a first trial, use mappings or health without enabling configuration diagnostics. See [configuration diagnostics](contracts/tools-schema/springboot_inspect_config.md).
 
+Gateway route inventory is disabled until the MCP registration includes `--enable-gateway-routes`. The target also needs an authorized, read-only Gateway Actuator exposure.
+
 ### ENDPOINT_UNAUTHORIZED
 
 The endpoint returned 401/403. Check existing Bearer credentials, parent-process environment forwarding, role mapping, and the security chain handling Actuator. Status alone cannot distinguish a missing/expired token from a role or chain problem.
 
---token-env names the variable; the parent process must supply its value. env_vars forwards the named variable and does not create a token. Keep token values out of commands, TOML, prompts, and reports. The host does not support Basic or arbitrary header forwarding.
+If startup reports that `--token-env` requires HTTPS, set `--base-url` to the registered loopback HTTPS origin. Its certificate must be trusted by the MCP process and cover the configured host. The parent process supplies the token in the named variable. env_vars forwards the named variable and does not create a token. Keep token values out of commands, TOML, prompts, and reports. The host does not support Basic or arbitrary header forwarding.
 
 Do not add permitAll, disable authentication, or change health-detail visibility to bypass a denial. See [target setup](target-app-setup.md) and [client configuration](client-configuration.md).
 
@@ -62,7 +64,7 @@ An ordinary endpoint returned 404. Ask the maintainer to check endpoint availabi
 | Tool | Required fixed endpoint(s) |
 | --- | --- |
 | springboot_inspect_beans | beans; conditions when analysis requires it |
-| springboot_verify_mappings | mappings |
+| springboot_verify_mappings | mappings in application mode; gateway-routes in explicitly enabled Gateway mode |
 | springboot_diagnose_health | health and the selected fixed health group |
 | springboot_check_migrations | flyway and/or liquibase according to engine |
 | springboot_analyze_startup | startup |

@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-让编码助手读取本地 Spring Boot 应用的实际运行状态。8 个只读 MCP 工具使用已授权的 Actuator 和 OpenAPI 数据，帮你排查 Bean 未创建、路由未注册、启动缓慢等问题。
+让编码助手读取本地 Spring Boot 应用的实际运行状态。默认提供 8 个只读 MCP 工具，使用已授权的 Actuator 和 OpenAPI 数据，帮你排查 Bean 未创建、路由未注册、启动缓慢等问题。
 
 已收录于 [Awesome MCP Servers（Developer Tools）](https://github.com/punkpeye/awesome-mcp-servers/pull/18153/files) · [在 Glama 查看工具](https://glama.ai/mcp/servers/neilmorse/spring-runtime-mcp)
 
@@ -29,11 +29,11 @@
 
 ### 用 MCP 客户端连接你的应用
 
-需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和读取本地 Spring Boot 应用管理端点的权限。先按[目标配置指南](docs/target-app-setup.md)确认端点与权限。以下命令使用 **0.2.14 Alpha**。
+需要 Python 3.11+、[uv](https://docs.astral.sh/uv/) 和读取本地 Spring Boot 应用管理端点的权限。先按[目标配置指南](docs/target-app-setup.md)确认端点与权限。以下命令使用 **0.2.15 Alpha**。
 
 ```bash
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --version
-uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --base-url http://127.0.0.1:18081
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --version
+uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.15 --base-url http://127.0.0.1:18081
 ```
 
 把第二条命令配置为 MCP 客户端的 STDIO 启动命令。直接在终端运行时，它会等待客户端请求。完整步骤见[首次查询（英文）](docs/first-query.md)，各客户端模板见[配置指南](docs/client-configuration.md)。
@@ -42,7 +42,7 @@ uvx --default-index https://pypi.org/simple spring-runtime-mcp==0.2.14 --base-ur
 
 ## 使用边界
 
-当前只连接本地回环地址，使用固定端点和可选 Bearer 环境变量鉴权；OpenAPI 固定读取 `/actuator/openapi`。配置诊断默认关闭，需通过 CLI 参数显式启用（`--config-prefix`、`--config-property`、`--config-profiles`）；启用后配置值仍默认隐藏，输出值还需要 `--config-allow-values` 和工具参数 `includeValues=true`。输出始终脱敏，每次工具结果最多 16 KiB。证据不足会明确返回 `partial/unknown`。
+当前只连接本地回环地址，使用固定端点。可选 Bearer 鉴权从指定环境变量读取令牌，要求使用经过证书验证的 HTTPS。OpenAPI 固定读取 `/actuator/openapi`。配置诊断默认关闭，需通过 CLI 参数显式启用（`--config-prefix`、`--config-property`、`--config-profiles`）；启用后配置值仍默认隐藏，输出值还需要 `--config-allow-values` 和工具参数 `includeValues=true`。输出始终脱敏，每次工具结果最多 16 KiB。证据不足会明确返回 `partial/unknown`。
 
 工具不写目标、不重启应用，也不读取 heapdump 或原始日志。完整 Boot/Java/客户端矩阵、Windows/macOS 和生产集群兼容性尚未验证。
 

@@ -1,6 +1,6 @@
 # Target Spring Boot application setup
 
-This guide configures standard observability in the target application. It installs no custom agent and does not turn business methods into MCP tools. The host reads registered loopback origins and supports `--token-env` binding to existing Bearer credentials. Basic, custom management base paths, and remote targets are unsupported. See [first query](first-query.md) for installation, credential forwarding, and queries, and [client configuration](client-configuration.md) for templates. Target dependencies, exposure, and restarts still require explicit application-maintainer authorization.
+This guide configures standard observability in the target application. It installs no custom agent and does not turn business methods into MCP tools. The host reads registered loopback origins. Binding a Bearer credential with `--token-env` requires HTTPS with a trusted certificate covering the configured host. Basic, custom management base paths, and remote targets are unsupported. See [first query](first-query.md) for installation, credential forwarding, and queries, and [client configuration](client-configuration.md) for templates. Target dependencies, exposure, and restarts still require explicit application-maintainer authorization.
 
 ## 1. Check the version and existing authorization
 
@@ -140,7 +140,7 @@ curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request 
 curl --noproxy '*' --connect-timeout 2 --max-time 5 --user mcp-reader --request GET --output /dev/null --write-out '%{http_code}\n' http://127.0.0.1:18081/actuator/startup
 ```
 
-These examples assume local HTTP on the management port. For existing HTTPS, retain the real HTTPS origin and trusted certificates; do not use `-k`. Bearer-only applications should use their existing protected credential process, without downgrading to Basic or placing tokens in shell history. The host independently binds existing Bearer credentials through `--token-env`; it does not forward a client's MCP token.
+These examples assume local HTTP on the management port. For existing HTTPS, retain the real HTTPS origin and trusted certificates; do not use `-k`. Bearer-only applications should use their existing protected credential process, without downgrading to Basic or placing tokens in shell history. For Bearer-authenticated MCP reads, register the HTTPS management origin and bind the existing target credential with `--token-env`.
 
 | Observation | Next check |
 | --- | --- |
@@ -159,5 +159,11 @@ Verify startup information and actual listeners to ensure the management port bi
 An application using springdoc may expose `/v3/api-docs` on the business port by default. This connector reads only fixed `/actuator/openapi` on the registered origin. Custom `springdoc.api-docs.path` does not trigger fallback; maintainers must confirm management-endpoint availability for the installed version. This guide does not automatically enable another path, switch ports, or enable springdoc business MCP tools.
 
 The Actuator access rules above do not automatically protect business-port springdoc paths; existing application security still applies. OpenAPI `servers`, remote `$ref`, and description cannot extend diagnostic targets. `springboot_search_openapi` already exists, but an available business `/v3/api-docs` does not establish fixed management-endpoint availability or successful MCP search.
+
+### Spring Cloud Gateway route inventory
+
+For an authorized Spring Cloud Gateway Server WebFlux target, set `management.endpoint.gateway.access=read-only` and add `gateway` to the existing management exposure list. Retain the loopback management origin and its access controls. Keep verbose route output enabled. For Spring Cloud Gateway 4.3 the setting is `spring.cloud.gateway.server.webflux.actuator.verbose.enabled=true`. [Gateway Actuator documentation](https://docs.spring.io/spring-cloud-gateway/reference/4.3/spring-cloud-gateway-server-webflux/actuator-api.html)
+
+Register the approved Gateway origin with `--enable-gateway-routes` and use `springboot_verify_mappings` with `routeSource: "gateway"`. See [route registration](contracts/tools-schema/springboot_verify_mappings.md).
 
 After diagnostics, deactivate local-mcp or narrow exposure and revoke temporary authorization. Application maintainers decide configuration changes and restarts. Retain sanitized structured conclusions, not raw env/configprops, health exception stacks, logs, or memory dumps.

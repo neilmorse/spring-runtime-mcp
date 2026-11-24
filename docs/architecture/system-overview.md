@@ -14,8 +14,8 @@ Spring Runtime MCP is a standalone Python 3.11+ STDIO service providing coding a
 | `models/` | Facts, queries, observations, graphs, and analysis/call budgets. |
 | `adapters/` | Normalize Actuator/OpenAPI structures into domain facts and evidence gaps. |
 | `analyzers/` | Deterministic Bean graph traversal, condition-chain analysis, and drift impact. |
-| `tools/` | Eight handlers, fixed registration, envelope composition, and pagination. |
-| `contracts/`, `schemas/` | Argument normalization and the packaged eight-tool Schema. |
+| `tools/` | Tool handlers, startup registration, envelope composition, and pagination. |
+| `contracts/`, `schemas/` | Argument normalization and the packaged default and optional tool Schemas. |
 | `snapshots.py` | Bounded sanitized snapshots, query-bound cursors, and continuation pages. |
 | `replay.py`, `replay_data/` | One-shot offline scenarios using the same handlers. |
 
@@ -43,6 +43,6 @@ Services admits four active tool calls and up to 16 waiting calls. This limits h
 
 ## Tools and evidence
 
-Eight tools are registered in name order. Their selectors and results follow the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) and [calling policy](../contracts/tool-calling-policy.md). Fact distinguishes known, unknown, notReported, and redacted; missing evidence propagates through gaps to tools, yielding partial results and unknown totals when necessary.
+Eight tools are registered by default. The startup flag `--enable-thread-diagnostics` adds the thread tool. The host publishes the registered tools in name order. Their selectors and results follow the [Schema](../../src/spring_runtime_mcp/schemas/tools-contract.json) and [calling policy](../contracts/tool-calling-policy.md). Fact distinguishes known, unknown, notReported, and redacted; missing evidence propagates through gaps to tools, yielding partial results and unknown totals when necessary.
 
 See the [product specification](../../SPEC.md) for availability and supported scope. Default validation uses synthetic fixtures and self-hosted loopback services; real targets require separate authorization. See the [release workflow](../launch/README.md) for development checks and distribution verification.

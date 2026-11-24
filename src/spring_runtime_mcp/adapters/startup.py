@@ -12,6 +12,7 @@ from ..models.timestamps import parse_rfc3339
 from ..contracts.definitions import glob_matches
 
 _DURATION = re.compile(r"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?\Z")
+_MAX_RANKED_STEPS = 500
 
 
 def _nanos(text: str) -> int | None:
@@ -40,6 +41,57 @@ def _bottleneck(name: str) -> str:
     return "OTHER" if name else "UNKNOWN"
 
 
+def _lineage(
+    parents: dict[str, str | None], budget: AnalysisBudget
+) -> dict[str, tuple[int, bool]]:
+    """Cache ancestor counts and cycle evidence across overlapping parent chains."""
+    known: dict[str, tuple[int, bool]] = {}
+    for step_id in parents:
+        path: dict[str, int] = {}
+        cursor: str | None = step_id
+        while (
+            cursor is not None
+            and cursor in parents
+            and cursor not in known
+            and cursor not in path
+        ):
+            budget.consume()
+            path[cursor] = len(path)
+            cursor = parents[cursor]
+
+        if cursor is not None and cursor in path:
+            cycle_start = path[cursor]
+            depth, cyclic = len(path) - cycle_start, True
+            for member in list(path)[cycle_start:]:
+                known[member] = (depth, True)
+                del path[member]
+        else:
+            # A reported but missing parent still occupies one ancestor slot.
+            depth, cyclic = (
+                (-1, False) if cursor is None else known.get(cursor, (0, False))
+            )
+
+        for member in reversed(path):
+            depth += 1
+            known[member] = (depth, cyclic)
+    return known
+
+
+def _tags(raw_tags: list[Any]) -> list[dict[str, str | None]]:
+    tags: list[dict[str, str | None]] = []
+    for tag in raw_tags[:10]:
+        if not isinstance(tag, dict) or not isinstance(tag.get("key"), str):
+            continue
+        value = tag.get("value")
+        tags.append(
+            {
+                "key": tag["key"][:128],
+                "value": value[:256] if isinstance(value, str) else None,
+            }
+        )
+    return tags
+
+
 def normalize_startup(
     body: Any,
     *,
@@ -57,13 +109,11 @@ def normalize_startup(
     version = version if isinstance(version, str) and len(version) <= 64 else None
     gaps: set[str] = set()
     budget = AnalysisBudget()
-    records: dict[str, dict[str, Any]] = {}
-    order: list[str] = []
+    indexed: dict[str, dict[str, Any]] = {}
+    parents: dict[str, str | None] = {}
+    duplicates: set[str] = set()
     for event in events:
         budget.consume()
-        if len(order) >= 500:
-            gaps.add("STARTUP_NODE_LIMIT")
-            break
         if not isinstance(event, dict) or not isinstance(
             event.get("startupStep"), dict
         ):
@@ -75,10 +125,19 @@ def normalize_startup(
             gaps.add("STARTUP_EVENT_UNREADABLE")
             continue
         step_id = str(raw_id)
-        if step_id in records:
+        if step_id in indexed:
             gaps.add("STARTUP_DUPLICATE_STEP")
-            records[step_id]["relationState"] = "duplicate"
+            duplicates.add(step_id)
             continue
+        parent = step.get("parentId")
+        parents[step_id] = str(parent) if type(parent) is int and parent >= 0 else None
+        indexed[step_id] = event
+
+    lineage = _lineage(parents, budget)
+    candidates: list[tuple[bool, int, str]] = []
+    for step_id, event in indexed.items():
+        budget.consume()
+        step = event["startupStep"]
         nanos = (
             _nanos(event["duration"])
             if isinstance(event.get("duration"), str)
@@ -86,91 +145,68 @@ def normalize_startup(
         )
         if nanos is None:
             gaps.add("STARTUP_DURATION_UNPARSED")
-        parent = step.get("parentId")
-        parent_id = str(parent) if type(parent) is int and parent >= 0 else None
-        tags = []
         raw_tags = step.get("tags", [])
-        if isinstance(raw_tags, list):
-            if len(raw_tags) > 10:
-                gaps.add("STARTUP_TAG_LIMIT")
-            for tag in raw_tags[:10]:
-                if not isinstance(tag, dict) or not isinstance(tag.get("key"), str):
-                    continue
-                value = tag.get("value")
-                tags.append(
-                    {
-                        "key": tag["key"][:128],
-                        "value": value[:256] if isinstance(value, str) else None,
-                    }
-                )
-        name = step.get("name") if isinstance(step.get("name"), str) else ""
-        raw_started = event.get("startTime")
-        started_at = _timestamp(raw_started)
-        if isinstance(raw_started, str) and started_at is None:
-            gaps.add("STARTUP_TIMING_UNOBSERVED")
-        records[step_id] = {
-            "stepId": step_id,
-            "parentStepId": parent_id,
-            "name": name[:256],
-            "startedAt": started_at,
-            "durationNanos": None if nanos is None else str(nanos),
-            "durationMs": None if nanos is None else nanos / 1_000_000,
-            "tags": tags,
-            "bottleneckCode": _bottleneck(name),
-            "relationState": "resolved",
-        }
-        order.append(step_id)
-    for step_id, row in records.items():
-        parent = row["parentStepId"]
-        if parent is None:
-            continue
-        if parent not in records:
-            row["relationState"] = "orphan"
+        raw_tags = raw_tags if isinstance(raw_tags, list) else []
+        if len(raw_tags) > 10:
+            gaps.add("STARTUP_TAG_LIMIT")
+        parent = parents[step_id]
+        depth, cyclic = lineage[step_id]
+        if parent is not None and parent not in parents:
             gaps.add("STARTUP_ORPHAN_STEP")
-            continue
-        seen = {step_id}
-        cursor = parent
-        while cursor is not None:
-            budget.consume()
-            if cursor in seen:
-                row["relationState"] = "cycle"
-                gaps.add("STARTUP_CYCLE")
-                break
-            seen.add(cursor)
-            cursor = records.get(cursor, {}).get("parentStepId")
-    items: list[dict[str, Any]] = []
-    for step_id in order:
-        row = records[step_id]
-        ancestors: list[str] = []
-        cursor = row["parentStepId"]
-        visited: set[str] = set()
-        while cursor and cursor not in visited and len(ancestors) < 16:
-            visited.add(cursor)
-            ancestors.append(cursor)
-            cursor = records.get(cursor, {}).get("parentStepId")
-        if len(ancestors) > max_depth:
+        if cyclic:
+            gaps.add("STARTUP_CYCLE")
+        if depth > max_depth:
             gaps.add("STARTUP_DEPTH_LIMIT")
             continue
-        if step_name_pattern and not glob_matches(step_name_pattern, row["name"]):
+        name = step.get("name") if isinstance(step.get("name"), str) else ""
+        if step_name_pattern and not glob_matches(step_name_pattern, name[:256]):
             continue
         if bean_name_pattern and not any(
             tag["key"] == "beanName"
             and isinstance(tag["value"], str)
             and glob_matches(bean_name_pattern, tag["value"])
-            for tag in row["tags"]
+            for tag in _tags(raw_tags)
         ):
             continue
-        duration = row["durationMs"]
-        if duration is not None and duration < min_duration_ms:
+        if nanos is not None and nanos / 1_000_000 < min_duration_ms:
             continue
-        row["ancestorIds"] = ancestors
-        items.append(row)
-    items.sort(
-        key=lambda row: (
-            -(row["durationMs"] if isinstance(row["durationMs"], (int, float)) else -1),
-            row["stepId"],
+        candidates.append((nanos is None, -(nanos or 0), step_id))
+
+    if len(candidates) > _MAX_RANKED_STEPS:
+        gaps.add("STARTUP_NODE_LIMIT")
+    candidates.sort()
+    items: list[dict[str, Any]] = []
+    for duration_unknown, negative_nanos, step_id in candidates[:_MAX_RANKED_STEPS]:
+        event = indexed[step_id]
+        step = event["startupStep"]
+        name = step.get("name") if isinstance(step.get("name"), str) else ""
+        raw_tags = step.get("tags", [])
+        depth, cyclic = lineage[step_id]
+        parent_id = parents[step_id]
+        ancestors: list[str] = []
+        cursor = parent_id
+        while cursor is not None and len(ancestors) < depth:
+            ancestors.append(cursor)
+            cursor = parents.get(cursor)
+        relation = "duplicate" if step_id in duplicates else "resolved"
+        if parent_id is not None and parent_id not in parents:
+            relation = "orphan"
+        elif cyclic:
+            relation = "cycle"
+        items.append(
+            {
+                "stepId": step_id,
+                "parentStepId": parent_id,
+                "name": name[:256],
+                "startedAt": _timestamp(event.get("startTime")),
+                "durationNanos": None if duration_unknown else str(-negative_nanos),
+                "durationMs": None if duration_unknown else -negative_nanos / 1_000_000,
+                "tags": _tags(raw_tags) if isinstance(raw_tags, list) else [],
+                "bottleneckCode": _bottleneck(name),
+                "relationState": relation,
+                "ancestorIds": ancestors,
+            }
         )
-    )
     total: int | float | None = None
     try:
         starts = [parse_rfc3339(event["startTime"]) for event in events]

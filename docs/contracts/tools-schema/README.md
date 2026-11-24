@@ -1,10 +1,10 @@
-# Eight-tool Schema reference
+# Tool Schema reference
 
 This directory provides human-readable documentation for [tools-contract.json](../../../src/spring_runtime_mcp/schemas/tools-contract.json).
 
 ## Tool list
 
-The eight diagnostic tools are published in fixed alphabetical order:
+The default host publishes these eight diagnostic tools in alphabetical order.
 
 | Tool name | Title | Purpose | Reference |
 |---------|------|------|---------|
@@ -15,7 +15,9 @@ The eight diagnostic tools are published in fixed alphabetical order:
 | `springboot_inspect_beans` | Bean wiring and conditions | Investigate injection and conditional creation | [Reference](springboot_inspect_beans.md) |
 | `springboot_inspect_config` | Configuration sources | Inspect property sources with explicit opt-in | [Reference](springboot_inspect_config.md) |
 | `springboot_search_openapi` | OpenAPI queries | Inspect operations and Schema definitions | [Reference](springboot_search_openapi.md) |
-| `springboot_verify_mappings` | Route registration | Verify MVC/WebFlux mapping registrations | [Reference](springboot_verify_mappings.md) |
+| `springboot_verify_mappings` | Route registration | Verify MVC/WebFlux mappings and opt-in Spring Cloud Gateway route inventory | [Reference](springboot_verify_mappings.md) |
+
+Hosts started with `--enable-thread-diagnostics` also publish [`springboot_analyze_threads`](../../thread-dump-replay.md).
 
 ## Shared structures
 

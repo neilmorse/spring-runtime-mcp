@@ -27,7 +27,15 @@ class HealthQuery:
     group: Literal["application", "liveness", "readiness"] = "application"
     include_details: bool = False
     include_healthy: bool = False
+    include_bean_evidence: bool = False
     max_depth: int = 4
+
+
+@dataclass(frozen=True)
+class ThreadQuery:
+    target_id: str = "local"
+    max_results: int = 50
+    cursor: str | None = None
 
 
 @dataclass(frozen=True)
@@ -39,6 +47,7 @@ class MappingQuery:
     http_method: str | None = None
     controller_class_pattern: str | None = None
     context_id: str | None = None
+    route_source: Literal["application", "gateway"] = "application"
 
 
 @dataclass(frozen=True)

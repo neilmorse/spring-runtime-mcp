@@ -15,7 +15,7 @@ from typing import Protocol
 from uuid import uuid4
 
 from ..models.common import NormalizationError, ParsedObservation
-from .bounded_json import loads_bounded
+from .bounded_json import loads_bounded, loads_bounded_array
 
 MAX_UPSTREAM_BYTES = 8 * 1024 * 1024
 ENDPOINTS = frozenset(
@@ -23,7 +23,9 @@ ENDPOINTS = frozenset(
         "beans",
         "conditions",
         "health",
+        "threaddump",
         "mappings",
+        "gateway-routes",
         "flyway",
         "liquibase",
         "startup",
@@ -171,7 +173,15 @@ class ResponseGateReader:
         if media is None:
             raise EndpointReadError("UNEXPECTED_CONTENT_TYPE", endpoint_id, status)
         try:
-            body = loads_bounded(response.body, max_bytes=MAX_UPSTREAM_BYTES)
+            body = (
+                {
+                    "routes": loads_bounded_array(
+                        response.body, max_bytes=MAX_UPSTREAM_BYTES
+                    )
+                }
+                if endpoint_id == "gateway-routes"
+                else loads_bounded(response.body, max_bytes=MAX_UPSTREAM_BYTES)
+            )
         except NormalizationError as exc:
             raise EndpointReadError(exc.code, endpoint_id, status) from None
         return ParsedObservation(

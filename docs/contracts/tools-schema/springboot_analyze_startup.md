@@ -89,4 +89,6 @@ This object rejects additional fields.
 
 ## Interpreting results
 
+Parent links use the observed timeline regardless of event order. The tool ranks eligible steps by descending duration and retains up to 500 for pagination. `STARTUP_NODE_LIMIT` marks a result set that exceeds this limit. `STARTUP_DEPTH_LIMIT` indicates that some observed chains exceeded `maxDepth`.
+
 Interpret totalMatched, truncated, coverage.gaps, and nextAction together; totalMatched=null means the complete matching count is unknown. Continue using the original query and nextCursor; snapshots default to a 60-second absolute TTL. See [calling policy](../tool-calling-policy.md) for error recipes and budgets.

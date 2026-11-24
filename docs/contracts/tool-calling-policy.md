@@ -1,10 +1,10 @@
 # Tool calling policy and error contract
 
-Public contract version is 2, targeting MCP 2026-07-28; the host also supports the SDK legacy mode. The eight Tool definitions in [tools-contract.json](../../src/spring_runtime_mcp/schemas/tools-contract.json) are published by tools/list. Package-level contractVersion/protocolVersion are not sent as Tool fields.
+Public contract version is 2, targeting MCP 2026-07-28; the host also supports the SDK legacy mode. The eight default Tool definitions in [tools-contract.json](../../src/spring_runtime_mcp/schemas/tools-contract.json) are published by tools/list. The optional thread tool is published only by hosts started with `--enable-thread-diagnostics`. Package-level contractVersion/protocolVersion are not sent as Tool fields.
 
 ## Discovery, arguments, and tool selection
 
-Publish the fixed eight tools in ASCII name order. inputSchema/outputSchema use JSON Schema 2020-12 with references closed within each schema's `$defs`. Four explicit risk annotations are readOnlyHint=true, destructiveHint=false, idempotentHint=true, and openWorldHint=false; deterministic guards enforce actual permissions.
+Publish the locally registered tools in ASCII name order. The list is fixed at host startup and requires no upstream reads. inputSchema/outputSchema use JSON Schema 2020-12 with references closed within each schema's `$defs`. Four explicit risk annotations are readOnlyHint=true, destructiveHint=false, idempotentHint=true, and openWorldHint=false; deterministic guards enforce actual permissions.
 
 Server argument normalization explicitly applies Schema defaults. Tool argument JSON is capped at 16 KiB. Invalid fields, types, selectors, or limits yield INVALID_ARGUMENT without reading the target. Patterns are bounded, case-sensitive globs supporting `*` and `?`, up to 128 characters; other characters match literally. Combine filters with AND; packagePrefix matches package-segment boundaries.
 
@@ -13,11 +13,11 @@ Server argument normalization explicitly applies Schema defaults. Tool argument 
 | Slow startup | springboot_analyze_startup: read GET startup; sort by descending duration and stable identity, retaining parent chains and unit gaps. |
 | Migration anomalies | springboot_check_migrations: engine=auto reads Flyway/Liquibase separately; prioritize anomalous states, then engine-reported order. |
 | Source/runtime comparison | springboot_detect_drift: compare explicit dimensions only; detecting extra runtime objects requires complete expectations and runtime coverage. |
-| Health anomalies | springboot_diagnose_health: healthy children and details are hidden by default; componentPath queries the local tree; probes use fixed health groups. |
+| Health anomalies | springboot_diagnose_health: healthy children and details are hidden by default; componentPath queries the local tree; probes use fixed health groups. Application calls can opt in to one operator-registered Bean association with includeBeanEvidence. |
 | Bean or condition problems | springboot_inspect_beans: require a name, type, or package selector; read beans/conditions as needed, retaining usable Bean evidence if conditions are missing. |
 | Configuration sources | springboot_inspect_config: require prefix/propertyKeyPattern, default includeValues=false; project only the operator-registered scope. |
 | OpenAPI | springboot_search_openapi: schemaName is exclusive with operation selectors; httpMethod cannot stand alone. Fixed GET `/actuator/openapi`; in-document reference depth defaults to 2 and is capped at 8. |
-| Route registration | springboot_verify_mappings: require path, method, or Controller selectors; read mappings only, without business-URL calls. |
+| Route registration | springboot_verify_mappings: application mode requires a path, method, or Controller selector. With `--enable-gateway-routes`, `routeSource: "gateway"` reads the fixed Gateway inventory and optionally filters its declared paths. |
 
 Read each current tool Schema for exact selectors, enums, depth limits, and output fields. Examples do not define additional arguments.
 
@@ -30,7 +30,7 @@ Continue with the original tool, target, and normalized query, adding only curso
 nextAction.kind indicates page/refine/remediate/done; page uses nextCursor. filterSuggestions includes only safe arguments allowed by that tool; clients merge and revalidate them. On CURSOR_EXPIRED, restart without cursor; do not treat new results as continuation of the old snapshot.
 
 - Bean aliases, parent chains, shadowing, nested conditions, and transitive blocking follow [normalization architecture](../architecture/cross-version-normalization.md). Uncovered source facts do not establish Bean absence.
-- Preserve available components and gaps when health components are unreadable or status is missing; counts affected by gaps use totalMatched=null.
+- Preserve available components and gaps when health components are unreadable or status is missing; counts affected by health gaps use totalMatched=null. Optional Bean evidence carries separate source and coverage. Its gaps never change the health count, and page fitting trims supplemental evidence before reducing the health page.
 - Non-DispatcherServlet mappings coverage or unknown functional predicates remain partial/unknown; empty results cannot establish nonregistration.
 - Missing migration fields use null/UNKNOWN; pending, MISSING_FAILED, and duration follow reported evidence. Liquibase version expectations do not replace changeSet identity.
 - Omitted drift arrays mean no comparison; explicit empty arrays mean empty expectations. Bean/route/migration-version expectations total at most 100 entities. sourceRevision/sourceModifiedAt are caller declarations; insufficient evidence remains candidate/unknown.
